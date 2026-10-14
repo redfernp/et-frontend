@@ -9,7 +9,7 @@ export function renderOfferSlots(content, offers) {
     if(!offer)throw new Error(`ACF offer ${piece.offerId} is not ready for its published slot`);
     const copy=approvedCopy.offers.find(o=>o.id===piece.offerId);
     const details=offer.everyTipOfferDetails;
-    return `<aside class="offer-slot"><h2>${escape(details.publicHeadline)}</h2><p>${escape(details.compactTerms)}</p><a href="${escape(copy.ctaPath)}" rel="sponsored nofollow">${escape(offer.everyTipOfferPublishing.etOfferCtaLabel||'View offer')}</a></aside>`;
+    return `<aside class="offer-slot" data-offer-id="${offer.databaseId}"><p class="offer-bookmaker">${escape(copy.partner)}</p><h2>${escape(details.publicHeadline)}</h2><p>${escape(details.compactTerms)}</p><a href="${escape(copy.ctaPath)}" rel="sponsored nofollow">${escape(offer.everyTipOfferPublishing.etOfferCtaLabel||'View offer')}</a></aside>`;
   }).join('');
 }
 export async function resolveLaunchOffers(records,query){

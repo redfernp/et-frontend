@@ -50,3 +50,11 @@ export function builderToBlocks(html) {
   if (!blocks) throw new Error('No builder content to migrate');
   return blocks;
 }
+
+/** Add centrally maintained offers without rewriting review prose or other promotions. */
+export function tierAOfferBlocks(html, offers, { heading = 'Current bookmaker offers' } = {}) {
+  const blocks = builderToBlocks(html);
+  if (!offers.length) throw new Error('Tier A requires at least one central offer');
+  const safeHeading = heading.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+  return `${blocks}\n\n${wrap('heading', `<h2 class="wp-block-heading">${safeHeading}</h2>`)}\n\n${offers.map(offerSlotBlock).join('\n\n')}`;
+}

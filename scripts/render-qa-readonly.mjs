@@ -140,6 +140,18 @@ try {
         const detailShot = await cdp.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
         await writeFile(join(output, 'paypal-mobile-table-expanded.png'), Buffer.from(detailShot.data, 'base64'));
       }
+      if (launch) {
+        const offers = await cdp.send('Runtime.evaluate', { expression: `(() => {
+          const cards = [...document.querySelectorAll('.offer-slot[data-offer-id]')];
+          cards[0]?.scrollIntoView({block:'start'});
+          return cards.map(card => ({id:card.dataset.offerId,headline:card.querySelector('h2')?.textContent,cta:card.querySelector('a')?.getAttribute('href')}));
+        })()`, returnByValue: true });
+        metrics.result.value.offers = offers.result.value;
+        if (offers.result.value.length) {
+          const offerShot = await cdp.send('Page.captureScreenshot', {format:'png',captureBeyondViewport:false});
+          await writeFile(join(output, `${name}-${view}-offers.png`), Buffer.from(offerShot.data, 'base64'));
+        }
+      }
       results.push({ name, view, path, ...metrics.result.value });
     }
   }

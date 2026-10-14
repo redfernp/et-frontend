@@ -7,6 +7,8 @@ const source = JSON.parse(await readFile('outputs/launch-source.json', 'utf8'));
 const origin = process.argv.find(arg=>arg.startsWith('--origin='))?.slice('--origin='.length);
 const sitemap = origin ? await (await fetch(new URL('/sitemap.xml',origin))).text() : await readFile('dist/sitemap.xml', 'utf8');
 const failures = [];
+const tierAIds = new Set(JSON.parse(await readFile('data/builder-tiers.json', 'utf8')).records.filter(r => r.tier === 'A').map(r => r.id));
+let offerPlacements = 0;
 if (process.argv.includes('--fresh') && (source.mode !== 'fresh' || !source.receipts?.length || source.receipts.some(receipt => receipt.cached))) {
   failures.push({ field: 'fresh-source', error: 'Final launch check requires WPGRAPHQL_FRESH=1 and no reused disk pages.' });
 }
@@ -45,6 +47,12 @@ async function inspect(record) {
   checked++;
   if (html.includes('data-everytip-offer-slot')) failures.push({ path: record.uri, field: 'unresolved-offer-slot' });
   const doc = parseDocument(html);
+  const sourceOffers = elements(parseDocument(record.content || ''), 'aside').filter(node => node.attribs['data-offer-id']);
+  const builtOffers = elements(doc, 'aside').filter(node => node.attribs['data-offer-id']);
+  offerPlacements += builtOffers.length;
+  if (tierAIds.has(record.databaseId) && !builtOffers.length) failures.push({path:record.uri,field:'missing-tier-a-offers'});
+  const offerSignature = nodes => nodes.map(node => ({id:node.attribs['data-offer-id'],text:text(node),ctas:elements(node,'a').map(a => ({path:new URL(a.attribs.href,'https://www.everytip.co.uk').pathname,rel:a.attribs.rel}))}));
+  if (JSON.stringify(offerSignature(sourceOffers)) !== JSON.stringify(offerSignature(builtOffers))) failures.push({path:record.uri,field:'central-offer-content'});
   const sourceTables = elements(parseDocument(record.content || ''), 'table').filter(node => /ninja/i.test(JSON.stringify(node.attribs)));
   for (const table of sourceTables) {
     const built = elements(doc, 'table').find(node => node.attribs.id === table.attribs.id);
@@ -77,7 +85,7 @@ if(origin){
     if(response.status!==expected.status||response.headers.get('location')!==location)failures.push({path,field:'redirect',expected,actual:{status:response.status,location:response.headers.get('location')}});
   }
 }
-const result = { fetchedAt: source.fetchedAt, origin:origin||'local assets', checked, matchingSourceRedirects, redirectsChecked, ninjaTables, ninjaRows, failures, scope: 'Post/page and discovered archive routes; browser QA is separate.' };
+const result = { fetchedAt: source.fetchedAt, origin:origin||'local assets', checked, matchingSourceRedirects, redirectsChecked, ninjaTables, ninjaRows, offerPlacements, failures, scope: 'Post/page and discovered archive routes; browser QA is separate.' };
 await writeFile(origin?'outputs/launch-network-parity.json':'outputs/launch-parity.json', JSON.stringify(result, null, 2));
-console.log(JSON.stringify({ checked, ninjaTables, ninjaRows, failures: failures.length, firstFailures: failures.slice(0, 10) }));
+console.log(JSON.stringify({ checked, ninjaTables, ninjaRows, offerPlacements, failures: failures.length, firstFailures: failures.slice(0, 10) }));
 if (failures.length) process.exitCode = 1;

@@ -24,8 +24,10 @@ Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 
 - D2: all seven central offers published on staging, one record at a time with one authenticated readback each. GB, 2026-10-14, active status and eligibility from the complete approved terms verified. Existing headline/terms already matched word for word; Betway and Betwright have ordinary spaces where source has NBSP, with identical wording/punctuation. Stable IDs assigned where absent.
 
+- Tasks 6-7 CMS work: all 28 fixed Tier A records rebuilt as core blocks plus ACF offer slots, sequential authenticated REST writes with one readback each. Every raw-content, identity and slot-render check passed. All existing prose retained, accounting only for removed CSS, whitespace and WordPress smart punctuation. Hubs have all seven offers; matching-brand reviews have their central offer; other reviews have a labelled comparison section. Existing embedded promotions remain as supplied. WordPress revisions and ignored before/after evidence support rollback.
+
 ## In progress
-- Tasks 6-7: generic Gutenberg conversion code, 28 local Tier A content plans, exact seven-offer field plans and central ACF slot rendering are prepared. Offer publication is complete; CMS replacement and slot wiring are underway.
+- Tasks 6-7: CMS work complete; full rebuild and refreshed preview/render verification are running.
 - Task 8: preview checks have completed with the documented status conflicts. Launch is not approved. Final WPGRAPHQL_FRESH=1 build/check remains to run after CMS and automation work is complete.
 
 ## Blocked / required next inputs
@@ -60,8 +62,8 @@ Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 3. [x] Resilient staging build and complete cached rebuild.
 4. [x] Fixed Tier A/Tier B inventory.
 5. [x] Generic cleanup and rendered sampling.
-6. [ ] Tier A Gutenberg + ACF: preparation complete; CMS writes underway.
-7. [ ] Publish seven offers and wire ACF slots: all seven published; page wiring underway.
+6. [x] Tier A Gutenberg + ACF: all 28 CMS replacements and slot readbacks passed.
+7. [ ] Publish seven offers and wire ACF slots: all seven published and all 28 pages wired; preview verification running.
 8. [ ] Workers launch checklist: checks run, remaining blockers documented.
 9. [x] Cutover morning checklist and scoped difference list.
 

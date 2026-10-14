@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { builderToBlocks } from '../src/lib/builder-to-blocks.mjs';
+import { builderToBlocks, tierAOfferBlocks } from '../src/lib/builder-to-blocks.mjs';
 import { builderTier } from '../src/lib/builder-tiers.mjs';
 test('section 0 fixed tiers exclude classic columns and tipster reviews from Tier A', () => {
   assert.equal(builderTier({ uri: '/bet365-review', content: '' }), 'A');
@@ -14,4 +14,12 @@ test('builder prose, links, lists, tables and offer references become editable b
   assert.match(result, /Keep <a href="\/go\/example">this link<\/a>/);
   assert.doesNotMatch(result, /fl-row/);
   assert.throws(() => builderToBlocks('<form><input></form>'), /integration/);
+});
+
+test('Tier A preserves review prose and adds references without hard-coded terms', () => {
+  const result = tierAOfferBlocks('<p>Independent review</p>', [90846,90848]);
+  assert.match(result, /Independent review/);
+  assert.equal((result.match(/wp:acf\/everytip-offer-slot/g) || []).length, 2);
+  assert.doesNotMatch(result, /compact_terms|Free Bets/);
+  assert.throws(() => tierAOfferBlocks('<p>Review</p>', []), /at least one/);
 });
