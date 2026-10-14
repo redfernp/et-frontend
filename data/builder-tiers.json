@@ -1,0 +1,2394 @@
+{
+  "rule": "Section 0: fixed Tier A; other rendered builder markup Tier B; no Tier C. Fragment detection also catches embedded builder layouts in classic posts; no post conversion is authorised by Tier B.",
+  "source": "https://wordpress-159231-2098144.cloudwaysapps.com/graphql",
+  "classifiedAt": "2026-10-14T17:59:19.065Z",
+  "records": [
+    {
+      "id": 1792,
+      "uri": "/france-horse-racing-tips.html",
+      "title": "France Horse Racing Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 73437,
+      "uri": "/jason-weaver-horse-racing-tips.html",
+      "title": "Jason Weaver Horse Racing Tips for Today",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 17012,
+      "uri": "/itv-racing-tips.html",
+      "title": "ITV Racing Tips – Including Opening Show Selections",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 87305,
+      "uri": "/uefa-champions-league-betting-tips-predictions.html",
+      "title": "Uefa Champions League Betting Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 73290,
+      "uri": "/best-betting-sites-for-accumulators.html",
+      "title": "Best Betting Sites For Accumulators (2026)",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 56442,
+      "uri": "/best-odds-guaranteed-bookies.html",
+      "title": "Best Odds Guaranteed Bookies (Full BOG Bookmaker List 2026)",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 58743,
+      "uri": "/best-paypal-betting-sites.html",
+      "title": "Best PayPal betting sites 2026",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 89134,
+      "uri": "/bet365-pays-out-30m-on-sub-on-play-on-offer.html",
+      "title": "bet365 Pays Out £30m on Sub On Play On Offer",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 83716,
+      "uri": "/bet365-6-horses-challenge.html",
+      "title": "Bet365 Royal Ascot 6 Horses Challenge Explained",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 88734,
+      "uri": "/bet365-tournament-challenge-win-up-to-250000-during-the-world-cup.html",
+      "title": "Bet365 Tournament Challenge: Win Up To £250,000 During The World Cup",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 11315,
+      "uri": "/paddy-power-review.html",
+      "title": "Paddy Power Review 2026",
+      "kind": "posts",
+      "tier": "A"
+    },
+    {
+      "id": 31435,
+      "uri": "/star-sports-bet-review.html",
+      "title": "Star Sports Bet Review 2026 – Are They Safe To Use?",
+      "kind": "posts",
+      "tier": "A"
+    },
+    {
+      "id": 18783,
+      "uri": "/bet365-maximum-bet-limit.html",
+      "title": "Bet365 Maximum Bet Limit",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 49740,
+      "uri": "/mr-play-sports-review.html",
+      "title": "mr.play Sports Review 2026",
+      "kind": "posts",
+      "tier": "A"
+    },
+    {
+      "id": 32070,
+      "uri": "/betfair-exchange-review.html",
+      "title": "Betfair Exchange Review (2026)",
+      "kind": "posts",
+      "tier": "A"
+    },
+    {
+      "id": 26997,
+      "uri": "/netbet-sportsbook-review.html",
+      "title": "NetBet Sportsbook Review 2026",
+      "kind": "posts",
+      "tier": "A"
+    },
+    {
+      "id": 8640,
+      "uri": "/cheltenham-non-runner-no-bet.html",
+      "title": "Cheltenham Non Runner No Bet",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 39817,
+      "uri": "/shearer-vs-owen-vs-rooney-best-of-3-series.html",
+      "title": "Shearer vs Owen vs Rooney [Best of 3 Series]",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 54596,
+      "uri": "/epl-game-week-37-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 37 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 54417,
+      "uri": "/epl-game-week-36-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 36 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 54311,
+      "uri": "/epl-game-week-35-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 35 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 54246,
+      "uri": "/epl-game-week-34-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 34 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 54098,
+      "uri": "/epl-game-week-33-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 33 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 53989,
+      "uri": "/epl-game-week-32-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 32 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 53866,
+      "uri": "/epl-game-week-30-2021-22-season-premier-league-tips-john-newsome-2.html",
+      "title": "EPL Game Week 31 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 39526,
+      "uri": "/english-premier-league-records-statistics.html",
+      "title": "10 Interesting English Premier League Records & Statistics",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 53577,
+      "uri": "/epl-game-week-30-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 30 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 53511,
+      "uri": "/epl-game-week-29-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 29 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 53374,
+      "uri": "/epl-game-week-28-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 28 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 53221,
+      "uri": "/epl-game-week-27-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 27 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 53130,
+      "uri": "/epl-game-week-26-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 26 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 52894,
+      "uri": "/epl-game-week-24-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 24 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 52644,
+      "uri": "/epl-game-week-23-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 23 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 52506,
+      "uri": "/epl-game-week-22-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 22 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 52305,
+      "uri": "/epl-game-week-21-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 21 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 52238,
+      "uri": "/epl-game-week-20-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 20 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 52081,
+      "uri": "/epl-game-week-19-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 19 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 51967,
+      "uri": "/epl-game-week-18-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 18 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 51821,
+      "uri": "/epl-game-week-17-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 17 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 51723,
+      "uri": "/epl-game-week-16-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 16 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 51626,
+      "uri": "/epl-game-week-15-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 15 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 51567,
+      "uri": "/epl-game-week-14-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 14 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 51439,
+      "uri": "/epl-game-week-13-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 13 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 50963,
+      "uri": "/epl-game-week-10-2021-22-season-premier-league-tips-john-newsome-2.html",
+      "title": "EPL Game Week 11 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 9914,
+      "uri": "/australia-horse-racing-tips.html",
+      "title": "Australia Horse Racing Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 50779,
+      "uri": "/epl-game-week-10-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 10 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 50637,
+      "uri": "/epl-game-week-9-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 9 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 50466,
+      "uri": "/epl-game-week-8-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 8 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 50092,
+      "uri": "/epl-game-week-7-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 7 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 49931,
+      "uri": "/epl-game-week-6-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 6 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 49804,
+      "uri": "/epl-game-week-5-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 5 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 49607,
+      "uri": "/epl-game-week-4-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 4 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 49307,
+      "uri": "/epl-game-week-3-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 3 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 49129,
+      "uri": "/epl-game-week-2-2021-22-season-premier-league-tips-john-newsome.html",
+      "title": "EPL Game Week 2 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 48857,
+      "uri": "/epl-game-week-1-2021-22-season-premier-league-tips.html",
+      "title": "EPL Game Week 1 – 2021/22 Season Premier League Tips – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 48677,
+      "uri": "/english-premier-league-2021-22-preview-outright-winner-prediction.html",
+      "title": "English Premier League 2021/22 Preview & Outright Winner Prediction",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 48086,
+      "uri": "/euro-2020-final-correct-score-prediction-john-newsome.html",
+      "title": "Euro 2020 Final Correct Score Prediction – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 48027,
+      "uri": "/euro-2020-semi-final-correct-score-predictions-john-newsome.html",
+      "title": "Euro 2020 Semi-Final Correct Score Predictions – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 47943,
+      "uri": "/euro-2020-quarter-final-correct-score-predictions-john-newsome.html",
+      "title": "Euro 2020 Quarter-Final Correct Score Predictions – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 47821,
+      "uri": "/euro-2020-last-16-correct-score-predictions-john-newsome.html",
+      "title": "Euro 2020 Last 16 Correct Score Predictions – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 47400,
+      "uri": "/euro-2020-all-group-games-correct-score-predictions.html",
+      "title": "Euro 2020 – All Group Games Correct Score Predictions – John Newsome",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 47158,
+      "uri": "/epl-game-week-38-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 38 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 47101,
+      "uri": "/epl-game-week-37-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 37 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 46974,
+      "uri": "/epl-game-week-36-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 36 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 46882,
+      "uri": "/epl-game-week-35-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 35 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 46761,
+      "uri": "/epl-game-week-34-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 34 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 46656,
+      "uri": "/epl-game-week-33-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 33 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 46505,
+      "uri": "/epl-game-week-32-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 32 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 46399,
+      "uri": "/epl-game-week-31-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 31 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 46254,
+      "uri": "/epl-game-week-30-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 30 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 45945,
+      "uri": "/epl-game-week-29-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 29 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 45783,
+      "uri": "/epl-game-week-28-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 28 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 45692,
+      "uri": "/epl-game-week-27-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 27 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 45627,
+      "uri": "/epl-game-week-29-33-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 29/33 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 45523,
+      "uri": "/epl-game-week-26-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 26 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 45345,
+      "uri": "/epl-game-week-25-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 25 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 45104,
+      "uri": "/epl-game-week-24-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 24 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 45010,
+      "uri": "/epl-game-week-23-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 23 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 44929,
+      "uri": "/epl-game-week-22-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 22 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 44843,
+      "uri": "/epl-game-week-21-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 21 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 44766,
+      "uri": "/epl-game-week-20-2020-21-season-weekdays-premier-league-tips.html",
+      "title": "EPL Game Week 20 – 2020/21 Season – Weekdays Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 6767,
+      "uri": "/germany-horse-racing-tips.html",
+      "title": "Germany Horse Racing Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 44655,
+      "uri": "/epl-game-week-18-part-2-2020-21-season-weekdays-premier-league-tips.html",
+      "title": "EPL Game Week 18-part 2 – 2020/21 Season – Weekdays Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 44587,
+      "uri": "/epl-game-week-19-2020-21-season-weekdays-premier-league-tips.html",
+      "title": "EPL Game Week 19 – 2020/21 Season – Weekdays Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 44394,
+      "uri": "/epl-game-week-18-part1-2020-21-season-weekdays-premier-league-tips.html",
+      "title": "EPL Game Week 18 part1 – 2020/21 Season – Weekdays Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 44170,
+      "uri": "/epl-game-week-17-2020-21-season-weekdays-premier-league-tips.html",
+      "title": "EPL Game Week 17 – 2020/21 Season – Weekdays Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 44121,
+      "uri": "/epl-game-week-16-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 16 – 2020/21 Season – Weekdays Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 44035,
+      "uri": "/epl-game-week-15-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 15 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 43937,
+      "uri": "/epl-game-week-14-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 14 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 43847,
+      "uri": "/epl-game-week-13-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 13 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 43756,
+      "uri": "/epl-game-week-12-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 12 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 43584,
+      "uri": "/epl-game-week-11-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 11 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 43417,
+      "uri": "/epl-game-week-10-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 10 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 43157,
+      "uri": "/epl-game-week-9-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 9 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 42924,
+      "uri": "/epl-game-week-8-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 8 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 42769,
+      "uri": "/epl-game-week-7-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 7 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 42616,
+      "uri": "/epl-game-week-6-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 6 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 42430,
+      "uri": "/epl-game-week-5-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 5 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 42157,
+      "uri": "/epl-game-week-4-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 4 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 42003,
+      "uri": "/epl-game-week-3-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 3 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 41808,
+      "uri": "/epl-game-week-2-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Game Week 2 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 41547,
+      "uri": "/epl-week-1-2020-21-season-weekend-premier-league-tips.html",
+      "title": "EPL Week 1 – 2020/21 Season – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 40749,
+      "uri": "/epl-week-38-weekend-premier-league-tips.html",
+      "title": "EPL Week 38 – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 40655,
+      "uri": "/epl-week-37-weekend-premier-league-tips.html",
+      "title": "EPL Week 37 – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 40601,
+      "uri": "/epl-week-36-weekend-premier-league.html",
+      "title": "EPL Week 36 – Weekend Premier League",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 40543,
+      "uri": "/epl-week-35-weekend-premier-league-tips.html",
+      "title": "EPL Week 35 – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 40491,
+      "uri": "/epl-week-34-weekend-premier-league-tips.html",
+      "title": "EPL Week 34 – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 40444,
+      "uri": "/epl-week-33-weekend-premier-league-tips.html",
+      "title": "EPL Week 33- Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 40327,
+      "uri": "/epl-week-32-weekend-premier-league-tips.html",
+      "title": "EPL Week 32- Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 40267,
+      "uri": "/epl-week-31-weekend-premier-league-tips.html",
+      "title": "EPL Week 31- Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 40081,
+      "uri": "/epl-week-30-resumption-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 30 [Resumption] Predictions- Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 40077,
+      "uri": "/epl-week-29-conclusion-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 29 Conclusion Predictions- Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 39720,
+      "uri": "/lampard-vs-gerrard-vs-scholes-best-of-3-series.html",
+      "title": "Lampard vs Gerrard vs Scholes [Best of 3 Series]",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 39636,
+      "uri": "/liverpool-1990-vs-2020-team.html",
+      "title": "Head-to-head – Liverpool 1990 vs 2020 Team Comparison",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 39571,
+      "uri": "/favourite-roy-keane-moments.html",
+      "title": "Top 10 Roy Keane Most Memorable Moments",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 39501,
+      "uri": "/liverpool-all-time-premier-league-best-eleven.html",
+      "title": "Liverpool All-Time Premier League Best Eleven",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 39440,
+      "uri": "/manchester-united-all-time-premier-league-best-eleven.html",
+      "title": "Manchester United All-Time Premier League Best Eleven",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 39328,
+      "uri": "/greatest-premier-league-football-games-of-all-time.html",
+      "title": "The Greatest Premier League Football Games of All Time",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 39152,
+      "uri": "/epl-week-30-predictions-weekend-premier-league-tips-2.html",
+      "title": "EPL Week 30 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 39035,
+      "uri": "/epl-week-29-predictions-weekend-premier-league-tips-2.html",
+      "title": "EPL Week 29 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 38943,
+      "uri": "/epl-week-28-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 28 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 38879,
+      "uri": "/epl-week-27-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 27 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 38671,
+      "uri": "/epl-week-26-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 26 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 38579,
+      "uri": "/epl-week-25-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 25 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 38446,
+      "uri": "/epl-week-24-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 24 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 38359,
+      "uri": "/epl-week-23-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 23 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 38248,
+      "uri": "/epl-week-22-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 22 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 39909,
+      "uri": "/campbell-vs-ferdinand-vs-john-terry-best-of-3-series.html",
+      "title": "Campbell vs Ferdinand vs John Terry [Best of 3 Series]",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 38103,
+      "uri": "/epl-week-21-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 21 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 38053,
+      "uri": "/epl-week-20-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 20 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 38012,
+      "uri": "/epl-week-19-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 19 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 37940,
+      "uri": "/epl-week-18-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 18 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 37843,
+      "uri": "/epl-week-17-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 17 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 37771,
+      "uri": "/epl-week-16-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 16 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 37671,
+      "uri": "/epl-week-15-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 15 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 37539,
+      "uri": "/epl-week-14-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 14 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 37441,
+      "uri": "/epl-week-13-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 13 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 37210,
+      "uri": "/epl-week-12-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 12 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 37108,
+      "uri": "/epl-week-11-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 11 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 36993,
+      "uri": "/epl-week-10-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 10 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 36901,
+      "uri": "/epl-week-9-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 9 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 36697,
+      "uri": "/epl-week-8-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 8 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 36587,
+      "uri": "/epl-week-7-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 7 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 36485,
+      "uri": "/epl-week-6-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 6 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 36308,
+      "uri": "/epl-week-5-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 5 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 36156,
+      "uri": "/epl-week-4-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 4 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 36026,
+      "uri": "/epl-week-3-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 3 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 35880,
+      "uri": "/epl-week-2-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 2 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 35773,
+      "uri": "/epl-week-1-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 1 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 35590,
+      "uri": "/english-premier-league-2019-2020-best-young-players.html",
+      "title": "English Premier League 2019/2020 – Best Young Players",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 34896,
+      "uri": "/2019-2020-english-premier-league-football-outright-winner.html",
+      "title": "2019/2020 English Premier League Football Table Final Positions – Predictions For All Clubs",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 33717,
+      "uri": "/epl-week-38-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 38 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 33587,
+      "uri": "/epl-week-37-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 37 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 33484,
+      "uri": "/football-blogging-award.html",
+      "title": "Everytip’s John Newsome Nominated For 2019 Football Blogging Award",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 33482,
+      "uri": "/epl-week-36-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 36 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 33332,
+      "uri": "/epl-week-35-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 35 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 33189,
+      "uri": "/epl-week-34-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 34 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 33055,
+      "uri": "/epl-week-33-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 33 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 33006,
+      "uri": "/boxing-townend-v-cordina-barnsley-man-is-bouncing-back.html",
+      "title": "Boxing – Townend v Cordina – Barnsley Man Is Bouncing Back",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 32587,
+      "uri": "/epl-week-31-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 31 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 32436,
+      "uri": "/epl-week-30-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 30 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 32354,
+      "uri": "/epl-week-29-predictions-weekend-premier-league-tips.html",
+      "title": "EPL Week 29 Predictions – Weekend Premier League Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 32310,
+      "uri": "/midweek-premier-league-football-correct-score-betting-tips-26th-27th-february-2019-game-week-28.html",
+      "title": "Midweek Premier League Football Correct Score Betting Tips 26th & 27th February 2019 – Game-Week 28",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 32207,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-22nd-23rd-24th-february-2019-game-week-27.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips 22nd, 23rd & 24th February 2019 – Game-Week 27",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 32016,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-9th-10th-11th-february-2019-game-week-26.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips 9th, 10th & 11th February 2019 – Game-Week 26",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 31921,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-2nd-6th-february-2019-game-week-25.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips 2nd-6th February 2019 – Game-Week 25",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 31795,
+      "uri": "/mid-week-premier-league-football-correct-score-betting-tips-29th-30th-january-2019-game-week-24.html",
+      "title": "Mid-Week Premier League Football Correct Score Betting Tips 29th & 30th January 2019 – Game-Week 24",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 31682,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-19th-20th-january-2019-game-week-23.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips 19th & 20th January 2019 – Game-Week 23",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 31584,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-12th-13th-14th-december-2018-game-week-22.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips 12th, 13th & 14th January 2019 – Game-Week 22",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 31331,
+      "uri": "/midweek-premier-league-football-correct-score-betting-tips-1st-2nd-3rd-january-2019-game-week-21.html",
+      "title": "Midweek Premier League Football Correct Score Betting Tips 1st, 2nd & 3rd January 2019 – Game-Week 21",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 31284,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-29th-30th-december-2018-game-week-20.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips 29th & 30th December 2018 – Game-Week 20",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 31214,
+      "uri": "/christmas-premier-league-football-correct-score-betting-tips-26th-27th-december-2018-game-week-19.html",
+      "title": "Christmas Premier League Football Correct Score Betting Tips 26th & 27th December 2018 – Game-Week 19",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 31109,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-21st-22nd-23rd-december-2018-game-week-18.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips 21st, 22nd & 23rd December 2018 – Game-Week 18",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 30977,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-15th-16th-december-2018-game-week-17.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips 15th & 16th December 2018 – Game-Week 17",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 30854,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-8th-9th-10th-december-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips 8th, 9th & 10th December 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 30800,
+      "uri": "/midweek-premier-league-football-correct-score-betting-tips-4th-5th-december-2018.html",
+      "title": "Midweek Premier League Football Correct Score Betting Tips – 4th & 5th December 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 30650,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-30th-november-2nd-december-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips 30th November – 2nd December 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 30517,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-24th-25th-26th-november-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 24th, 25th & 26th November 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 30269,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-10th-11th-november-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 10th & 11th November 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 30185,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-3rd-4th-5th-november-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 3rd, 4th & 5th November 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 30086,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-27th-28th-29th-october-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 27th, 28th & 29th October 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 29981,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-20th-to-22nd-october-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 20th To 22nd October 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 29808,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-5th-october-to-7th-october-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 5th October To 7th October 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 29721,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-29th-september-to-1st-october-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 29th September To 1st October 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 29634,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-22nd-23rd-september-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 22nd & 23rd September 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 29531,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-15th-16th-17th-september-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 15th, 16th & 17th September 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 29360,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-1st-2nd-september-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 1st & 2nd September 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 29245,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-25th-27th-august-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 25th-27th August 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 29153,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-18th-20th-august-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 18th-20th August 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 29052,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-10th-12th-august-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 10th-12th August 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 29036,
+      "uri": "/2018-2019-premier-league-preview-southampton-tottenham-watford-west-ham-wolves.html",
+      "title": "2018/2019 Premier League Preview – Southampton, Tottenham, Watford, West Ham & Wolves",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 28951,
+      "uri": "/2018-2019-premier-league-preview-leicester-liverpool-man-city-man-united-newcastle.html",
+      "title": "2018/2019 Premier League Preview – Leicester, Liverpool, Man City, Man United & Newcastle",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 28856,
+      "uri": "/2018-2019-premier-league-preview-chelsea-crystal-palace-everton-fulham-huddersfield.html",
+      "title": "2018/2019 Premier League Preview – Chelsea, Crystal Palace, Everton, Fulham & Huddersfield",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 28690,
+      "uri": "/final-2018-world-cup-football-correct-score-betting-tips.html",
+      "title": "Final 2018 World Cup Football Correct Score Betting Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 28583,
+      "uri": "/semi-finals-2018-world-cup-football-correct-score-betting-tips.html",
+      "title": "Semi-Finals 2018 World Cup Football Correct Score Betting Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 28499,
+      "uri": "/quarter-finals-2018-world-cup-football-correct-score-betting-tips.html",
+      "title": "Quarter-Finals 2018 World Cup Football Correct Score Betting Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 28444,
+      "uri": "/more-last-16-2018-world-cup-football-correct-score-betting-tips.html",
+      "title": "More Last 16 2018 World Cup Football Correct Score Betting Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 28412,
+      "uri": "/last-16-2018-world-cup-group-stage-football-correct-score-betting-tips.html",
+      "title": "Last 16 2018 World Cup Football Correct Score Betting Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 28396,
+      "uri": "/final-r3-2018-world-cup-group-stage-football-correct-score-betting-tips.html",
+      "title": "Final R3 2018 World Cup Group Stage Football Correct Score Betting Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 28381,
+      "uri": "/further-r3-2018-world-cup-group-stage-football-correct-score-betting-tips.html",
+      "title": "Further R3 2018 World Cup Group Stage Football Correct Score Betting Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 28339,
+      "uri": "/further-2018-world-cup-group-stage-football-correct-score-betting-tips.html",
+      "title": "Further 2018 World Cup Group Stage Football Correct Score Betting Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 28294,
+      "uri": "/latest-2018-world-cup-group-stage-football-correct-score-betting-tips.html",
+      "title": "Latest 2018 World Cup Group Stage Football Correct Score Betting Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 28202,
+      "uri": "/more-2018-world-cup-group-stage-football-correct-score-betting-tips.html",
+      "title": "More 2018 World Cup Group Stage Football Correct Score Betting Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 28081,
+      "uri": "/2018-world-cup-group-stage-football-correct-score-betting-tips.html",
+      "title": "2018 World Cup Group Stage Football Correct Score Betting Tips",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 27404,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-13th-may-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 13th May 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 27357,
+      "uri": "/midweek-premier-league-football-correct-score-betting-tips-8th-9th-10th-may-2018.html",
+      "title": "Midweek Premier League Football Correct Score Betting Tips – 8th, 9th & 10th May 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 27268,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-4th-5th-6th-may-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 4th, 5th & 6th May 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 27160,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-28th-29th-30th-april-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 28th, 29th & 30th April 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 26978,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-21st-22nd-23rd-april-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 21st, 22nd & 23rd April 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 26844,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-14th-15th-16th-april-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 14th, 15th, 16th, 17th, 18th & 19th April 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 26573,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-7th-8th-april-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 7th & 8th April 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 26138,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-31st-march-1st-april-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 31st March & 1st April 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 26136,
+      "uri": "/friday-international-football-correct-score-betting-tips-23rd-march-2018.html",
+      "title": "Friday International Football Correct Score Betting Tips – 23rd March 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 25826,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-17th-march-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 17th March 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 25685,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-10th-11th-12th-march-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 10th, 11th & 12th March 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 25582,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-3rd-4th-5th-march-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 3rd, 4th & 5th March 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 25487,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-24th-25th-26th-february-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 24th, 25th & 26th February 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 25270,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-10th-11th-12th-february-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 10th, 11th & 12th February 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 25206,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-3rd-4th-5th-february-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 3rd, 4th & 5th February 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 25167,
+      "uri": "/midweek-premier-league-football-correct-score-betting-tips-30th-31st-january-2018.html",
+      "title": "Midweek Premier League Football Correct Score Betting Tips – 30th & 31st January 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 24989,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-20th-21st-22nd-january-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 20th, 21st & 22nd January 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 24881,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-13th-14th-15th-january-2018.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 13th, 14th & 15th January 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 24774,
+      "uri": "/new-years-day-midweek-premier-league-football-correct-score-betting-tips-1st-2nd-3rd-4th-january-2018.html",
+      "title": "New Year’s Day/Midweek Premier League Football Correct Score Betting Tips – 1st, 2nd, 3rd & 4th January 2018",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 24685,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-30th-31st-december-2017.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 30th & 31st December 2017",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 24579,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-22nd-23rd-december-2017.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 22nd & 23rd December 2017",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 24509,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-16th-17th-18th-december-2017.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 16th, 17th & 18th December 2017",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 24472,
+      "uri": "/midweek-premier-league-football-correct-score-betting-tips-28th-29th-november-2017-2.html",
+      "title": "Midweek Premier League Football Correct Score Betting Tips – 12th & 13th December 2017",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 24376,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-9th-10th-december-2017.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 9th & 10th December 2017",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 24295,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-2nd-3rd-december-2017.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 2nd & 3rd December 2017",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 24247,
+      "uri": "/midweek-premier-league-football-correct-score-betting-tips-28th-29th-november-2017.html",
+      "title": "Midweek Premier League Football Correct Score Betting Tips – 28th & 29th November 2017",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 24130,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-24th-25th-26th-november-2017.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 24th, 25th & 26th November 2017",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 24011,
+      "uri": "/weekend-premier-league-football-correct-score-betting-tips-18th-19th-20th-november-2017.html",
+      "title": "Weekend Premier League Football Correct Score Betting Tips – 18th, 19th & 20th November 2017",
+      "kind": "posts",
+      "tier": "B"
+    },
+    {
+      "id": 60493,
+      "uri": "/bet365-6-scores-challenge",
+      "title": "Bet365 6 Scores Challenge Explained & This Weekend’s Qualifying Games",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 75853,
+      "uri": "/high-stakes-betting-sites-for-high-rollers-vips",
+      "title": "Best High Stakes Betting Sites for High Rollers & VIPs (2026)",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 69843,
+      "uri": "/quinnbet-review",
+      "title": "QuinnBet Review",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 75026,
+      "uri": "/top-cricket-betting-sites",
+      "title": "Best Cricket Betting Sites 2026",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 75043,
+      "uri": "/what-is-best-way-to-bet-on-greyhounds",
+      "title": "Best Way To Bet On Greyhounds in 2026",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 75678,
+      "uri": "/best-bookie-for-lucky-15-bets-uk-ireland",
+      "title": "Best Bookie for Lucky 15 Bets in 2026",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 64050,
+      "uri": "/best-betting-sites-for-live-sports-streaming",
+      "title": "Best Betting Sites For Live Sports Streaming",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 42466,
+      "uri": "/betfred-review",
+      "title": "Betfred Review 2026",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 87553,
+      "uri": "/bet365-review",
+      "title": "bet365 review PPC",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 86045,
+      "uri": "/betway-sportsbook-review",
+      "title": "Betway UK Review 2026",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 75559,
+      "uri": "/best-cash-out-betting-sites-uk-ire",
+      "title": "Best Cash Out Betting Sites [2026]",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 89169,
+      "uri": "/bet365-review-redesign",
+      "title": "Bet365 Review 2026",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 89153,
+      "uri": "/10bet-review",
+      "title": "10Bet Review 2026",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 89146,
+      "uri": "/betwright-review",
+      "title": "BetWright Review 2026",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 89145,
+      "uri": "/netbet-review",
+      "title": "NetBet Review 2026",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 89143,
+      "uri": "/spreadex-review",
+      "title": "Spreadex Review 2026",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 88994,
+      "uri": "/betfred-sign-up-offer",
+      "title": "Betfred Sign Up Offer",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 88965,
+      "uri": "/bet365-sign-up-offer",
+      "title": "bet365 sign up offer",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 43135,
+      "uri": "/bet365-review-old",
+      "title": "Bet365 Review 2026",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 86907,
+      "uri": "/boylesports-review",
+      "title": "Boylesports Review",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 73041,
+      "uri": "/cheltenham-racing-tips",
+      "title": "Cheltenham Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 73006,
+      "uri": "/ascot-racing-tips",
+      "title": "Ascot Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 72995,
+      "uri": "/york-racing-tips",
+      "title": "York Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 73979,
+      "uri": "/racecourses/hamilton-park-racing-tips",
+      "title": "Hamilton Park Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 45714,
+      "uri": "/racecourses/chester-racing-tips",
+      "title": "Chester Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 73050,
+      "uri": "/epsom-downs-racing-tips",
+      "title": "Epsom Downs Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 45997,
+      "uri": "/racecourses/beverley-racing-tips",
+      "title": "Beverley Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 46440,
+      "uri": "/racecourses/fakenham-racing-tips",
+      "title": "Fakenham Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 73957,
+      "uri": "/racecourses/redcar-racing-tips",
+      "title": "Redcar Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 45272,
+      "uri": "/racecourses/southwell-racing-tips",
+      "title": "Southwell Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 45999,
+      "uri": "/racecourses/bath-racing-tips",
+      "title": "Bath Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 46322,
+      "uri": "/racecourses/catterick-racing-tips",
+      "title": "Catterick Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 45850,
+      "uri": "/racecourses/ayr-racing-tips",
+      "title": "Ayr Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 45395,
+      "uri": "/racecourses/chelmsford-city-racing-tips",
+      "title": "Chelmsford City Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 46442,
+      "uri": "/racecourses/ffos-las-racing-tips",
+      "title": "Ffos Las Horse Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 50329,
+      "uri": "/racecourses/leicester-racing-tips",
+      "title": "Leicester Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 50039,
+      "uri": "/racecourses/doncaster-racing-tips",
+      "title": "Doncaster Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 46325,
+      "uri": "/racecourses/chepstow-racing-tips",
+      "title": "Chepstow Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 46158,
+      "uri": "/racecourses/carlisle-racing-tips",
+      "title": "Carlisle Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 45847,
+      "uri": "/racecourses/haydock-racing-tips",
+      "title": "Haydock Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 50411,
+      "uri": "/racecourses/musselburgh-racing-tips",
+      "title": "Musselburgh Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 50327,
+      "uri": "/racecourses/wetherby-racing-tips",
+      "title": "Wetherby Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 48068,
+      "uri": "/racecourses/sandown-racing-tips",
+      "title": "Sandown Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 50413,
+      "uri": "/racecourses/newbury-racing-tips",
+      "title": "Newbury Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 45276,
+      "uri": "/racecourses/wolverhampton-racing-tips",
+      "title": "Wolverhampton Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 45270,
+      "uri": "/racecourses/kempton-racing-tips",
+      "title": "Kempton Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 45274,
+      "uri": "/racecourses/lingfield-racing-tips",
+      "title": "Lingfield Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 16,
+      "uri": "/",
+      "title": "Home",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 45390,
+      "uri": "/racecourses/newcastle-racing-tips",
+      "title": "Newcastle Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 46160,
+      "uri": "/racecourses/brighton-racing-tips",
+      "title": "Brighton Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 75016,
+      "uri": "/best-darts-betting-sites",
+      "title": "Best Darts Betting Sites 2026",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 60489,
+      "uri": "/bet365-best-odds-guaranteed",
+      "title": "Bet365 best odds guaranteed",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 56059,
+      "uri": "/betfred-best-odds-guaranteed",
+      "title": "Betfred Best Odds Guaranteed Promotion Explained",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 75007,
+      "uri": "/best-snooker-betting-sites",
+      "title": "Best Snooker Betting Sites 2026",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 56067,
+      "uri": "/goals-galore-betfred-explained",
+      "title": "Goals Galore Betfred Explained",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 60491,
+      "uri": "/how-does-bet365-bet-builder-work",
+      "title": "How does Bet365 bet builder work?",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 61948,
+      "uri": "/bet365-how-to-bet",
+      "title": "How to place a bet on bet365",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 59687,
+      "uri": "/does-william-hill-pay-first-past-the-post",
+      "title": "Does William Hill Pay First Past The Post?",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 74973,
+      "uri": "/best-rugby-betting-sites",
+      "title": "Best Rugby Betting Sites in 2026",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 74913,
+      "uri": "/best-golf-betting-sites",
+      "title": "Best Golf Betting Sites For 2026",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 44009,
+      "uri": "/bet365-cash-out-feature-explained",
+      "title": "Bet365 Cash Out Feature Explained",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 30897,
+      "uri": "/best-horse-racing-betting-sites",
+      "title": "Best Horse Racing Betting Sites In UK 2026",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 56061,
+      "uri": "/betfred-pick-your-punt",
+      "title": "Betfred Pick Your Punt Explained",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 75552,
+      "uri": "/best-telephone-betting-bookmakers-uk",
+      "title": "Best Telephone Betting Bookmakers UK (2026)",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 44012,
+      "uri": "/betfred-cash-out-feature-explained",
+      "title": "Betfred Cash Out Feature explained",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 75034,
+      "uri": "/best-mobile-betting-sites-in-uk",
+      "title": "Best Mobile Betting Sites in UK (2026)",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 44479,
+      "uri": "/betfair-sportsbook-review",
+      "title": "Betfair Sportsbook Review 2026",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 60152,
+      "uri": "/who-does-bet365-sponsor",
+      "title": "Who does bet365 sponsor?",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 44986,
+      "uri": "/william-hill-review",
+      "title": "William Hill Review 2026",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 43548,
+      "uri": "/888sport-review",
+      "title": "888sport Review 2026 – Bet £10 & Get £40 in Free Bets & Casino Bonuses",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 60154,
+      "uri": "/can-bet365-cancel-a-withdrawal",
+      "title": "Can bet365 cancel a withdrawal?",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 56315,
+      "uri": "/bookie-free-bets-bonus-offers",
+      "title": "Best Bookie New Customer Free Bets & Bonus Offers For 2026",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 72881,
+      "uri": "/quinnbet-bonus-code",
+      "title": "QuinnBet Welcome Offer: Get 50% Back in Free Bets up to £25 – No Bonus Code",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 35493,
+      "uri": "/mansionbet-review",
+      "title": "MansionBet Review",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 59685,
+      "uri": "/william-hill-cash-out",
+      "title": "William Hill cash out: Cash in my bet feature explained",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 81395,
+      "uri": "/what-is-a-patent-bet",
+      "title": "Patent Bet Explained: Unlock 7 Bets from 3 Picks",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 61953,
+      "uri": "/bet365-lucky-15-betting-guide",
+      "title": "Bet365 Lucky 15 Betting Guide",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 74011,
+      "uri": "/racecourses/bellewstown-racing-tips",
+      "title": "Bellewstown Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 45582,
+      "uri": "/racecourses/dundalk-racing-tips",
+      "title": "Dundalk Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 74023,
+      "uri": "/racecourses/ballinrobe-racing-tips",
+      "title": "Ballinrobe Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 49575,
+      "uri": "/racecourses/listowel-racing-tips",
+      "title": "Listowel Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 49441,
+      "uri": "/racecourses/down-royal-racing-tips",
+      "title": "Down Royal Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 49443,
+      "uri": "/racecourses/roscommon-racing-tips",
+      "title": "Roscommon Racecourse Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 49266,
+      "uri": "/racecourses/tipperary-racing-tips",
+      "title": "Tipperary Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 49096,
+      "uri": "/racecourses/clonmel-racing-tips",
+      "title": "Clonmel Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 48639,
+      "uri": "/racecourses/navan-racing-tips",
+      "title": "Navan Horse Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 49896,
+      "uri": "/racecourses/downpatrick-racing-tips",
+      "title": "Downpatrick Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 48711,
+      "uri": "/racecourses/fairyhouse-racing-tips",
+      "title": "Fairyhouse racing tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 48792,
+      "uri": "/racecourses/killarney-racing-tips",
+      "title": "Killarney racing tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 48789,
+      "uri": "/racecourses/cork-racing-tips",
+      "title": "Cork racing tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 48637,
+      "uri": "/racecourses/naas-racing-tips",
+      "title": "Naas Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 48550,
+      "uri": "/racecourses/gowran-park-racing-tips",
+      "title": "Gowran Park Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 48548,
+      "uri": "/racecourses/curragh-racing-tips",
+      "title": "Curragh Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 48190,
+      "uri": "/racecourses/leopardstown-racing-tips",
+      "title": "Leopardstown Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 48188,
+      "uri": "/racecourses/galway-racing-tips",
+      "title": "Galway Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 48390,
+      "uri": "/racecourses/limerick-racing-tips",
+      "title": "Limerick Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 49894,
+      "uri": "/racecourses/sligo-racing-tips",
+      "title": "Sligo Racing Tips",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 76939,
+      "uri": "/free-betting-tips",
+      "title": "Free Betting Tips New",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 5600,
+      "uri": "/thanks-signing-up",
+      "title": "Thanks for signing up",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 70111,
+      "uri": "/quinnbet-extra-places-offer",
+      "title": "Quinnbet Extra Places Offer",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 59679,
+      "uri": "/william-hill-free-or-4-explained",
+      "title": "William Hill Free or 4 Promotion Explained (Free to Play)",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 73411,
+      "uri": "/fafabet-bonus-code",
+      "title": "Fafabet Bonus Code: Claim Up to £50 Free Bet + £20 Casino Bonus",
+      "kind": "pages",
+      "tier": "A"
+    },
+    {
+      "id": 59675,
+      "uri": "/william-hill-scratch-of-the-day",
+      "title": "William Hill Scratch of the Day Explained",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 56063,
+      "uri": "/betfred-double-delight",
+      "title": "Betfred Double Delight & Hat-Trick Heaven Explained",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 59677,
+      "uri": "/william-hill-best-odds-guaranteed",
+      "title": "William Hill Best Odds Guaranteed",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 59683,
+      "uri": "/william-hill-acca-club",
+      "title": "What is the William Hill Acca Club – weekly £5 free bet offer?",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 60150,
+      "uri": "/which-countries-is-bet365-available",
+      "title": "Which countries is bet365 available?",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 59681,
+      "uri": "/william-hill-maximum-payout",
+      "title": "William Hill Maximum Payout – What Is It?",
+      "kind": "pages",
+      "tier": "B"
+    },
+    {
+      "id": 56065,
+      "uri": "/who-owns-betfred",
+      "title": "Who Owns Betfred?",
+      "kind": "pages",
+      "tier": "B"
+    }
+  ]
+}

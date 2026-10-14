@@ -7,7 +7,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 - Created this single progress file with sections 4 and 5 as checklists.
 - Default Astro entry point now reads fresh paginated staging WPGraphQL through WPGRAPHQL_ENDPOINT. No October snapshot fallback or live-only overlays; section 0 permits resumable local response caching. Shared layout retained; old pilot routes are outside the default build.
 - Removed per-article live modules, their snapshot scripts and obsolete overlay tests. Stopped classic post conversions and general live/staging drift work.
-- Generic builder cleanup strips builder wrappers/styles and retains prose, headings, images, tables, links and ACF slot markers. Applied by markup detection; final Tier B membership follows the section 0 fixed rule.
+- Generic builder cleanup strips builder wrappers/styles and retains prose, headings, images, tables, links and ACF slot markers. Applied by markup detection; fixed tier inventory is in data/builder-tiers.json.
 - Rendered affiliate links retain existing www.everytip.co.uk/go paths and receive sponsored/nofollow. Workers /go routing remains outstanding.
 - Sitemap uses source robots. Added a section 4 gate for built assets, Yoast parity, sitemap membership, affiliate relations and unresolved offer slots.
 - Preview packaging preserves source Yoast meta and adds HTTP X-Robots-Tag noindex. No remote upload performed.
@@ -54,7 +54,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 1. [x] Commit and push baseline.
 2. [x] Create PROGRESS.md.
 3. [x] Resilient staging build and cached rebuild completed.
-4. [ ] Apply fixed Tier A / all-other-builder Tier B classification.
+4. [x] Fixed tiers committed in data/builder-tiers.json: 27 Tier A routes; 87 Tier B pages. Another 227 classic posts contain embedded builder fragments and receive render cleanup only, never Gutenberg conversion.
 5. [ ] Generic cleanup: implemented; rendered sampling/final membership pending.
 6. [ ] Tier A Gutenberg + ACF: authorised through single-record staging REST. Use staging; user's no-live-write instruction overrides section 3a's live wording.
 7. [ ] Publish seven offers and wire slots through single-record staging REST.
@@ -83,4 +83,4 @@ Scope is only section 4a; HTML inequality is a signal for review, not proof ever
 No DNS, Cloudflare production settings, live WordPress writes, Tier C redirects, new dated reports, classic post conversions or general drift audits. Existing dated docs remain historical, not current instructions.
 
 ## Active checkpoint
-Task 3 complete; proceeding to fixed tiers and cleanup sampling. Prior timeout stop checkpoint is superseded by section 0. No new staging writes or remote deployment yet this turn.
+Tasks 3 and 4 complete; cleanup sampling underway. Prior timeout stop checkpoint is superseded by section 0. No new staging writes or remote deployment yet this turn.
