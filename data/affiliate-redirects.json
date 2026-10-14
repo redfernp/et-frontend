@@ -1,0 +1,321 @@
+{
+  "checkedAt": "2026-10-14T18:09:57.842Z",
+  "redirects": {
+    "/go/10bet": {
+      "status": 302,
+      "location": "https://track.10bet.com/C.ashx?btag=a_52705b_6478c_&affid=1680674&siteid=52705&adid=6478&c="
+    },
+    "/go/10bet-offers": {
+      "status": 302,
+      "location": "https://track.10bet.com/C.ashx?btag=a_52705b_5801c_&affid=1680674&siteid=52705&adid=5801&c="
+    },
+    "/go/888sport": {
+      "status": 302,
+      "location": "https://mmwebhandler.aff-online.com/c/41262?sr=1694409"
+    },
+    "/go/888sport-terms": {
+      "status": 302,
+      "location": "https://www.888sport.com/spt/betget-offer.htm?utm_campaign=100074935_1694409_nodescription&utm_content=100074935&utm_medium=casap&utm_source=aff/#fullTerms"
+    },
+    "/go/basketball-geek": {
+      "status": 302,
+      "location": "https://hop.clickbank.net/?affiliate=predfern&vendor=betgods&cbpage=TBG"
+    },
+    "/go/bet365": {
+      "status": 302,
+      "location": "https://www.bet365.com/hub/en-gb/open-account-offer?affiliate=365_371786"
+    },
+    "/go/bet365-6-horses-challenge": {
+      "status": 302,
+      "location": "https://www.bet365.com/hub/en-gb/6-horse-challenge?affiliate=365_102546"
+    },
+    "/go/bet365-6-scores-challenge": {
+      "status": 302,
+      "location": "https://www.bet365.com/hub/en-gb/6-scores-challenge?affiliate=365_102546"
+    },
+    "/go/bet365-casino": {
+      "status": 302,
+      "location": "https://casino.bet365.com/?affiliate=365_734343"
+    },
+    "/go/bet365-each-way-extra": {
+      "status": 302,
+      "location": "https://extra.bet365.com/promotions/horse-racing/each-way-extra/?=affiliate=365_294285"
+    },
+    "/go/bet365-early-payout-offer": {
+      "status": 302,
+      "location": "https://extra.bet365.com/promotions/soccer/early-payout-offer/?=affiliate=365_294285"
+    },
+    "/go/bet365-horse-racing": {
+      "status": 302,
+      "location": "https://www.bet365.com/hub/en-gb/open-account-horse-racing?affiliate=365_102546"
+    },
+    "/go/bet365-live-streams": {
+      "status": 302,
+      "location": "https://www.bet365.com/hub/aff/live-streaming?affiliate=365_734343"
+    },
+    "/go/bet365-royal-ascot": {
+      "status": 302,
+      "location": "https://www.bet365.com/hub/en-gb/royal-ascot?affiliate=365_102546"
+    },
+    "/go/bet365-wc-2026": {
+      "status": 302,
+      "location": "https://www.bet365.com/hub/en-gb/wc26-tournament-challenge?affiliate=365_102546"
+    },
+    "/go/bet365-wc-signup-offer": {
+      "status": 302,
+      "location": "https://www.bet365.com/hub/aff/open-account?affiliate=365_04071968"
+    },
+    "/go/betalchemist": {
+      "status": 302,
+      "location": "https://hop.clickbank.net/?affiliate=affiliateid&predfern=betalchemi"
+    },
+    "/go/betfair-exchange": {
+      "status": 302,
+      "location": "http://ads.betfair.com/redirect.aspx?pid=929978&bid=8799"
+    },
+    "/go/betfair-sportsbook": {
+      "status": 302,
+      "location": "http://ads.betfair.com/redirect.aspx?pid=929978&bid=9182"
+    },
+    "/go/betfred": {
+      "status": 302,
+      "location": "https://bfpartners.click/o/t9b-WJ?lpage=dRMZ-2&site_id=54649&r_id=332"
+    },
+    "/go/betfred-extra-places": {
+      "status": 302,
+      "location": "https://bfpartners.click/o/kiUxMU?lpage=CBeOZU&site_id=54649"
+    },
+    "/go/betfred-horse-racing": {
+      "status": 302,
+      "location": "https://bfpartners.click/o/t9b-WJ?lpage=dRMZ-2&site_id=54649"
+    },
+    "/go/betfred-money-back-2nd": {
+      "status": 302,
+      "location": "https://bfpartners.click/o/kiUxMU?lpage=N25dcS&site_id=54649"
+    },
+    "/go/betfred-multiply-your-odds": {
+      "status": 302,
+      "location": "https://bfpartners.click/o/kiUxMU?lpage=SYlgD4&site_id=54649"
+    },
+    "/go/betfred-new-offer": {
+      "status": 302,
+      "location": "https://activewins.link/o/t9b-WJ?site_id=47560&lpage=dr3AQ3"
+    },
+    "/go/betway": {
+      "status": 302,
+      "location": "https://betway.com/bwp/bet10get40/en-gb/?s=bw41213&a=spadid223931"
+    },
+    "/go/betwright": {
+      "status": 302,
+      "location": "https://refer.onyxaffiliates.com/redirect?cid=67ff798c7766cd997e38e84f&oid=644901df3d562de33590ec88&bid=67410b9e621f8bfcbc8e2170&pid=&customParameter="
+    },
+    "/go/bookies-enemy": {
+      "status": 302,
+      "location": "https://hop.clickbank.net/?affiliate=predfern&vendor=betgods&cbpage=TBE"
+    },
+    "/go/boylesports": {
+      "status": 302,
+      "location": "https://ads.boylesports.com/redirect.aspx?pid=35384&bid=8105"
+    },
+    "/go/boylesports-mobile": {
+      "status": 302,
+      "location": "https://ads.boylesports.com/redirect.aspx?pid=49891&bid=6502"
+    },
+    "/go/comeon": {
+      "status": 302,
+      "location": "https://media.comeon.com/tracking.php?tracking_code&aid=105944&mid=1920&sid=349530&pid=581"
+    },
+    "/go/declan-o-donoghue": {
+      "status": 302,
+      "location": "http://hop.betfanplus.com/10072/2/view/59"
+    },
+    "/go/each-way-leader": {
+      "status": 302,
+      "location": "https://hop.clickbank.net/?affiliate=predfern&vendor=betgods&cbpage=CURRENT"
+    },
+    "/go/factor-seven-racing": {
+      "status": 302,
+      "location": "http://hop.betfanplus.com/10072/7/view/45"
+    },
+    "/go/fafabet": {
+      "status": 302,
+      "location": "https://ffbt.link/o/6lBbK4?lpage=WtX_iY"
+    },
+    "/go/fantastic-8s": {
+      "status": 302,
+      "location": "http://hop.betfanplus.com/10072/0/view/338"
+    },
+    "/go/flat-racing-master": {
+      "status": 302,
+      "location": "http://bettinggods.com/go.php?offer=predfern&pid=51"
+    },
+    "/go/fold-4-gold": {
+      "status": 302,
+      "location": "http://hop.betfanplus.com/10072/0/view/96"
+    },
+    "/go/footballer-tips-tipstrr": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/footballer-tips?via=everytip"
+    },
+    "/go/inform-racing": {
+      "status": 302,
+      "location": "https://transactions.sendowl.com/stores/5555/27164"
+    },
+    "/go/layzy-profits": {
+      "status": 302,
+      "location": "http://hop.betfanplus.com/10072/0/view/391"
+    },
+    "/go/lucky-7-naps": {
+      "status": 302,
+      "location": "https://hop.betfan.com/10072/view/618"
+    },
+    "/go/mrplay": {
+      "status": 302,
+      "location": "https://online.mrplaypartners.com/promoRedirect?key=ej0yNDAwNDg0MSZsPTI0MDA0Nzk5JnA9MTEzMDk5"
+    },
+    "/go/netbet": {
+      "status": 302,
+      "location": "https://www.everytips.co.uk/"
+    },
+    "/go/netbet-50": {
+      "status": 302,
+      "location": "https://banners.livepartners.com/view.php?z=72193"
+    },
+    "/go/outside-edge": {
+      "status": 302,
+      "location": "https://hop.clickbank.net/?affiliate=predfern&vendor=betgods&cbpage=TOE"
+    },
+    "/go/paddy-power": {
+      "status": 302,
+      "location": "https://media.paddypower.com/redirect.aspx?pid=11402305&bid=7199&redirectURL=http://www.paddypower.com/"
+    },
+    "/go/paddypower": {
+      "status": 302,
+      "location": "https://media.paddypower.com/redirect.aspx?pid=11402305&bid=7035"
+    },
+    "/go/premier-greyhound-tips": {
+      "status": 302,
+      "location": "https://hop.clickbank.net/?affiliate=predfern&vendor=betgods&cbpage=PGT"
+    },
+    "/go/qf-value-tips": {
+      "status": 302,
+      "location": "https://hop.clickbank.net/?affiliate=predfern&vendor=betgods&cbpage=QFVT"
+    },
+    "/go/quentin-franks-racing": {
+      "status": 302,
+      "location": "https://hop.clickbank.net/?affiliate=predfern&vendor=betgods&cbpage=QFR"
+    },
+    "/go/quentin-franks-racing&pid=18": {
+      "status": 302,
+      "location": "https://hop.clickbank.net/?affiliate=predfern&vendor=betgods&cbpage=QFR"
+    },
+    "/go/quinnbet": {
+      "status": 302,
+      "location": "https://quinnbet.click/o/p8sdpa?lpage=YuZWlV"
+    },
+    "/go/quinnbet-moneyback-second": {
+      "status": 302,
+      "location": "https://quinnbet.click/o/p8sdpa?lpage=LNtIiY"
+    },
+    "/go/racebets": {
+      "status": 302,
+      "location": "https://record.racebets.com/_njdXI1wtW60bBrTWibWhiGNd7ZgqdRLk/1/"
+    },
+    "/go/racebets-jackpot-freeroll": {
+      "status": 302,
+      "location": "https://record.racebets.com/_njdXI1wtW63VgEQ-TwYvH2Nd7ZgqdRLk/1/"
+    },
+    "/go/racebets-new-offer": {
+      "status": 302,
+      "location": "https://record.racebets.com/_njdXI1wtW63IenQdqPA1GGNd7ZgqdRLk/1/"
+    },
+    "/go/racing-wins": {
+      "status": 302,
+      "location": "http://6d612mszt1ng0zbbve07sbw481.hop.clickbank.net/?tid=EVERYTIP"
+    },
+    "/go/recovery-racing": {
+      "status": 302,
+      "location": "http://hop.betfanplus.com/10072/0/view/394"
+    },
+    "/go/rolling-aces": {
+      "status": 302,
+      "location": "https://hop.clickbank.net/?affiliate=predfern"
+    },
+    "/go/round-the-clock-racing": {
+      "status": 302,
+      "location": "http://hop.betfanplus.com/10072/2/view/119"
+    },
+    "/go/sixth-sense": {
+      "status": 302,
+      "location": "http://hop.betfanplus.com/10072/1/view/134"
+    },
+    "/go/sports-trader": {
+      "status": 302,
+      "location": "https://thesportstrader.com/?promo=88"
+    },
+    "/go/sports-trader-ebooks": {
+      "status": 302,
+      "location": "https://thesportstrader.com/trading-ebooks/?promo=88"
+    },
+    "/go/spreadex": {
+      "status": 302,
+      "location": "https://spreadex.com/?tid=786574"
+    },
+    "/go/star-sports-bet": {
+      "status": 302,
+      "location": "http://wltwoupdigital.adsrv.eacdn.com/C.ashx?btag=a_48b_35c_&affid=35&siteid=48&adid=35&c="
+    },
+    "/go/super-lucky15": {
+      "status": 302,
+      "location": "http://hop.betfanplus.com/10072/7/view/28"
+    },
+    "/go/super-sports-capper": {
+      "status": 302,
+      "location": "https://hop.clickbank.net/?affiliate=predfern"
+    },
+    "/go/tee-and-serve-tips": {
+      "status": 302,
+      "location": "https://hop.clickbank.net/?affiliate=predfern&vendor=betgods&cbpage=TST"
+    },
+    "/go/the-judge": {
+      "status": 302,
+      "location": "http://hop.betfanplus.com/10072/2/view/70"
+    },
+    "/go/the-outside-trap": {
+      "status": 302,
+      "location": "https://hop.clickbank.net/?affiliate=predfern"
+    },
+    "/go/the-source": {
+      "status": 302,
+      "location": "https://hop.clickbank.net/?affiliate=predfern"
+    },
+    "/go/top-rated-runners": {
+      "status": 302,
+      "location": "http://bettinggods.com/go.php?offer=predfern&pid=42"
+    },
+    "/go/wh-terms-sports-offer": {
+      "status": 302,
+      "location": "https://promotion.williamhill.com/uk/sports/football/aff/r30?btag=a_3238b_815c_&utm_source=incomeaccess&utm_medium=affiliates&utm_campaign=815&utm_term=3238&utm_content=1733905&siteid=3238&tgclid=0a01001b-38e3-4316-ab00-18b267194e9a#TermsAndConditions"
+    },
+    "/go/whale-picks": {
+      "status": 302,
+      "location": "http://bb59cos2g9slov9qvxrd4bpiuu.hop.clickbank.net/?tid=WHALEET"
+    },
+    "/go/william-hill": {
+      "status": 302,
+      "location": "https://campaigns.williamhill.com/C.ashx?btag=a_3238b_815c_&affid=1733905&siteid=3238&adid=815&c="
+    },
+    "/go/william-hill-new-offer": {
+      "status": 302,
+      "location": "https://ads2.williamhill.com/redirect.aspx?bid=1487417159&lpid=1487413840&pid=191760498&redirectURL=http%3A%2F%2Fstatic.williamhill.com%2Fsport%2Fp30%2F"
+    },
+    "/go/yankee-jackpot": {
+      "status": 302,
+      "location": "http://hop.betfanplus.com/10072/2/view/106"
+    },
+    "/go/zenith": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/zenith/join?ref-a=everytip"
+    }
+  }
+}

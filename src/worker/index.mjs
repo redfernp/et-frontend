@@ -1,4 +1,5 @@
 import { verifiedLegacyRedirects } from '../lib/legacy-redirects.mjs';
+import affiliateInventory from '../../data/affiliate-redirects.json' with { type: 'json' };
 
 // Static assets are tried first by Cloudflare except for /index.html aliases
 // and verified redirects, which Wrangler routes here first.
@@ -12,6 +13,10 @@ export default {
 
     const url = new URL(request.url);
     const path = url.pathname;
+    if (path.startsWith('/go/')) {
+      const redirect = affiliateInventory.redirects[path + url.search] || affiliateInventory.redirects[path];
+      return redirect ? Response.redirect(redirect.location, redirect.status) : new Response('Not Found', {status:404});
+    }
     if (verifiedLegacyRedirects.has(path)) {
       return Response.redirect(new URL(verifiedLegacyRedirects.get(path), url), 301);
     }

@@ -8,7 +8,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 - Default Astro entry point now reads fresh paginated staging WPGraphQL through WPGRAPHQL_ENDPOINT. No October snapshot fallback or live-only overlays; section 0 permits resumable local response caching. Shared layout retained; old pilot routes are outside the default build.
 - Removed per-article live modules, their snapshot scripts and obsolete overlay tests. Stopped classic post conversions and general live/staging drift work.
 - Generic builder cleanup strips builder wrappers/styles and retains prose, headings, images, tables, links and ACF slot markers. Applied by markup detection; fixed tier inventory is in data/builder-tiers.json.
-- Rendered affiliate links retain existing www.everytip.co.uk/go paths and receive sponsored/nofollow. Workers /go routing remains outstanding.
+- Rendered affiliate links retain existing www.everytip.co.uk/go paths and receive sponsored/nofollow. All 79 distinct /go paths in the source were checked against current redirects without visiting partners: 79 resolved, zero failures. Worker routing preserves their observed status and destination; network preview verification pending.
 - Sitemap uses source robots. Added a section 4 gate for built assets, Yoast parity, sitemap membership, affiliate relations and unresolved offer slots.
 - Preview packaging preserves source Yoast meta and adds HTTP X-Robots-Tag noindex. No remote upload performed.
 - Latest Astro check: zero errors/warnings/hints. Eight focused content-source, pagination, cleanup and archive tests passed.
@@ -83,4 +83,4 @@ Scope is only section 4a; HTML inequality is a signal for review, not proof ever
 No DNS, Cloudflare production settings, live WordPress writes, Tier C redirects, new dated reports, classic post conversions or general drift audits. Existing dated docs remain historical, not current instructions.
 
 ## Active checkpoint
-Tasks 3–5 complete. Tasks 6–7 have a concrete ACF REST field blocker; conversion/exact-copy extraction code prepared. Moving to independently accessible launch checks. Prior timeout stop checkpoint is superseded by section 0. Only D3/D5 staging SEO writes completed; no remote deployment this turn.
+Tasks 3–5 complete. Tasks 6–7 have a concrete ACF REST field blocker; conversion/exact-copy extraction code prepared. Moving to independently accessible launch checks. Prior timeout stop checkpoint is superseded by section 0. Only D3/D5 staging SEO writes completed; no remote deployment this turn. Archive membership fetch and pagination implementation in progress.
