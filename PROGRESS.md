@@ -47,7 +47,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 - [x] D2: seven offers approved, UK only, checked 14 Oct 2026. Copy exact headlines/terms from 56315, derive eligibility from terms, publish on staging. Full terms and official terms URL already optional in the local display model. CMS publication and slot wiring pending.
 - [x] D3 COMPLETE: page 87553 staging Yoast description changed from GBP 30 to GBP 20 via authenticated REST; one readback verified description, identity and status. Related GraphQL cache invalidated.
 - [x] D4: migrate free bets as supplied. Flag risk-free/win-win only outside offer blocks. No extra offer-claim approval gate.
-- [x] D5: no live noindex work; fix staging post 70985. CMS change pending.
+- [x] D5 COMPLETE: staging post 70985 set to noindex via the authenticated Yoast ability; one readback verified noindex and preserved title, description, canonical, nofollow and publish status. Related GraphQL cache invalidated.
 - [x] D6: superseded by section 0: no Tier C list for now; no redirects created.
 
 ## Order of work
@@ -83,4 +83,4 @@ Scope is only section 4a; HTML inequality is a signal for review, not proof ever
 No DNS, Cloudflare production settings, live WordPress writes, Tier C redirects, new dated reports, classic post conversions or general drift audits. Existing dated docs remain historical, not current instructions.
 
 ## Active checkpoint
-Tasks 3–5 complete. Tasks 6–7 have a concrete ACF REST field blocker; conversion/exact-copy extraction code prepared. Moving to independently accessible launch checks. Prior timeout stop checkpoint is superseded by section 0. No new staging writes or remote deployment yet this turn.
+Tasks 3–5 complete. Tasks 6–7 have a concrete ACF REST field blocker; conversion/exact-copy extraction code prepared. Moving to independently accessible launch checks. Prior timeout stop checkpoint is superseded by section 0. Only D3/D5 staging SEO writes completed; no remote deployment this turn.
