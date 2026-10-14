@@ -1,3 +1,4 @@
+import { mkdir, writeFile } from 'node:fs/promises';
 // The launch build has no disk snapshot or live-content overlay fallback.
 export const endpoint = import.meta.env?.WPGRAPHQL_ENDPOINT || process.env.WPGRAPHQL_ENDPOINT ||
   'https://wordpress-159231-2098144.cloudwaysapps.com/graphql';
@@ -23,7 +24,12 @@ export async function requestGraphql(query, variables = {}, fetchImpl = fetch) {
 
 let pending;
 export function launchContent() {
-  return pending ??= readContent();
+  return pending ??= readContent().then(async records => {
+    // Output-only receipt for launch gates, never a build input or fallback.
+    await mkdir('outputs', { recursive: true });
+    await writeFile('outputs/launch-source.json', JSON.stringify({ endpoint, fetchedAt: new Date().toISOString(), records }));
+    return records;
+  });
 }
 
 export async function readContent({ query = requestGraphql } = {}) {
@@ -34,7 +40,7 @@ export async function readContent({ query = requestGraphql } = {}) {
     const cursors = new Set();
     do {
       const result = await query(`query LaunchContent($after: String) {
-        ${kind}(first: 25, after: $after) {
+        ${kind}(first: ${kind === 'pages' ? 5 : 50}, after: $after) {
           nodes { databaseId uri title content date modified status
             ${kind === 'pages' ? 'isPostsPage' : ''}
             seo { title metaDesc canonical metaRobotsNoindex metaRobotsNofollow }

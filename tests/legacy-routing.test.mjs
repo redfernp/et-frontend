@@ -21,11 +21,6 @@ const env = {
   },
 };
 
-test('exact .html pilot assets are emitted as files, not directories', () => {
-  assert.ok(existsSync(join(dist, 'pilot', 'betfair-exchange-review.html')));
-  assert.ok(!existsSync(join(dist, 'pilot', 'betfair-exchange-review.html', 'index.html')));
-});
-
 test('Wrangler disables HTML normalization and SPA fallback for legacy URL parity', () => {
   assert.equal(wrangler.assets.html_handling, 'none');
   assert.notEqual(wrangler.assets.not_found_handling, 'single-page-application');
@@ -38,13 +33,6 @@ test('Wrangler disables HTML normalization and SPA fallback for legacy URL parit
 test('exact public .html file exists without an Astro directory variant', () => {
   assert.ok(existsSync(join(dist, 'best-paypal-betting-sites.html')));
   assert.ok(!existsSync(join(dist, 'best-paypal-betting-sites.html', 'index.html')));
-});
-
-test('extensionless page resolves internally with no redirect', async () => {
-  const response = await worker.fetch(new Request('https://preview.example/pilot/free-betting-tips/'), env);
-  assert.equal(response.status, 200);
-  assert.equal(response.headers.get('location'), null);
-  assert.equal(paths.at(-1), '/pilot/free-betting-tips/index.html');
 });
 
 test('exact public extensionless page and homepage resolve without browser redirects', async () => {

@@ -24,7 +24,7 @@ let failed = false;
 for (const [path, expected, htmlExpected] of cases) {
   const response = await fetch(new URL(path, base), { redirect: 'manual' });
   const body = await response.text();
-  const noindex = /<meta\s+name="robots"\s+content="noindex(?:,\s*nofollow)?"\s*\/?\s*>/i.test(body);
+  const noindex = /\bnoindex\b/i.test(response.headers.get('x-robots-tag') ?? '');
   const pilotLink = /href=['"]\/pilot\//i.test(body);
   const pass = response.status === expected && !response.headers.has('location') && (!htmlExpected || (noindex && !pilotLink));
   console.log(JSON.stringify({ path, status: response.status, expected, noindex, pilotLink, redirect: response.headers.get('location'), pass }));

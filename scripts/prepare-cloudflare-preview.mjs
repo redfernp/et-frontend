@@ -28,13 +28,10 @@ async function inspect(dir) {
     if (!path.endsWith('.html')) continue;
     htmlCount++;
     const html = await readFile(path, 'utf8');
-    // Paginated historical archives intentionally use noindex,follow; both
-    // follow and nofollow are safe for the public review hostname.
-    if (!/<meta\s+name="robots"\s+content="noindex(?:,\s*(?:nofollow|follow))?"\s*\/?\s*>/i.test(html)) {
-      throw new Error(`Public preview would expose an indexable page: ${relative(source, path)}`);
-    }
-    if (/wordpress-159231-2098144\.cloudwaysapps\.com|href=["'](?:https?:\/\/www\.everytip\.co\.uk)?\/go\//i.test(html)) {
-      throw new Error(`Public preview contains a staging host or active /go/ link: ${relative(source, path)}`);
+    // Preserve staging Yoast meta verbatim for parity. The separate preview
+    // bundle gets an HTTP noindex header below; active affiliate CTAs are required.
+    if (!/<meta\s+name="robots"\s+content="[^"]+"/i.test(html)) {
+      throw new Error(`Missing source robots metadata: ${relative(source, path)}`);
     }
   }
 }
@@ -49,6 +46,7 @@ try {
 }
 await mkdir(target);
 await cp(source, target, { recursive: true, filter: (path) => !excluded(path) });
+await writeFile(join(target, '_headers'), '/*\n  X-Robots-Tag: noindex, nofollow\n');
 const pilotLinks = new Map([
   ['/pilot/about-us/', '/about-us'],
   ['/pilot/best-paypal-betting-sites/', '/best-paypal-betting-sites.html'],
