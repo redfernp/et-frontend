@@ -26,7 +26,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 - Task 3 completed with resumable five-record pages, six-attempt exponential backoff and atomic cache writes. Cache resume, endpoint isolation, fresh bypass and sequential-request tests pass.
 
 ## Blocked
-- D2 / tasks 6–7: authenticated OPTIONS /wp-json/wp/v2/et_offer/90846 exposes acf as an object with zero properties; authenticated edit read returns acf []. ACF offer fields need SSH (or an explicitly exposed write route). Do not publish incomplete draft offers. Generic Tier A Gutenberg converter and 27 local content plans are prepared; CMS replacement and ACF slot wiring remain pending this dependency. Evidence: outputs/staging-writes/offers-schema.json and 90846-read.json.
+- D2 / tasks 6–7: authenticated OPTIONS /wp-json/wp/v2/et_offer/90846 exposes acf as an object with zero properties; authenticated edit read returns acf []. ACF offer fields need SSH (or an explicitly exposed write route). Do not publish incomplete draft offers. Exact D2 headline/terms and UK/date field plans are committed in data/approved-offer-copy.json; eligibility retains the complete source terms. Central slot rendering is implemented and tested, ready for published ACF records. Generic Tier A Gutenberg converter and 27 local content plans are prepared; CMS replacement and ACF slot wiring remain pending this dependency. Evidence: outputs/staging-writes/offers-schema.json and 90846-read.json.
 - Full launch checks, archives, offers, tracking and rebuild automation remain unfinished work, not approved launch gates.
 
 ## Launch checklist (section 4)
