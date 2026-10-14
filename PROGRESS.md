@@ -1,29 +1,33 @@
 # EveryTip launch progress
 
-Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md. Earlier lanes and dated gates are superseded. D1-D6 are answered.
+Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RESCOPE.md. Earlier lanes and dated gates are superseded. D1-D6 are answered.
 
 ## Done
 - Baseline committed (0928025) and pushed to redfernp/et-frontend/main. Explicitly using the existing redfernp GitHub credential resolves the default-account 403.
 - Created this single progress file with sections 4 and 5 as checklists.
-- Default Astro entry point now reads fresh paginated staging WPGraphQL through WPGRAPHQL_ENDPOINT. No snapshot fallback or live-only overlays. Shared layout retained; old pilot routes are outside the default build.
+- Default Astro entry point now reads fresh paginated staging WPGraphQL through WPGRAPHQL_ENDPOINT. No October snapshot fallback or live-only overlays; section 0 permits resumable local response caching. Shared layout retained; old pilot routes are outside the default build.
 - Removed per-article live modules, their snapshot scripts and obsolete overlay tests. Stopped classic post conversions and general live/staging drift work.
-- Generic builder cleanup strips builder wrappers/styles and retains prose, headings, images, tables, links and ACF slot markers. Applied by markup detection; final Tier B membership awaits GSC.
+- Generic builder cleanup strips builder wrappers/styles and retains prose, headings, images, tables, links and ACF slot markers. Applied by markup detection; final Tier B membership follows the section 0 fixed rule.
 - Rendered affiliate links retain existing www.everytip.co.uk/go paths and receive sponsored/nofollow. Workers /go routing remains outstanding.
 - Sitemap uses source robots. Added a section 4 gate for built assets, Yoast parity, sitemap membership, affiliate relations and unresolved offer slots.
 - Preview packaging preserves source Yoast meta and adds HTTP X-Robots-Tag noindex. No remote upload performed.
 - Latest Astro check: zero errors/warnings/hints. Eight focused content-source, pagination, cleanup and archive tests passed.
 
 ## In progress
-- Task 3 implementation is committed; full verification failed after fetching 983 posts because staging page requests timed out. A smaller five-page probe also exhausted retries. No successful final build or new Workers deployment.
+- Task 3 COMPLETE: sequential five-record GraphQL pages with exponential backoff and atomic on-disk caching. Full staging build: 1,188 pages, 983 exact .html routes, 15m 11s. Cached rebuild: 1,188 pages in 5.91s. Final launch still requires cache bypass.
 - Task 5 cleanup is implemented; random-ten and traffic-page rendered sampling remains outstanding.
 - Task 8: new entry point covers posts/pages only. Fresh taxonomy/author/blog archives and pagination remain to implement. No complete coverage claim.
 - Task 9: cutover checklist and scoped difference inventory recorded below. Exact offer-text reconciliation and timeout cases remain open.
 
+## Current section 0 instructions
+- Fixed Tier A: homepage, /free-betting-tips, /bookie-free-bets-bonus-offers, every bookmaker review and sign-up offer page. Every other builder page is Tier B. No GSC ranking or Tier C list.
+- Single-record authenticated staging REST writes are authorised; read each back once. Only fields genuinely inaccessible over REST need SSH.
+- Small sequential WPGraphQL pages, backoff and completed-page disk cache are authorised for local builds. Final launch check must bypass cache with WPGRAPHQL_FRESH=1.
+- Task 3 now running with resumable five-record pages, six-attempt exponential backoff and atomic cache writes. Cache resume, endpoint isolation, fresh bypass and sequential-request tests pass.
+
 ## Blocked
-- Tasks 4/6, D6 implementation: missing 12-month GSC URL-click export and referring-domain inventory. Requested location. Missing data cannot establish zero clicks or zero referring domains; no Tier C classification or redirects invented.
-- Tasks 6/7, D2/D3/D5 implementation: SSH keys exist but Cloudways username and staging application directory were not found. Requested details. No bulk REST fallback or WordPress writes.
-- Tasks 3/8: repeated staging GraphQL timeouts block complete build, SEO/URL parity and rendered/Workers QA. The archive-schema probe also timed out.
-- Task 8: analytics configuration, save-trigger webhook and scheduled fallback are not connected. These are implementation/configuration gaps, not new approval requests.
+- No GSC or blanket SSH blocker remains. Any field-level REST limitation will be recorded with its decision ID.
+- Full launch checks, archives, offers, tracking and rebuild automation remain unfinished work, not approved launch gates.
 
 ## Launch checklist (section 4)
 - [ ] Fresh staging WPGraphQL build with one endpoint variable. Code implemented; full build failed.
@@ -44,16 +48,16 @@ Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md. Earlier lanes and 
 - [x] D3: GBP 20 in Bet365 staging Yoast description; CMS change pending.
 - [x] D4: migrate free bets as supplied. Flag risk-free/win-win only outside offer blocks. No extra offer-claim approval gate.
 - [x] D5: no live noindex work; fix staging post 70985. CMS change pending.
-- [x] D6: suggest Tier C targets only; Paul creates redirects.
+- [x] D6: superseded by section 0: no Tier C list for now; no redirects created.
 
 ## Order of work
 1. [x] Commit and push baseline.
 2. [x] Create PROGRESS.md.
-3. [ ] Fresh staging build: implementation committed, verification blocked by timeouts.
-4. [ ] GSC tiers: blocked by missing exports.
+3. [x] Resilient staging build and cached rebuild completed.
+4. [ ] Apply fixed Tier A / all-other-builder Tier B classification.
 5. [ ] Generic cleanup: implemented; rendered sampling/final membership pending.
-6. [ ] Tier A Gutenberg + ACF: blocked by SSH details and GSC ranking. Use staging; user's no-live-write instruction overrides section 3a's live wording.
-7. [ ] Publish seven offers and wire slots: blocked by SSH details.
+6. [ ] Tier A Gutenberg + ACF: authorised through single-record staging REST. Use staging; user's no-live-write instruction overrides section 3a's live wording.
+7. [ ] Publish seven offers and wire slots through single-record staging REST.
 8. [ ] Workers launch checklist: not passed.
 9. [ ] Cutover checklist and scoped difference inventory prepared; exact offer-text comparison and timeout cases remain incomplete.
 
@@ -78,8 +82,5 @@ Scope is only section 4a; HTML inequality is a signal for review, not proof ever
 ## Boundaries
 No DNS, Cloudflare production settings, live WordPress writes, Tier C redirects, new dated reports, classic post conversions or general drift audits. Existing dated docs remain historical, not current instructions.
 
-## Stop checkpoint
-- All eight focused unit tests pass; Astro check passes (351 files, zero diagnostics). Full fresh build did not pass.
-- Build-dependent legacy route tests were attempted and failed because the failed build emitted no complete assets; obsolete pilot assertions were removed. Current exact-route and redirect-target asset checks still need a successful build.
-- No Workers upload, WordPress write, DNS or Cloudflare production change occurred. No background migration or conversion task was started.
-- Resume with GSC/referring-domain export location, Cloudways staging SSH username/application path and responsive staging GraphQL. Then finish task 3 coverage and build verification before proceeding through the remaining launch gates.
+## Active checkpoint
+Task 3 complete; proceeding to fixed tiers and cleanup sampling. Prior timeout stop checkpoint is superseded by section 0. No new staging writes or remote deployment yet this turn.

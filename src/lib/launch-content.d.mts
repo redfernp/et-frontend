@@ -12,4 +12,4 @@ export interface LaunchRecord {
 export const endpoint: string;
 export function launchContent(): Promise<LaunchRecord[]>;
 export function robotsFor(record: LaunchRecord): string;
-export function requestGraphql(query: string, variables?: Record<string, unknown>, fetchImpl?: typeof fetch): Promise<any>;
+export function requestGraphql(query: string, variables?: Record<string, unknown>): Promise<any>;

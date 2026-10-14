@@ -4,6 +4,12 @@ From Paul (owner). This replaces the working approach in `docs/everytip-content-
 
 The goal is to switch www.everytip.co.uk to the Astro frontend. It is **not** to convert every WordPress post to Gutenberg first. That conversion has been treated as a launch blocker, and it isn't one.
 
+## 0. Update, 14 Oct evening (overrides the sections below where they conflict)
+
+- **No traffic tiering.** Paul says the GSC and referring-domain data won't change much, so don't wait for it. Tier A is a fixed list: the homepage, `/free-betting-tips`, `/bookie-free-bets-bonus-offers`, and every bookmaker review and sign-up offer page. **Every other Beaver/Thrive page is Tier B** (generic cleanup). There is no Tier C list for now.
+- **Staging writes without SSH.** Until Paul supplies the Cloudways SSH details, single-record writes on staging (the 7 offers, the Bet365 £20 description, post `70985` noindex, Tier A pages) may go through the authenticated REST API, one record at a time, reading each one back once. If a field can't be written over REST (for example ACF fields the route doesn't expose), record it in PROGRESS.md as needing SSH and move on.
+- **Staging timeouts.** Make the WPGraphQL fetch resilient instead of waiting for a faster server: small page sizes, sequential requests, retry with backoff, and an on-disk cache of completed pages so a rerun resumes where the last one stopped. Use the cache for local builds; a full fresh fetch is only required for the final launch check.
+
 ## 1. What an independent review found
 
 - The Astro build already works: 1,264 pages, exact `.html` routing on Workers, 0 broken internal links across 21,099, and clean Astro checks. It renders from WordPress HTML, so a post does not need to be in Gutenberg to display correctly.
@@ -38,7 +44,7 @@ The goal is to switch www.everytip.co.uk to the Astro frontend. It is **not** to
 ### 3a. Beaver/Thrive pages (~97 pages, 9 posts)
 
 1. Pull 12 months of Google Search Console clicks per URL (the export is enough) and put the builder records into three tiers:
-   - **Tier A, top 20 to 30 by clicks, plus the homepage, `/free-betting-tips`, `/bookie-free-bets-bonus-offers`, and every review and sign-up offer page:** rebuild in Gutenberg plus ACF on live WordPress, using the agreed hybrid model (core blocks for prose, ACF offer slot blocks for offers).
+   - **Tier A, top 20 to 30 by clicks, plus the homepage, `/free-betting-tips`, `/bookie-free-bets-bonus-offers`, and every review and sign-up offer page:** rebuild in Gutenberg plus ACF on staging WordPress, using the agreed hybrid model (core blocks for prose, ACF offer slot blocks for offers).
    - **Tier B, pages with some traffic:** render the existing builder HTML through one generic "builder cleanup" sanitiser in Astro (strip `fl-*`/`tve_` wrappers and inline styles, keep text, headings, images, tables and links). One component handles all of them; no per-page work.
    - **Tier C, zero clicks and no referring domains:** list them in `PROGRESS.md` with a suggested 301 target. Paul creates the redirects himself. Don't rebuild them or add redirects.
 2. The eight owner-rewritten pages in `../legacy-rewrites/CODEX-HANDOFF.md` are already done on live. Render them from live like any other page.

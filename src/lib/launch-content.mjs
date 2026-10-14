@@ -1,33 +1,20 @@
 import { mkdir, writeFile } from 'node:fs/promises';
-// The launch build has no disk snapshot or live-content overlay fallback.
+import { createGraphqlClient } from './graphql-cache.mjs';
+// Section 0 permits resumable local reads; final launch uses WPGRAPHQL_FRESH=1.
 export const endpoint = import.meta.env?.WPGRAPHQL_ENDPOINT || process.env.WPGRAPHQL_ENDPOINT ||
   'https://wordpress-159231-2098144.cloudwaysapps.com/graphql';
 
-export async function requestGraphql(query, variables = {}, fetchImpl = fetch) {
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      const response = await fetchImpl(endpoint, {
-        method: 'POST', headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ query, variables }), signal: AbortSignal.timeout(30000),
-      });
-      if (!response.ok) throw new Error(`WPGraphQL HTTP ${response.status}`);
-      const result = await response.json();
-      if (result.errors?.length) throw new Error(result.errors.map(e => e.message).join('; '));
-      if (!result.data) throw new Error('WPGraphQL returned no data');
-      return result.data;
-    } catch (error) {
-      if (attempt === 2) throw error;
-      await new Promise(resolve => setTimeout(resolve, 750 * (attempt + 1)));
-    }
-  }
-}
+const fresh = (process.env.WPGRAPHQL_FRESH ?? import.meta.env?.WPGRAPHQL_FRESH) === '1';
+const client = createGraphqlClient({ endpoint, fresh });
+export const requestGraphql = (query, variables = {}) => client.request(query, variables);
 
 let pending;
 export function launchContent() {
   return pending ??= readContent().then(async records => {
     // Output-only receipt for launch gates, never a build input or fallback.
     await mkdir('outputs', { recursive: true });
-    await writeFile('outputs/launch-source.json', JSON.stringify({ endpoint, fetchedAt: new Date().toISOString(), records }));
+    await writeFile('outputs/launch-source.json', JSON.stringify({ endpoint, fetchedAt: new Date().toISOString(),
+      mode: fresh ? 'fresh' : 'resumable-local', receipts: client.receipts, records }));
     return records;
   });
 }
@@ -40,7 +27,7 @@ export async function readContent({ query = requestGraphql } = {}) {
     const cursors = new Set();
     do {
       const result = await query(`query LaunchContent($after: String) {
-        ${kind}(first: ${kind === 'pages' ? 5 : 50}, after: $after) {
+        ${kind}(first: 5, after: $after) {
           nodes { databaseId uri title content date modified status
             ${kind === 'pages' ? 'isPostsPage' : ''}
             seo { title metaDesc canonical metaRobotsNoindex metaRobotsNofollow }
