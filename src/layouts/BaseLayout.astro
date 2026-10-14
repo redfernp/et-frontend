@@ -22,7 +22,7 @@ interface Props {
   verifiedPublicPaths?: string[];
 }
 const { title, sidebar = false, withholdSidebarOffers = false, wide = false, relatedTopic = 'racing', robots = 'noindex,nofollow', previewMessage = 'Template preview only · sample content · no active offers or tips', publicPage = false, previewOnly = false, seo = null, menuItems = null, verifiedPublicPaths = [] } = Astro.props;
-const resolvedTitle = seo?.title?.trim() || (publicPage ? title : `${title} | EveryTip template preview`);
+const resolvedTitle = seo?.title?.trim() ? seo.title : (publicPage ? title : `${title} | EveryTip template preview`);
 const resolvedRobots = resolvePreviewRobots({ previewOnly, publicPage, robots, seoRobots: seo?.robots });
 const publicItems = publicPage ? publicNavigation(menuItems ?? publicMenuFallback, verifiedPublicPaths) : [];
 const publicPaths = new Set(verifiedPublicPaths);

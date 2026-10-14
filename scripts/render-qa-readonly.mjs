@@ -7,6 +7,7 @@ import { join } from 'node:path';
 
 const chromePath = process.env.ET_QA_CHROME ?? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const origin = process.env.ET_QA_ORIGIN ?? 'http://127.0.0.1:4321';
+const launch = process.env.ET_QA_LAUNCH === '1';
 const defaultPages = [
   ['home', '/pilot/home/'],
   ['free-tips', '/pilot/free-betting-tips/'],
@@ -15,7 +16,7 @@ const defaultPages = [
   ['article', '/pilot/article-daily-tips/'],
 ];
 const requestedPaths = process.env.ET_QA_PATHS?.split(',').map((path) => path.trim()).filter(Boolean) ?? [];
-if (requestedPaths.some((path) => !/^\/[A-Za-z0-9_/%.-]+$/.test(path) || path.includes('..'))) {
+if (requestedPaths.some((path) => !/^\/[A-Za-z0-9_/%.-]*$/.test(path) || path.includes('..'))) {
   throw new Error('ET_QA_PATHS must contain local pathnames only');
 }
 const pages = requestedPaths.length
@@ -94,6 +95,7 @@ try {
             footer: !!footer, legal, sidebar: !!sidebar, sidebarDisplay: sidebar ? getComputedStyle(sidebar).display : null,
             previewBanner: !!document.querySelector('.preview-banner'), disabledOffers: document.querySelectorAll('.offer-disabled,.offer-preview-button,.featured-offer-cta').length,
             activeAffiliateLinks: document.querySelectorAll('a[href*="/go/"],a[href*="?via="]').length,
+            invalidAffiliateRels: [...document.querySelectorAll('a[href*="/go/"]')].filter(a => !a.relList.contains('sponsored') || !a.relList.contains('nofollow')).length,
             overflow };
         })()`, returnByValue: true,
       });
@@ -139,7 +141,7 @@ try {
   }
   cdp.close();
   const failures = results.filter((result) => result.scrollWidth > result.width + 1
-    || !result.footer || !result.legal || result.activeAffiliateLinks > 0
+    || !result.footer || !result.legal || (launch ? result.invalidAffiliateRels > 0 : result.activeAffiliateLinks > 0)
     || (result.name === 'article' && !result.sidebar)
     || (result.name === 'bet365' && result.view === 'mobile'
       && (!result.sticky?.visible || !result.sticky.disabled || result.sticky.activeLink)));

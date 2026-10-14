@@ -27,7 +27,7 @@ export default {
     const assetPath = path === '/' ? '/index.html' : `${path.replace(/\/$/, '')}/index.html`;
     const assetUrl = new URL(assetPath, url);
     const response = await env.ASSETS.fetch(new Request(assetUrl, request));
-    if (!response.ok) return new Response('Not Found', { status: 404 });
+    if (!response.ok && response.status !== 304) return new Response('Not Found', { status: 404 });
     return response;
   },
 };

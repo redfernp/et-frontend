@@ -15,7 +15,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 
 ## In progress
 - Task 3 COMPLETE: sequential five-record GraphQL pages with exponential backoff and atomic on-disk caching. Full staging build: 1,188 pages, 983 exact .html routes, 15m 11s. Cached rebuild: 1,188 pages in 5.91s. Final launch still requires cache bypass.
-- Task 5 cleanup is implemented; random-ten and traffic-page rendered sampling remains outstanding.
+- Task 5 COMPLETE: 10 random Tier B pages plus all 27 fixed Tier A routes passed 74 mobile/desktop render checks. Visual mobile sample inspected. Fixed conditional asset responses incorrectly becoming 404; regression test passes.
 - Task 8: new entry point covers posts/pages only. Fresh taxonomy/author/blog archives and pagination remain to implement. No complete coverage claim.
 - Task 9: cutover checklist and scoped difference inventory recorded below. Exact offer-text reconciliation and timeout cases remain open.
 
@@ -23,14 +23,14 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 - Fixed Tier A: homepage, /free-betting-tips, /bookie-free-bets-bonus-offers, every bookmaker review and sign-up offer page. Every other builder page is Tier B. No GSC ranking or Tier C list.
 - Single-record authenticated staging REST writes are authorised; read each back once. Only fields genuinely inaccessible over REST need SSH.
 - Small sequential WPGraphQL pages, backoff and completed-page disk cache are authorised for local builds. Final launch check must bypass cache with WPGRAPHQL_FRESH=1.
-- Task 3 now running with resumable five-record pages, six-attempt exponential backoff and atomic cache writes. Cache resume, endpoint isolation, fresh bypass and sequential-request tests pass.
+- Task 3 completed with resumable five-record pages, six-attempt exponential backoff and atomic cache writes. Cache resume, endpoint isolation, fresh bypass and sequential-request tests pass.
 
 ## Blocked
 - No GSC or blanket SSH blocker remains. Any field-level REST limitation will be recorded with its decision ID.
 - Full launch checks, archives, offers, tracking and rebuild automation remain unfinished work, not approved launch gates.
 
 ## Launch checklist (section 4)
-- [ ] Fresh staging WPGraphQL build with one endpoint variable. Code implemented; full build failed.
+- [ ] Fresh staging WPGraphQL build with one endpoint variable. Complete 1,188-route build passed; final fresh-cache-bypass check remains.
 - [ ] Every staging 200 URL returns 200 at its exact Workers path, including archives.
 - [ ] Existing 301s retain targets. Worker map retained; network parity unverified.
 - [ ] Indexable title/description/canonical/robots match staging Yoast; zero unexplained differences.
@@ -55,7 +55,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 2. [x] Create PROGRESS.md.
 3. [x] Resilient staging build and cached rebuild completed.
 4. [x] Fixed tiers committed in data/builder-tiers.json: 27 Tier A routes; 87 Tier B pages. Another 227 classic posts contain embedded builder fragments and receive render cleanup only, never Gutenberg conversion.
-5. [ ] Generic cleanup: implemented; rendered sampling/final membership pending.
+5. [x] Generic cleanup applied; 37 sampled routes passed at both viewport sizes.
 6. [ ] Tier A Gutenberg + ACF: authorised through single-record staging REST. Use staging; user's no-live-write instruction overrides section 3a's live wording.
 7. [ ] Publish seven offers and wire slots through single-record staging REST.
 8. [ ] Workers launch checklist: not passed.
@@ -83,4 +83,4 @@ Scope is only section 4a; HTML inequality is a signal for review, not proof ever
 No DNS, Cloudflare production settings, live WordPress writes, Tier C redirects, new dated reports, classic post conversions or general drift audits. Existing dated docs remain historical, not current instructions.
 
 ## Active checkpoint
-Tasks 3 and 4 complete; cleanup sampling underway. Prior timeout stop checkpoint is superseded by section 0. No new staging writes or remote deployment yet this turn.
+Tasks 3, 4 and 5 complete; Tier A/offer REST capability assessment underway. Prior timeout stop checkpoint is superseded by section 0. No new staging writes or remote deployment yet this turn.

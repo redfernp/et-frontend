@@ -2,9 +2,9 @@ import { parseDocument } from 'htmlparser2';
 import render from 'dom-serializer';
 import sanitizeHtml from 'sanitize-html';
 
-const builderClass = /^(?:fl-|tve[_-]|tcb-)/;
+const builderClass = /^(?:fl-|tve[_-]|thrv_|tcb-)/;
 export function hasBuilderMarkup(html = '') {
-  return /class=["'][^"']*\b(?:fl-|tve[_-]|tcb-)/i.test(html);
+  return /class=["'][^"']*\b(?:fl-|tve[_-]|thrv_|tcb-)/i.test(html);
 }
 
 // One family-level cleanup, with no URL- or article-specific exceptions.
@@ -43,6 +43,7 @@ export function cleanupBuilderHtml(html) {
 }
 
 export function launchHtml(html, sourceEndpoint) {
+  html = html ?? '';
   const doc = parseDocument(hasBuilderMarkup(html) ? cleanupBuilderHtml(html) : html);
   const sourceHost = new URL(sourceEndpoint).hostname;
   function visit(node) {

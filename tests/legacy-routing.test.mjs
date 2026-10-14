@@ -9,6 +9,13 @@ import { verifiedLegacyRedirects } from '../src/lib/legacy-redirects.mjs';
 const dist = fileURLToPath(new URL('../dist/', import.meta.url));
 const wrangler = JSON.parse(readFileSync(new URL('../wrangler.jsonc', import.meta.url), 'utf8'));
 const paths = [];
+test('conditional requests preserve asset 304 instead of turning cached pages into 404', async () => {
+  const response = await worker.fetch(new Request('https://preview.example/free-betting-tips', { headers: { 'if-none-match': 'cached' } }), {
+    ASSETS: { fetch: async () => new Response(null, { status: 304, headers: { etag: 'cached' } }) },
+  });
+  assert.equal(response.status, 304);
+  assert.equal(response.headers.get('etag'), 'cached');
+});
 const env = {
   ASSETS: {
     async fetch(request) {
