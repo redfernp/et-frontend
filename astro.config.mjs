@@ -3,4 +3,5 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://www.everytip.co.uk',
   output: 'static',
+  srcDir: './src/launch',
 });

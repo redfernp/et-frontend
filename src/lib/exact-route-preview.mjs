@@ -5,9 +5,6 @@ import { columnistKeyForUri, getColumnistProfiles } from './columnist-profiles.m
 import { curatedExactPaths, curatedPreviewSections, curatedReasonMatches } from './curated-exact-preview.mjs';
 import { freshGenericRecordMap } from './staging-generic-cms.mjs';
 import { representativeArticle } from './staging-article-cms.mjs';
-import { johnWeek7 } from './live-john-week7.mjs';
-import { seymourOct10 } from './live-seymour-oct10.mjs';
-import { seymourOct3 } from './live-seymour-oct3.mjs';
 import { patentBetPreviewRecord } from './patent-bet-preview.mjs';
 import { verifiedLegacyRedirects } from './legacy-redirects.mjs';
 import { ownerRewritePreviewRecords, ownerRewriteSources } from './owner-rewrite-preview.mjs';
@@ -29,7 +26,7 @@ const dailyOct13 = Object.freeze({ id: 91113, slug: 'extra-place-races-today-tip
 const dailyOct12 = Object.freeze({ id: 91093, slug: 'extra-place-races-today-tips-12-october', uri: '/extra-place-races-today-tips-12-october.html' });
 const dailyOct11 = Object.freeze({ id: 91076, slug: 'extra-place-races-today-tips-11-october', uri: '/extra-place-races-today-tips-11-october.html' });
 const johnWeek6 = Object.freeze({ id: 90942, slug: 'epl-game-week-6-2026-27-season-premier-league-tips-john-newsome', uri: '/epl-game-week-6-2026-27-season-premier-league-tips-john-newsome.html' });
-const dedicatedLiveArticlePaths = new Set([johnWeek7.uri, johnWeek6.uri, seymourOct10.uri, seymourOct3.uri, dailyOct13.uri, dailyOct12.uri, dailyOct11.uri]);
+const dedicatedLiveArticlePaths = new Set([dailyOct13.uri, dailyOct12.uri, dailyOct11.uri]);
 // Redirects must not be rebuilt as local 200 pages from an older CMS snapshot.
 export const uncrawledRedirectPaths = new Set(verifiedLegacyRedirects.keys());
 

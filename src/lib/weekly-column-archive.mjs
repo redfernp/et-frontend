@@ -1,11 +1,5 @@
 import { parseDocument } from 'htmlparser2';
-import { existsSync } from 'node:fs';
-import { resolve } from 'node:path';
 import { latestContentSnapshot } from './migration-preview.mjs';
-import { johnWeek7, johnWeek7Preview, previewJohnWeek7Body } from './live-john-week7.mjs';
-import { johnWeek6, readLiveJohnWeek6, previewJohnWeek6Body } from './live-john-week6.mjs';
-import { seymourOct10, seymourOct10Preview, previewSeymourOct10Body } from './live-seymour-oct10.mjs';
-import { seymourOct3, seymourOct3Preview, previewSeymourOct3Body } from './live-seymour-oct3.mjs';
 
 const stagingOrigin = 'https://wordpress-159231-2098144.cloudwaysapps.com';
 const pageSize = 100;
@@ -75,55 +69,6 @@ export function selectWeeklyColumnEntries(posts, slug) {
   return entries;
 }
 
-/** Four independently vetted live-source records may extend the stale staging inventory.
- * The opt-in never creates article routes: each exact safe Astro source must exist first.
- */
-export async function sourceLockedOctoberOverlayPosts({
-  johnRead = johnWeek7Preview, johnWeek6Read = readLiveJohnWeek6,
-  seymourRead = seymourOct10Preview, seymourOct3Read = seymourOct3Preview,
-  routeExists = existsSync,
-} = {}) {
-  const specs = [
-    { source: johnWeek7, read: johnRead, safeBody: previewJohnWeek7Body },
-    { source: johnWeek6, read: async () => ({ record: await johnWeek6Read() }), safeBody: previewJohnWeek6Body },
-    { source: seymourOct10, read: seymourRead, safeBody: previewSeymourOct10Body },
-    { source: seymourOct3, read: seymourOct3Read, safeBody: previewSeymourOct3Body },
-  ];
-  return Promise.all(specs.map(async ({ source, read, safeBody }) => {
-    const routeFile = resolve(process.cwd(), 'src/pages', `${source.slug}.html.astro`);
-    if (!routeExists(routeFile)) throw new Error(`Missing safe exact October columnist route: ${source.uri}`);
-    const { record } = await read();
-    if (record?.id !== source.id || record.uri !== source.uri || record.slug !== source.slug ||
-        record.status !== 'publish' || !/^2026-10-/.test(record.date ?? '') ||
-        !record.title?.trim()) throw new Error(`October columnist source identity changed: ${source.uri}`);
-    safeBody(record); // Source-specific conservative commercial filter must still pass.
-    return { databaseId: record.id, uri: record.uri, slug: record.slug, status: record.status,
-      title: record.title, date: record.date, modified: record.modified };
-  }));
-}
-
-export function mergeSourceLockedOctoberEntries(datedEntries, slug, overlayPosts) {
-  if (!Array.isArray(overlayPosts) || overlayPosts.length !== 4 ||
-      overlayPosts[0]?.databaseId !== johnWeek7.id || overlayPosts[0]?.uri !== johnWeek7.uri ||
-      overlayPosts[1]?.databaseId !== johnWeek6.id || overlayPosts[1]?.uri !== johnWeek6.uri ||
-      overlayPosts[2]?.databaseId !== seymourOct10.id || overlayPosts[2]?.uri !== seymourOct10.uri ||
-      overlayPosts[3]?.databaseId !== seymourOct3.id || overlayPosts[3]?.uri !== seymourOct3.uri) {
-    throw new Error('October weekly overlay did not contain the four exact source-locked posts');
-  }
-  const entries = selectWeeklyColumnEntries(overlayPosts, slug);
-  const known = new Map(datedEntries.map((entry) => [entry.id, entry.href]));
-  for (const entry of entries) {
-    if (known.has(entry.id)) {
-      if (known.get(entry.id) !== entry.href) throw new Error(`October weekly overlay exact route changed: ${entry.id}`);
-      continue; // A later staging snapshot may already contain this exact article.
-    }
-    if ([...known.values()].includes(entry.href)) throw new Error(`October weekly overlay duplicate path: ${entry.href}`);
-    known.set(entry.id, entry.href);
-    datedEntries = [...datedEntries, entry];
-  }
-  return datedEntries.sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
-}
-
 /** Complete read-only published-post inventory from the exact staging GraphQL host. */
 export async function readStagingWeeklyColumnPosts({ endpoint = `${stagingOrigin}/graphql`, fetchImpl = fetch } = {}) {
   const url = new URL(endpoint);
@@ -161,7 +106,6 @@ export async function readStagingWeeklyColumnPosts({ endpoint = `${stagingOrigin
 let buildInventoryPromise;
 export async function weeklyColumnArchivePreview(slug, {
   snapshotRead = latestContentSnapshot, freshRead = readStagingWeeklyColumnPosts,
-  overlayRead = sourceLockedOctoberOverlayPosts,
 } = {}) {
   const family = weeklyColumnFamilies[slug];
   if (!family) throw new Error(`Unknown weekly column: ${slug}`);
@@ -187,10 +131,6 @@ export async function weeklyColumnArchivePreview(slug, {
   }
   sourceMode = 'fresh-staging-wpgraphql-preview';
   capturedAt = new Date().toISOString();
-  }
-  if (process.env.MIGRATION_LIVE_WEEKLY_ARCHIVE_OVERLAY === '1') {
-    entries = mergeSourceLockedOctoberEntries(entries, slug, await overlayRead());
-    sourceMode += '+four-source-locked-october-articles';
   }
   return { slug, page, family, entries, sourceMode, capturedAt };
 }

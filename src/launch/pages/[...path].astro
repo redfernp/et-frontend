@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { launchContent, robotsFor } from '../../lib/launch-content.mjs';
+
+export async function getStaticPaths() {
+  const records = await launchContent();
+  const paths = records.map(record => record.uri);
+  return records.map(record => ({
+    params: { path: record.uri === '/' ? undefined : record.uri.replace(/^\//, '').replace(/\/$/, '') },
+    props: { record, paths },
+  }));
+}
+const { record, paths } = Astro.props;
+const seo = {
+  title: record.seo?.title || record.title,
+  description: record.seo?.metaDesc || '',
+  canonical: record.seo?.canonical || null,
+  robots: robotsFor(record),
+};
+---
+<BaseLayout title={record.title} publicPage={true} seo={seo} verifiedPublicPaths={paths}>
+  <article class="cms-content">
+    <h1 set:html={record.title} />
+    <div set:html={record.content} />
+  </article>
+</BaseLayout>
+<style>
+  .cms-content{max-width:100%;line-height:1.7;overflow-wrap:anywhere}
+  .cms-content :global(img){max-width:100%;height:auto}
+  .cms-content :global(table){display:block;max-width:100%;overflow-x:auto}
+  .cms-content :global(iframe){max-width:100%}
+  .cms-content :global(figure){max-width:100%;margin:1rem 0}
+</style>

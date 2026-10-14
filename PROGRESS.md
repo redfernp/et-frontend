@@ -1,14 +1,17 @@
-﻿# EveryTip launch progress
+# EveryTip launch progress
 
 Updated: 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md; supersedes earlier lanes and dated migration reports.
 
 ## Done
-- Current repository checkpoint committed as 0928025.
+- Current repository checkpoint committed as 0928025 and pushed to redfernp/et-frontend/main. Switched the already-authenticated GitHub account from predfern-rs to redfernp.
+- Default Astro entry point now uses fresh paginated WPGraphQL content and Yoast fields, with no snapshot fallback. Shared layout retained; old preview routes are outside the default build.
+- Removed per-article live modules, their snapshot scripts, live feed overlays and obsolete overlay tests.
+- Astro check: 0 errors/warnings/hints; six targeted source/pagination/archive tests pass.
 - Stopped per-post Gutenberg conversion and general live/staging drift work.
 - Read all D1–D6 answers. No owner decision is outstanding.
 
 ## In progress
-- Section 6 task 3: switch the default build to fresh staging WPGraphQL through WPGRAPHQL_ENDPOINT, without snapshot fallback.
+- Section 6 task 3: full fresh build running; remote read succeeded. Endpoint is WPGRAPHQL_ENDPOINT. Full source coverage is not yet verified.
 
 ## Blocked
 - Task 1 push: GitHub HTTP 403; active account predfern-rs lacks access to redfernp/et-frontend. Local checkpoint is complete. Access is an operational blocker, not an unanswered D1–D6 decision.
@@ -35,7 +38,7 @@ Updated: 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md; supersedes earlie
 - [x] D6: suggest Tier C targets only; Paul creates redirects.
 
 ## Order of work
-1. [ ] Commit and push baseline (commit done; push blocked).
+1. [x] Commit and push baseline.
 2. [x] Create this single progress file.
 3. [ ] Fresh staging WPGraphQL build.
 4. [ ] GSC builder tiers (12-month clicks and referring domains required).

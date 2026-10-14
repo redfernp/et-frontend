@@ -5,18 +5,13 @@ import HomeOfferLadder from '../../components/HomeOfferLadder.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import { featuredOfferPreview } from '../../lib/pilot-data';
 import { extractHomeEditorial } from '../../lib/home-editorial.mjs';
-import { homepageFeaturePreview, stagingHomeFeatureFeedEnabled } from '../../lib/home-feature-feed.mjs';
-import { liveEditorialFeedEnabled, readLiveEditorialPreviewFeed } from '../../lib/live-editorial-preview-feed.mjs';
+import { homepageFeaturePreview } from '../../lib/home-feature-feed.mjs';
 import { getWordPressMenu, publicNavigation } from '../../lib/wordpress-menu.ts';
 import { previewPublicPaths } from '../../lib/preview-public-paths.ts';
 
 const { exactRecord } = Astro.props;
 const exactEditorial = exactRecord ? extractHomeEditorial(exactRecord) : null;
-if (exactRecord && liveEditorialFeedEnabled() && stagingHomeFeatureFeedEnabled()) {
-  throw new Error('Choose one homepage editorial feed preview source');
-}
-const featureFeed = exactRecord && liveEditorialFeedEnabled()
-  ? await readLiveEditorialPreviewFeed() : await homepageFeaturePreview();
+const featureFeed = await homepageFeaturePreview();
 const latestFeatureDate = featureFeed.cards[0]?.date ?? 'unknown';
 const staleFeatures = featureFeed.freshness.stale;
 const cmsNavigation = exactRecord ? publicNavigation((await getWordPressMenu('PRIMARY')).items, previewPublicPaths) : null;
