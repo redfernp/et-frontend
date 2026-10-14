@@ -11,12 +11,12 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 - Rendered affiliate links retain existing www.everytip.co.uk/go paths and receive sponsored/nofollow. All 79 distinct /go paths in the source were checked against current redirects without visiting partners: 79 resolved, zero failures. Worker routing preserves their observed status and destination; network preview verification pending.
 - Sitemap uses source robots. Added a section 4 gate for built assets, Yoast parity, sitemap membership, affiliate relations and unresolved offer slots.
 - Preview packaging preserves source Yoast meta and adds HTTP X-Robots-Tag noindex. No remote upload performed.
-- Latest Astro check: zero errors/warnings/hints. Eight focused content-source, pagination, cleanup and archive tests passed.
+- Latest Astro check: zero errors/warnings/hints. Twenty-two focused source, cache, archive, offer and routing tests passed.
 
 ## In progress
 - Task 3 COMPLETE: sequential five-record GraphQL pages with exponential backoff and atomic on-disk caching. Full staging build: 1,188 pages, 983 exact .html routes, 15m 11s. Cached rebuild: 1,188 pages in 5.91s. Final launch still requires cache bypass.
 - Task 5 COMPLETE: 10 random Tier B pages plus all 27 fixed Tier A routes passed 74 mobile/desktop render checks. Visual mobile sample inspected. Fixed conditional asset responses incorrectly becoming 404; regression test passes.
-- Task 8: new entry point covers posts/pages only. Fresh taxonomy/author/blog archives and pagination remain to implement. No complete coverage claim.
+- Task 8: fresh category/tag/author/blog archives and 100-post pagination implemented; archive-inclusive build running. Rendered archive SEO and observed archive redirects are cached separately. No complete coverage claim yet.
 - Task 9 COMPLETE: cutover checklist and scoped differences below; exact offer-copy match and all prior timeout cases resolved.
 
 ## Current section 0 instructions
@@ -26,7 +26,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 - Task 3 completed with resumable five-record pages, six-attempt exponential backoff and atomic cache writes. Cache resume, endpoint isolation, fresh bypass and sequential-request tests pass.
 
 ## Blocked
-- D2 / tasks 6–7: authenticated OPTIONS /wp-json/wp/v2/et_offer/90846 exposes acf as an object with zero properties; authenticated edit read returns acf []. ACF offer fields need SSH (or an explicitly exposed write route). Do not publish incomplete draft offers. Exact D2 headline/terms and UK/date field plans are committed in data/approved-offer-copy.json; eligibility retains the complete source terms. Central slot rendering is implemented and tested, ready for published ACF records. Generic Tier A Gutenberg converter and 27 local content plans are prepared; CMS replacement and ACF slot wiring remain pending this dependency. Evidence: outputs/staging-writes/offers-schema.json and 90846-read.json.
+- D2 / tasks 6–7: authenticated OPTIONS /wp-json/wp/v2/et_offer/90846 exposes acf as an object with zero properties; authenticated edit read returns acf []. ACF offer fields need SSH (or an explicitly exposed write route). Do not publish incomplete draft offers. Exact D2 headline/terms and UK/date field plans are committed in data/approved-offer-copy.json; eligibility retains the complete source terms. Central slot rendering is implemented and tested, ready for published ACF records. Generic Tier A Gutenberg converter and 28 local content plans are prepared; CMS replacement and ACF slot wiring remain pending this dependency. Evidence: outputs/staging-writes/offers-schema.json and 90846-read.json.
 - Rebuild automation: preview-only GitHub workflow (manual, save-dispatch and 30-minute fallback) plus debounced WordPress save hook prepared locally. GitHub currently has no repository Actions secrets. Needs EVERYTIP_PREVIEW_CLOUDFLARE_API_TOKEN, EVERYTIP_PREVIEW_CLOUDFLARE_ACCOUNT_ID and EVERYTIP_PREVIEW_BUILDS_ENABLED=true; SSH deployment of rebuild-hook.php and EVERYTIP_PREVIEW_DISPATCH_TOKEN in wp-config.php. No webhook or scheduled build has been verified. PHP CLI is unavailable locally, so PHP lint also remains pending.
 - Full launch checks, archives, offers and tracking remain unfinished work, not approved launch gates.
 
@@ -55,7 +55,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 1. [x] Commit and push baseline.
 2. [x] Create PROGRESS.md.
 3. [x] Resilient staging build and cached rebuild completed.
-4. [x] Fixed tiers committed in data/builder-tiers.json: 27 Tier A routes; 87 Tier B pages. Another 227 classic posts contain embedded builder fragments and receive render cleanup only, never Gutenberg conversion.
+4. [x] Fixed tiers committed in data/builder-tiers.json: 28 Tier A routes; 87 Tier B pages. ComeOn sportsbook review 25354 was added after a complete review-path check; casino-only and tipster reviews are excluded. Another 227 classic posts contain embedded builder fragments and receive render cleanup only, never Gutenberg conversion.
 5. [x] Generic cleanup applied; 37 sampled routes passed at both viewport sizes.
 6. [ ] Tier A Gutenberg + ACF: authorised through single-record staging REST. Use staging; user's no-live-write instruction overrides section 3a's live wording.
 7. [ ] Publish seven offers and wire slots through single-record staging REST.
