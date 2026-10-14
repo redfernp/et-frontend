@@ -20,6 +20,8 @@ Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 - Task 9: cutover checklist and narrowly scoped differences completed below. All seven approved offer headlines and compact terms match live word for word; previous timeout unknowns are resolved.
 - Validation: Astro check covers 367 files with zero errors/warnings/hints. Twenty-two focused cache, source, archive, offer and routing tests passed; affected archive/routing tests were rerun after implementation. Workflow YAML parses successfully.
 
+- Synced Paul's staging change: only the Offer Publishing ACF group is exposed through REST in the repo plugin. Other field groups retain their existing settings.
+
 ## In progress
 - Tasks 6-7: generic Gutenberg conversion code, 28 local Tier A content plans, exact seven-offer field plans and central ACF slot rendering are prepared. CMS replacement, offer publication and slot wiring are pending the field-access blocker below.
 - Task 8: preview checks have completed with the documented status conflicts. Launch is not approved. Final WPGRAPHQL_FRESH=1 build/check remains to run after CMS and automation work is complete.

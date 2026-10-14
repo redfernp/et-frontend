@@ -12,7 +12,7 @@ require_once __DIR__ . '/rebuild-hook.php';
 
 /**
  * Additional offer and bookmaker fields. These complement, rather than
- * replace, the three existing pilot field groups. None uses default WP REST.
+ * replace, the three existing pilot field groups. Offer Publishing exposes WP REST.
  */
 function everytip_register_offer_fields() {
 	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
@@ -38,7 +38,7 @@ function everytip_register_offer_fields() {
 			),
 			'location'           => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'et_offer' ) ) ),
 			'active'             => true,
-			'show_in_rest'       => 0,
+			'show_in_rest'       => 1,
 			'show_in_graphql'    => true,
 			'graphql_field_name' => 'EveryTipOfferPublishing',
 		)
