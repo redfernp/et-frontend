@@ -1,5 +1,6 @@
 {
   "name": "everytip-astro-preview",
+  "account_id": "5aa99b5280868c09bf3092fff6d06125",
   "main": "src/worker/index.mjs",
   "compatibility_date": "2026-10-01",
   "previews": {},

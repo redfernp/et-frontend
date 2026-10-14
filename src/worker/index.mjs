@@ -1,5 +1,6 @@
 import { verifiedLegacyRedirects } from '../lib/legacy-redirects.mjs';
 import affiliateInventory from '../../data/affiliate-redirects.json' with { type: 'json' };
+import archiveRedirects from '../../outputs/archive-redirects.json' with { type: 'json' };
 
 // Static assets are tried first by Cloudflare except for /index.html aliases
 // and verified redirects, which Wrangler routes here first.
@@ -19,6 +20,10 @@ export default {
     }
     if (verifiedLegacyRedirects.has(path)) {
       return Response.redirect(new URL(verifiedLegacyRedirects.get(path), url), 301);
+    }
+    if (archiveRedirects[path]) {
+      const redirect = archiveRedirects[path];
+      return Response.redirect(new URL(redirect.location, url), redirect.status);
     }
     if (path.includes('\\') || path.includes('//') || /\.[^/]+\/?$/.test(path)) {
       return new Response('Not Found', { status: 404 });

@@ -7,6 +7,10 @@ export interface LaunchRecord {
   modified: string;
   status: string;
   kind: string;
+  posts: LaunchRecord[];
+  page: number;
+  pageCount: number;
+  archiveBase: string;
   seo: { title: string; metaDesc: string; canonical: string; metaRobotsNoindex: string; metaRobotsNofollow: string } | null;
 }
 export const endpoint: string;

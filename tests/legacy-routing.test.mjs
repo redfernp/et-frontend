@@ -31,8 +31,7 @@ const env = {
 test('Wrangler disables HTML normalization and SPA fallback for legacy URL parity', () => {
   assert.equal(wrangler.assets.html_handling, 'none');
   assert.notEqual(wrangler.assets.not_found_handling, 'single-page-application');
-  assert.deepEqual(wrangler.assets.run_worker_first.slice(0, 2), ['/index.html', '/*/index.html']);
-  assert.deepEqual(new Set(wrangler.assets.run_worker_first.slice(2)), new Set(verifiedLegacyRedirects.keys()));
+  assert.deepEqual(new Set(wrangler.assets.run_worker_first), new Set(['/go/*', '/index.html', '/*/index.html', ...verifiedLegacyRedirects.keys()]));
   const previewWrangler = JSON.parse(readFileSync(new URL('../wrangler.preview.jsonc', import.meta.url), 'utf8'));
   assert.deepEqual(previewWrangler.assets.run_worker_first, wrangler.assets.run_worker_first);
 });
@@ -97,8 +96,9 @@ test('verified WordPress redirects remain 301 rather than becoming preview pages
   for (const [source, target] of verifiedLegacyRedirects) {
     const targetAsset = target.endsWith('.html') ? join(dist, target.slice(1)) : join(dist, target.slice(1), 'index.html');
     assert.ok(existsSync(targetAsset), `Missing local redirect target: ${target}`);
-    const sourceAsset = source.endsWith('.html') ? join(dist, source.slice(1)) : join(dist, source.slice(1), 'index.html');
-    assert.ok(!existsSync(sourceAsset), `Redirect source became a 200 asset: ${source}`);
+    // Staging still publishes some redirect sources. run_worker_first must
+    // preserve the known 301 even while Paul resolves their CMS status.
+    assert.ok(wrangler.assets.run_worker_first.includes(source));
     const response = await worker.fetch(new Request(`https://preview.example${source}`, { method: 'HEAD' }), env);
     assert.equal(response.status, 301);
     assert.equal(response.headers.get('location'), `https://preview.example${target}`);

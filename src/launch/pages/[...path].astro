@@ -22,7 +22,17 @@ const seo = {
 <BaseLayout title={record.title} publicPage={true} seo={seo} verifiedPublicPaths={paths}>
   <article class="cms-content">
     <h1 set:html={record.title} />
-    <div set:html={launchHtml(record.content, endpoint)} />
+    {record.content && <div set:html={launchHtml(record.content, endpoint)} />}
+    {record.posts?.length > 0 && <>
+      <ol class="archive-posts">
+        {record.posts.map(post => <li><a href={post.uri} set:html={post.title} /><time datetime={post.date}>{post.date.slice(0,10)}</time></li>)}
+      </ol>
+      <nav aria-label="Archive pages">
+        {record.page > 1 && <a rel="prev" href={record.page === 2 ? record.archiveBase : `${record.archiveBase}/page/${record.page-1}`}>Previous</a>}
+        <span>Page {record.page} of {record.pageCount}</span>
+        {record.page < record.pageCount && <a rel="next" href={`${record.archiveBase}/page/${record.page+1}`}>Next</a>}
+      </nav>
+    </>}
   </article>
 </BaseLayout>
 <style>
@@ -31,4 +41,6 @@ const seo = {
   .cms-content :global(table){display:block;width:100%;min-width:0;max-width:100%;overflow-x:auto}
   .cms-content :global(iframe){max-width:100%}
   .cms-content :global(figure){max-width:100%;margin:1rem 0}
+  .archive-posts{padding-left:1.5rem}.archive-posts li{padding:.75rem 0}.archive-posts time{display:block;font-size:.85rem;color:#555}
+  nav{display:flex;gap:1rem;flex-wrap:wrap;margin:2rem 0}
 </style>

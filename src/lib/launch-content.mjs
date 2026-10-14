@@ -1,5 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { createGraphqlClient } from './graphql-cache.mjs';
+import { launchArchives } from './launch-archives.mjs';
+import { resolveLaunchOffers } from './launch-offers.mjs';
 // Section 0 permits resumable local reads; final launch uses WPGRAPHQL_FRESH=1.
 export const endpoint = import.meta.env?.WPGRAPHQL_ENDPOINT || process.env.WPGRAPHQL_ENDPOINT ||
   'https://wordpress-159231-2098144.cloudwaysapps.com/graphql';
@@ -11,10 +13,14 @@ export const requestGraphql = (query, variables = {}) => client.request(query, v
 let pending;
 export function launchContent() {
   return pending ??= readContent().then(async records => {
+    await resolveLaunchOffers(records, requestGraphql);
+    const archiveReceipts = [];
+    const archives = await launchArchives(records, {query:requestGraphql, endpoint, fresh, receipts:archiveReceipts});
+    records.push(...archives.records);
     // Output-only receipt for launch gates, never a build input or fallback.
     await mkdir('outputs', { recursive: true });
     await writeFile('outputs/launch-source.json', JSON.stringify({ endpoint, fetchedAt: new Date().toISOString(),
-      mode: fresh ? 'fresh' : 'resumable-local', receipts: client.receipts, records }));
+      mode: fresh ? 'fresh' : 'resumable-local', receipts: [...client.receipts,...archiveReceipts], records, archiveRedirects:archives.redirects }));
     return records;
   });
 }
