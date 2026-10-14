@@ -75,7 +75,7 @@ try {
     await cdp.send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile });
     for (const [name, path] of pages) {
       await cdp.send('Page.navigate', { url: `${origin}${path}` });
-      for (let attempt = 0; attempt < 30; attempt++) {
+      for (let attempt = 0; attempt < 150; attempt++) {
         const ready = await cdp.send('Runtime.evaluate', { expression: '({ ready: document.readyState, path: location.pathname })', returnByValue: true });
         if (ready.result.value?.ready === 'complete' && ready.result.value?.path === path) break;
         await new Promise((resolve) => setTimeout(resolve, 100));
@@ -103,6 +103,7 @@ try {
             overflow };
         })()`, returnByValue: true,
       });
+      if (!metrics.result.value) throw new Error(`Browser metrics failed on ${path}: ${JSON.stringify(metrics.exceptionDetails || metrics.result)}`);
       const screenshot = await cdp.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
       await writeFile(join(output, `${name}-${view}.png`), Buffer.from(screenshot.data, 'base64'));
       if (name === 'home' || name === 'article') {
