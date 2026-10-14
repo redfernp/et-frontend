@@ -22,12 +22,13 @@ Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 
 - Synced Paul's staging change: only the Offer Publishing ACF group is exposed through REST in the repo plugin. Other field groups retain their existing settings.
 
+- D2: all seven central offers published on staging, one record at a time with one authenticated readback each. GB, 2026-10-14, active status and eligibility from the complete approved terms verified. Existing headline/terms already matched word for word; Betway and Betwright have ordinary spaces where source has NBSP, with identical wording/punctuation. Stable IDs assigned where absent.
+
 ## In progress
-- Tasks 6-7: generic Gutenberg conversion code, 28 local Tier A content plans, exact seven-offer field plans and central ACF slot rendering are prepared. CMS replacement, offer publication and slot wiring are pending the field-access blocker below.
+- Tasks 6-7: generic Gutenberg conversion code, 28 local Tier A content plans, exact seven-offer field plans and central ACF slot rendering are prepared. Offer publication is complete; CMS replacement and slot wiring are underway.
 - Task 8: preview checks have completed with the documented status conflicts. Launch is not approved. Final WPGRAPHQL_FRESH=1 build/check remains to run after CMS and automation work is complete.
 
 ## Blocked / required next inputs
-- D2 / tasks 6-7: authenticated OPTIONS /wp-json/wp/v2/et_offer/90846 exposes acf with zero properties; the edit read returns acf []. The public GraphQL offer catalogue is empty. These ACF fields need SSH or an explicitly exposed write route. Per section 0, no incomplete draft offers were published and work moved on. Exact approved headlines/terms, UK and 14 October date plans are in data/approved-offer-copy.json; eligibility retains the complete source terms. Central slot rendering is ready for published records. Evidence: outputs/staging-writes/offers-schema.json and 90846-read.json.
 - Rebuild automation: preview-only GitHub workflow (manual, save-dispatch and 30-minute fallback) and debounced WordPress save hook are committed. Repository Actions secrets are empty and EVERYTIP_PREVIEW_BUILDS_ENABLED is unset. Needs EVERYTIP_PREVIEW_CLOUDFLARE_API_TOKEN, enabling that flag, and SSH deployment of the complete content-model plugin folder plus EVERYTIP_PREVIEW_DISPATCH_TOKEN in wp-config.php. The preview account is already pinned in wrangler.preview.jsonc. No save-trigger or scheduled rebuild has been verified. PHP CLI is unavailable locally; lint the hook on the server before activation. This workflow targets previews only; Paul must configure the production build target at cutover.
 - Eleven existing legacy redirect sources still return 200 on staging but correctly return their established 301 on the preview. Paul must align the pre-push statuses/rules listed below. Do not claim complete staging HTTP parity until that is done.
 - Four existing staging archive redirects, /john-newsome/page/2 through /page/5, point to malformed /john-newsome-football-betting-tipspage/N destinations returning 404. Existing targets are preserved; Paul should correct the source redirect rules.
@@ -39,7 +40,7 @@ Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 - [ ] Complete indexable SEO parity. All 1,217 served HTML responses match source Yoast; the 11 status conflicts prevent the complete gate passing.
 - [x] Sitemap includes indexable served routes and excludes noindexed/redirected paths.
 - [x] All 79 /go paths retain current destinations; sponsored/nofollow verified in rendered HTML.
-- [ ] Homepage, free tips, free bets and every review use current ACF offers. Publication/slot wiring blocked on ACF write access.
+- [ ] Homepage, free tips, free bets and every review use current ACF offers. Publication complete; slot wiring underway.
 - [x] Ninja tables render without withheld rows: 97 tables, 3,105 matching rows.
 - [x] Analytics and tracking fire on preview; GTM and GA4 requests verified.
 - [ ] Save webhook and scheduled fallback rebuild work. Code prepared; activation and verification pending.
@@ -47,7 +48,7 @@ Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 
 ## Decisions (section 5)
 - [x] D1: staging WPGraphQL comes across at cutover; no separate live installation.
-- [x] D2: seven offers approved, UK only, checked 14 Oct 2026. Exact source copy and field plans prepared; full terms and official terms URL are optional in the display model. CMS publication and slot wiring remain blocked on field access, not copy approval.
+- [x] D2: seven offers approved, UK only, checked 14 Oct 2026. Exact source copy and field plans prepared; full terms and official terms URL are optional in the display model. CMS publication complete; slot wiring underway.
 - [x] D3: GBP 20 description implemented and verified on staging page 87553.
 - [x] D4: migrate free bets as supplied. General-prose flags below; no additional offer-claim gate.
 - [x] D5: staging post 70985 noindex implemented and verified; no live noindex work.
@@ -59,8 +60,8 @@ Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 3. [x] Resilient staging build and complete cached rebuild.
 4. [x] Fixed Tier A/Tier B inventory.
 5. [x] Generic cleanup and rendered sampling.
-6. [ ] Tier A Gutenberg + ACF: preparation complete; CMS writes blocked on central offer field access.
-7. [ ] Publish seven offers and wire ACF slots: exact-copy plans and renderer prepared; needs SSH.
+6. [ ] Tier A Gutenberg + ACF: preparation complete; CMS writes underway.
+7. [ ] Publish seven offers and wire ACF slots: all seven published; page wiring underway.
 8. [ ] Workers launch checklist: checks run, remaining blockers documented.
 9. [x] Cutover morning checklist and scoped difference list.
 
@@ -83,4 +84,4 @@ Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 - Evidence: outputs/cutover-final-scope.json, outputs/staging-legacy-http.json and outputs/launch-network-parity.json. No live writes or broad drift audit performed.
 
 ## Boundaries and stopping checkpoint
-Tasks 3-5 and 9 are complete. Task 8 has a working noindex preview, passing layout/tracking/table checks and the documented status conflicts. Tasks 6-7 await ACF field access; automation awaits its credentials and plugin installation; final uncached launch verification remains pending. Only the two authorised D3/D5 staging SEO writes were made. No classic post conversions, DNS changes, Cloudflare production changes, live WordPress writes, Tier C redirects or new dated reports. All completed work and this checkpoint are committed and pushed.
+Tasks 3-5 and 9 are complete. Task 8 has a working noindex preview, passing layout/tracking/table checks and the documented status conflicts. Task 6 and slot wiring are underway; automation awaits its credentials and plugin installation; final uncached launch verification remains pending. The authorised D3/D5 staging SEO writes and seven offer publications are verified. No classic post conversions, DNS changes, Cloudflare production changes, live WordPress writes, Tier C redirects or new dated reports. All completed work and this checkpoint are committed and pushed.
