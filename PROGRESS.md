@@ -17,7 +17,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 - Task 3 COMPLETE: sequential five-record GraphQL pages with exponential backoff and atomic on-disk caching. Full staging build: 1,188 pages, 983 exact .html routes, 15m 11s. Cached rebuild: 1,188 pages in 5.91s. Final launch still requires cache bypass.
 - Task 5 COMPLETE: 10 random Tier B pages plus all 27 fixed Tier A routes passed 74 mobile/desktop render checks. Visual mobile sample inspected. Fixed conditional asset responses incorrectly becoming 404; regression test passes.
 - Task 8: new entry point covers posts/pages only. Fresh taxonomy/author/blog archives and pagination remain to implement. No complete coverage claim.
-- Task 9: cutover checklist and scoped difference inventory recorded below. Exact offer-text reconciliation and timeout cases remain open.
+- Task 9 COMPLETE: cutover checklist and scoped differences below; exact offer-copy match and all prior timeout cases resolved.
 
 ## Current section 0 instructions
 - Fixed Tier A: homepage, /free-betting-tips, /bookie-free-bets-bonus-offers, every bookmaker review and sign-up offer page. Every other builder page is Tier B. No GSC ranking or Tier C list.
@@ -59,7 +59,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 6. [ ] Tier A Gutenberg + ACF: authorised through single-record staging REST. Use staging; user's no-live-write instruction overrides section 3a's live wording.
 7. [ ] Publish seven offers and wire slots through single-record staging REST.
 8. [ ] Workers launch checklist: not passed.
-9. [ ] Cutover checklist and scoped difference inventory prepared; exact offer-text comparison and timeout cases remain incomplete.
+9. [x] Cutover checklist and scoped differences completed; Paul must apply the listed pre-push changes.
 
 ## Cutover morning checklist for Paul
 1. Before pushing, re-apply only desired live edits to staging. Check exact offer texts on 56315, the eight owner rewrites and the unpublished records below. For Paddy Power 34795, ensure rewritten post_content renders instead of the old Thrive content; use page SEO from ../legacy-rewrites/manifest.json where needed.
@@ -69,15 +69,15 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 5. Paul switches DNS/routing. Codex makes no DNS or Cloudflare production changes.
 6. Add that morning's tips normally; confirm the rebuild updates rendered tables. Retain prior deployment and WordPress backup for rollback.
 
-## Narrow cutover differences (14 October read results)
-Scope is only section 4a; HTML inequality is a signal for review, not proof every text passage differs.
-- 56315: both REST reads 200; rendered HTML differs. Exact offer-text comparison still required.
-- Rewrites 56061, 72881, 60150, 12138, 7945, 34795: both reads 200; rendered HTML differs.
-- Rewrites 10754, 1482: live 200, staging timeout; unknown.
-- Unpublished IDs 59675, 59683, 88734, 11057, 19627, 89061, 89063: staging 200, live public REST 401. Owner handoff identifies these as unpublished; Paul must check staging status before push.
-- Other unpublished IDs 89134, 37819, 5438, 11716, 11710, 11708, 33064 and 20902: staging timed out; live public REST returned 401. Confirm staging status before push.
-- Confirmed meta-description differences: post 12138 retains the old RaceBets promotion on staging while live has the owner legal explainer; post 7945 retains the old full-time-career pitch on staging while live describes a small-stakes beginner guide. Copy the intended owner metadata before push.
-- HTML differences can include hostname or wrapper changes. Exact offer-text equality is not established by these reads; do not treat the free-bets check as passed.
+## Narrow cutover differences (14 October verified results)
+Scope is only section 4a; no general live/staging sync was performed.
+- Free bets 56315: all seven offer headlines and compact terms match live word for word. Wrapper HTML differs but the approved offer copy does not. Evidence: outputs/cutover-offer-copy.json.
+- All eight owner rewrites (56061, 72881, 60150, 12138, 7945, 10754, 1482, 34795) have different rendered body text on staging. All eight live public reads succeeded; previous timeout unknowns are resolved. Paul should re-apply the intended rewrites before push, using ../legacy-rewrites/manifest.json for page SEO. For Paddy Power 34795, disable Thrive so post_content is used.
+- Confirmed meta-description differences on posts 12138 (old RaceBets promotion), 7945 (old full-time earnings pitch), 10754 (old GBP 100/week claim), and 1482 (old daily tips wording). Live has the owner's replacement descriptions; stage those before push.
+- Fourteen records identified as unpublished by the owner are still published in the complete staging source: 59675, 59683, 88734, 89134, 37819, 5438, 11716, 11710, 11708, 20902, 19627, 11057, 89061, 89063. Record 33064 is absent from the published source. Paul must align these statuses before cutover.
+- Existing redirect sources still published in staging create a conflict between retaining the known 301s and returning 200 for every staging page. Existing 301 behavior is retained; do not claim launch parity until the statuses are aligned.
+- D4 prose-only flags outside the seven offer blocks: ?free bets are a win-win?; the ?Risk-Free Bets? section says ?you?re in a win-win situation?; the comparison text uses ?risk-free bet?; final thoughts says ?a risk-free way to enjoy your favourite games?. Flagged for Paul, not rewritten or used to block approved offers.
+- Evidence: outputs/cutover-final-scope.json. No changes made to live WordPress or to these staging records.
 
 ## Boundaries
 No DNS, Cloudflare production settings, live WordPress writes, Tier C redirects, new dated reports, classic post conversions or general drift audits. Existing dated docs remain historical, not current instructions.
