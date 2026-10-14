@@ -45,7 +45,10 @@ export function approvedOfferForSlot(slot, offers, { approvedIds = new Set(), co
   const offer = offers.find((item) => item.databaseId === slot.offerId);
   const publishing = offer?.everyTipOfferPublishing;
   const details = offer?.everyTipOfferDetails;
-  if (!publishing || !details || offer.status !== 'publish' || publishing.etOfferStatus !== 'active') return null;
+  // WPGraphQL for ACF exposes select values as a list, even for single selects.
+  const status = Array.isArray(publishing?.etOfferStatus) && publishing.etOfferStatus.length === 1
+    ? publishing.etOfferStatus[0] : publishing?.etOfferStatus;
+  if (!publishing || !details || offer.status !== 'publish' || status !== 'active') return null;
   if (!publishing.etOfferUid?.trim() || !publishing.etOfferLastChecked?.trim()) return null;
   if (!details.publicHeadline?.trim() || !details.compactTerms?.trim()) return null;
   const included = countryCodes(publishing.etOfferCountriesInclude);

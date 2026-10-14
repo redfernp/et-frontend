@@ -6,3 +6,10 @@ test('owner-approved UK offer slot reads central copy and keeps working affiliat
   assert.match(html,/Current &amp; central/);assert.match(html,/href="\/go\/betfred" rel="sponsored nofollow"/);assert.doesNotMatch(html,/data-everytip-offer-slot/);
 });
 test('draft or missing offer cannot silently disappear from published placement',()=>{assert.throws(()=>renderOfferSlots(marker,[]),/not ready/);});
+
+test('staging WPGraphQL single-select arrays resolve a published GB offer',()=>{
+  const offer={databaseId:90846,status:'publish',everyTipOfferDetails:{publicHeadline:'Central headline',compactTerms:'Central terms'},everyTipOfferPublishing:{etOfferUid:'stable-id',etOfferStatus:['active'],etOfferLastChecked:'2026-10-14T00:00:00+00:00',etOfferCountriesInclude:'GB'}};
+  assert.match(renderOfferSlots(marker,[offer]),/Central headline/);
+  offer.everyTipOfferPublishing.etOfferStatus=['active','paused'];
+  assert.throws(()=>renderOfferSlots(marker,[offer]),/not ready/);
+});

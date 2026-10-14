@@ -16,7 +16,21 @@ export function offerSlotBlock(id) {
  */
 export function builderToBlocks(html) {
   if (/<(?:script|iframe|form)\b/i.test(html)) throw new Error('Embedded script/frame/form needs its launch integration before CMS replacement');
-  const doc = parseDocument(cleanupBuilderHtml(html));
+  // Retain the live Ninja shortcode when rebuilding a Tier A page, so table edits
+  // still flow through WordPress instead of freezing the rendered rows in blocks.
+  const source = parseDocument(html);
+  function preserveTables(node) {
+    for (const child of [...(node.children ?? [])]) {
+      const id = child.attribs?.['data-footable_id'];
+      if (child.name === 'table' && child.attribs?.['data-ninja_table_instance'] && /^[1-9]\d*$/.test(id ?? '')) {
+        const marker = parseDocument(`<div data-everytip-ninja-table="${id}"></div>`).children[0];
+        marker.parent = node;
+        node.children[node.children.indexOf(child)] = marker;
+      } else preserveTables(child);
+    }
+  }
+  preserveTables(source);
+  const doc = parseDocument(cleanupBuilderHtml(render(source)));
   function convert(nodes) {
     const result = [];
     for (const node of nodes) {
@@ -25,6 +39,8 @@ export function builderToBlocks(html) {
         if (node.data.trim()) result.push(wrap('paragraph', `<p>${render(node)}</p>`));
         continue;
       }
+      const ninja = node.attribs?.['data-everytip-ninja-table'];
+      if (ninja) { result.push(wrap('shortcode', `[ninja_tables id="${ninja}"]`)); continue; }
       const marker = node.attribs?.['data-everytip-offer-slot'];
       if (marker) { result.push(offerSlotBlock(Number(marker))); continue; }
       const name = node.name;

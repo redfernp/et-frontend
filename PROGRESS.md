@@ -27,7 +27,7 @@ Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 - Tasks 6-7 CMS work: all 28 fixed Tier A records rebuilt as core blocks plus ACF offer slots, sequential authenticated REST writes with one readback each. Every raw-content, identity and slot-render check passed. All existing prose retained, accounting only for removed CSS, whitespace and WordPress smart punctuation. Hubs have all seven offers; matching-brand reviews have their central offer; other reviews have a labelled comparison section. Existing embedded promotions remain as supplied. WordPress revisions and ignored before/after evidence support rollback.
 
 ## In progress
-- Tasks 6-7: CMS work complete; full rebuild and refreshed preview/render verification are running.
+- Tasks 6-7: CMS work complete and 1,230-page rebuild passed (35.04 seconds). All 76 central-offer placements pass local parity. Final preview upload/render verification is running. WPGraphQL single-select arrays are supported. Betfred Ninja table 57082 is retained as a dynamic shortcode, with a verified corrective readback.
 - Task 8: preview checks have completed with the documented status conflicts. Launch is not approved. Final WPGRAPHQL_FRESH=1 build/check remains to run after CMS and automation work is complete.
 
 ## Blocked / required next inputs
