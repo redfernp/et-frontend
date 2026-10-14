@@ -26,7 +26,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 - Task 3 completed with resumable five-record pages, six-attempt exponential backoff and atomic cache writes. Cache resume, endpoint isolation, fresh bypass and sequential-request tests pass.
 
 ## Blocked
-- No GSC or blanket SSH blocker remains. Any field-level REST limitation will be recorded with its decision ID.
+- D2 / tasks 6–7: authenticated OPTIONS /wp-json/wp/v2/et_offer/90846 exposes acf as an object with zero properties; authenticated edit read returns acf []. ACF offer fields need SSH (or an explicitly exposed write route). Do not publish incomplete draft offers. Generic Tier A Gutenberg converter and 27 local content plans are prepared; CMS replacement and ACF slot wiring remain pending this dependency. Evidence: outputs/staging-writes/offers-schema.json and 90846-read.json.
 - Full launch checks, archives, offers, tracking and rebuild automation remain unfinished work, not approved launch gates.
 
 ## Launch checklist (section 4)
@@ -83,4 +83,4 @@ Scope is only section 4a; HTML inequality is a signal for review, not proof ever
 No DNS, Cloudflare production settings, live WordPress writes, Tier C redirects, new dated reports, classic post conversions or general drift audits. Existing dated docs remain historical, not current instructions.
 
 ## Active checkpoint
-Tasks 3, 4 and 5 complete; Tier A/offer REST capability assessment underway. Prior timeout stop checkpoint is superseded by section 0. No new staging writes or remote deployment yet this turn.
+Tasks 3–5 complete. Tasks 6–7 have a concrete ACF REST field blocker; conversion/exact-copy extraction code prepared. Moving to independently accessible launch checks. Prior timeout stop checkpoint is superseded by section 0. No new staging writes or remote deployment yet this turn.

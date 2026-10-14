@@ -18,7 +18,8 @@ export function splitOfferSlots(content) {
 }
 
 function countryCodes(value) {
-  return new Set((value ?? '').split(',').map((code) => code.trim().toUpperCase()).filter(Boolean));
+  return new Set((value ?? '').split(',').map((code) => code.trim().toUpperCase()).filter(Boolean)
+    .map(code => code === 'UK' ? 'GB' : code));
 }
 
 function unambiguousTime(value) {
