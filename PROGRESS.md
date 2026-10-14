@@ -10,7 +10,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 - Generic builder cleanup strips builder wrappers/styles and retains prose, headings, images, tables, links and ACF slot markers. Applied by markup detection; fixed tier inventory is in data/builder-tiers.json.
 - Rendered affiliate links retain existing www.everytip.co.uk/go paths and receive sponsored/nofollow. All 79 distinct /go paths in the source were checked against current redirects without visiting partners: 79 resolved, zero failures. Worker routing preserves their observed status and destination; local network checks passed for all 79 affiliate and 14 legacy redirects; remote checks pending.
 - Sitemap uses source robots. Added a section 4 gate for built assets, Yoast parity, sitemap membership, affiliate relations and unresolved offer slots.
-- Preview packaging preserves source Yoast meta and adds HTTP X-Robots-Tag noindex. No remote upload performed.
+- Uploaded the noindex Workers preview: https://everytip-review-everytip-astro-preview.jpredfern1979.workers.dev (version 738b435f-6e9e-4c57-be25-3be03ca33d87). Production and DNS unchanged. The final refresh changed only sitemap.xml; the other 1,231 assets were reused.
 - Latest Astro check: zero errors/warnings/hints. Twenty-two focused source, cache, archive, offer and routing tests passed.
 
 ## In progress
@@ -28,7 +28,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 ## Blocked
 - D2 / tasks 6–7: authenticated OPTIONS /wp-json/wp/v2/et_offer/90846 exposes acf as an object with zero properties; authenticated edit read returns acf []. ACF offer fields need SSH (or an explicitly exposed write route). Do not publish incomplete draft offers. Exact D2 headline/terms and UK/date field plans are committed in data/approved-offer-copy.json; eligibility retains the complete source terms. Central slot rendering is implemented and tested, ready for published ACF records. Generic Tier A Gutenberg converter and 28 local content plans are prepared; CMS replacement and ACF slot wiring remain pending this dependency. Evidence: outputs/staging-writes/offers-schema.json and 90846-read.json.
 - Rebuild automation: preview-only GitHub workflow (manual, save-dispatch and 30-minute fallback) plus debounced WordPress save hook prepared locally. GitHub currently has no repository Actions secrets. Needs EVERYTIP_PREVIEW_CLOUDFLARE_API_TOKEN, EVERYTIP_PREVIEW_CLOUDFLARE_ACCOUNT_ID and EVERYTIP_PREVIEW_BUILDS_ENABLED=true; SSH deployment of rebuild-hook.php and EVERYTIP_PREVIEW_DISPATCH_TOKEN in wp-config.php. No webhook or scheduled build has been verified. PHP CLI is unavailable locally, so PHP lint also remains pending.
-- Offers, automation activation and final fresh launch verification remain unfinished. Remote preview checks are in progress.
+- Offers, automation activation and final fresh launch verification remain unfinished. Final remote network check is in progress; 72 browser checks and tracking checks have passed.
 - Four pre-existing staging archive redirects (/john-newsome/page/2 through /page/5) point to malformed /john-newsome-football-betting-tipspage/N destinations returning 404. Targets are preserved, not silently changed. Paul should correct the source redirect rules.
 
 ## Launch checklist (section 4)
@@ -39,10 +39,10 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 - [ ] Sitemap contains all indexable URLs and no noindexed URLs.
 - [ ] All /go links resolve to existing destinations and use sponsored/nofollow.
 - [ ] Homepage, free tips, free bets and every review use current ACF offers.
-- [ ] Ninja tables render without withheld rows. HTML is retained; JS-populated tables need browser verification.
-- [ ] Analytics and tracking fire on preview.
+- [x] Ninja Tables: 97 rendered tables with 3,105 rows match staging source row text exactly; table pages included in browser sampling. No rows withheld.
+- [x] Analytics: existing GTM-TJ4SSH4 loaded in all 72 browser checks; GA4 collection requests to region1.google-analytics.com were observed on mobile and desktop after a seven-second settling period. No tracking configuration was changed.
 - [ ] Save webhook and scheduled fallback rebuild work.
-- [ ] Thirty-page QA at 375px and desktop, including required families.
+- [x] 36-page QA at 375px and desktop: 72 checks, zero layout/footer/affiliate-rel failures. Includes hubs, reviews, five Tier B pages, five classic posts, five columnist posts and five archive routes; ComeOn added. Selected desktop/mobile screenshots visually inspected. Evidence: outputs/launch-render-result.json and outputs/rescope-tracking-render.log.
 
 ## Decisions (section 5)
 - [x] D1: staging WPGraphQL comes across with cutover; no separate live installation.

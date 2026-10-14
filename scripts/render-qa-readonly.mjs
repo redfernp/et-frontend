@@ -1,4 +1,4 @@
-// Local-only visual QA. Starts an isolated headless Chrome profile, captures
+// Read-only visual QA. Starts an isolated headless Chrome profile, captures
 // representative pages, reports viewport overflow/footer/sidebar evidence.
 import { spawn } from 'node:child_process';
 import { readFile, writeFile, mkdtemp } from 'node:fs/promises';
@@ -80,6 +80,8 @@ try {
         if (ready.result.value?.ready === 'complete' && ready.result.value?.path === path) break;
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
+      const settle = Math.min(10000, Number(process.env.ET_QA_SETTLE_MS) || 0);
+      if (settle > 0) await new Promise(resolve => setTimeout(resolve, settle));
       await cdp.send('Runtime.evaluate', { expression: 'scrollTo(0, 0)' });
       const metrics = await cdp.send('Runtime.evaluate', {
         expression: `(() => {
@@ -96,6 +98,8 @@ try {
             previewBanner: !!document.querySelector('.preview-banner'), disabledOffers: document.querySelectorAll('.offer-disabled,.offer-preview-button,.featured-offer-cta').length,
             activeAffiliateLinks: document.querySelectorAll('a[href*="/go/"],a[href*="?via="]').length,
             invalidAffiliateRels: [...document.querySelectorAll('a[href*="/go/"]')].filter(a => !a.relList.contains('sponsored') || !a.relList.contains('nofollow')).length,
+            tagManagerLoaded: !!window.google_tag_manager?.['GTM-TJ4SSH4'],
+            trackingRequests: performance.getEntriesByType('resource').map(r=>r.name).filter(url=>/google-analytics.com|googletagmanager.com|doubleclick.net/.test(url)),
             overflow };
         })()`, returnByValue: true,
       });
