@@ -1,0 +1,6 @@
+---
+import PolicyShell from '../../components/PolicyShell.astro';
+import { getLegalPageByUri } from '../../lib/wpgraphql';
+const page = await getLegalPageByUri('/terms-conditions');
+---
+<PolicyShell title="Terms and conditions" kind="Site terms" intro="The existing EveryTip site terms in a cleaner, readable layout. Bookmaker offer terms remain separate from these site terms." content={page.content} modified={page.modified} reviewNote="Preserved from staging WordPress for design review; confirm the wording and links before launch. No revised legal terms have been invented by the frontend." />

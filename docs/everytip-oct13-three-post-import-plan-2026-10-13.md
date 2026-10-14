@@ -1,0 +1,35 @@
+# Three live-only 13 October posts: read-only import plan
+
+Audit time: 13 October 2026. Sources: live public WordPress REST `wp/v2/posts/{id}`, staging authenticated REST readback for identity only, the dated local snapshot, and the generic Astro route code. No WordPress or Cloudflare writes were made. Re-run `node scripts/audit-live-oct13-posts.mjs` to refresh the structural inventory. Treat the three live bodies as unverified source copy, not approved offers or current tips.
+
+| Live ID and exact slug | Classification | Rendered body | Source SEO/media |
+| --- | --- | --- | --- |
+| 91111 `money-back-if-2nd-leicester-1324-13-october.html` | Dated race/offer news | 9 paragraphs, 4 H2s, 2 lists, 4 links. No table, image, or rendered builder/shortcode signal. | Yoast title `Money Back if 2nd: 13:24 Leicester Tips Today`; description 131 characters; index/follow; canonical exact `.html` path. No featured/body image. |
+| 91113 `extra-place-races-today-tips-13-october.html` | Dated ordinary racing-tip/offer hybrid | 11 paragraphs, 4 H2s, 1 six-column table with 8 body rows, 7 links. Six rows say 5 places and two say 4; do not alter this table to match the headline. No image or rendered builder/shortcode signal. | Yoast title `Extra Place Races Today: 5 Places on 6 Races`; description 142 characters; index/follow; canonical exact `.html` path. No featured/body image. |
+| 91115 `champions-league-bet-builder-refund-arsenal-v-lille-13-october.html` | Dated football/offer news | 13 paragraphs, 6 H2s, 3 lists, 9 links. No table, image, or rendered builder/shortcode signal. | Yoast title `Arsenal v Lille: Bet Builder Refund up to £10`; description 152 characters; index/follow; canonical exact `.html` path. No featured/body image. |
+
+All three were published and last modified on 13 October 2026, are authored by WordPress user 9, and have `featured_media: 0`. Yoast exposes a social image for each, but that is **not** evidence of a post-specific featured image. The description text and social-image identity need exact readback before release. Staging REST returned `rest_post_invalid_id` for all three IDs: the clone predates them. Neither the dated local snapshot nor the existing staging-only fresh discovery can supply an exact Astro route for them. The generic route currently strips anchors to inert spans and makes previews noindex; even if an ID were present, that would not constitute production parity.
+
+## Links and content boundaries
+
+- 91111: two `/go/betfred-money-back-2nd` anchors (`nofollow sponsored`) plus links to Dark Horse tips and the sibling extra-place article.
+- 91113: two `/go/betfred-extra-places` and one `/go/quinnbet` anchors (`nofollow sponsored`) plus four editorial internal links, including the sibling money-back article.
+- 91115: two `/go/betfred-bet-builder-refund`, `/go/10bet`, `/go/quinnbet`, and `/go/netbet-50` anchors (`nofollow sponsored`) plus four editorial internal links.
+
+These are internal cloak paths, **not verified final affiliate destinations**. The live rel values are observed evidence; do not silently rewrite them during migration. The one-off-post guidance says to validate affiliate link attributes and exact offer caveats, so the rel-policy difference needs explicit editorial resolution. The offer titles, amounts, eligibility, deadlines, and final destinations must be checked against the central approved offer records before enabling any CTA. For noindex preview, preserve article wording and link-label positions while leaving commercial anchors inert. The 91113 race table is historical editorial content, not the current Dark Horse/Ninja feed; it must never populate today's tips table.
+
+## Safe sequence
+
+1. Obtain a new **read-only** authenticated source export for these exact three IDs, with `post_content` raw, editor/builder meta, revision/modified timestamp, Yoast title/description/canonical/robots, and media IDs. Public `content.rendered` cannot prove Gutenberg versus classic editor, or prove the absence of source shortcodes. Do not use staging credentials against live.
+2. Lock each source by ID **and slug** plus modified timestamp and rendered/raw hashes; save a recoverable source copy outside the deploy bundle. Reject an ID/slug mismatch or changed source. Import to staging only when separately authorized, using new staging IDs rather than assuming live IDs survive.
+3. If raw is plain WordPress block HTML, preserve those blocks. If raw is classic HTML, convert standard headings/paragraphs/lists conservatively; keep the 91113 table as a responsive, six-column Gutenberg table or a validated dated-table block with exact rows and labels. If a Ninja/other shortcode is found in raw, stop instead of flattening rendered output. None of the three needs an ACF offer block simply because it contains a `/go/` link; only insert an offer-reference block after the offer claim is verified.
+4. Create exact `.html` noindex Astro previews using staging source, the standard post/sidebar/EveryTip-editor layout, historical publication date, and disabled commercial CTAs. Retain editorial internal links only after all exact paths exist. Do not add a hero/author portrait: none is supported by post media metadata.
+5. Compare every heading, paragraph, list item, table cell, link label, Yoast field, canonical path, and mobile table behavior against the source. Run content/route/build checks, then decide separately whether each dated promotion remains indexable or should become an archive. The older-than-12-month noindex policy for John/Seymour does not automatically apply to these EveryTip-editor posts.
+
+**Current blocker:** no live authenticated raw export and no staging copies, so editor format, shortcode absence, and safe staging conversion are unverified. The immediate safe work is source-locked read-only export plus local noindex/link-inert previews; no offer CTA activation or deploy.
+
+## Local 91113 preview added later on 13 October
+
+The public REST rendering for ID 91113 is now captured in `data/source-locked/extra-place-races-2026-10-13.json` with its exact SHA-256 and identity. `src/lib/oct13-extra-place-preview.mjs` verifies that lock at read time, verifies one six-column/eight-row table (six 5-place rows, two 4-place rows), removes all three offer CTA paragraphs, and renders the remaining article copy with every link inert. The current-tense “today” references are reframed as a dated archival record; the how-to-bet and dated offer-terms sections are withheld. `src/pages/extra-place-races-today-tips-13-october.html.astro` uses the exact `.html` path, a prominent historical warning, noindex/nofollow and a six-column desktop table with expandable mobile rows. The generic exact route excludes/reserves this identity to avoid collision.
+
+Focused tests `node --test tests/oct13-extra-place-preview.test.mjs`: 3/3 pass. `npm run check`: 0 errors/warnings/hints. **No dist rebuild, deployment, staging/live write, or CTA activation.** This is only a local preview; authenticated raw editor format and current offer validity remain unresolved.

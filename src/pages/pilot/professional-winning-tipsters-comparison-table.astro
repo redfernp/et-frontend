@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Research snapshot for the local design pilot. Replace with curated WP records
+// before publication; do not silently present these as live performance data.
+const checkedOn = '30 September 2026';
+const tipsters = [
+  { name: 'TheBanker', sport: 'Horse racing', since: 'June 2019', volume: 'Around 15 tips a week', style: 'Evening selections, often at longer odds', watch: 'Long losing runs are possible; the profile itself advises a substantial betting bank.', slug: 'thebanker' },
+  { name: 'eachwaymornigtips', sport: 'Horse racing', since: 'November 2022', volume: 'Around 48 tips a week', style: 'High-volume each-way racing selections', watch: 'Check the actual each-way terms and achievable odds before subscribing.', slug: 'eachwaymornigtips' },
+  { name: 'The Least Expected', sport: 'Football', since: 'March 2025', volume: 'Around 24 tips a week', style: 'Football selections across multiple leagues', watch: 'Check whether the covered leagues and available bookmakers suit you.', slug: 'the-least-expected' },
+  { name: 'Javier Rey', sport: 'Football', since: 'July 2022', volume: 'Around 7 tips a week', style: 'Lower-volume football selections', watch: 'The profile shows Pinnacle frequently; compare the odds you can actually obtain.', slug: 'javier-rey' },
+] as const;
+
+function tipstrrLink(slug: string) {
+  const url = new URL(`https://tipstrr.com/tipster/${slug}`);
+  url.searchParams.set('via', 'everytip');
+  return url.toString();
+}
+---
+<BaseLayout
+  title="Professional betting tipsters — comparison pilot"
+  wide={true}
+  previewMessage="Local design preview · researched 30 September 2026 · Tipstrr profile links include EveryTip's referral parameter"
+  footerMessage="EveryTip template preview · 18+ · Gamble responsibly. Tipstrr profile links are active affiliate links."
+>
+  <article class="tipster-guide">
+    <nav class="tipster-breadcrumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><span>Tipster comparison</span></nav>
+    <header class="tipster-hero">
+      <p class="kicker">Independent comparison · design pilot</p>
+      <h1>Find a tipster that fits your betting</h1>
+      <p>Our old comparison leaned on services that have since closed. This new version starts with a small Tipstrr shortlist, explains what each service actually does, and makes the trade-offs visible before anyone considers paying.</p>
+      <div class="tipster-hero-meta"><span>Research checked {checkedOn}</span><span>Horse racing + football first</span><span>Monthly review planned</span></div>
+    </header>
+
+    <aside class="tipster-disclosure" aria-label="Affiliate disclosure"><strong>How this page works</strong><p>EveryTip may earn a commission if you visit Tipstrr through our links and subscribe. These are research candidates for the new page, not guaranteed winners or a recommendation to bet. Check the current price, trial terms, recent results and available odds on each profile.</p></aside>
+
+    <nav class="tipster-jump" aria-label="On this page"><a href="#horse-racing">Horse racing</a><a href="#football">Football</a><a href="#other-sports">Other sports</a><a href="#method">Our checks</a><a href="#questions">Questions</a></nav>
+
+    <section class="tipster-intro"><p class="kicker">A cleaner comparison</p><h2>Not a wall of “winning” claims</h2><p>These four profiles had multi-year or year-plus Tipstrr histories and visible recent activity when checked. The descriptions below focus on sport, tip frequency and the practical questions a subscriber should ask. We deliberately do not freeze live ROI or profit figures into the page: those figures change and can look very different after fees, odds movement and losing runs.</p></section>
+
+    {['Horse racing', 'Football'].map((sport) => <section class="tipster-section" id={sport === 'Football' ? 'football' : 'horse-racing'}>
+      <div class="tipster-section-heading"><p class="kicker">{sport}</p><h2>{sport} tipsters to compare</h2><p>Profile details are a dated snapshot from Tipstrr. Open the full record to inspect the latest results yourself.</p></div>
+      <div class="tipster-grid">{tipsters.filter((tipster) => tipster.sport === sport).map((tipster) => <article class="tipster-card">
+        <div class="tipster-card-top"><span class="tipster-sport">{tipster.sport}</span><span class="tipster-since">On Tipstrr since {tipster.since}</span></div>
+        <h3>{tipster.name}</h3>
+        <p class="tipster-style">{tipster.style}</p>
+        <dl><div><dt>Frequency</dt><dd>{tipster.volume}</dd></div><div><dt>What to check</dt><dd>{tipster.watch}</dd></div></dl>
+        <a class="tipster-cta" href={tipstrrLink(tipster.slug)} target="_blank" rel="sponsored nofollow noopener noreferrer" aria-label={`View ${tipster.name}'s Tipstrr profile (affiliate link)`}>View Tipstrr profile <span aria-hidden="true">↗</span></a>
+        <small>Affiliate link · current membership price and results on Tipstrr</small>
+      </article>)}</div>
+    </section>)}
+
+    <section id="other-sports" class="tipster-section"><div class="tipster-section-heading"><p class="kicker">Still researching</p><h2>Greyhounds, cricket and other sports</h2></div><div class="tipster-empty"><strong>No endorsed shortlist yet</strong><p>EveryTip also covers greyhounds and cricket, but we could not verify suitable current premium Tipstrr profiles for those categories in this review. We will leave a sport empty rather than fill it with an old Betting Gods name or a hot short-term result. The monthly review can add a profile once its activity, pricing, record and sport are checked.</p></div></section>
+
+    <section id="method" class="tipster-section tipster-method"><div class="tipster-section-heading"><p class="kicker">Our method</p><h2>What Eric should check every month</h2></div><ol><li><strong>Is it active?</strong> Confirm recent tips and that a paid membership can still be purchased.</li><li><strong>Is the record meaningful?</strong> Inspect all-time and recent results, number of settled tips, losing periods and staking method—not only a headline ROI.</li><li><strong>Can readers follow it?</strong> Check tip timing, sport and leagues, bookmaker access, realistic odds and the subscription cost against a reader’s likely stake.</li><li><strong>Is the entry current?</strong> Record the check date and source URL in WordPress. Unpublish or mark “review needed” if the service closes or material facts change.</li></ol><p>Suggested minimum screening: at least 12 months and 200 settled tips, plus a separate look at the last 12 months. These are proposed editorial rules, not proof of future returns.</p></section>
+
+    <section id="questions" class="tipster-section tipster-faq"><div class="tipster-section-heading"><p class="kicker">Before subscribing</p><h2>Common questions</h2></div><details><summary>Does a positive historical ROI mean I will profit?</summary><p>No. Past results do not predict future results. Your results may differ because of subscription fees, available odds, bookmaker limits, timing and staking.</p></details><details><summary>Why no fixed price or profit figure in the cards?</summary><p>Both can change. The profile link is the source of truth for the current membership price and Tipstrr’s latest recorded results. The WordPress record can retain a dated review snapshot for editors without turning it into a timeless promise.</p></details><details><summary>Can I compare a free option first?</summary><p>Yes. Read our <a href="/pilot/free-betting-tips/">free betting tips</a> before paying for a separate service.</p></details></section>
+    <footer class="tipster-end"><strong>18+ · Gamble responsibly.</strong> Only bet what you can afford to lose. This is a local design pilot; the shortlist needs a final editorial and affiliate-tracking check before publication.</footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .tipster-guide{padding:24px 30px 50px;color:#24394b}.tipster-breadcrumb{display:flex;gap:9px;color:#748391;font-size:12px;margin-bottom:18px}.tipster-breadcrumb a{color:#1c6396}.tipster-hero{padding:32px;background:linear-gradient(115deg,#e8f2f8,#f7f9fb);border-top:5px solid #ed7600}.tipster-hero h1{font-size:clamp(34px,4vw,51px);line-height:1.08;margin:4px 0 16px;color:#184d76;max-width:740px}.tipster-hero>p:not(.kicker){max-width:770px;font-size:17px;line-height:1.55}.tipster-hero-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.tipster-hero-meta span{background:#fff;border:1px solid #d0e0e9;color:#385a71;padding:7px 10px;font-size:12px;font-weight:700}.tipster-disclosure{margin:16px 0;padding:16px 19px;background:#fff7ee;border-left:4px solid #ed7600;font-size:13px}.tipster-disclosure p{margin:5px 0 0}.tipster-jump{display:flex;flex-wrap:wrap;gap:9px;margin:20px 0}.tipster-jump a{padding:8px 12px;color:#1b5e8c;background:#e9f2f8;text-decoration:none;font-size:13px;font-weight:800;border-radius:4px}.tipster-jump a:hover{text-decoration:underline}.tipster-intro{max-width:850px;margin:35px 0}.tipster-intro h2,.tipster-section h2{margin:4px 0 8px;color:#1e5278;font-size:28px}.tipster-intro p:last-child,.tipster-section-heading p:last-child{color:#566c7c}.tipster-section{scroll-margin-top:20px;margin:42px 0}.tipster-section-heading{margin-bottom:19px}.tipster-section-heading .kicker,.tipster-intro .kicker{margin:0;color:#a74900}.tipster-section-heading p:last-child{margin:0;font-size:14px}.tipster-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.tipster-card{display:flex;flex-direction:column;border:1px solid #d5e2e9;border-top:5px solid #1e699e;background:#fff;padding:20px;box-shadow:0 4px 12px #173e5910}.tipster-card-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:5px;font-size:11px;font-weight:800}.tipster-sport{color:#a34b06;text-transform:uppercase}.tipster-since{color:#617788}.tipster-card h3{margin:13px 0 4px;font-size:23px;color:#1d4c70}.tipster-style{margin:0 0 15px;color:#475d6e}.tipster-card dl{margin:0 0 18px}.tipster-card dl div{padding:9px 0;border-top:1px solid #e1e9ee}.tipster-card dt{font-size:11px;text-transform:uppercase;font-weight:800;color:#627586}.tipster-card dd{margin:2px 0 0;font-size:13px}.tipster-cta{display:inline-flex;justify-content:space-between;align-items:center;gap:16px;margin-top:auto;padding:11px 15px;background:#ed7600;color:#fff!important;text-decoration:none;font-size:14px;font-weight:800;border-radius:4px}.tipster-cta:hover{background:#c45d00}.tipster-card small{margin-top:8px;color:#647886;font-size:11px}.tipster-empty{padding:21px;background:#eef4f8;border-left:4px solid #1e699e}.tipster-empty p{max-width:780px;margin:5px 0 0}.tipster-method{padding:23px 25px;background:#f4f8fa}.tipster-method ol{display:grid;gap:11px;padding-left:21px}.tipster-method>p{font-size:13px;color:#627381}.tipster-faq details{border-bottom:1px solid #d9e4eb;padding:13px 0}.tipster-faq summary{cursor:pointer;font-weight:800;color:#1e5278}.tipster-faq details p{margin:10px 0 2px;max-width:800px}.tipster-end{border-top:1px solid #dae4e9;margin-top:42px;padding-top:17px;color:#5a6d7b;font-size:12px}@media(max-width:700px){.tipster-guide{padding:16px 14px 34px}.tipster-hero{padding:23px 18px}.tipster-hero h1{font-size:34px}.tipster-hero>p:not(.kicker){font-size:15px}.tipster-grid{grid-template-columns:1fr}.tipster-card{padding:17px}.tipster-intro h2,.tipster-section h2{font-size:24px}.tipster-method{padding:18px}}
+</style>

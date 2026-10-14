@@ -1,0 +1,6 @@
+---
+import PolicyShell from '../../components/PolicyShell.astro';
+import { getLegalPageByUri } from '../../lib/wpgraphql';
+const page = await getLegalPageByUri('/safer-gambling');
+---
+<PolicyShell title="Safer gambling" kind="Support information" intro="Help and responsible-gambling guidance from the current EveryTip page, in a clearer reading layout without bookmaker promotions." content={page.content} modified={page.modified} reviewNote="Check all support links and guidance against current sources before this design replaces the live page. The copy below comes from staging WordPress and remains editable there." />

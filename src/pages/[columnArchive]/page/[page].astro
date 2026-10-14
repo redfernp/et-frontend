@@ -1,0 +1,15 @@
+---
+import ExactWeeklyColumnArchive from '../../../components/ExactWeeklyColumnArchive.astro';
+import { archivePageEntries, weeklyColumnArchivePreview, weeklyColumnFamilies, WEEKLY_ARCHIVE_PAGE_SIZE } from '../../../lib/weekly-column-archive.mjs';
+
+export async function getStaticPaths() {
+  const archives = await Promise.all(Object.keys(weeklyColumnFamilies).map((slug) => weeklyColumnArchivePreview(slug)));
+  return archives.flatMap((archive) => Array.from({ length: Math.ceil(archive.entries.length / WEEKLY_ARCHIVE_PAGE_SIZE) - 1 }, (_, index) => {
+    const page = index + 2;
+    return { params: { columnArchive: archive.slug, page: String(page) }, props: { archive: archivePageEntries(archive, page) } };
+  }));
+}
+
+const { archive } = Astro.props;
+---
+<ExactWeeklyColumnArchive archive={archive} />

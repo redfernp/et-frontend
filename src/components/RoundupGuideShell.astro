@@ -1,0 +1,39 @@
+---
+type TocItem = { href: string; label: string };
+const {
+  title,
+  deck,
+  byline,
+  image,
+  imageAlt = '',
+  kicker = 'Betting guide · migration preview',
+  disclosure,
+  toc = [],
+  exactPath = false,
+} = Astro.props as {
+  title: string;
+  deck: string;
+  byline: string;
+  image?: string;
+  imageAlt?: string;
+  kicker?: string;
+  disclosure: string;
+  toc?: TocItem[];
+  exactPath?: boolean;
+};
+---
+<article class="paypal-guide integrated-roundup">
+  <nav class="paypal-breadcrumb" aria-label="Breadcrumb"><a href={exactPath ? '/' : '/pilot/home/'}>EveryTip</a><span aria-hidden="true">›</span><span>Betting guides</span></nav>
+  <header class="paypal-hero">
+    <div class="paypal-hero-copy">
+      <p class="kicker">{kicker}</p>
+      <h1>{title}</h1>
+      <p class="paypal-deck">{deck}</p>
+      <p class="paypal-byline">{byline}</p>
+    </div>
+    {image && <img src={image} alt={imageAlt} width="1008" height="301" />}
+  </header>
+  <div class="paypal-disclosure"><strong>Migration review only</strong><p>{disclosure}</p></div>
+  {toc.length > 0 && <nav class="paypal-toc" aria-label="On this guide"><strong>On this page</strong>{toc.map((item) => <a href={item.href}>{item.label}</a>)}</nav>}
+  <slot />
+</article>

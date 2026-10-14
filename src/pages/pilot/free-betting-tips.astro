@@ -1,0 +1,162 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FreeTipsDirectory from '../../components/FreeTipsDirectory.astro';
+import { featuredOfferPreview } from '../../lib/pilot-data';
+import { extractFreeTipsEditorial } from '../../lib/free-tips-editorial.mjs';
+import { getWordPressMenu } from '../../lib/wordpress-menu.ts';
+import { previewPublicPaths } from '../../lib/preview-public-paths.ts';
+import { freeTipsFeedPreview, stagingFreeTipsFeedEnabled } from '../../lib/staging-free-tips-feed.mjs';
+import { liveEditorialFeedEnabled, readLiveEditorialPreviewFeed } from '../../lib/live-editorial-preview-feed.mjs';
+
+const exactRecord = Astro.props.exactRecord as { uri: string; content: string; title: string; databaseId: number; seo?: { title?: string; metaDesc?: string } } | undefined;
+const editorialOverride = Astro.props.editorialOverride as { html: string; draftId: number; sourceMode: string; modified: string } | null | undefined;
+const exactEditorial = editorialOverride ?? (exactRecord ? extractFreeTipsEditorial(exactRecord) : null);
+
+const live = 'https://www.everytip.co.uk';
+const exactHref = (href: string) => {
+  if (!exactRecord) return href;
+  const mapped: Record<string, string> = {
+    '/pilot/english-premier-league-predictions-for-saturday/': '/english-premier-league-predictions-for-saturday',
+    '/pilot/value-bet-tips-dark-horses/': '/value-bet-tips-dark-horses.html',
+    '/pilot/saturday-horse-racing-tips/': '/saturday-horse-racing-tips',
+  };
+  return mapped[href] ?? (href.startsWith(`${live}/`) ? href.slice(live.length) : href);
+};
+const tipGroups = [
+  { title: 'Sports betting tips', links: [
+    { label: 'John Newsome', href: '/pilot/english-premier-league-predictions-for-saturday/' },
+    { label: 'Football correct scores', href: `${live}/football-correct-score-tips.html` },
+    { label: 'Champions League', href: `${live}/uefa-champions-league-betting-tips-predictions.html` },
+    { label: '1X2 tips', href: `${live}/1x2-betting-tips.html` },
+    { label: 'Over/under 1.5 goals', href: `${live}/under-over-1-5-goals-tips.html` },
+    { label: 'Over/under 2.5 goals', href: `${live}/over-2-5-goals-tips.html` },
+    { label: 'Both teams to score', href: `${live}/both-teams-to-score-btts-tips.html` },
+    { label: 'Football accumulators', href: `${live}/football-accumulator-tips.html` },
+    { label: 'Greyhound racing', href: `${live}/greyhound-tips.html` },
+    { label: 'Cricket', href: `${live}/cricket-betting-tips.html` },
+  ]},
+  { title: 'UK & Irish racing tips', links: [
+    { label: 'Daily treble', href: `${live}/horse-racing-treble-tips.html` },
+    { label: 'Dark Horse value tips', href: '/pilot/value-bet-tips-dark-horses/' },
+    { label: 'Seymour Biz', href: '/pilot/saturday-horse-racing-tips/' },
+    { label: 'Nap of the day', href: `${live}/nap-of-the-day.html` },
+    { label: 'Daily Lucky 15', href: `${live}/lucky-15-tips.html` },
+    { label: 'Templegate', href: `${live}/templegates-tips.html` },
+    { label: 'Channel 4 racing', href: `${live}/channel-4-racing-tips-morning-line.html` },
+    { label: 'Greg Wood', href: `${live}/greg-woods-tips.html` },
+    { label: 'ITV Racing', href: `${live}/itv-racing-tips.html` },
+    { label: 'Ireland', href: `${live}/irish-horse-racing-tips.html` },
+  ]},
+  { title: 'Overseas racing tips', links: [
+    { label: 'South Africa', href: `${live}/south-africa-racing-tips.html` },
+    { label: 'France', href: `${live}/france-horse-racing-tips.html` },
+    { label: 'Japan', href: `${live}/japan-horse-racing-tips.html` },
+    { label: 'Hong Kong', href: `${live}/hong-kong-horse-racing-tips.html` },
+    { label: 'Singapore', href: `${live}/singapore-horse-racing-tips.html` },
+    { label: 'India', href: `${live}/indian-horse-racing-tips.html` },
+    { label: 'Mauritius', href: `${live}/mauritius-horse-racing-tips.html` },
+    { label: 'Meydan', href: `${live}/dubai-horse-racing-tips.html` },
+  ]},
+  { title: 'Weekend football tipsters', links: [
+    { label: 'Alan Shearer tips', href: `${live}/alan-shearer-football-tips.html` },
+    { label: 'Peter Crouch tips', href: `${live}/peter-crouch-football-tips.html` },
+  ]},
+  { title: 'Weekend racing tipsters', links: [
+    { label: 'Matt Chapman', href: `${live}/matt-chapmans-horse-racing-tips.html` },
+    { label: 'Mick Fitzgerald', href: `${live}/mick-fitzgeralds-horse-racing-tips.html` },
+    { label: 'Ruby Walsh', href: `${live}/ruby-walsh-horse-racing-tips.html` },
+    { label: 'Kevin Blake', href: `${live}/kevin-blake-horse-racing-tips-for-today.html` },
+    { label: 'Jason Weaver', href: `${live}/jason-weaver-horse-racing-tips.html` },
+  ]},
+];
+
+const newsPreview = [
+  { date: '30 Sep', title: 'Extra places on 10 races today, and our tip for every one', summary: 'A timely offer story tied to the day’s horse racing, with a useful editorial hook.', href: `${live}/extra-place-races-today-tips-30-september.html` },
+  { date: '30 Sep', title: 'Only one Lucky 15 winner? Betfred triples the odds, in cash', summary: 'A bookmaker promotion explained through a familiar betting situation.', href: `${live}/lucky-15-offers-one-winner-30-september.html` },
+  { date: '30 Sep', title: 'Money back if 2nd in the 14:48 at Musselburgh', summary: 'A race-specific news angle that can bring readers from the newsletter.', href: `${live}/money-back-if-2nd-musselburgh-1448-30-september.html` },
+];
+if (exactRecord && liveEditorialFeedEnabled() && stagingFreeTipsFeedEnabled()) {
+  throw new Error('Choose one free-tips editorial feed preview source');
+}
+const liveEditorialFeed = exactRecord && liveEditorialFeedEnabled()
+  ? await readLiveEditorialPreviewFeed() : null;
+const freshNewsFeed = liveEditorialFeed ?? await freeTipsFeedPreview();
+const latestFeedDate = freshNewsFeed?.items[0]?.date ?? null;
+const staleNewsFeed = freshNewsFeed?.freshness.stale ?? false;
+const newsItems: { date: string; title: string; summary?: string; href: string; publishedDate?: string }[] = freshNewsFeed
+  ? freshNewsFeed.items.map((item) => ({ date: item.dateLabel, title: item.title, href: item.href, publishedDate: item.date }))
+  : newsPreview;
+
+const featuredOffer = featuredOfferPreview[0];
+const displayedTipGroups = exactRecord ? tipGroups.map((group) => ({
+  ...group, links: group.links.map((link) => ({ ...link, href: exactHref(link.href) })),
+})) : tipGroups;
+const menuItems = exactRecord ? (await getWordPressMenu('PRIMARY')).items : null;
+---
+<BaseLayout title="Free betting tips — hub pilot" wide={true} publicPage={!!exactRecord} previewOnly={!!exactRecord} menuItems={menuItems} verifiedPublicPaths={exactRecord ? previewPublicPaths : []} seo={exactRecord ? { title: exactRecord.seo?.title, description: exactRecord.seo?.metaDesc } : undefined} previewMessage={exactRecord ? (freshNewsFeed ? `Exact free tips URL preview · newest ${liveEditorialFeed ? 'live REST reviewed column' : 'staging post'} ${latestFeedDate}${staleNewsFeed ? ` (${freshNewsFeed.freshness.ageDays} days old; feed stale as of ${freshNewsFeed.freshness.asOfDate} Europe/Rome)` : ''} · offers disabled` : 'Exact free tips URL preview · dated WordPress copy · offers and daily feed withheld') : undefined}>
+  <div class="free-tips-hub">
+    <header class="hub-heading">
+      <p class="kicker">{exactRecord ? 'Free tips directory · WordPress content preview' : 'Free tips, updated daily'}</p>
+      <h1>Free Betting Tips</h1>
+      <p>{exactRecord ? (freshNewsFeed ? `Browse the established sports and tipster destinations alongside dated published ${liveEditorialFeed ? 'columnist previews sourced from live public REST' : 'staging articles'}. Current selections and offers are still withheld from this preview.` : 'Browse the established sports and tipster destinations. The current daily selections and offer feed are not connected in this local preview.') : 'Explore horse racing and football selections by sport, and catch up on betting offer news examples.'}</p>
+    </header>
+
+    <section class="hub-tipster-banners" aria-label="Featured tipsters">
+      <a class="hub-columnist-card" href={exactHref('/pilot/saturday-horse-racing-tips/')}>
+        <img src={`${live}/wp-content/uploads/2025/06/Seymour-Biz-Horse-Racing-Feature-Writer-100x100.png`} alt="" width="100" height="100" />
+        <span><strong>Seymour Biz</strong><small>Saturday horse racing previews &amp; tips</small><em>Read Seymour’s column →</em></span>
+      </a>
+      <a class="hub-columnist-card" href={exactHref('/pilot/english-premier-league-predictions-for-saturday/')}>
+        <img src={`${live}/wp-content/uploads/2025/06/John-Newsome-Everytip-Football-Feature-Writer-100x100.png`} alt="" width="100" height="100" />
+        <span><strong>John Newsome</strong><small>Premier League predictions &amp; analysis</small><em>Read John’s column →</em></span>
+      </a>
+    </section>
+
+    <nav class="hub-editorial-links" aria-label="Featured betting guides">
+      <a href={exactHref(`${live}/which-bookies-paying-5-places-each-way.html`)}><span aria-hidden="true">👉</span> Who’s paying five places or more today?</a>
+      <a href={exactHref(`${live}/best-odds-guaranteed-bookies.html`)}><span aria-hidden="true">👉</span> Best odds guaranteed bookmakers</a>
+    </nav>
+
+    {!exactRecord && <section class="hub-spotlight" aria-label="Featured bookmaker offer" style={`--spotlight-brand:${featuredOffer.brandColor}`}>
+      <div class="hub-spotlight-logo"><img src={featuredOffer.logoUrl} alt={featuredOffer.bookmaker} width="150" height="40" /></div>
+      <div class="hub-spotlight-copy"><span>Featured bookmaker · #Ad</span><h2>{featuredOffer.headline}</h2><p>Approved short terms will come from the central ACF offer record. No offer is active in this preview.</p></div>
+      <span class="hub-commercial-cta" aria-label="Offer link disabled in template preview">Offer preview</span>
+    </section>}
+
+    {(!exactRecord || freshNewsFeed) && <section class="hub-news" aria-labelledby="hub-news-title">
+      <div class="hub-section-heading"><p class="kicker">{freshNewsFeed ? `${freshNewsFeed.sourceMode === 'live-public-rest-columnist-review' ? 'Live public REST review' : 'Staging WPGraphQL'} · newest post ${latestFeedDate}${staleNewsFeed ? ` · ${freshNewsFeed.freshness.ageDays} days old` : ''}` : 'New editorial direction'}</p><h2 id="hub-news-title">{freshNewsFeed?.sourceMode === 'live-public-rest-columnist-review' ? 'Dated Columnist Articles' : freshNewsFeed ? (staleNewsFeed ? 'Dated Published Articles on Staging' : 'Recent Published Articles on Staging') : 'Betting Offer News Examples'}</h2><p>{freshNewsFeed?.sourceMode === 'live-public-rest-columnist-review' ? 'Four source-checked John and Seymour columns from live public REST. These are historical article previews, not current selections, prices or offers.' : freshNewsFeed ? 'The five most recent published posts from staging WordPress. Titles and exact paths are read-only; this is not a current offer or tips approval.' : 'Stories Eric can write around big games, race meetings and genuine new or existing-customer offers.'}</p></div>
+      <div class="hub-news-list">
+        {newsItems.map((item) => <article><time datetime={item.publishedDate}>{item.date}</time><h3><a href={item.href}>{item.title}</a></h3>{item.summary && <p>{item.summary}</p>}</article>)}
+      </div>
+      <p class="hub-preview-note">{liveEditorialFeed ? `Read-only live REST review captured ${liveEditorialFeed.capturedAt.slice(0, 16)} UTC · exact local article previews only · past tips are not current advice.` : freshNewsFeed ? `${staleNewsFeed ? `Stale feed as of ${freshNewsFeed.freshness.asOfDate} Europe/Rome · ` : ''}Read-only staging feed · exact WordPress paths · no offer claims or affiliate destinations are imported.` : 'Article titles are dated examples, not an automated live feed yet.'}</p>
+    </section>}
+
+    <section class="hub-directory-section" aria-labelledby="hub-directory-title">
+      <div class="hub-section-heading"><p class="kicker">Find your tips</p><h2 id="hub-directory-title">Browse Free Tips by Sport &amp; Tipster</h2><p>The same core destinations as the live page, grouped for quicker scanning on desktop and mobile.</p></div>
+      <FreeTipsDirectory groups={displayedTipGroups} />
+    </section>
+
+    {!exactRecord && <section class="hub-recommended" aria-labelledby="hub-recommended-title">
+      <div class="hub-section-heading"><p class="kicker">Bookmakers</p><h2 id="hub-recommended-title">Recommended Bookies</h2><p>The same seven offer records used in the homepage ladder; compact and full terms will be managed once in ACF Pro.</p></div>
+      <ol>
+        {featuredOfferPreview.map((offer, index) => <li><article class="hub-offer" style={`--hub-brand:${offer.brandColor}`}>
+          <span class="hub-offer-rank">{index + 1}</span>
+          <div class:list={['hub-offer-logo', { 'logo-on-light': offer.logoOnLight }]}><img src={offer.logoUrl} alt={offer.bookmaker} loading="lazy" /></div>
+          <div class="hub-offer-copy"><h3>{offer.headline}</h3><p>#Ad · 18+ · Approved compact terms from the ACF offer record will appear here.</p></div>
+          <span class="hub-commercial-cta" aria-label="Offer link disabled in template preview">Offer preview</span>
+        </article></li>)}
+      </ol>
+    </section>}
+
+    <section class="hub-seo-copy" aria-labelledby={exactEditorial ? undefined : 'hub-about-title'} aria-label={exactEditorial ? 'Free tips editorial guide' : undefined}>
+      {exactEditorial ? <>
+        <p class="hub-preview-note">{editorialOverride ? `Editorial sections below come from unpublished staging Gutenberg draft ${editorialOverride.draftId}, modified ${editorialOverride.modified.slice(0, 10)}. The published free-tips page is unchanged.` : `Editorial sections below come from WordPress page ${exactRecord?.databaseId}.`} Links and old offer modules are disabled; facts and SEO need a current review.</p>
+        <div class="hub-wordpress-copy" set:html={exactEditorial.html} />
+      </> : <>
+        <h2 id="hub-about-title">Free Sports Betting Tips From Professional Tipsters</h2>
+        <p>The live page’s detailed horse racing, football and other sport explanations will remain editable in WordPress. This pilot shows the reading layout; we will migrate the existing copy and internal links section by section before launch.</p>
+        <div class="hub-seo-grid"><div><h3>Horse racing tips</h3><p>UK, Irish and international racing coverage, including daily selections and weekend tipster previews.</p></div><div><h3>Football tips</h3><p>Correct scores, match results, goals markets and expert Premier League previews.</p></div><div><h3>Other sports</h3><p>Cricket, greyhounds, golf and rugby remain findable through the hub.</p></div></div>
+      </>}
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,12 @@
+---
+import UtilityPage from '../../components/UtilityPage.astro';
+const sections = [
+  { id: 'general', title: 'General questions and corrections', text: 'Readers can flag a factual error, a broken link or a concern about a tip or review. The final page should show the mailbox and expected response time only after Eric confirms the current process.' },
+  { id: 'commercial', title: 'Commercial enquiries', text: 'Affiliate managers and advertisers can reach the EveryTip team through the approved contact route. Editorial decisions and published assessments remain separate from commercial arrangements.' },
+  { id: 'writers', title: 'Write for EveryTip', text: 'Prospective pundits can introduce their specialist sport, examples of their work and how they would source and verify predictions. The editorial team can decide whether submissions are open.' },
+];
+---
+<UtilityPage title="Contact EveryTip" eyebrow="Get in touch" deck="One clear route for feedback, corrections, partnerships and contributor enquiries." note="The live page says its contact form was removed because of spam. This pilot does not add a form or promise a response time. Confirm the current mailbox and handling process before launch." sections={sections}>
+  <aside class="contact-card"><span>CONTACT METHOD PREVIEW</span><h2>Email the team</h2><p>The verified public email address can be displayed here without a new form. No message is sent from this pilot.</p><strong>Mailbox awaiting confirmation</strong></aside>
+</UtilityPage>
+<style>.contact-card{padding:20px;background:#eaf3f9;border-left:4px solid var(--et-orange)}.contact-card span{font-size:11px;font-weight:850;color:#a64d00}.contact-card h2{margin:7px 0}.contact-card p{font-size:13px}.contact-card strong{display:inline-block;padding:9px 13px;background:#fff;color:#1e5d88;font-size:12px}</style>

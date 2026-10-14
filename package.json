@@ -1,0 +1,49 @@
+{
+  "name": "everytip-astro-pilot",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/normalize-html-routes.mjs",
+    "check": "astro check",
+    "test:routes": "node --test tests/legacy-routing.test.mjs",
+    "test:noindex": "node --test tests/columnist-noindex-cutoff.test.mjs",
+    "test:priority-pages": "node --test tests/staging-priority-page-cms.test.mjs",
+    "test:priority-slice": "node --test tests/staging-priority-page-cms.test.mjs tests/staging-free-tips-editorial-draft.test.mjs tests/home-feature-feed.test.mjs tests/live-editorial-preview-feed.test.mjs tests/priority-head-preview-guard.test.mjs tests/free-tips-editorial.test.mjs tests/weekly-column-archive.test.mjs tests/bet365-review-editorial.test.mjs tests/staging-bet365-review-cms.test.mjs tests/priority-launch-acceptance.test.mjs tests/oct11-extra-place-preview.test.mjs tests/oct12-extra-place-preview.test.mjs tests/owner-rewrite-preview.test.mjs tests/value-tip-feed.test.mjs tests/value-tip-placement.test.mjs tests/daily-tip-import.test.mjs tests/opted-in-daily-tip-preview.test.mjs",
+    "test:content": "node --test tests/migration-preview.test.mjs tests/ninja-tip-preview-safety.test.mjs tests/exact-route-preview.test.mjs tests/exact-article-route.test.mjs tests/archive-routes.test.mjs tests/season-archive-preview.test.mjs tests/racecourse-preview.test.mjs tests/builder-roundup-preview.test.mjs tests/builder-editorial-drafts.test.mjs tests/newsletter-preview-paths.test.mjs tests/offer-preview-capture.test.mjs tests/bookmaker-feature-preview.test.mjs tests/free-tips-editorial.test.mjs tests/free-bets-editorial.test.mjs tests/home-editorial.test.mjs tests/public-seo.test.mjs tests/wordpress-menu.test.mjs tests/columnist-profiles.test.mjs tests/offer-slot-block.test.mjs tests/offer-slots.test.mjs tests/offer-disclosure.test.mjs tests/offer-field-audit.test.mjs tests/classic-to-gutenberg.test.mjs tests/paypal-featured-cards.test.mjs tests/paypal-payment-table.test.mjs tests/low-deposit-roundup.test.mjs tests/payment-method-roundup.test.mjs tests/basketball-roundup.test.mjs tests/staging-roundup-cms.test.mjs tests/staging-article-cms.test.mjs tests/staging-generic-cms.test.mjs tests/published-content-discovery.test.mjs tests/published-content-drift.test.mjs tests/patent-bet-preview.test.mjs tests/curated-exact-preview.test.mjs tests/launch-audit-gate.test.mjs",
+    "snapshot:wp": "node scripts/snapshot-wordpress-content.mjs",
+    "audit:content": "node scripts/audit-content-conversion.mjs",
+    "audit:body-retention": "node scripts/audit-exact-body-retention.mjs --strict",
+    "audit:uncrawled": "node scripts/audit-uncrawled-published-paths.mjs",
+    "audit:uncrawled-seo": "node scripts/audit-uncrawled-seo.mjs --preview-strict",
+    "audit:gutenberg": "node scripts/audit-gutenberg-convertibility.mjs",
+    "plan:gutenberg:staging": "node --env-file=.env.local scripts/plan-staging-gutenberg-batch.mjs",
+    "audit:urls": "node scripts/audit-url-coverage.mjs",
+    "audit:launch": "node scripts/audit-launch-readiness.mjs",
+    "audit:launch:fresh": "node scripts/audit-launch-readiness.mjs --fresh-live",
+    "audit:preview-links": "node scripts/audit-preview-internal-links.mjs",
+    "probe:wp": "node scripts/probe-wordpress-contract.mjs",
+    "probe:editor-auth": "node --env-file=.env.local scripts/probe-editor-auth.mjs",
+    "probe:offer-slot": "node --env-file=.env.local scripts/probe-offer-slot-roundtrip.mjs",
+    "convert:paypal": "node scripts/preview-paypal-roundup-conversion.mjs",
+    "seed:paypal": "node --env-file=.env.local scripts/seed-paypal-roundup-pilot.mjs",
+    "probe:paypal": "node --env-file=.env.local scripts/probe-paypal-roundup-render.mjs",
+    "probe:roundup-acf": "node --env-file=.env.local scripts/probe-roundup-acf.mjs",
+    "probe:offer-relations": "node --env-file=.env.local scripts/probe-offer-bookmaker-relations.mjs",
+    "probe:offer-catalog": "node --env-file=.env.local scripts/probe-staging-offer-catalog.mjs",
+    "probe:builder-drafts": "node --env-file=.env.local scripts/probe-builder-editorial-drafts.mjs",
+    "audit:offer-copy": "node --env-file=.env.local scripts/audit-staging-offer-copy.mjs",
+    "seo:staging": "node --env-file=.env.local scripts/staging-editorial-seo.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.3.5",
+    "dom-serializer": "^2.0.0",
+    "htmlparser2": "^12.0.0",
+    "sanitize-html": "^2.18.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "typescript": "^5.9.2",
+    "wrangler": "^4.146.0"
+  }
+}

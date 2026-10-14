@@ -1,0 +1,29 @@
+---
+import { featuredOfferPreview } from '../lib/pilot-data';
+import { capturedOfferPreview } from '../lib/offer-preview-capture.mjs';
+const capture = await capturedOfferPreview();
+const displayOffers = featuredOfferPreview.map((offer) => ({ ...offer,
+  headline: capture?.offers[offer.id]?.headline ?? offer.headline,
+  compactTerms: capture?.offers[offer.id]?.compactTerms ?? null,
+}));
+---
+<section class="featured-offers" aria-labelledby="featured-offers-heading">
+  <h2 id="featured-offers-heading">Today's top offers</h2>
+  <p class="featured-offers-intro">The same seven-bookmaker lineup as the homepage ladder. Visual preview only.</p>
+  <ol class="featured-offers-list">
+    {displayOffers.map((offer, index) => <li>
+      <article class="featured-offer-block" style={`--offer-brand:${offer.brandColor}`}>
+        <div class="featured-offer-top">
+          <span class="featured-offer-rank" aria-label={`Rank ${index + 1}`}>{index + 1}</span>
+          <span class:list={['featured-offer-logo', { 'logo-on-light': offer.logoOnLight }]}>
+            <img src={offer.logoUrl} alt={offer.bookmaker} loading="lazy" />
+          </span>
+        </div>
+        <h3>{offer.headline}</h3>
+        <p class="featured-offer-terms">{offer.compactTerms ?? '#Ad · 18+ · Approved short terms will come from the central ACF offer record.'}</p>
+        <span class="featured-offer-cta" aria-label="Offer link disabled in template preview">Offer preview</span>
+      </article>
+    </li>)}
+  </ol>
+  <p class="featured-offers-foot">No affiliate links are active in this preview.{capture && ` ACF draft copy ${capture.sourceMode === 'fresh-staging-wpgraphql-preview' ? 'read from staging WPGraphQL' : 'captured'} ${capture.capturedAt.slice(0, 10)}; eligibility and full terms still need review.`}</p>
+</section>

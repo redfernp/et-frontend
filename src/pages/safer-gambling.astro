@@ -1,0 +1,10 @@
+---
+import PolicyShell from '../components/PolicyShell.astro';
+import { getLegalPageByUri } from '../lib/wpgraphql';
+import { latestContentSnapshot } from '../lib/migration-preview.mjs';
+
+const page = await getLegalPageByUri('/safer-gambling');
+const snapshot = await latestContentSnapshot();
+const record = snapshot?.pages.find((item: { uri: string; seo?: { title?: string; metaDesc?: string } }) => item.uri === '/safer-gambling');
+---
+<PolicyShell exactPath title="Safer gambling" kind="Support information" intro="Help and responsible-gambling guidance from the current EveryTip page, in a clearer reading layout without bookmaker promotions." content={page.content} modified={page.modified} seo={{ title: record?.seo?.title, description: record?.seo?.metaDesc }} reviewNote="Check support links and guidance against current sources before this design replaces the live page. The copy comes from staging WordPress and remains editable there." />

@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MenuBranch from '../../components/MenuBranch.astro';
+import { getWordPressMenu } from '../../lib/wordpress-menu';
+
+const menu = await getWordPressMenu('PRIMARY');
+---
+<BaseLayout title="WordPress navigation mapping" wide={true} previewMessage="Read-only staging menu preview · destinations shown as text, not active links">
+  <article class="menu-preview">
+    <p class="kicker">WordPress → Astro</p>
+    <h1>Primary navigation</h1>
+    <p>{menu.id === 0 ? 'Offline fallback for layout QA only; it is not a captured WordPress menu. A connected build must read the current staging menu before launch.' : <>This is the current staging WordPress <strong>{menu.name}</strong> menu (ID {menu.id}). Astro will reuse its labels, order, nested groups and exact URL paths.</>} This local view deliberately does not link to unfinished Astro pages.</p>
+    <div class="menu-columns">{menu.items.map((item) => <section>
+      <h2>{item.label}</h2>
+      <code>{item.href ?? 'submenu label'}</code>
+      {item.children.length > 0 && <MenuBranch items={item.children} />}
+    </section>)}</div>
+    <p class="menu-note">Editing the WordPress menu changes the next Astro build; the published static site updates after a successful rebuild. Before launch, each menu destination must pass the exact-URL route audit. No footer menu is assigned in staging yet, so the legal footer links remain explicit.</p>
+  </article>
+</BaseLayout>
+<style>
+  .menu-preview{max-width:1100px;margin:auto}
+  .menu-preview>p{max-width:800px}
+  .menu-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:25px}
+  .menu-columns section{padding:18px;border:1px solid #dce7ee;border-top:4px solid var(--et-blue);background:#fff}
+  .menu-columns h2{font-size:19px;margin:0 0 3px}
+  .menu-columns>section>code{display:block;font-size:11px;color:#647886;margin-bottom:10px}
+  .menu-note{padding:15px;border-left:4px solid var(--et-orange);background:#fff6e8;margin-top:25px;font-size:13px}
+  @media(max-width:650px){.menu-columns{grid-template-columns:1fr}}
+</style>

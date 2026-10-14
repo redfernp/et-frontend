@@ -1,0 +1,16 @@
+---
+interface Props { profile: { name: string; image: string } }
+const { profile } = Astro.props;
+---
+<aside class="editor-profile" aria-label="About the EveryTip editorial team">
+  <img src={profile.image} alt="EveryTip logo" width="300" height="300" loading="lazy" />
+  <div><p class="editor-kicker">About the publisher</p><h2>{profile.name}</h2><p>EveryTip’s editorial team maintains our daily tips, guides and offer news. The source and date of each selection or offer should be clear in the article.</p></div>
+</aside>
+<style>
+  .editor-profile{display:flex;align-items:center;gap:19px;margin:36px 0 8px;padding:20px;border:1px solid #d8e5ee;border-top:4px solid var(--et-orange);border-radius:10px;background:#f5f9fc}
+  .editor-profile img{width:82px;height:82px;flex:none;object-fit:contain;padding:8px;background:#fff;border:1px solid #e1e9ef;border-radius:10px}
+  .editor-profile h2{margin:0 0 5px;color:#183f5f;font-size:21px}
+  .editor-profile p{margin:0;color:#445d6e;font-size:13px;line-height:1.55}
+  .editor-profile .editor-kicker{margin-bottom:3px;color:#a84c00;font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+  @media(max-width:520px){.editor-profile{align-items:flex-start;gap:12px;padding:15px}.editor-profile img{width:58px;height:58px;padding:5px}.editor-profile h2{font-size:17px}}
+</style>

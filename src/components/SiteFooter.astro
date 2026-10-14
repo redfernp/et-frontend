@@ -1,0 +1,53 @@
+---
+const { preview = true, verifiedPublicPaths = [] } = Astro.props;
+const prefix = preview ? '/pilot' : '';
+const links = [
+  { label: 'About us', path: '/about-us' },
+  { label: 'Contact', path: '/we-love-to-hear-from-you' },
+  { label: 'Terms and conditions', path: '/terms-conditions' },
+  { label: 'Privacy and cookies', path: '/privacy-policy' },
+  { label: 'Safer gambling', path: '/safer-gambling' },
+  { label: 'Sitemap', path: '/html-sitemap' },
+];
+const available = new Set(verifiedPublicPaths);
+const visibleLinks = preview ? links : links.filter((link) => available.has(link.path));
+const linkHref = (path: string) => preview ? `${prefix}${path}/` : path;
+---
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand"><span class="brand-wordmark">Every<span>Tip</span></span><span class="footer-age">18+</span></div>
+      <nav aria-label="Footer navigation">{visibleLinks.map((link) => <a href={linkHref(link.path)}>{link.label}</a>)}</nav>
+    </div>
+    <div class="footer-disclosures">
+      <section aria-labelledby="footer-protection-title">
+        <h2 id="footer-protection-title">Player protection</h2>
+        <p>Here at everytip.co.uk, we are fully committed to safer gambling. We understand that gambling can become an addiction that can cause great harm if not controlled. We respectfully remind you that you should only ever bet with an amount of money that you can afford to lose. The information provided on site at everytip.co.uk is for information and entertainment purposes only, and EveryTip will not be held liable for any inaccuracy, or for any loss which may be incurred.</p>
+        <p>For help regarding a gambling addiction, or more information on the subject, please visit <a href="https://www.gambleaware.org/" rel="noopener noreferrer">GambleAware</a>{(preview || available.has('/safer-gambling')) && <> or our <a href={linkHref('/safer-gambling')}>safer gambling page</a></>}. You must be 18+ to bet.</p>
+      </section>
+      <section aria-labelledby="footer-ad-title">
+        <h2 id="footer-ad-title">Advertising disclosure</h2>
+        <p>At everytip.co.uk, we offer free, impartial and independent reviews of betting operators. Our ratings and reviews are made independently of the operator. We accept compensation from companies advertised on this website via their affiliate programmes, and this may affect brand positioning.</p>
+      </section>
+    </div>
+    <div class="footer-bottom"><span>© {new Date().getFullYear()} EveryTip.co.uk</span><span>18+ · Please gamble responsibly</span>{preview && <span>Local design preview · no sample offer is active</span>}</div>
+  </div>
+</footer>
+<style>
+  .footer-inner{display:grid;gap:23px}
+  .footer-top{display:flex;justify-content:space-between;align-items:center;gap:22px;padding-bottom:20px;border-bottom:1px solid #ffffff35}
+  .footer-brand{display:flex;align-items:center;gap:12px}
+  .footer-brand .brand-wordmark{font-size:25px;font-weight:900;letter-spacing:-.04em;color:#fff}
+  .footer-brand .brand-wordmark span{color:var(--et-orange)}
+  .footer-age{border:2px solid #fff;border-radius:4px;padding:2px 6px;font-weight:900;color:#fff}
+  .footer-top nav{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px 19px}
+  .site-footer a{color:#fff;text-underline-offset:3px}
+  .footer-top nav a{font-weight:750}
+  .footer-disclosures{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  .footer-disclosures h2{margin:0 0 8px;font-size:16px;color:#fff}
+  .footer-disclosures p{margin:0;color:#dce8ef;font-size:13px;line-height:1.65}
+  .footer-disclosures p + p{margin-top:10px}
+  .footer-bottom{display:flex;flex-wrap:wrap;gap:8px 22px;padding-top:16px;border-top:1px solid #ffffff35;color:#c9dce8;font-size:12px}
+  .site-footer a:focus-visible{outline:3px solid var(--et-orange);outline-offset:3px}
+  @media(max-width:700px){.footer-top{align-items:flex-start;flex-direction:column}.footer-top nav{justify-content:flex-start}.footer-disclosures{grid-template-columns:1fr;gap:20px}}
+</style>

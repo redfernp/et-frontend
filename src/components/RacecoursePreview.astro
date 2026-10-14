@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { RacecourseEditorial } from '../lib/racecourse-preview.mjs';
+import { getWordPressMenu } from '../lib/wordpress-menu.ts';
+import { previewPublicPaths } from '../lib/preview-public-paths.ts';
+import { loadOptedInDailyTipSnapshot } from '../lib/opted-in-daily-tip-snapshot.mjs';
+import { resolveValueTipPlacement, valueTipPlacements } from '../lib/value-tip-placement.mjs';
+import DatedTipsPreview from './DatedTipsPreview.astro';
+interface Props {
+  record: { uri: string; databaseId: number; title: string; seo?: { title?: string; metaDesc?: string } };
+  editorial: RacecourseEditorial;
+  snapshotDate: string;
+  crawlRow: { indexability: string; canonical: string };
+}
+const { record, editorial, snapshotDate, crawlRow } = Astro.props;
+const menuItems = (await getWordPressMenu('PRIMARY')).items;
+const tipPlacement = record.uri === '/racecourses/kempton-racing-tips' ? valueTipPlacements[record.uri] : null;
+const importedTipSnapshot = tipPlacement ? await loadOptedInDailyTipSnapshot() : null;
+const tipSnapshot = tipPlacement ? resolveValueTipPlacement({
+  path: record.uri,
+  reference: { type: 'tip-table-reference', ...tipPlacement },
+  snapshot: importedTipSnapshot,
+}) : null;
+---
+<BaseLayout title={`${record.title} — racecourse preview`} wide publicPage previewOnly menuItems={menuItems} verifiedPublicPaths={previewPublicPaths} seo={{ title: record.seo?.title, description: record.seo?.metaDesc }} previewMessage="Racecourse migration preview · tips and offers withheld · not for publication">
+  <article class="course-preview">
+    <p class="course-kicker">Racecourse guide · exact legacy URL</p>
+    <h1>{record.title}</h1>
+    <p class="course-notice">The guide text below comes from a dated WordPress snapshot. Old Ninja Tables tips and Beaver offer modules are intentionally omitted. Course facts and SEO need editorial verification before launch.</p>
+    {editorial.hero && <img class="course-hero" src={editorial.hero.src} alt={editorial.hero.alt} loading="lazy" />}
+    {editorial.introHtml && <div class="course-intro" set:html={editorial.introHtml} />}
+    {tipSnapshot ? <DatedTipsPreview rows={tipSnapshot.rows} feedDate={tipSnapshot.feedDate} uploadId={tipSnapshot.uploadId} title="Kempton value tips" idPrefix="kempton-upload" emptyMessage="No Kempton selections are recorded in this dated upload." /> : <section class="tips-status" aria-labelledby="tips-status-title">
+      <div><p class="course-kicker">Today’s predictions</p><h2 id="tips-status-title">Racecourse tips feed pending</h2></div>
+      <p>Selections will come from the shared structured tips dataset, filtered to this course. This preview does not republish old or unrelated table rows.</p>
+    </section>}
+    {editorial.sections.map((section) => <section class="course-section">
+      <h2>{section.heading}</h2>
+      <div class="course-copy" set:html={section.html} />
+    </section>)}
+    <p class="course-source">Snapshot {snapshotDate.slice(0, 10)} · WordPress page {record.databaseId} · {editorial.discardedModules} legacy module wrappers omitted · Live crawl: {crawlRow.indexability} · Intended canonical: {crawlRow.canonical || 'none recorded'}.</p>
+  </article>
+</BaseLayout>
+<style>
+  .course-preview{max-width:1020px;margin:auto;padding:32px;background:#fff;color:#183f5f}
+  .course-kicker{margin:0 0 8px;color:#bd5200;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  .course-preview h1{margin:0 0 20px;font-size:clamp(30px,4vw,45px);line-height:1.12}
+  .course-notice{margin:0 0 24px;padding:14px 18px;border-left:5px solid #f26800;background:#fff5e9;color:#63421f}
+  .course-hero{display:block;width:100%;height:auto;max-height:320px;object-fit:cover;margin:0 0 25px;border-radius:8px}
+  .course-intro,.course-copy{max-width:780px;color:#30495c;font-size:16px;line-height:1.75}
+  .course-intro :global(p),.course-copy :global(p){margin:0 0 17px}
+  .course-copy :global(h3){margin:24px 0 9px;color:#194768;font-size:21px}
+  .course-copy :global(ul),.course-copy :global(ol){padding-left:25px}
+  .tips-status{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:center;margin:31px 0;padding:23px 26px;border:1px solid #cfdfea;border-top:5px solid #286da5;border-radius:8px;background:#f4f9fc}
+  .tips-status h2{margin:0;color:#173e5e;font-size:23px}
+  .tips-status>p{margin:0;color:#445e70;line-height:1.55}
+  .course-section{padding:24px 0;border-top:1px solid #dbe6ec}
+  .course-section h2{margin:0 0 16px;font-size:26px}
+  .course-source{padding-top:15px;border-top:1px solid #dbe6ec;color:#607582;font-size:12px;overflow-wrap:anywhere}
+  @media(max-width:650px){.course-preview{padding:20px}.tips-status{grid-template-columns:1fr;padding:18px}.course-section h2{font-size:23px}}
+</style>

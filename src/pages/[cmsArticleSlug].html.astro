@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ColumnistProfile from '../components/ColumnistProfile.astro';
+import { getColumnistProfiles, legacyColumnistPortraitPaths } from '../lib/columnist-profiles.mjs';
+import { representativeExactArticlePaths } from '../lib/exact-article-route.mjs';
+import { previewHtml } from '../lib/migration-preview.mjs';
+import { representativeArticle } from '../lib/staging-article-cms.mjs';
+
+interface Props {
+  record: { databaseId: number; slug: string; uri: string; title: string; content: string; date: string; modified: string; seo?: { title?: string; metaDesc?: string; metaRobotsNoindex?: string } };
+  sourceMode: 'dated-snapshot-preview' | 'fresh-staging-wpgraphql-preview';
+  snapshotDate: string;
+}
+export const getStaticPaths = representativeExactArticlePaths;
+
+const { record, sourceMode, snapshotDate } = Astro.props as Props;
+if (Astro.url.pathname.replace(/\/$/, '') !== representativeArticle.uri) throw new Error('Exact John Newsome article URL mismatch');
+const { john } = await getColumnistProfiles();
+const body = previewHtml(record, { excludedImagePaths: legacyColumnistPortraitPaths.john });
+const fresh = sourceMode === 'fresh-staging-wpgraphql-preview';
+---
+<BaseLayout title={`${record.title} — exact CMS preview`} seo={{ title: record.seo?.title, description: record.seo?.metaDesc }} sidebar relatedTopic="football" robots="noindex,nofollow" previewMessage="Exact legacy URL pilot · not for publication · commercial links disabled">
+  <article class="exact-cms-article">
+    <p class="kicker">{fresh ? 'Fresh staging WPGraphQL read' : 'Dated WordPress snapshot preview'}</p>
+    <h1>{record.title}</h1>
+    <ColumnistProfile profile={john} variant="byline" />
+    <p class="article-meta">Published {record.date.slice(0, 10)} · updated {record.modified.slice(0, 10)} · WordPress post {record.databaseId}</p>
+    <p class="article-warning">Exact-path local preview only. Links and legacy offer placements are disabled. WordPress SEO data is retained for parity checks, but this preview is always <strong>noindex</strong> until editorial, offers and routing are approved.</p>
+    <div class="article-body" set:html={body} />
+    <ColumnistProfile profile={john} variant="full" />
+    <p class="article-source">{fresh ? 'Fresh staging CMS read' : `Snapshot ${snapshotDate.slice(0, 10)}`} · <code>{record.uri}</code> · WordPress robots: {record.seo?.metaRobotsNoindex ?? 'unknown'}</p>
+  </article>
+</BaseLayout>
+<style>
+  .exact-cms-article{max-width:980px;margin:auto;padding:clamp(20px,3vw,36px);background:#fff}
+  .exact-cms-article h1{font-size:clamp(30px,4vw,44px);line-height:1.13;color:#183f60}
+  .article-meta,.article-source{font-size:12px;color:#627585}
+  .article-warning{padding:14px 17px;background:#fff4e9;border-left:4px solid var(--et-orange);font-size:13px;line-height:1.55}
+  .article-body{overflow-wrap:anywhere;line-height:1.72}
+  .article-body :global(img){max-width:100%;height:auto}
+  .article-body :global(table){display:block;max-width:100%;overflow-x:auto}
+  .article-source{margin-top:30px;border-top:1px solid #dce7ed;padding-top:12px}
+  .article-source code{overflow-wrap:anywhere}
+  :global(.page-shell.with-sidebar) .exact-cms-article{max-width:none;padding:0}
+</style>

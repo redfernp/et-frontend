@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { oct12ExtraPlacePath, oct12ExtraPlaceHeaders as headers, oct12ExtraPlaceRows as rows, oct12ExtraPlaceSource as source } from '../lib/oct12-extra-place-preview.mjs';
+import { previewPublicPaths } from '../lib/preview-public-paths.ts';
+
+if (Astro.url.pathname.replace(/\/$/, '') !== oct12ExtraPlacePath) throw new Error('12 October extra-place exact URL mismatch');
+---
+<BaseLayout title="Extra place races — 12 October 2026" sidebar withholdSidebarOffers
+  publicPage previewOnly verifiedPublicPaths={previewPublicPaths} relatedTopic="racing"
+  seo={{ title: 'Extra Place Races — 12 October 2026 | EveryTip', description: 'Historical EveryTip racing-tip record for 12 October 2026. No current selections or bookmaker offers are shown.' }}
+  robots="noindex,nofollow" previewMessage="Exact historical racing article preview · noindex · offers and commercial links withheld">
+  <article class="dated-extra-place">
+    <p class="kicker">Horse-racing archive · 12 October 2026</p>
+    <h1>Extra place races and tips — 12 October 2026</h1>
+    <p class="meta"><time datetime="2026-10-12">12 October 2026</time> · EveryTip editor · WordPress post {source.id}</p>
+    <div class="status" role="note"><strong>Historical record, not today’s tips.</strong> These fourteen selections, runner counts and forecast prices were published on 12 October 2026. The bookmaker/place columns reproduce what the original article listed; their terms have not been independently verified and must not be used for betting. All affiliate links, sign-up prompts and instructions are withheld.</div>
+    <p>The original article listed fourteen races at Roscommon, Musselburgh, Yarmouth, Newcastle and Kempton. It drew the British selections from EveryTip’s Dark Horses and the Roscommon selections from its Irish racing tips. The prices and runner counts below are the article’s historical figures, not a live feed.</p>
+    <section class="results" aria-label="Historical extra-place race selections">
+      <p class="table-label">Archived selections · 12 October 2026</p>
+      <div class="table-scroll"><table><thead><tr>{headers.map((header) => <th scope="col">{header}</th>)}</tr></thead><tbody>{rows.map((row) => <tr>{row.map((cell) => <td>{cell}</td>)}</tr>)}</tbody></table></div>
+      <div class="mobile-rows">{rows.map((row) => <details><summary><span class="expand" aria-hidden="true">+</span><strong>{row[0]} {row[1]}</strong><span>{row[5]}</span></summary><dl>{headers.slice(2).map((header, index) => <div><dt>{header}</dt><dd>{row[index + 2]}</dd></div>)}</dl></details>)}</div>
+    </section>
+    <h2>Where the original model saw value</h2>
+    <p>The article singled out ICE SOVEREIGNS in the 15:47 at Musselburgh: its forecast price was 10/1 against EveryTip’s tissue price of 2.87. It also named RAFFLES ANGEL (16:24 Yarmouth, forecast 11/2, tissue 2.98) and FANTASTIC FOX (18:45 Kempton, forecast 9/2, tissue 2.88). Those were predictions for that date only; they are not current prices or recommendations.</p>
+    <p class="source-note">Source-locked public WordPress article {source.id}, published 12 October 2026. Historical table: fourteen rows, six columns; source SHA-256 <code>{source.sha256.slice(0, 12)}…</code>. Historical bookmaker terms and offer claims have not been verified for this preview. This noindex page is not approved for public replacement of the original.</p>
+  </article>
+</BaseLayout>
+<style>
+  .dated-extra-place{min-width:0;background:#fff;padding:clamp(20px,3vw,36px);color:#173b58;line-height:1.72;overflow-wrap:anywhere}.kicker,.table-label{text-transform:uppercase;letter-spacing:.1em;color:#bd4b00;font-size:.78rem;font-weight:800}.dated-extra-place h1{font-size:clamp(2rem,3.5vw,3.1rem);line-height:1.1;margin:.2em 0 .5em}.dated-extra-place h2{color:#174c76;margin-top:30px}.meta,.source-note{font-size:.85rem;color:#5e7487}.status{padding:16px 19px;background:#fff3e8;border-left:5px solid #f36b00;line-height:1.6;margin:24px 0}.results{margin:22px 0 30px}.table-scroll{overflow-x:auto;border:1px solid #d1dee8;border-radius:7px}.results table{border-collapse:collapse;width:100%;font-size:.88rem}.results th{background:#174c76;color:#fff;text-align:left;padding:11px 10px}.results td{padding:12px 10px;border-top:1px solid #d1dee8;vertical-align:top}.results tr:nth-child(even){background:#edf5f9}.results th:nth-child(3),.results td:nth-child(3),.results th:nth-child(5),.results td:nth-child(5){white-space:nowrap}.mobile-rows{display:none}.source-note{border-top:1px solid #d1dee8;padding-top:17px;margin-top:30px}.source-note code{overflow-wrap:anywhere}@media(max-width:700px){.table-scroll{display:none}.mobile-rows{display:block}.mobile-rows details{border:1px solid #bfd3e0;border-radius:6px;margin:8px 0;overflow:hidden}.mobile-rows summary{display:grid;grid-template-columns:24px 1fr;gap:2px 9px;align-items:center;cursor:pointer;padding:12px;background:#19618f;color:#fff}.mobile-rows summary span:last-child{grid-column:2;font-size:.86rem}.mobile-rows .expand{font-size:1.3rem;font-weight:800}.mobile-rows details[open] .expand{transform:rotate(45deg)}.mobile-rows dl{margin:0}.mobile-rows dl div{display:grid;grid-template-columns:43% 57%;border-top:1px solid #d6e3eb}.mobile-rows dt,.mobile-rows dd{margin:0;padding:10px}.mobile-rows dt{font-weight:700;background:#e8f1f6}.mobile-rows dd{background:#f9fcfd}}
+</style>

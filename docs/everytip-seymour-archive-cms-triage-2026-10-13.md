@@ -1,0 +1,7 @@
+# Seymour archive CMS conversion triage — 13 October 2026
+
+Staging published page 23888, `/saturday-horse-racing-tips`, was compared read-only with the live public page. Both have the same identity, last-modified time (`2026-09-25T15:23:32`) and rendered visible text. Staging has 3,592 classic-editor raw characters and zero Gutenberg blocks. No staging or live write was made.
+
+There is **no source-locked evergreen prose block safe to seed as a separate draft**. The page contains an H1, the heading “Seymour Biz’s Weekend Racing Previews”, and one substantive paragraph asserting that Seymour gives tips “every week”, reviews all main televised races, and previews major festivals. Those are present-tense service/currentness claims, not neutral archive copy. The remaining content is an old Betfred “Bet £10, Get £50” promotion with dated/possibly superseded terms, images, and a row of guide links. Copying just the heading into Gutenberg would not create a useful editable archive introduction; copying the paragraph or offer would require factual and commercial re-approval.
+
+Keep the published WordPress page unchanged. For the headless archive, retain the separately modelled article list and pagination in Astro. Once Eric/the owner approves a current, accurate archive introduction, create a *new unpublished* Gutenberg draft from that approved copy with a full original-body/SEO backup and REST/WPGraphQL readback; do not transplant the Betfred block or weekly feed into the intro.

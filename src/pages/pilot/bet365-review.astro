@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ReviewMobileSticky from '../../components/ReviewMobileSticky.astro';
+
+const reviewSections = [
+  { id: 'welcome-bonus', title: 'Welcome bonus', score: '5.0', summary: 'Explain how the current welcome offer works, who qualifies, and what matters in the terms.', note: 'The approved headline, short terms and full terms must all come from the linked ACF Offer record.' },
+  { id: 'safety', title: 'Safety & licensing', score: '5.0', summary: 'Show licensing, account checks and safer-gambling tools using verified current information.', note: 'Eric can update factual details and source links in WordPress without changing the layout.' },
+  { id: 'service', title: 'Customer service', score: '5.0', summary: 'Keep Seymour’s real support-testing experience, including what he asked and how quickly he received help.', note: 'The test date and method should appear with the observation.' },
+  { id: 'markets', title: 'Betting markets', score: '5.0', summary: 'Cover the sports and racing bet types Seymour actually tried during his review weekend.', note: 'Avoid broad claims that have not been checked recently.' },
+  { id: 'odds', title: 'Odds value', score: '5.0', summary: 'Compare prices using dated examples and explain Bet365’s racing value from the reviewer’s perspective.', note: 'The editorial assessment belongs to the review, not to the reusable welcome-offer record.' },
+  { id: 'in-play', title: 'In-play betting', score: '5.0', summary: 'Describe the live-betting experience and where Bet365’s interface worked well or fell short.', note: 'Screenshots and market availability can be refreshed independently.' },
+  { id: 'promotions', title: 'Ongoing promotions', score: '4.5', summary: 'Keep the useful criticism: existing-customer offers may be less distinctive than the welcome deal.', note: 'Individual current promotions should link to separate ACF Offer records or timely news articles.' },
+  { id: 'banking', title: 'Deposits & withdrawals', score: '5.0', summary: 'Present payment options and withdrawal experience with a clear last-checked date.', note: 'Times and minimums are changeable facts and must be verified before launch.' },
+  { id: 'mobile', title: 'Mobile app', score: '5.0', summary: 'Keep Seymour’s first-hand phone and tablet testing, especially the racing experience.', note: 'The reviewer’s specific observations are more persuasive than generic feature claims.' },
+  { id: 'streaming', title: 'Live streaming', score: '5.0', summary: 'Explain which sports can be watched and what account conditions apply.', note: 'Eligibility rules must be checked against the current bookmaker terms.' },
+];
+
+const pros = [
+  'First-hand testing across horse racing and football',
+  'Strong racing tools and integrated Tote betting',
+  'Clear mobile experience in Seymour’s test',
+  'A broad range of sports and bet types',
+];
+const cons = [
+  'Existing-customer promotions are less distinctive',
+  'Some streams have account or bet requirements',
+  'Offer eligibility and payment exclusions need careful reading',
+];
+---
+<BaseLayout title="Bet365 review — pilot" wide={true}>
+  <article class="review-pilot" style="--bookie-green:#1d5b32;--bookie-green-dark:#144324">
+    <div class="review-breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><span>Bookmaker reviews</span></div>
+
+    <header class="review-hero">
+      <div class="review-hero-copy">
+        <p class="kicker">Independent bookmaker review</p>
+        <h1>Bet365 Review</h1>
+        <p class="review-deck">Seymour Biz tested Bet365 with a real £20 bankroll across ten areas. Here’s what stood out, what disappointed him, and what new customers should check before joining.</p>
+        <div class="review-meta"><img src="https://www.everytip.co.uk/wp-content/uploads/2025/06/Seymour-Biz-Horse-Racing-Feature-Writer-100x100.png" alt="" width="100" height="100" /><div><strong>Reviewed by Seymour Biz</strong><span>EveryTip horse racing columnist · hands-on review</span></div></div>
+        <p class="review-updated">Pilot snapshot of the live review · claims and ratings require a fresh editorial check before launch</p>
+      </div>
+      <aside id="review-offer" class="review-offer" aria-label="Bet365 offer preview">
+        <div class="review-offer-brand"><img src="https://www.everytip.co.uk/wp-content/uploads/2017/02/Bet365-150x40.png" alt="Bet365" width="150" height="40" /><span>Bookmaker review</span></div>
+        <div class="review-offer-body"><p class="review-rating"><strong>4.8<span>/5</span></strong> <span>EveryTip rating on the live review</span></p><h2>Bet £10 &amp; Get £30 in Free Bets</h2><p class="review-offer-audience">New UK customers only · 18+</p><span class="review-cta" aria-label="Offer link disabled in template preview">Offer preview</span><p class="review-terms">#Ad · Approved compact terms will be read from the central ACF offer record. No affiliate link is active in this pilot.</p><details><summary>Read full offer terms</summary><p>The approved full terms will be shown here from the same ACF offer record used across the site.</p></details></div>
+      </aside>
+    </header>
+
+    <nav class="review-jump" aria-label="On this review"><strong>In this review</strong><a href="#review-verdict">Verdict</a><a href="#review-scores">Ratings</a><a href="#review-pros-cons">Pros &amp; cons</a><a href="#review-testing">How we tested</a><a href="#review-detail">Detailed review</a></nav>
+
+    <section id="review-verdict" class="review-verdict" aria-labelledby="review-verdict-title"><div><p class="kicker">The quick verdict</p><h2 id="review-verdict-title">Excellent for racing; less special for loyal-customer offers</h2><p>The live article’s substance stays: Seymour found the platform strong for racing, Tote bets, odds and mobile use, while its ongoing promotions impressed him less. The review should help readers decide whether Bet365 suits them before they see another offer prompt.</p></div><div class="review-verdict-score"><strong>4.8<small>/5</small></strong><span>Current review score</span></div></section>
+
+    <section id="review-scores" class="review-section" aria-labelledby="review-scores-title"><div class="review-section-heading"><p class="kicker">At a glance</p><h2 id="review-scores-title">Our Bet365 ratings</h2><p>Ten tested areas, with one consistent score source for the summary and the detailed sections.</p></div><div class="review-score-grid">{reviewSections.map((section) => <a href={`#${section.id}`}><span>{section.title}</span><strong>{section.score}<small>/5</small></strong></a>)}</div><p class="review-fineprint">Scores are transcribed from the live review for this visual pilot; they need one editorial source and accessibility check before publication.</p></section>
+
+    <section id="review-pros-cons" class="review-section" aria-labelledby="review-pros-title"><div class="review-section-heading"><p class="kicker">Strengths &amp; trade-offs</p><h2 id="review-pros-title">Bet365 pros and cons</h2></div><div class="review-pros-cons"><div><h3>What Seymour liked</h3><ul>{pros.map((item) => <li>{item}</li>)}</ul></div><div><h3>What to weigh up</h3><ul>{cons.map((item) => <li>{item}</li>)}</ul></div></div></section>
+
+    <section id="review-testing" class="review-method" aria-labelledby="review-method-title"><img src="https://www.everytip.co.uk/wp-content/uploads/2025/06/Seymour-Biz-Horse-Racing-Feature-Writer-100x100.png" alt="" width="100" height="100" /><div><p class="kicker">Why trust this review?</p><h2 id="review-method-title">Tested with real bets, not just a feature checklist</h2><p>Seymour’s live review describes a £20 bankroll and tests including racing multiples, Tote bets, forecasts, each-way singles and football markets. In the final template, his method, dates, evidence and independent verdict will remain prominent and editable in WordPress.</p></div></section>
+
+    <section id="review-detail" class="review-section" aria-labelledby="review-detail-title"><div class="review-section-heading"><p class="kicker">The full assessment</p><h2 id="review-detail-title">Bet365 reviewed in ten areas</h2><p>This pilot demonstrates the repeatable section layout. We will migrate Seymour’s full text, images and internal links from the live review rather than replacing them with these summaries.</p></div><div class="review-detail-list">{reviewSections.map((section, index) => <section id={section.id} class="review-detail-section"><div class="review-detail-heading"><span>{String(index + 1).padStart(2, '0')}</span><h3>{section.title}</h3><strong>{section.score}/5</strong></div><p>{section.summary}</p><p class="review-editor-note">{section.note}</p></section>)}</div></section>
+
+    <section class="review-endnote"><h2>Our conclusion</h2><p>The closing verdict will preserve Seymour’s first-hand findings and caveats. We’ll use a second offer placement here only after the reader has reached the conclusion—not after every few paragraphs.</p><span class="review-cta" aria-label="Offer link disabled in template preview">Offer preview</span><p class="review-terms">#Ad · The same centrally managed compact terms will accompany this placement.</p></section>
+    <footer class="review-disclosure"><p><strong>Affiliate disclosure.</strong> EveryTip may earn a commission when a reader registers through an affiliate link. Editorial ratings and criticism should remain independent.</p><p><strong>Safer gambling.</strong> 18+ only. Please gamble responsibly. Offer eligibility and full terms must be checked before any live CTA is enabled.</p></footer>
+  </article>
+  <ReviewMobileSticky bookmaker="Bet365" />
+</BaseLayout>

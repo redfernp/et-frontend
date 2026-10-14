@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { racecourseGroups, racecourseHref } from '../../../lib/racecourses';
+
+const totalCourses = racecourseGroups.reduce((sum, group) => sum + group.courses.length, 0);
+---
+<BaseLayout title="Racecourses — index pilot" sidebar={true}>
+  <article class="course-index">
+    <nav class="ci-breadcrumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><a href="/pilot/free-betting-tips/">Racing tips</a><span aria-hidden="true">›</span><span>Racecourses</span></nav>
+    <header class="ci-hero"><p class="kicker">Racecourse directory · design pilot</p><h1>Racecourse tips &amp; guides</h1><p>Find a track quickly, then see its current tips, earlier selections and course guide. Every course page will filter the same canonical tips dataset by a stable course ID.</p><div class="ci-hero-meta"><span>{totalCourses} mapped guides</span><span>UK and Ireland</span><span>Grouped by surface</span></div></header>
+    <div class="ci-note"><strong>Crawl inventory preview</strong><p>The index below uses the 45 racecourse-guide URLs found in the September crawl. The live page also names some additional tracks, so Eric should reconcile the final list and exact paths before publishing. Links other than Kempton lead to the current live site.</p></div>
+    <div class="ci-search"><label for="course-filter">Find a racecourse</label><input id="course-filter" type="search" placeholder="Search by track name" autocomplete="off" /><p id="course-filter-status" aria-live="polite">Showing all {totalCourses} mapped courses</p></div>
+    <nav class="ci-jump" aria-label="Racecourse groups">{racecourseGroups.map((group) => <a href={`#${group.id}`}>{group.title}</a>)}</nav>
+    {racecourseGroups.map((group) => <section id={group.id} class="ci-group"><div class="ci-group-head"><div><p class="kicker">Browse tracks</p><h2>{group.title}</h2><p>{group.description}</p></div><span>{group.courses.length} {group.courses.length === 1 ? 'course' : 'courses'}</span></div><div class="ci-grid">{group.courses.map((course) => <a class="ci-course" data-course={course.name.toLowerCase()} href={racecourseHref(course.slug)}><strong>{course.name}</strong><span>Tips &amp; guide <span aria-hidden="true">→</span></span></a>)}</div></section>)}
+    <section class="ci-how"><h2>One tip, many useful views</h2><p>The racecourse directory, the Dark Horse hub and individual course pages can all display the same selection record. A course alias such as “Kempton (AW)” resolves to the canonical Kempton ID before filtering. The evergreen guide text stays editable in WordPress.</p><a href="/pilot/racecourses/kempton-racing-tips/">See the Kempton course-page pilot →</a></section>
+    <footer class="ci-footer">This is a route/design snapshot, not a live fixture list. No result history is included in the first pass. 18+ · Gamble responsibly.</footer>
+  </article>
+</BaseLayout>
+<script>
+  const filterInput = document.querySelector<HTMLInputElement>('#course-filter');
+  const status = document.querySelector<HTMLElement>('#course-filter-status');
+  const cards = [...document.querySelectorAll<HTMLElement>('.ci-course')];
+  filterInput?.addEventListener('input', () => {
+    const query = filterInput.value.trim().toLocaleLowerCase('en-GB');
+    let visible = 0;
+    cards.forEach((card) => {
+      const match = !query || (card.dataset.course ?? '').includes(query);
+      card.hidden = !match;
+      if (match) visible += 1;
+    });
+    if (status) status.textContent = query ? `${visible} matching ${visible === 1 ? 'course' : 'courses'}` : `Showing all ${cards.length} mapped courses`;
+  });
+</script>
+<style>
+  .course-index{color:#263b4d}.ci-breadcrumb{display:flex;flex-wrap:wrap;gap:8px;color:#697b89;font-size:12px;margin-bottom:19px}.ci-hero{padding:24px;background:linear-gradient(110deg,#e6f2f9,#f7fafc);border-top:5px solid var(--et-orange)}.ci-hero h1{margin:4px 0 10px}.ci-hero>p:not(.kicker){max-width:720px;font-size:16px}.ci-hero-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:17px}.ci-hero-meta span{padding:6px 10px;background:#fff;color:#486b81;font-size:11px;font-weight:800}.ci-note{margin:15px 0;padding:13px 16px;background:#fff3e8;border-left:4px solid var(--et-orange);font-size:12px}.ci-note p{margin:4px 0 0}.ci-search{margin:25px 0 12px;padding:15px;background:#edf5fa}.ci-search label{display:block;margin-bottom:6px;color:#1b5179;font-size:13px;font-weight:800}.ci-search input{width:min(100%,410px);padding:11px 12px;border:1px solid #b8cfde;border-radius:4px;background:#fff;font:inherit;font-size:14px}.ci-search input:focus{outline:3px solid #ef9b5b}.ci-search p{margin:6px 0 0;color:#617584;font-size:11px}.ci-jump{display:flex;flex-wrap:wrap;gap:7px 10px;padding:8px 0 17px;border-bottom:1px solid #dce6ec}.ci-jump a{padding:7px 10px;background:#e7f2f9;text-decoration:none;font-size:12px;font-weight:800}.ci-group{margin-top:35px;scroll-margin-top:20px}.ci-group-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:14px}.ci-group-head .kicker{margin:0}.ci-group-head h2{margin:2px 0 6px;font-size:24px}.ci-group-head p:last-child{margin:0;color:#637789;font-size:12px}.ci-group-head>span{white-space:nowrap;color:#6a7d8a;font-size:11px}.ci-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.ci-course{display:flex;justify-content:space-between;align-items:center;gap:9px;padding:12px 13px;border:1px solid #d9e5ec;border-left:4px solid var(--et-blue);text-decoration:none;color:#24485f}.ci-course:hover{background:#edf5fa;text-decoration:none}.ci-course strong{font-size:13px}.ci-course>span{white-space:nowrap;color:#216394;font-size:11px;font-weight:800}.ci-course[hidden]{display:none}.ci-how{margin-top:43px;padding:21px;background:#eaf3f9;border-top:4px solid var(--et-orange)}.ci-how h2{margin:0 0 8px}.ci-how p{font-size:13px}.ci-how a{font-size:13px;font-weight:800}.ci-footer{margin-top:35px;border-top:1px solid #dce6ec;padding-top:13px;color:#667887;font-size:11px}@media(max-width:700px){.ci-grid{grid-template-columns:1fr}.ci-group-head{display:block}.ci-group-head>span{display:block;margin-top:6px}}@media(max-width:500px){.ci-hero{padding:18px 14px}.ci-hero>p:not(.kicker){font-size:14px}.ci-course{display:block}.ci-course>span{display:block;margin-top:3px}}
+</style>

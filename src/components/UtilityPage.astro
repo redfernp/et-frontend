@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+interface Props { title: string; eyebrow: string; deck: string; note: string; sections: { id: string; title: string; text: string }[] }
+const { title, eyebrow, deck, note, sections } = Astro.props;
+---
+<BaseLayout title={`${title} — utility page pilot`} wide={true}>
+  <article class="utility-page">
+    <nav class="utility-crumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><span>{title}</span></nav>
+    <header class="utility-hero"><p class="kicker">{eyebrow} · design pilot</p><h1>{title}</h1><p>{deck}</p></header>
+    <div class="utility-note"><strong>Content review before migration</strong><span>{note}</span></div>
+    <div class="utility-grid"><nav class="utility-nav" aria-label="On this page"><strong>On this page</strong>{sections.map((section) => <a href={`#${section.id}`}>{section.title}</a>)}</nav><div class="utility-content">{sections.map((section) => <section id={section.id}><h2>{section.title}</h2><p>{section.text}</p></section>)}<slot /></div></div>
+    <footer class="utility-footer">All page wording, links and SEO fields remain editable in WordPress. The pilot is not a published policy or a live contact form.</footer>
+  </article>
+</BaseLayout>
+<style>
+  .utility-page{color:#273d4e}.utility-crumb{display:flex;gap:9px;margin-bottom:20px;font-size:12px;color:#63798a}.utility-hero{padding:27px;background:linear-gradient(110deg,#e9f3f9,#fff);border-top:5px solid var(--et-orange)}.utility-hero h1{margin:3px 0 10px}.utility-hero>p:not(.kicker){max-width:750px;font-size:17px;line-height:1.5}.utility-note{display:grid;gap:4px;margin:16px 0 27px;padding:13px 16px;background:#fff4e8;border-left:4px solid var(--et-orange);font-size:12px}.utility-grid{display:grid;grid-template-columns:200px minmax(0,1fr);gap:26px}.utility-nav{display:grid;align-content:start;gap:9px;padding:17px;background:#eaf3f9;border-top:4px solid var(--et-blue)}.utility-nav strong{font-size:12px;color:#174c72}.utility-nav a{font-size:13px;font-weight:750}.utility-content section{scroll-margin-top:20px;padding:4px 0 21px;border-bottom:1px solid #dce6ec;margin-bottom:17px}.utility-content h2{margin:0 0 10px}.utility-content p{max-width:730px;line-height:1.6}.utility-footer{margin-top:30px;padding:15px 0;border-top:1px solid #dce6ec;font-size:11px;color:#637889}@media(max-width:650px){.utility-hero{padding:19px 15px}.utility-hero>p:not(.kicker){font-size:15px}.utility-grid{grid-template-columns:1fr;gap:17px}.utility-nav{grid-template-columns:repeat(2,minmax(0,1fr))}.utility-nav strong{grid-column:1/-1}}
+</style>

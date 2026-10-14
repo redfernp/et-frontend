@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OfferCard from '../../components/OfferCard.astro';
+import { offers, rankedEntries } from '../../lib/pilot-data';
+---
+<BaseLayout title="Best betting sites — roundup pilot">
+  <article class="guide">
+    <p class="kicker">Betting guides</p>
+    <h1>Best betting sites — roundup template</h1>
+    <p class="lede">A full-width guide proof based on the current EveryTip money-page structure. Eric’s introduction, verdicts and guide sections remain editable in WordPress; Astro controls their presentation.</p>
+    <nav class="toc" aria-label="On this page"><strong>On this page</strong><a href="#quick-picks">Quick picks</a><a href="#ranked-sites">Ranked sites</a><a href="#how-we-choose">How we choose</a></nav>
+    <section id="quick-picks"><h2>Our quick picks</h2><p>Ranked entries can be reordered in ACF without changing the template.</p></section>
+    <section id="ranked-sites"><h2>Ranked sites and offers</h2><div class="offer-list">
+      {rankedEntries.map((entry, index) => <OfferCard offer={offers[entry.offerId]} rank={index + 1} bestFor={entry.bestFor} verdict={entry.verdict} />)}
+    </div></section>
+    <section id="how-we-choose" class="editorial"><h2>How we choose</h2><p>This section represents editable WordPress editorial copy. The pilot does not reproduce a specific live guide’s text or publish an unverified offer.</p></section>
+  </article>
+</BaseLayout>

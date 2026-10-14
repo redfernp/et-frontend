@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { weeklyArchivePath } from '../lib/weekly-column-archive.mjs';
+
+const { archive } = Astro.props;
+const { slug, family, page, pageNumber, totalPages, entriesOnPage, entries, capturedAt, sourceMode } = archive;
+const pageTitle = pageNumber === 1 ? page.title : `${page.title} — Page ${pageNumber}`;
+const verifiedPublicPaths = ['/', '/free-betting-tips', '/saturday-horse-racing-tips', '/english-premier-league-predictions-for-saturday', '/bookie-free-bets-bonus-offers', '/safer-gambling', '/terms-conditions', '/privacy-policy'];
+const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
+const hasOctoberOverlay = sourceMode.includes('+four-source-locked-october-articles');
+---
+<BaseLayout title={pageTitle} publicPage previewOnly sidebar relatedTopic={family.relatedTopic}
+  robots={pageNumber > 1 ? 'noindex,follow' : 'noindex,nofollow'}
+  seo={{ title: pageTitle, description: `${family.intro} Dated EveryTip archive; not current betting advice.` }}
+  previewMessage="Dated archive preview · no active offers · not for publication"
+  verifiedPublicPaths={verifiedPublicPaths}>
+  <article class="weekly-archive" style={`--archive-accent:${family.accent}`}>
+    <nav class="archive-breadcrumb" aria-label="Breadcrumb"><a href="/">EveryTip</a><span aria-hidden="true">/</span><span>{family.discipline}</span></nav>
+    <header class="archive-hero">
+      <div class="archive-copy">
+        <span class="archive-eyebrow">EveryTip weekly column</span>
+        <h1>{page.title}</h1>
+        <p>{family.intro}</p>
+        <p class="archive-subtitle">{family.subtitle}</p>
+      </div>
+      <img src={family.portrait} width="112" height="112" alt={`${family.columnist}, EveryTip columnist`} loading="eager" decoding="async" />
+    </header>
+    <div class="archive-notice" role="note">Historical archive. Every article is dated; old selections, fixtures, prices and offers must not be treated as current. Commercial links are disabled in this preview.</div>
+    <div class="archive-toolbar">
+      <h2>{family.columnist} articles</h2>
+      <span>{entries.length} dated records · Page {pageNumber} of {totalPages}</span>
+    </div>
+    <ol class="archive-list" start={(pageNumber - 1) * 20 + 1}>
+      {entriesOnPage.map((entry: { id: number; href: string; title: string; date: string; dateLabel: string; excerpt: string }) => <li>
+        <div class="archive-list-copy"><time datetime={entry.date}>{entry.dateLabel}</time><h3><a href={entry.href}>{entry.title}</a></h3><p>{entry.excerpt}</p></div>
+        <span class="archive-arrow" aria-hidden="true">→</span>
+      </li>)}
+    </ol>
+    <nav class="archive-pagination" aria-label="Archive pagination">
+      {pageNumber > 1 && <a rel="prev" href={weeklyArchivePath(slug, pageNumber - 1)}>← Newer</a>}
+      {pageNumbers.filter((number) => number === 1 || number === totalPages || Math.abs(number - pageNumber) <= 2).map((number) => <a href={weeklyArchivePath(slug, number)} aria-current={number === pageNumber ? 'page' : undefined}>{number}</a>)}
+      {pageNumber < totalPages && <a rel="next" href={weeklyArchivePath(slug, pageNumber + 1)}>Older →</a>}
+    </nav>
+    <p class="archive-crosslink">Explore <a href={family.siblingHref}>{family.siblingLabel}</a>.</p>
+    <p class="archive-provenance">Content source: {sourceMode.startsWith('fresh-staging-wpgraphql-preview') ? 'validated staging WPGraphQL' : 'dated staging snapshot'} ({capturedAt.slice(0, 10)}){hasOctoberOverlay ? ' plus two separately validated October article sources' : ''}. Exact article URLs retained; all selections and prices are historical.</p>
+  </article>
+</BaseLayout>
+<style>
+  .weekly-archive{max-width:100%;min-width:0;padding:clamp(18px,3vw,36px);background:#fff;color:#123858}
+  .archive-breadcrumb{display:flex;gap:8px;align-items:center;color:#60758a;font-size:.85rem;margin-bottom:20px}
+  .archive-breadcrumb a,.archive-crosslink a{color:#0b5b9e;text-underline-offset:3px}
+  .archive-hero{display:flex;justify-content:space-between;align-items:center;gap:24px;border-bottom:4px solid var(--archive-accent);padding-bottom:24px}
+  .archive-hero h1{font-size:clamp(2rem,4vw,3rem);line-height:1.1;margin:7px 0 12px}
+  .archive-hero p{max-width:65ch;margin:0 0 8px;line-height:1.55}
+  .archive-hero img{width:112px;height:112px;object-fit:cover;border-radius:16px;border:4px solid #e9f0f5;flex:none}
+  .archive-eyebrow{font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--archive-accent)}
+  .archive-subtitle{font-weight:700}
+  .archive-notice{background:#fff6ed;border-left:4px solid #f26800;padding:14px 18px;margin:25px 0;color:#704100;line-height:1.5}
+  .archive-toolbar{display:flex;justify-content:space-between;gap:12px;align-items:end;margin:28px 0 12px}
+  .archive-toolbar h2{margin:0;font-size:1.45rem}.archive-toolbar span{font-size:.85rem;color:#60758a}
+  .archive-list{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+  .archive-list li{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:18px;border:1px solid #d5e0ea;border-left:4px solid var(--archive-accent);border-radius:8px;background:#fbfdff}
+  .archive-list time{font-size:.78rem;color:#5f7080;font-weight:700}
+  .archive-list h3{font-size:1.08rem;line-height:1.35;margin:5px 0}
+  .archive-list h3 a{color:#123858;text-decoration:none}.archive-list h3 a:hover{text-decoration:underline;text-decoration-color:var(--archive-accent);text-underline-offset:3px}
+  .archive-list p{margin:0;font-size:.85rem;color:#5f7080}.archive-arrow{font-size:1.3rem;color:var(--archive-accent)}
+  .archive-pagination{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:26px 0}
+  .archive-pagination a{display:inline-flex;align-items:center;justify-content:center;min-width:40px;min-height:40px;padding:0 12px;border:1px solid #9ab8d2;border-radius:6px;color:#174b75;text-decoration:none;font-weight:700}
+  .archive-pagination a[aria-current="page"]{background:#174b75;border-color:#174b75;color:#fff}
+  .archive-crosslink{margin:20px 0}.archive-provenance{font-size:.75rem;color:#6a7d8e}
+  @media(max-width:600px){.weekly-archive{padding:18px}.archive-hero{flex-direction:column-reverse;align-items:flex-start;gap:12px}.archive-copy{width:100%;min-width:0}.archive-hero h1{overflow-wrap:anywhere}.archive-hero img{width:72px;height:72px}.archive-toolbar{display:block}.archive-toolbar span{display:block;margin-top:6px}.archive-list li{padding:14px}.archive-arrow{display:none}}
+</style>

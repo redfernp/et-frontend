@@ -1,0 +1,29 @@
+# EveryTip Content Model (staging-first)
+
+Version-controlled ACF offer/bookmaker fields and capability-checked editorial REST routes. This complements the three pilot ACF groups already present on staging; it does not enable their public REST exposure or add public offers.
+
+The plugin registers public offer-publishing fields in WPGraphQL and keeps verification fields out of both public GraphQL and default REST. Version 0.2 adds optional bookmaker-level USPs (up to three) and an optional offer-specific highlight; these are editorial copy, separate from offer terms. `GET /wp-json/everytip/v1/offer/{id}` requires an authenticated user with `edit_post` capability and returns only an allowlist of editorial fields, never the affiliate destination. There is no offer write route. Anonymous access must fail.
+
+Do not deploy to live or activate offers until the staging schema, country fail-closed behaviour, revision strategy and terms approval have passed review. ACF field groups registered via PHP are not editable in the ACF Field Groups UI; change this source and redeploy instead.
+
+## Gutenberg offer-slot prototype
+
+Version `0.3.0-dev` added `blocks/offer-slot/`, a Gutenberg/ACF placement prototype now installed on staging. It lets Eric select one central `et_offer` record, an approved card layout and an optional contextual heading. The block renders only a data marker; it never embeds an affiliate URL, headline or terms in the post body. A staging draft round-trip proved REST and WPGraphQL retain the reference. Astro must still resolve the marker against its typed offer feed and fail closed for unapproved, expired or geographically ineligible offers. Do not publish a page that still contains an unresolved marker.
+
+## Staging v0.4.0-dev field
+
+JP approved the short disclosures on the live free-bets page as the space-restricted offer terms. The plugin adds `et_offer_full_terms_url` as an optional offer-specific URL for direct access to the operator's full terms. This avoids pasting the complete legal text into ACF and does not replace the short terms or affiliate destination. Version `0.4.0-dev` was uploaded to staging only on 3 October 2026 after JP's approval. The field appears in the staging editor, the authenticated editorial read route and WPGraphQL. All seven offer records remain drafts and this new field is empty. The Astro query and offer-slot gate now understand the field, but the live offer renderer still needs to show a direct full-terms link and the complete activation checklist must pass before an offer is published.
+
+## Staging v0.5.0-dev editorial SEO route
+
+Yoast's native Abilities API is present on staging and can read SEO data and write advanced metadata such as canonical/noindex. Its update ability does **not** write snippet title or meta description. The new `GET/POST /wp-json/everytip/v1/editorial-seo/{id}` route fills only that gap for posts and pages: SEO title, meta description, and focus keyphrase. It requires `edit_post` for the exact ID, rejects all other fields, sanitizes and length-limits values, and requires a read-before-write `expected_revision` token. A private `_everytip_seo_edit_log` meta record stores before/after values and editor ID for recovery. The route does not allow Eric to change canonical, robots, affiliate links or offers.
+
+Version `0.5.0-dev` was uploaded to staging on 3 October 2026 after JP's explicit approval. Private page draft 90894 was updated and independently read back through this route **and** Yoast's native SEO-data ability; both returned the staging-only title and description. The page stayed a draft with `noindex=true`. The probe confirmed anonymous GET denial, an advanced-field rejection and a stale-token 409. Run `node --env-file=.env.local scripts/probe-staging-editorial-seo.mjs` for a read-only check; `--apply-draft-90894` repeats the write-only-on-that-draft test. Verify a separate Editor-role application password before relying on Eric's workflow; the current probe uses JP's administrator credential.
+
+For a normal staging edit, `npm run seo:staging -- 90894` reads the current fields and revision token. Put the exact ID, token and only the fields to change in a local JSON file (`{ "post_id": 90894, "expected_revision": "…", "fields": { "seo_title": "…" } }`). `npm run seo:staging -- 90894 path/to/edit.json` shows a dry-run diff; adding `--apply` writes and independently reads back. Non-draft staging content additionally needs `--allow-published`. This command is locked to the staging hostname and cannot update live. Store Eric's future Editor application password separately from JP's administrator `.env.local`; do not share one application password or commit either file. The route enforces WordPress's per-post `edit_post` capability, but an actual Editor-login test is still pending.
+
+## Local-only v0.6.0-dev tip-table reference draft
+
+The uninstalled local source now includes an `acf/everytip-tip-table` placement block. Its two ACF fields select one of the 49 IDs in the 13 October authenticated Ninja Tables audit and preserve an optional exact filter string. The render callback emits only a `data-everytip-tip-table-id` marker with an optional `data-everytip-tip-table-filter`; it does not run a shortcode, copy rendered rows, or claim the table data is current. Unknown IDs, markup/control characters in the filter, and missing registry data fail closed. This is a placement model, **not** the structured tips-row feed or import API.
+
+The block has **not** been uploaded or activated on staging or live. There is no current Astro resolver for its marker. Do not insert it into a published post or replace a Ninja shortcode until a draft round-trip, WPGraphQL read, typed row feed, exact filter parity, mobile table rendering, and rollback have all passed. See `docs/everytip-ninja-table-migration-plan-2026-10-13.md` for the pilot order and safeguards.

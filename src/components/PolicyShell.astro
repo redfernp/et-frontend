@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getWordPressMenu } from '../lib/wordpress-menu.ts';
+import { previewPublicPaths } from '../lib/preview-public-paths.ts';
+interface Props { title: string; kind: string; intro: string; content: string; modified: string; reviewNote: string; exactPath?: boolean; seo?: { title?: string; description?: string } }
+const { title, kind, intro, content, modified, reviewNote, exactPath = false, seo } = Astro.props;
+const previewContent = exactPath
+  ? content.replaceAll('wordpress-159231-2098144.cloudwaysapps.com', 'www.everytip.co.uk')
+  : content.replaceAll(/https:\/\/wordpress-159231-2098144\.cloudwaysapps\.com\/(safer-gambling|terms-conditions|privacy-policy)\/?/g, '/pilot/$1/');
+const verifiedPublicPaths = exactPath ? previewPublicPaths : [];
+const menuItems = exactPath ? (await getWordPressMenu('PRIMARY')).items : null;
+---
+<BaseLayout title={`${title} — policy preview`} wide={true} seo={seo} publicPage={exactPath} previewOnly={exactPath} menuItems={menuItems} verifiedPublicPaths={verifiedPublicPaths} previewMessage={exactPath ? 'Exact legal URL preview · WordPress copy · review before launch' : 'Current WordPress policy copy · local design preview · review before launch'}>
+  <article class="policy-shell">
+    <nav class="ps-crumb" aria-label="Breadcrumb"><a href={exactPath ? '/' : '/pilot/home/'}>EveryTip</a><span aria-hidden="true">›</span><span>{title}</span></nav>
+    <header class="ps-hero"><p class="kicker">{kind}</p><h1>{title}</h1><p>{intro}</p><div class="ps-meta"><span>Current staging WordPress copy</span><span>Last modified {modified.slice(0, 10)}</span><span>Local preview only</span></div></header>
+    <div class="ps-review"><strong>Content review required before launch</strong><p>{reviewNote}</p></div>
+    <div class="ps-content" set:html={previewContent} />
+  </article>
+</BaseLayout>
+<style>
+  .policy-shell{color:#283e4f;max-width:980px;margin:auto}.ps-crumb{display:flex;gap:8px;margin-bottom:19px;color:#617b8a;font-size:12px}.ps-hero{padding:27px;background:linear-gradient(110deg,#e9f3f9,#fff);border-top:5px solid var(--et-orange)}.ps-hero h1{margin:3px 0 9px}.ps-hero>p:not(.kicker){max-width:740px;font-size:17px;line-height:1.5}.ps-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:17px}.ps-meta span{padding:6px 9px;background:#fff;color:#4e7186;font-size:11px;font-weight:800}.ps-review{margin:16px 0 24px;padding:15px 18px;background:#fff3e7;border-left:4px solid var(--et-orange);font-size:12px}.ps-review p{margin:4px 0 0}.ps-content{line-height:1.7;overflow-wrap:anywhere}.ps-content :global(p){margin:0 0 17px}.ps-content :global(h2){font-size:24px;margin:34px 0 13px}.ps-content :global(h3){font-size:19px;margin:26px 0 10px;color:#254d70}.ps-content :global(a){overflow-wrap:anywhere}.ps-content :global(ul),.ps-content :global(ol){padding-left:24px;margin-bottom:20px}.ps-content :global(li){margin-bottom:6px}.ps-content :global(img){max-width:100%;height:auto}.ps-content :global(table){display:block;overflow-x:auto}.ps-content :global(*[style]){font-family:inherit!important;font-size:inherit!important;line-height:inherit!important;color:inherit!important;background:transparent!important}@media(max-width:650px){.ps-hero{padding:20px 15px}.ps-hero>p:not(.kicker){font-size:15px}}
+</style>

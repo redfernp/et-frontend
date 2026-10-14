@@ -1,0 +1,252 @@
+{
+  "savedAt": "2026-10-04T20:05:49.973Z",
+  "plan": "plan-2026-10-04T19-20-38.441Z.json",
+  "expected": {
+    "id": 66531,
+    "slug": "epl-game-week-11-2023-24-season-premier-league-tips-john-newsome",
+    "uri": "/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html",
+    "family": "john",
+    "date": "2023-10-31T17:37:59",
+    "currentDate": "2023-10-31T17:37:59",
+    "status": "publish",
+    "robotsIndex": "index",
+    "robotsFollow": "follow",
+    "reason": null,
+    "needsUpdate": true
+  },
+  "wordpress": {
+    "id": 66531,
+    "date": "2023-10-31T17:37:59",
+    "slug": "epl-game-week-11-2023-24-season-premier-league-tips-john-newsome",
+    "status": "publish",
+    "yoast_head_json": {
+      "title": "EPL Game Week 11 – 2023/24 Season Premier League Tips – John Newsome - Every Tip",
+      "description": "EPL Week 11 Predictions [2023/24 Season] - Check out John Newsome's game by game previews for all upcoming Premier League matches.",
+      "robots": {
+        "index": "index",
+        "follow": "follow",
+        "max-snippet": "max-snippet:-1",
+        "max-image-preview": "max-image-preview:large",
+        "max-video-preview": "max-video-preview:-1"
+      },
+      "canonical": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html",
+      "og_locale": "en_GB",
+      "og_type": "article",
+      "og_title": "EPL Game Week 11 – 2023/24 Season Premier League Tips – John Newsome - Every Tip",
+      "og_description": "EPL Week 11 Predictions [2023/24 Season] - Check out John Newsome's game by game previews for all upcoming Premier League matches.",
+      "og_url": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html",
+      "og_site_name": "Every Tip",
+      "article_publisher": "https://www.facebook.com/everytipsite/",
+      "article_published_time": "2023-10-31T16:37:59+00:00",
+      "article_modified_time": "2023-11-04T10:46:46+00:00",
+      "og_image": [
+        {
+          "url": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2017/11/John-Newsome-Football-Betting-Tips-everytip.png",
+          "type": "",
+          "width": "",
+          "height": ""
+        }
+      ],
+      "author": "Everytip",
+      "twitter_card": "summary_large_image",
+      "twitter_creator": "@everytipsite",
+      "twitter_site": "@everytipsite",
+      "twitter_misc": {
+        "Written by": "Everytip",
+        "Estimated reading time": "31 minutes"
+      },
+      "schema": {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Article",
+            "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html#article",
+            "isPartOf": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html"
+            },
+            "author": {
+              "name": "Everytip",
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#/schema/person/4b745c4a63b14b6328944f3b7bb1aff8"
+            },
+            "headline": "EPL Game Week 11 – 2023/24 Season Premier League Tips – John Newsome",
+            "datePublished": "2023-10-31T16:37:59+00:00",
+            "dateModified": "2023-11-04T10:46:46+00:00",
+            "mainEntityOfPage": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html"
+            },
+            "wordCount": 6860,
+            "publisher": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#organization"
+            },
+            "image": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html#primaryimage"
+            },
+            "thumbnailUrl": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2017/11/John-Newsome-Football-Betting-Tips-everytip.png",
+            "articleSection": [
+              "John Newsome"
+            ],
+            "inLanguage": "en-GB"
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html",
+            "url": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html",
+            "name": "EPL Game Week 11 – 2023/24 Season Premier League Tips – John Newsome - Every Tip",
+            "isPartOf": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#website"
+            },
+            "primaryImageOfPage": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html#primaryimage"
+            },
+            "image": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html#primaryimage"
+            },
+            "thumbnailUrl": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2017/11/John-Newsome-Football-Betting-Tips-everytip.png",
+            "datePublished": "2023-10-31T16:37:59+00:00",
+            "dateModified": "2023-11-04T10:46:46+00:00",
+            "description": "EPL Week 11 Predictions [2023/24 Season] - Check out John Newsome's game by game previews for all upcoming Premier League matches.",
+            "breadcrumb": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html#breadcrumb"
+            },
+            "inLanguage": "en-GB",
+            "potentialAction": [
+              {
+                "@type": "ReadAction",
+                "target": [
+                  "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html"
+                ]
+              }
+            ]
+          },
+          {
+            "@type": "ImageObject",
+            "inLanguage": "en-GB",
+            "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html#primaryimage",
+            "url": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2017/11/John-Newsome-Football-Betting-Tips-everytip.png",
+            "contentUrl": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2017/11/John-Newsome-Football-Betting-Tips-everytip.png"
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://wordpress-159231-2098144.cloudwaysapps.com/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "John Newsome",
+                "item": "https://wordpress-159231-2098144.cloudwaysapps.com/john-newsome"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "EPL Game Week 11 – 2023/24 Season Premier League Tips – John Newsome"
+              }
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#website",
+            "url": "https://wordpress-159231-2098144.cloudwaysapps.com/",
+            "name": "Every Tip",
+            "description": "",
+            "publisher": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#organization"
+            },
+            "potentialAction": [
+              {
+                "@type": "SearchAction",
+                "target": {
+                  "@type": "EntryPoint",
+                  "urlTemplate": "https://wordpress-159231-2098144.cloudwaysapps.com/?s={search_term_string}"
+                },
+                "query-input": {
+                  "@type": "PropertyValueSpecification",
+                  "valueRequired": true,
+                  "valueName": "search_term_string"
+                }
+              }
+            ],
+            "inLanguage": "en-GB"
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#organization",
+            "name": "EveryTip",
+            "url": "https://wordpress-159231-2098144.cloudwaysapps.com/",
+            "logo": {
+              "@type": "ImageObject",
+              "inLanguage": "en-GB",
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#/schema/logo/image/",
+              "url": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2017/07/EveryTip.png",
+              "contentUrl": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2017/07/EveryTip.png",
+              "width": 450,
+              "height": 120,
+              "caption": "EveryTip"
+            },
+            "image": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#/schema/logo/image/"
+            },
+            "sameAs": [
+              "https://www.facebook.com/everytipsite/",
+              "https://x.com/everytipsite",
+              "https://www.pinterest.com/everytipsite/",
+              "https://www.youtube.com/c/Everytip"
+            ]
+          },
+          {
+            "@type": "Person",
+            "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#/schema/person/4b745c4a63b14b6328944f3b7bb1aff8",
+            "name": "Everytip",
+            "image": {
+              "@type": "ImageObject",
+              "inLanguage": "en-GB",
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2025/06/cropped-ET-96x96.jpg",
+              "url": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2025/06/cropped-ET-96x96.jpg",
+              "contentUrl": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2025/06/cropped-ET-96x96.jpg",
+              "caption": "Everytip"
+            },
+            "url": "https://wordpress-159231-2098144.cloudwaysapps.com/author/erick"
+          }
+        ]
+      }
+    }
+  },
+  "yoast": {
+    "post_id": 66531,
+    "post_title": "EPL Game Week 11 – 2023/24 Season Premier League Tips – John Newsome",
+    "permalink": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html",
+    "post_type": "post",
+    "post_status": "publish",
+    "seo_title": null,
+    "seo_title_rendered": "EPL Game Week 11 – 2023/24 Season Premier League Tips – John Newsome - Every Tip",
+    "meta_description": "EPL Week 11 Predictions [2023/24 Season] - Check out John Newsome's game by game previews for all upcoming Premier League matches.",
+    "meta_description_rendered": "EPL Week 11 Predictions [2023/24 Season] - Check out John Newsome's game by game previews for all upcoming Premier League matches.",
+    "focus_keyphrase": null,
+    "canonical": null,
+    "canonical_rendered": "https://wordpress-159231-2098144.cloudwaysapps.com/epl-game-week-11-2023-24-season-premier-league-tips-john-newsome.html",
+    "is_cornerstone": false,
+    "noindex": null,
+    "nofollow": false,
+    "noimageindex": false,
+    "noarchive": false,
+    "nosnippet": false,
+    "open_graph_title": null,
+    "open_graph_title_rendered": "EPL Game Week 11 – 2023/24 Season Premier League Tips – John Newsome - Every Tip",
+    "open_graph_description": null,
+    "open_graph_description_rendered": "EPL Week 11 Predictions [2023/24 Season] - Check out John Newsome's game by game previews for all upcoming Premier League matches.",
+    "twitter_title": null,
+    "twitter_title_rendered": null,
+    "twitter_description": null,
+    "twitter_description_rendered": null,
+    "schema_page_type": null,
+    "schema_article_type": null,
+    "seo_score": "na",
+    "readability_score": "bad",
+    "inclusive_language_score": "na"
+  }
+}

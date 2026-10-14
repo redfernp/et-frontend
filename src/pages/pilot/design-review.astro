@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const cases = [
+  { name: 'Homepage', focus: 'Offer ladder stays colourful; supporting editorial sections become calmer.', path: '/pilot/home/' },
+  { name: 'Seymour article', focus: 'Narrower reading measure and stronger title, with the colour author cards intact.', path: '/saturdays-horse-racing-preview-tips-7th-december-2024-seymour-biz.html/' },
+  { name: 'Free bets', focus: 'The same seven branded rows and orange commercial CTAs in a clearer page hierarchy.', path: '/pilot/bookie-free-bets-bonus-offers/' },
+  { name: 'Dark Horse tips', focus: 'More legible WordPress copy and the same seven desktop/four mobile table columns.', path: '/pilot/value-bet-tips-dark-horses/' },
+  { name: 'PayPal roundup', focus: 'A stronger guide introduction and quieter cards without changing rankings or offer data.', path: '/pilot/best-paypal-betting-sites/' },
+];
+---
+<BaseLayout title="Approved design examples" wide={true} previewMessage="Local design examples · brand colours and offer data unchanged">
+  <article class="design-review">
+    <p class="kicker">Approved direction</p><h1>EveryTip design examples</h1>
+    <p>The refreshed design is now fixed across the local pilots. The EveryTip blue and orange, bookmaker-brand blocks and commercial-button colour are unchanged. These are design examples, not published WordPress pages.</p>
+    <div class="review-cases">{cases.map((item) => <section><div><h2>{item.name}</h2><p>{item.focus}</p></div><nav aria-label={`${item.name} preview`}><a href={item.path}>Open page</a></nav></section>)}</div>
+    <p class="review-note">The Seymour article uses the opt-in local exact-URL preview. In Astro development its URL ends in <code>.html/</code>; the production build test emits the exact <code>.html</code> file. All comparison pages are noindex pilots and commercial links remain disabled.</p>
+  </article>
+</BaseLayout>
+<style>
+  .design-review{max-width:1040px;margin:auto}.design-review>p{max-width:760px}.design-review h1{margin-bottom:12px}.review-cases{display:grid;gap:10px;margin-top:25px}.review-cases section{display:flex;justify-content:space-between;align-items:center;gap:22px;padding:18px 20px;border:1px solid #dce6ed;border-left:5px solid var(--et-blue);background:#fff}.review-cases h2{margin:0 0 4px;font-size:20px}.review-cases p{margin:0;font-size:13px;color:#516a7a}.review-cases nav{display:flex;gap:8px;flex:none}.review-cases a{display:inline-block;padding:9px 12px;border:1px solid var(--et-blue);border-radius:4px;color:var(--et-blue-ink);font-size:12px;font-weight:800;text-decoration:none}.review-cases a:last-child{background:var(--et-blue);color:#fff}.review-cases a:hover{text-decoration:underline}.review-cases a:focus-visible{outline:3px solid var(--et-orange);outline-offset:3px}.review-note{margin-top:22px;padding:13px 16px;border-left:4px solid var(--et-orange);background:#fff7ee;font-size:12px}@media(max-width:600px){.review-cases section{display:block}.review-cases nav{margin-top:12px}}
+</style>

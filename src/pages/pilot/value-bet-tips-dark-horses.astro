@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TipsTable from '../../components/TipsTable.astro';
+import TipsArchive from '../../components/TipsArchive.astro';
+import { tipsForCourse } from '../../lib/pilot-data';
+import { getPostContentByUri } from '../../lib/wpgraphql';
+const post = await getPostContentByUri('/value-bet-tips-dark-horses.html');
+const tableHeading = /<h2[^>]*>\s*Todays Value Bets\/ Dark Horse Selections\s*<\/h2>/i.exec(post.content);
+if (!tableHeading || tableHeading.index < 200) throw new Error('Dark Horse editorial/table boundary changed in WordPress');
+const editorialIntro = post.content.slice(0, tableHeading.index);
+if (/<\s*(script|iframe|form|table)\b/i.test(editorialIntro)) throw new Error('Dark Horse intro contains active or tabular HTML requiring review');
+const rows = tipsForCourse();
+const latest = rows.map((row) => row.published).sort().reverse()[0];
+---
+<BaseLayout title="Dark Horse value tips — pilot" sidebar={true}>
+  <article><p class="kicker">Horse racing tips · WordPress editorial copy</p><h1>{post.title}</h1>
+    <div class="dark-horse-intro" set:html={editorialIntro} />
+    <section><h2>Today's Value Bets / Dark Horse Selections</h2><TipsTable rows={rows.filter((row) => row.published === latest)} idPrefix="latest" /></section>
+    <TipsArchive rows={rows.filter((row) => row.published !== latest)} />
+    <p class="note">The explanation above comes from staging WordPress. The table rows below are still sample data; the real daily feed remains on Google Sheets/Ninja Tables until the verified import is connected. Results are out of scope for now.</p>
+  </article>
+</BaseLayout>
+<style>
+  .dark-horse-intro{font-size:16px;line-height:1.7;color:#354b5b;margin:8px 0 34px;max-width:780px}
+  .dark-horse-intro :global(p){margin:0 0 17px}
+  .dark-horse-intro :global(h3){font-size:22px;line-height:1.3;margin:27px 0 12px;color:var(--et-blue-ink)}
+  .dark-horse-intro :global(ol){padding-left:25px;margin:0 0 18px}
+  .dark-horse-intro :global(li){margin-bottom:8px}
+  .dark-horse-intro :global(blockquote){border-left:5px solid #e9eef1;margin:25px 0;padding:12px 22px;color:#47535d;font-size:20px;font-style:italic}
+  .dark-horse-intro :global(blockquote p){margin:0}
+</style>

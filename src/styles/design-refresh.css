@@ -1,0 +1,99 @@
+/* Accepted EveryTip pilot design. Brand and CTA tokens stay unchanged. */
+html.design-refresh {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color: #263b4b;
+  line-height: 1.65;
+}
+html.design-refresh h1,
+html.design-refresh h2,
+html.design-refresh h3 { letter-spacing: -.035em; }
+html.design-refresh .kicker { text-transform: none; letter-spacing: 0; font-size: 13px; }
+html.design-refresh .page-shell { gap: 32px; padding-top: 34px; }
+html.design-refresh main { border-color: #e4ebef; box-shadow: none; }
+html.design-refresh .site-header { box-shadow: 0 4px 16px #183f5f18; }
+html.design-refresh .site-header nav a { font-size: 14px; }
+html.design-refresh .site-header nav a:hover { text-decoration: underline; text-decoration-color: var(--et-orange); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+html.design-refresh .featured-offer-block { box-shadow: none; border-radius: 7px; }
+html.design-refresh .featured-offers-list { gap: 10px; }
+
+/* Homepage: let the coloured ladder carry the emphasis; editorial modules become quieter. */
+html.design-refresh .home-preview { background: #fff; }
+html.design-refresh .home-header { min-height: 126px; }
+html.design-refresh .home-hero h1 { padding: 15px 24px; line-height: 1.34; }
+html.design-refresh .home-enter { margin-bottom: 62px; }
+html.design-refresh .home-ladder-heading h2 { text-transform: none; color: var(--et-navy); font-size: clamp(25px, 3vw, 32px); }
+html.design-refresh .home-ladder-badge { background: var(--et-navy); }
+html.design-refresh .home-ladder-row { box-shadow: none; border-color: #dce6ed; border-left-color: var(--ladder-brand); border-radius: 7px; min-height: 106px; }
+html.design-refresh .home-ladder-copy h3 { font-size: 18px; color: var(--et-navy); }
+html.design-refresh .home-ladder-copy p { font-size: 12px; line-height: 1.5; }
+@media (max-width: 600px) { html.design-refresh .home-ladder-copy p { font-size: 13px; line-height: 1.55; } }
+html.design-refresh .home-newsletter { box-shadow: none; border-top: 0; border-left: 5px solid var(--et-orange); text-align: left; padding: 26px 30px; }
+html.design-refresh .home-newsletter p:not(.kicker) { margin-left: 0; }
+html.design-refresh .home-feature-card,
+html.design-refresh .home-recommended-grid article { box-shadow: none; border-radius: 4px; background: #fff; border-color: #dce6ed; }
+html.design-refresh .home-feature-card { border-left: 4px solid var(--et-blue); }
+html.design-refresh .home-feature-card > span:first-child { text-transform: none; letter-spacing: 0; font-size: 12px; }
+html.design-refresh .home-feature-card h3 { font-weight: 750; }
+html.design-refresh .home-tip-grid a { border-radius: 4px; background: #f4f8fb; }
+html.design-refresh .home-two-column { background: #f5f9fb; }
+
+/* Free bets: retain the seven brand-colour rows and commercial button colour. */
+html.design-refresh .freebets-guide { padding-top: 8px; }
+html.design-refresh .freebets-hero { background: #f4f8fb; border-top: 0; border-left: 5px solid var(--et-orange); padding: 31px 34px; }
+html.design-refresh .freebets-hero h1 { font-size: clamp(34px, 4.4vw, 52px); max-width: 750px; }
+html.design-refresh .freebets-disclosure { background: #fff8f1; }
+html.design-refresh .freebets-offers,
+html.design-refresh .freebets-understand,
+html.design-refresh .freebets-terms,
+html.design-refresh .freebets-faq { margin-top: 48px; }
+html.design-refresh .freebets-section-head h2 { font-size: clamp(26px, 3vw, 34px); }
+html.design-refresh .freebets-explainer article { background: #fff; border: 1px solid #dce6ed; border-left: 4px solid var(--et-blue); }
+html.design-refresh .freebets-terms { background: #f3f8fb; }
+
+/* Dark Horse tips: a more legible editorial column and data-first table, same seven columns. */
+html.design-refresh .dark-horse-intro { max-width: 70ch; font-size: 17px; line-height: 1.76; }
+html.design-refresh .dark-horse-intro blockquote { border-left-color: var(--et-orange); background: #f5f9fb; }
+html.design-refresh .tips-table { font-size: 14px; }
+html.design-refresh .tips-table thead th { background: var(--et-navy); }
+html.design-refresh .tips-table th,
+html.design-refresh .tips-table td { padding-block: 13px; }
+html.design-refresh .tips-table tbody .tip-main-row { background: #21679d; }
+html.design-refresh .tips-table tbody .tip-main-row:nth-of-type(4n + 3) { background: #2879b6; }
+html.design-refresh .tips-table .tip-horse { font-weight: 800; }
+
+/* PayPal roundup: visual ranking remains branded, with fewer generic cards and clearer reading width. */
+html.design-refresh .paypal-guide { padding-top: 18px; }
+html.design-refresh .paypal-hero { border-top: 0; border-left: 5px solid var(--et-orange); background: #f3f8fb; padding: 26px; gap: 28px; }
+html.design-refresh .paypal-hero h1 { font-size: clamp(38px, 4vw, 54px); }
+html.design-refresh .paypal-deck { line-height: 1.6; }
+html.design-refresh .paypal-hero img { border-radius: 3px; }
+html.design-refresh .paypal-section { margin-top: 58px; }
+html.design-refresh .paypal-section-head h2 { font-size: clamp(27px, 3vw, 35px); }
+html.design-refresh .paypal-pick { box-shadow: none; border-radius: 4px; padding: 18px; gap: 18px; }
+html.design-refresh .paypal-pick-copy p { font-size: 14px; line-height: 1.55; }
+html.design-refresh .paypal-profile { max-width: 950px; }
+html.design-refresh .paypal-editorial-block { max-width: 72ch; }
+
+/* Long-form columnist article: readable measure without diminishing the colour author cards. */
+html.design-refresh .exact-preview { max-width: 1050px; }
+html.design-refresh .exact-preview > h1 { max-width: 29ch; font-size: clamp(34px, 3.7vw, 46px); text-wrap: balance; }
+html.design-refresh .exact-preview-body { max-width: 72ch; font-size: 17px; line-height: 1.78; }
+html.design-refresh .exact-preview-body :where(p, li) { margin-bottom: 1.05em; }
+html.design-refresh .columnist-byline { border-radius: 6px; background: #f5f9fb; }
+html.design-refresh .columnist-card { max-width: 900px; box-shadow: none; }
+
+@media (max-width: 700px) {
+  html.design-refresh .page-shell { padding-top: 22px; }
+  html.design-refresh .site-header nav { flex-wrap: nowrap; overflow-x: auto; white-space: nowrap; padding: 5px 0 9px; scrollbar-width: thin; }
+  html.design-refresh .home-newsletter { padding: 20px; }
+  html.design-refresh .paypal-hero { grid-template-columns: 1fr; padding: 20px; }
+  html.design-refresh .paypal-hero img { max-height: 180px; object-fit: contain; }
+  html.design-refresh .dark-horse-intro { font-size: 16px; }
+  html.design-refresh .tips-table th,
+  html.design-refresh .tips-table td { padding: 9px 5px; }
+  html.design-refresh .exact-preview-body { font-size: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.design-refresh *, html.design-refresh *::before, html.design-refresh *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}

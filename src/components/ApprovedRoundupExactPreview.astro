@@ -1,0 +1,15 @@
+---
+import RoundupPilot from '../pages/pilot/[roundup].astro';
+import { latestContentSnapshot } from '../lib/migration-preview.mjs';
+import { roundupSnapshotPreview } from '../lib/roundup-snapshot-preview.mjs';
+
+const { uri } = Astro.props as { uri: string };
+if (!['/online-bookmakers-that-accept-neteller.html', '/online-bookmakers-that-accept-skrill.html', '/best-betting-sites-for-basketball.html'].includes(uri)) {
+  throw new Error(`Unsupported exact roundup preview: ${uri}`);
+}
+if (Astro.url.pathname.replace(/\/$/, '') !== uri) throw new Error(`Exact roundup path mismatch: ${uri}`);
+const snapshot = await latestContentSnapshot();
+if (!snapshot) throw new Error('Exact roundup preview requires the dated WordPress snapshot');
+const preview = roundupSnapshotPreview(snapshot, uri);
+---
+<RoundupPilot preview={preview} />

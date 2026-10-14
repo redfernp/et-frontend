@@ -1,0 +1,156 @@
+---
+import '../../styles/global.css';
+import '../../styles/design-refresh.css';
+import HomeOfferLadder from '../../components/HomeOfferLadder.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { featuredOfferPreview } from '../../lib/pilot-data';
+import { extractHomeEditorial } from '../../lib/home-editorial.mjs';
+import { homepageFeaturePreview, stagingHomeFeatureFeedEnabled } from '../../lib/home-feature-feed.mjs';
+import { liveEditorialFeedEnabled, readLiveEditorialPreviewFeed } from '../../lib/live-editorial-preview-feed.mjs';
+import { getWordPressMenu, publicNavigation } from '../../lib/wordpress-menu.ts';
+import { previewPublicPaths } from '../../lib/preview-public-paths.ts';
+
+const { exactRecord } = Astro.props;
+const exactEditorial = exactRecord ? extractHomeEditorial(exactRecord) : null;
+if (exactRecord && liveEditorialFeedEnabled() && stagingHomeFeatureFeedEnabled()) {
+  throw new Error('Choose one homepage editorial feed preview source');
+}
+const featureFeed = exactRecord && liveEditorialFeedEnabled()
+  ? await readLiveEditorialPreviewFeed() : await homepageFeaturePreview();
+const latestFeatureDate = featureFeed.cards[0]?.date ?? 'unknown';
+const staleFeatures = featureFeed.freshness.stale;
+const cmsNavigation = exactRecord ? publicNavigation((await getWordPressMenu('PRIMARY')).items, previewPublicPaths) : null;
+const exactPath = (href: string) => {
+  if (!exactRecord) return href.startsWith('/pilot/') ? href : `https://www.everytip.co.uk${href}`;
+  const mapped: Record<string, string> = {
+    '/pilot/value-bet-tips-dark-horses/': '/value-bet-tips-dark-horses.html',
+    '/pilot/racecourses/kempton-racing-tips/': '/racecourses/kempton-racing-tips',
+    '/pilot/roundup/': '/best-paypal-betting-sites.html',
+  };
+  return mapped[href] ?? href;
+};
+
+const tipLinks = [
+  ['Football correct score tips', '/football-correct-score-tips.html'],
+  ['Dark Horse value tips', '/pilot/value-bet-tips-dark-horses/'],
+  ['Channel 4 racing tips', '/channel-4-racing-tips-morning-line.html'],
+  ['Ireland horse racing tips', '/irish-horse-racing-tips.html'],
+  ['Templegate’s tips', '/templegates-tips.html'],
+  ['Lucky 15 tips for today', '/lucky-15-tips.html'],
+  ['Under/over 2.5 goals tips', '/over-2-5-goals-tips.html'],
+  ['1X2 betting tips', '/1x2-betting-tips.html'],
+  ['Greyhound tips', '/greyhound-tips.html'],
+  ['Cricket betting tips', '/cricket-betting-tips.html'],
+  ['Football accumulator tips', '/football-accumulator-tips.html'],
+  ['Kempton racing tips', '/pilot/racecourses/kempton-racing-tips/'],
+];
+
+const quickLinks = [
+  ['Newsletter', '#newsletter'],
+  ['Free tipsters', '#free-tips'],
+  ['Pro tipsters', '#latest-guides'],
+  ['Free bets', '#offers'],
+  ['Best streams', '#latest-guides'],
+];
+---
+<!doctype html>
+<html lang="en-GB" class="design-refresh">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="everytip-preview" content="not-for-publication" />
+    {exactRecord?.seo?.metaDesc && <meta name="description" content={exactRecord.seo.metaDesc} />}
+    <title>{exactRecord?.seo?.title || 'EveryTip homepage | template preview'}</title>
+  </head>
+  <body class="home-preview">
+    <div class="preview-banner">{exactRecord ? `Exact homepage preview · staging page modified ${exactRecord.modified?.slice(0, 10) || 'unknown'} · newest featured post ${latestFeatureDate}${staleFeatures ? ` (${featureFeed.freshness.ageDays} days old; feed stale as of ${featureFeed.freshness.asOfDate} Europe/Rome)` : ''} · editorial claims need review · no active offers or tips` : 'Homepage template preview · sample editorial content · no active offers or tips'}</div>
+    <header class:list={['home-header', 'wrap', { 'cms-nav': !!cmsNavigation }]}>
+      <a href={exactRecord ? '/' : '/pilot/home/'} aria-label="EveryTip homepage"><img src="https://www.everytip.co.uk/wp-content/uploads/2017/07/EveryTip-300x80.png" alt="EveryTip" width="308" height="80" /></a>
+      <nav aria-label={exactRecord ? 'WordPress primary navigation' : 'Template previews'}>
+        {cmsNavigation ? cmsNavigation.map((item) => item.children.length ? <details class="home-nav-group"><summary>{item.href ? <a href={item.href}>{item.label}</a> : item.label}</summary><div>{item.children.map((child) => child.href && <a href={child.href}>{child.label}</a>)}</div></details> : item.href && <a href={item.href}>{item.label}</a>) : <><a href={exactPath('/pilot/value-bet-tips-dark-horses/')}>Dark Horse pilot</a><a href={exactPath('/pilot/roundup/')}>Roundup pilot</a></>}
+      </nav>
+    </header>
+    <main class="home-main wrap">
+      <section class="home-hero" aria-labelledby="home-title">
+        <h1 id="home-title">All Your Favourite Free Betting Tips In One Place</h1>
+        <a class="home-enter" href="#free-tips">Explore free betting tips</a>
+      </section>
+
+      <div id="offers"><HomeOfferLadder /></div>
+
+      <nav class="home-quick-links" aria-label="Explore EveryTip">
+        {quickLinks.map(([label, href]) => <a href={href}>{label}</a>)}
+      </nav>
+
+      <section id="newsletter" class="home-newsletter" aria-labelledby="newsletter-title">
+        <p class="kicker">EveryTip newsletter</p>
+        <h2 id="newsletter-title">The best tips and offers in your inbox</h2>
+        <p>Horse racing, football and other free tips, plus timely offer news. The existing ConvertBox form remains in place until the email migration is ready.</p>
+        <span class="home-newsletter-preview">Newsletter form placement preview</span>
+      </section>
+
+      <section class="home-section" aria-labelledby="features-title">
+        <div class="home-section-heading"><h2 id="features-title">Columnist Articles</h2><span>{featureFeed.sourceMode === 'live-public-rest-columnist-review' ? `Live REST review · dated columns · newest ${latestFeatureDate}` : staleFeatures ? `Dated articles · newest ${latestFeatureDate} · ${featureFeed.freshness.ageDays} days old` : featureFeed.sourceMode === 'fresh-staging-wpgraphql-preview' ? `Staging feed · newest post ${latestFeatureDate}` : `Dated WordPress snapshot ${featureFeed.capturedAt.slice(0, 10)}`}</span></div>
+        <div class="home-feature-grid">
+          {featureFeed.cards.map((article) => <article class="home-feature-card">
+            <span>{article.type}</span>
+            <h3>{article.title}</h3>
+            <p>{article.description}</p>
+            {featureFeed.sourceMode === 'live-public-rest-columnist-review' ? <a class="home-text-link" href={article.uri}>Read dated column preview</a> : <span class="home-text-link">Article link withheld in preview</span>}
+          </article>)}
+        </div>
+      </section>
+
+      <section class="home-section home-intro" aria-labelledby="intro-title">
+        <h2 id="intro-title">Free Betting Tips Published Every Day On EveryTip</h2>
+        {exactEditorial ? <><p class="home-source-note">Dated WordPress editorial snapshot. Sports coverage and named tipsters require verification before launch; legacy commercial links are withheld.</p><div set:html={exactEditorial.html} /></> : <><p>EveryTip brings together free predictions for horse racing, football, greyhounds, cricket and more. This introduction and its internal links stay editable in WordPress, while Astro handles the layout.</p><p>The home template will preserve the existing search-focused copy rather than replacing it wholesale. We will migrate and check the current internal links before launch.</p><p class="home-commercial-example">In-copy commercial link preview: <strong>🔎 View the Betfred offer ↗</strong><small>#Ad · Orange underline and clear destination; this sample is deliberately not clickable.</small></p></>}
+      </section>
+
+      <section id="free-tips" class="home-section" aria-labelledby="tips-title">
+        <div class="home-section-heading"><h2 id="tips-title">Browse Free Betting Tips</h2><span>Browse by sport and tipster · current selections not verified in preview</span></div>
+        <div class="home-tip-grid">
+          {tipLinks.map(([label, href]) => <a href={exactPath(href)}>{label}<span aria-hidden="true">→</span></a>)}
+        </div>
+        <a class="home-section-button" href={exactRecord ? '/free-betting-tips' : 'https://www.everytip.co.uk/free-betting-tips'}>See all free betting tips</a>
+      </section>
+
+      <div id="latest-guides" class="home-two-column">
+        <section class="home-list-panel" aria-labelledby="reviews-title">
+          <h2 id="reviews-title">Bookmaker Reviews</h2>
+          <ul><li>Betway review</li><li>NetBet Sportsbook review</li><li>Bet365 review</li><li>QuinnBet review</li></ul>
+          <p class="home-panel-note">Live links and ordering will come from WordPress.</p>
+        </section>
+        <section class="home-list-panel" aria-labelledby="guides-title">
+          <h2 id="guides-title">Betting Guides</h2>
+          <ul><li>Best PayPal betting sites</li><li>Best odds guaranteed bookmakers</li><li>Betting sites with cash-out</li><li>Best betting sites for accumulators</li></ul>
+          <p class="home-panel-note">Eric can edit guide text and placement in WordPress.</p>
+        </section>
+      </div>
+
+      <section class="home-section home-recommended" aria-labelledby="recommended-title">
+        <div class="home-section-heading"><h2 id="recommended-title">Recommended Bookmakers</h2><span>Same central offer records as the ladder</span></div>
+        <div class="home-recommended-grid">
+          {featuredOfferPreview.slice(0, 3).map((offer) => <article style={`--recommend-brand:${offer.brandColor}`}>
+            <div class="home-recommended-logo"><img src={offer.logoUrl} alt={offer.bookmaker} loading="lazy" /></div>
+            <h3>{offer.headline}</h3>
+            <p>Approved compact terms from the ACF offer record will appear here.</p>
+            <span>Offer preview</span>
+          </article>)}
+        </div>
+      </section>
+    </main>
+    <SiteFooter />
+  </body>
+</html>
+<style>
+  .home-header.cms-nav{display:grid;justify-items:center;gap:8px;min-height:0;padding:12px 0 10px}
+  .home-header.cms-nav nav{position:static;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 18px;max-width:100%;font-size:12px}
+  .home-nav-group{position:relative}
+  .home-nav-group summary{cursor:pointer;list-style:none;color:#1d5684;font-weight:750}
+  .home-nav-group summary::-webkit-details-marker{display:none}
+  .home-nav-group>div{position:absolute;z-index:15;left:0;top:100%;min-width:200px;display:grid;gap:7px;padding:10px;background:#fff;box-shadow:0 8px 24px #173b5a30}
+  .home-nav-group:not([open])>div{display:none}
+  .home-nav-group a{white-space:nowrap}
+  @media(max-width:600px){.home-nav-group>div{left:auto;right:0;max-width:min(80vw,300px)}.home-nav-group a{white-space:normal}}
+</style>

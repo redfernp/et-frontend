@@ -1,0 +1,90 @@
+---
+import '../styles/global.css';
+import '../styles/design-refresh.css';
+import FeaturedOffersSidebar from '../components/FeaturedOffersSidebar.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { publicMenuFallback, publicNavigation, type NavigationItem } from '../lib/menu-tree';
+import { resolvePreviewRobots } from '../lib/preview-robots.mjs';
+type Seo = { title?: string; description?: string; canonical?: string | null; robots?: string };
+interface Props {
+  title: string;
+  sidebar?: boolean;
+  withholdSidebarOffers?: boolean;
+  wide?: boolean;
+  relatedTopic?: string;
+  robots?: string;
+  previewMessage?: string;
+  footerMessage?: string;
+  publicPage?: boolean;
+  previewOnly?: boolean;
+  seo?: Seo | null;
+  menuItems?: NavigationItem[] | null;
+  verifiedPublicPaths?: string[];
+}
+const { title, sidebar = false, withholdSidebarOffers = false, wide = false, relatedTopic = 'racing', robots = 'noindex,nofollow', previewMessage = 'Template preview only · sample content · no active offers or tips', publicPage = false, previewOnly = false, seo = null, menuItems = null, verifiedPublicPaths = [] } = Astro.props;
+const resolvedTitle = seo?.title?.trim() || (publicPage ? title : `${title} | EveryTip template preview`);
+const resolvedRobots = resolvePreviewRobots({ previewOnly, publicPage, robots, seoRobots: seo?.robots });
+const publicItems = publicPage ? publicNavigation(menuItems ?? publicMenuFallback, verifiedPublicPaths) : [];
+const publicPaths = new Set(verifiedPublicPaths);
+---
+<!doctype html>
+<html lang="en-GB" class="design-refresh">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content={resolvedRobots} />
+    {(!publicPage || previewOnly) && <meta name="everytip-preview" content="not-for-publication" />}
+    {seo?.description && <meta name="description" content={seo.description} />}
+    {publicPage && !previewOnly && seo?.canonical && <link rel="canonical" href={seo.canonical} />}
+    <title>{resolvedTitle}</title>
+  </head>
+  <body>
+    {(!publicPage || previewOnly) && <div class="preview-banner">{previewMessage}</div>}
+    <header class="site-header">
+      <div class="wrap header-inner">
+        {publicPage ? (publicPaths.has('/') ? <a class="brand" href="/" aria-label="EveryTip home"><span class="brand-wordmark">Every<span>Tip</span></span></a> : <span class="brand"><span class="brand-wordmark">Every<span>Tip</span></span></span>) : <a class="brand" href="/pilot/home/" aria-label="EveryTip pilot home"><span class="brand-wordmark">Every<span>Tip</span></span></a>}
+        {publicPage ? <nav aria-label="Primary navigation" class="public-nav">
+          {publicItems.map((item) => item.children.length ? <details class="public-nav-group">
+            <summary>{item.href ? <a href={item.href}>{item.label}</a> : item.label}</summary>
+            <div class="public-nav-children">{item.children.map((child) => child.href && <a href={child.href}>{child.label}</a>)}</div>
+          </details> : item.href && <a href={item.href}>{item.label}</a>)}
+        </nav> : <nav aria-label="Pilot navigation">
+          <a href="/pilot/home/">Home</a>
+          <a href="/pilot/free-betting-tips/">Free tips</a>
+          <a href="/pilot/bet365-review/">Bookie review</a>
+          <a href="/pilot/best-paypal-betting-sites/">PayPal guide</a>
+          <a href="/pilot/professional-winning-tipsters-comparison-table/">Paid tipsters</a>
+          <a href="/pilot/value-bet-tips-dark-horses/">Dark Horse tips</a>
+          <a href="/pilot/racecourses/kempton-racing-tips/">Kempton</a>
+        </nav>}
+      </div>
+    </header>
+    <div class:list={['wrap', 'page-shell', { 'with-sidebar': sidebar, 'wide-page': wide }]}>
+      <main id="content"><slot /></main>
+      {sidebar && <aside class="sidebar" aria-label="Related content">
+        {withholdSidebarOffers ? <section class="sidebar-card"><h2>Offers withheld</h2><p>Bookmaker headlines, terms and prices are not part of this dated article preview. Check current verified offers separately.</p><a href="/english-premier-league-predictions-for-saturday">John Newsome’s column →</a><a href="/free-betting-tips">Browse free tips →</a></section> : <FeaturedOffersSidebar />}
+        {!publicPage && (relatedTopic === 'football' ? <section class="sidebar-card">
+          <h2>Football tips</h2>
+          <p>Find John’s previews and more football predictions.</p>
+          <a href="/pilot/english-premier-league-predictions-for-saturday/">John Newsome’s column →</a>
+          <a href="/pilot/free-betting-tips/">Browse all free tips →</a>
+        </section> : <section class="sidebar-card">
+          <h2>Horse racing tips</h2>
+          <p>Browse today’s selections and course guides.</p>
+          <a href="/pilot/value-bet-tips-dark-horses/">Dark Horse value tips →</a>
+          <a href="/pilot/racecourses/kempton-racing-tips/">Kempton racing tips →</a>
+        </section>)}
+      </aside>}
+    </div>
+    <SiteFooter preview={!publicPage} verifiedPublicPaths={verifiedPublicPaths} />
+  </body>
+</html>
+<style>
+  .public-nav-group{position:relative;color:#fff;font-weight:700}
+  .public-nav-group summary{cursor:pointer;list-style:none}
+  .public-nav-group summary::-webkit-details-marker{display:none}
+  .public-nav-children{position:absolute;z-index:10;top:100%;left:0;min-width:210px;padding:10px;background:#183f5f;box-shadow:0 6px 16px #183f5f35;display:grid;gap:7px}
+  .public-nav-group:not([open]) .public-nav-children{display:none}
+  .public-nav a:focus-visible,.public-nav summary:focus-visible{outline:3px solid var(--et-orange);outline-offset:3px}
+  @media(max-width:600px){.public-nav-children{position:static;box-shadow:none}}
+</style>

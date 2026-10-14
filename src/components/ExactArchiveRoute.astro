@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { archivePagePath } from '../lib/archive-route-data.mjs';
+
+type ArchiveEntry = { uri: string; title: string; date?: string };
+type ArchiveData = {
+  path: string; title: string; template: string; page: number; sourceName: string | null;
+  sourceCount: number; entries: ArchiveEntry[]; hasPrevious: boolean; hasNext: boolean;
+  snapshotDate: string; legacyIndexability: string; legacyCanonical: string | null;
+};
+const { archive } = Astro.props as { archive: ArchiveData };
+if (Astro.url.pathname.replace(/\/$/, '') !== archive.path) throw new Error(`Archive route mismatch: ${archive.path}`);
+const section = archive.template === 'author-archive' ? 'Author archive'
+  : archive.template === 'tag-archive' ? 'Tag archive'
+  : archive.template === 'category-hub' ? 'Category hub' : 'Reviews archive';
+---
+<BaseLayout title={`${archive.title} — exact-URL preview`} wide={true} robots="noindex, nofollow" previewMessage="Exact archive URL test · archive entries are not launch-approved">
+  <article class="exact-archive">
+    <p class="archive-kicker">{section} · exact legacy URL</p>
+    <h1>{archive.title}</h1>
+    <p class="archive-notice">This local archive is a route and content-source preview. It is noindex, and article links and commercial offers are disabled until editorial, taxonomy and SEO parity are checked.</p>
+    <div class="archive-meta"><span>{archive.sourceName ?? 'WordPress source not resolved'}</span><span>Page {archive.page}</span><span>{archive.sourceCount} source posts loaded</span></div>
+    {archive.entries.length ? <div class="archive-list">
+      {archive.entries.map((entry) => <article class="archive-entry">
+        <time datetime={entry.date?.slice(0, 10)}>{entry.date?.slice(0, 10) || 'Date unavailable'}</time>
+        <h2>{entry.title}</h2>
+        <code>{entry.uri}</code>
+      </article>)}
+    </div> : <p class="archive-empty">No matching entries were returned for this page in the staging snapshot. Hold this route for verification.</p>}
+    {(archive.hasPrevious || archive.hasNext) && <nav class="archive-pagination" aria-label="Archive pages">
+      {archive.hasPrevious ? <a href={archivePagePath(archive.path, archive.page - 1)} rel="prev">← Newer posts</a> : <span />}
+      {archive.hasNext ? <a href={archivePagePath(archive.path, archive.page + 1)} rel="next">Older posts →</a> : <span />}
+    </nav>}
+    <p class="archive-source">Staging snapshot {archive.snapshotDate?.slice(0, 10)} · Live crawl: {archive.legacyIndexability} · Legacy canonical: {archive.legacyCanonical || 'none recorded'}. Current local robots: noindex, nofollow.</p>
+  </article>
+</BaseLayout>
+<style>
+  .exact-archive{max-width:1020px;margin:auto;padding:32px;background:#fff;color:#173b58}
+  .archive-kicker{color:#b65306;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  .exact-archive h1{margin:0 0 20px;line-height:1.16}
+  .archive-notice{padding:14px 18px;border-left:4px solid var(--et-orange);background:#fff5e9;color:#594430}
+  .archive-meta{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0}
+  .archive-meta span{padding:6px 10px;background:#eaf2f8;color:#1d527b;font-size:12px;font-weight:700}
+  .archive-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .archive-entry{min-width:0;padding:18px;border:1px solid #d8e6ee;border-top:3px solid #246da7;background:#fff}
+  .archive-entry time{color:#9e4d08;font-size:12px;font-weight:800}
+  .archive-entry h2{margin:7px 0 11px;font-size:19px;line-height:1.3}
+  .archive-entry code{color:#667c8e;font-size:11px;overflow-wrap:anywhere}
+  .archive-empty{padding:22px;border:1px dashed #bbcfdb}
+  .archive-pagination{display:flex;justify-content:space-between;gap:12px;margin-top:22px}
+  .archive-pagination a{padding:9px 14px;border:1px solid #2a6fa2;color:#175988;text-decoration:none;font-weight:700}
+  .archive-source{margin-top:30px;padding-top:12px;border-top:1px solid #dce6eb;color:#647986;font-size:12px;overflow-wrap:anywhere}
+  @media(max-width:650px){.exact-archive{padding:20px}.archive-list{grid-template-columns:1fr}}
+</style>

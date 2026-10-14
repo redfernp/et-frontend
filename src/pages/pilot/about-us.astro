@@ -1,0 +1,13 @@
+---
+import UtilityPage from '../../components/UtilityPage.astro';
+const sections = [
+  { id: 'story', title: 'Our story', text: 'EveryTip launched in 2013 and covers horse racing, football and other sports. The final page should tell that story in JP’s own voice, with the current team and coverage checked before publication.' },
+  { id: 'tips', title: 'How our tips are produced', text: 'Explain which tips are authored by a columnist, which come from external publications and which are generated from EveryTip’s own input files and algorithm. Each displayed selection should carry its source and publication date.' },
+  { id: 'reviews', title: 'How reviews and offers work', text: 'Reviews should show who tested a product, when, what was checked and what did not work well. Commercial offers are separate centrally managed records; an affiliate relationship must not overwrite editorial criticism.' },
+  { id: 'corrections', title: 'Corrections and updates', text: 'Give readers a clear way to report an error. Eric can update editorial copy in WordPress, while offer terms are corrected once in the shared ACF record and reflected everywhere that offer appears.' },
+];
+---
+<UtilityPage title="About EveryTip" eyebrow="People and editorial standards" deck="Meet the people behind the tips and reviews, and understand where our predictions and commercial information come from." note="The current About page contains historical claims and performance promises that need a full editorial audit. This layout does not repeat or endorse those claims." sections={sections}>
+  <aside class="about-author"><div class="about-author-mark">JP</div><div><h2>Chief Editor</h2><p>JP’s approved biography, photograph and current responsibilities will be managed as an author record and reused across guide and review pages.</p><a href="/pilot/author/jnewsome/">See an author archive example →</a></div></aside>
+</UtilityPage>
+<style>.about-author{display:flex;gap:15px;padding:18px;background:#eaf3f9;border-left:4px solid var(--et-orange)}.about-author-mark{display:grid;place-items:center;flex:none;width:58px;height:58px;border-radius:50%;background:var(--et-blue);color:#fff;font-size:19px;font-weight:900}.about-author h2{margin:0 0 5px}.about-author p{margin:0 0 8px;font-size:13px}.about-author a{font-size:12px;font-weight:800}</style>

@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { assessContent, latestContentSnapshot, previewHtml, previewTitle, previewUris, withholdsSnapshotTipTables } from '../../lib/migration-preview.mjs';
+
+export async function getStaticPaths() {
+  const snapshot = await latestContentSnapshot();
+  if (!snapshot) return [];
+  const records = [...snapshot.posts, ...snapshot.pages];
+  return previewUris.flatMap((uri) => {
+    const record = records.find((node) => node.uri === uri);
+    return record && !assessContent(record).length
+      ? [{ params: { path: uri.slice(1) }, props: { record, snapshotDate: snapshot.generatedAt } }]
+      : [];
+  });
+}
+
+const { record, snapshotDate } = Astro.props;
+const body = previewHtml(record);
+const title = previewTitle(record);
+---
+<BaseLayout title={`${title} — migration preview`} wide={true} robots="noindex, nofollow" previewMessage="Staging WordPress content · links disabled · local migration preview">
+  <article class="migration-preview">
+    <p class="kicker">Content migration test</p>
+    <h1>{title}</h1>
+    <div class="migration-preview-meta"><span>Exact WordPress URL: <code>{record.uri}</code></span><span>Snapshot: {snapshotDate.slice(0, 10)}</span><span>Links and offers disabled</span></div>
+    <p class="migration-preview-note">This preview tests real WordPress body content. It is not publication-ready: links, offer terms, images, layout and SEO metadata still need URL-by-URL review.</p>
+    {withholdsSnapshotTipTables(record) && <p class="migration-preview-note" role="status">Tips table feed unavailable in this preview. Historical Ninja Tables rows have been withheld; no current selections are shown.</p>}
+    <div class="migration-preview-body" set:html={body} />
+  </article>
+</BaseLayout>
+<style>
+  .migration-preview{margin:auto;max-width:980px;padding:32px;background:#fff}
+  .migration-preview-meta{display:flex;flex-wrap:wrap;gap:7px 16px;color:#5c6d7a;font-size:12px}
+  .migration-preview-meta code{overflow-wrap:anywhere}
+  .migration-preview-note{padding:13px 16px;border-left:4px solid var(--et-orange);background:#fff6ec;color:#514639}
+  .migration-preview-body{line-height:1.7;overflow-wrap:anywhere}
+  .migration-preview-body :global(img){max-width:100%;height:auto}
+  .migration-preview-body :global(figure){margin:22px 0}
+  .migration-preview-body :global(table){display:block;max-width:100%;overflow-x:auto}
+  .migration-preview-body :global(h2){margin-top:34px}
+  @media(max-width:600px){.migration-preview{padding:20px}}
+</style>

@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RoundupGuideShell from '../components/RoundupGuideShell.astro';
+import { builderRoundupPreviewPaths } from '../lib/builder-roundup-preview.mjs';
+import { getWordPressMenu } from '../lib/wordpress-menu.ts';
+import { previewPublicPaths } from '../lib/preview-public-paths.ts';
+
+export const getStaticPaths = builderRoundupPreviewPaths;
+const { record, editorial, draft, snapshotDate, crawlRow } = Astro.props;
+if (Astro.url.pathname.replace(/\/$/, '') !== record.uri) throw new Error(`Roundup route mismatch: ${record.uri}`);
+const menuItems = (await getWordPressMenu('PRIMARY')).items;
+---
+<BaseLayout title={`${record.title} — roundup preview`} wide={true} publicPage previewOnly menuItems={menuItems} verifiedPublicPaths={previewPublicPaths} seo={{ title: record.seo?.title, description: record.seo?.metaDesc }} previewMessage="Exact roundup migration preview · old offers withheld · not for publication">
+  <RoundupGuideShell
+    exactPath
+    title={record.title}
+    deck={`The approved EveryTip roundup layout applied to the ${editorial.topic} guide. Bookmaker recommendations and offers await current ACF records and editorial verification.`}
+    byline={draft ? `WordPress source ${record.databaseId} · staging Gutenberg draft ${draft.draftId} · captured ${draft.modified.slice(0, 10)} · exact legacy path` : `WordPress source ${record.databaseId} · snapshot ${snapshotDate.slice(0, 10)} · exact legacy path`}
+    image={editorial.hero?.src}
+    imageAlt={editorial.hero?.alt || ''}
+    disclosure="Local content-migration preview only. Legacy rankings, bookmaker modules, affiliate links and offer terms are withheld; no current recommendation is implied."
+    toc={[{ href: '#guide-explanation', label: 'Guide explanation' }, { href: '#migration-status', label: 'Migration status' }]}
+  >
+    {!draft && <div class="roundup-intro" set:html={editorial.intro} />}
+    <section class="ranked-pending">
+      <p class="kicker">Bookmaker comparison</p>
+      <h2>Ranked offer cards pending verification</h2>
+      <p>This guide’s commercial cards will be driven by ordered WordPress ACF bookmaker and offer references, with approved terms supplied centrally. No older sign-up links or promotions are active in this preview.</p>
+    </section>
+    <section id="guide-explanation" class="roundup-body">
+      <p class="kicker">Existing editorial guide</p>
+      <div set:html={draft?.content ?? editorial.body} />
+    </section>
+    <aside id="migration-status" class="roundup-status">{editorial.withheldNodes} legacy ranking/module elements were withheld. Live crawl: {crawlRow.indexability}; intended canonical: {crawlRow.canonical || 'none recorded'}. This is not publication approval.</aside>
+  </RoundupGuideShell>
+</BaseLayout>
+<style>
+  .roundup-intro,.roundup-body,.ranked-pending,.roundup-status{width:min(100%,1000px);margin-inline:auto}
+  .roundup-intro,.roundup-body{line-height:1.72;color:#294861}
+  .roundup-intro{margin-top:25px}
+  .roundup-intro :global(p),.roundup-body :global(p){max-width:none}
+  .roundup-body{padding-top:26px;border-top:1px solid #dce7ed}
+  .roundup-body :global(h2){margin:34px 0 13px;color:#183f5f;font-size:clamp(24px,2.8vw,32px)}
+  .roundup-body :global(h3){margin:26px 0 10px;color:#205c89;font-size:21px}
+  .ranked-pending{margin-top:27px;margin-bottom:30px;padding:23px 26px;border:1px solid #d7e5ed;border-top:5px solid var(--et-orange);background:#f7fafc}
+  .ranked-pending h2{margin:0 0 8px;color:#173f5e;font-size:25px}
+  .ranked-pending p:last-child{margin:0;line-height:1.55}
+  .roundup-status{margin-top:35px;padding:16px 20px;border-left:4px solid #286da5;background:#edf5fa;color:#4c6272;font-size:13px}
+  @media(max-width:600px){.ranked-pending{padding:18px}}
+</style>

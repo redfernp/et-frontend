@@ -1,0 +1,12 @@
+---
+import NewsletterLanding from '../components/NewsletterLanding.astro';
+import { newsletterPreviewPaths } from '../lib/newsletter-preview-paths.mjs';
+import { getWordPressMenu } from '../lib/wordpress-menu.ts';
+import { previewPublicPaths } from '../lib/preview-public-paths.ts';
+
+export const getStaticPaths = newsletterPreviewPaths;
+const { source } = Astro.props;
+if (Astro.url.pathname.replace(/\/$/, '') !== source.uri) throw new Error('Newsletter landing route mismatch');
+const menuItems = (await getWordPressMenu('PRIMARY')).items;
+---
+<NewsletterLanding variant="extended" exactRecord={source} menuItems={menuItems} verifiedPublicPaths={previewPublicPaths} />

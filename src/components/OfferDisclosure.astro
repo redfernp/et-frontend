@@ -1,0 +1,40 @@
+---
+import { offerDisclosureForSlot } from '../lib/offer-disclosure.mjs';
+interface Props {
+  slot: { type: string; offerId: number; layout?: string; heading?: string };
+  offers: unknown[];
+  approvedIds?: Set<number>;
+  approvedTermsUrls?: Set<string>;
+  country?: string;
+  now?: Date;
+}
+const { slot, offers, approvedIds = new Set<number>(), approvedTermsUrls = new Set<string>(), country = 'GB', now = new Date() } = Astro.props;
+const disclosure = offerDisclosureForSlot(slot, offers, { approvedIds, approvedTermsUrls, country, now });
+---
+{disclosure ? <aside class="offer-disclosure" aria-label="Bookmaker offer disclosure">
+  <p class="offer-disclosure-label">Advertisement · 18+</p>
+  <h3>{disclosure.headline}</h3>
+  <p class="offer-disclosure-short">{disclosure.shortTerms}</p>
+  {disclosure.termsMode === 'on-page' ? <details>
+    <summary>Full offer terms</summary>
+    <p>{disclosure.fullTerms}</p>
+  </details> : disclosure.termsMode === 'official-link' ? <p class="offer-disclosure-link"><a href={disclosure.officialHref!} target="_blank" rel="noopener noreferrer">Read the bookmaker’s full offer terms</a></p> : null}
+  <span class="offer-disclosure-disabled" aria-label="Sign-up link disabled">Sign-up link withheld</span>
+</aside> : <aside class="offer-disclosure offer-disclosure-withheld" aria-label="Offer unavailable">
+  <strong>Offer unavailable</strong>
+  <p>The central offer, approved short terms and audience settings must be verified before this placement can appear.</p>
+</aside>}
+<style>
+  .offer-disclosure{border:1px solid #cbd9e5;border-left:5px solid var(--et-orange);border-radius:7px;background:#fff;padding:18px;margin:22px 0;display:grid;gap:10px}
+  .offer-disclosure-label{margin:0;color:var(--et-orange-ink);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+  .offer-disclosure h3{margin:0;color:#183f5f;font-size:21px}
+  .offer-disclosure-short,.offer-disclosure details p,.offer-disclosure-withheld p{margin:0;line-height:1.55}
+  .offer-disclosure details{border-top:1px solid #dce7ef;padding-top:9px}
+  .offer-disclosure summary{cursor:pointer;color:var(--et-blue-ink);font-weight:800}
+  .offer-disclosure details p{padding-top:9px;white-space:pre-line}
+  .offer-disclosure-link{margin:0}
+  .offer-disclosure-link a{font-weight:800;text-decoration:underline;text-underline-offset:3px}
+  .offer-disclosure-disabled{justify-self:start;background:#e9eef2;border-radius:4px;color:#52606b;font-weight:800;font-size:13px;padding:9px 12px}
+  .offer-disclosure-withheld{background:#f5f9fc;color:#315371}
+  .offer-disclosure a:focus-visible,.offer-disclosure summary:focus-visible{outline:3px solid var(--et-orange);outline-offset:3px}
+</style>

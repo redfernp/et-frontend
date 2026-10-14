@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { splitOfferSlots } from '../../lib/offer-slots.mjs';
+import { stagingOfferSlotFixture } from '../../lib/offer-slot-fixture.mjs';
+import { previewHtml } from '../../lib/migration-preview.mjs';
+
+const fixture = await stagingOfferSlotFixture();
+const pieces = fixture ? splitOfferSlots(fixture.content) : [];
+---
+<BaseLayout title="Managed offer-slot roundtrip" wide={true} robots="noindex,nofollow" previewMessage="Staging-only integration check · no live offer or affiliate link">
+  <article class="slot-probe">
+    <p class="kicker">WordPress → WPGraphQL → Astro</p>
+    <h1>Managed offer-slot test</h1>
+    <p>This local preview reads the rendered content of an unpublished staging Gutenberg draft. Its offer reference came through WPGraphQL, but the offer itself is withheld until the central record has verified terms, eligibility, dates, destination and explicit publication approval.</p>
+    {fixture ? <>
+      <p class="probe-meta">Staging draft {fixture.postId} · captured {fixture.capturedAt.slice(0, 10)} · noindex</p>
+      <div class="probe-body">{pieces.map((piece) => piece.type === 'html'
+        ? piece.html.trim() && <div set:html={previewHtml({ uri: '/staging-only-offer-slot-roundtrip.html', content: piece.html })} />
+        : <div class="withheld-slot"><strong>Offer placement recognised</strong><span>Central offer ID {piece.offerId} · {piece.layout} layout</span><p>Not rendered or linked: this staging offer is still a draft and has no publication approval.</p></div>)}</div>
+    </> : <p class="withheld-slot">No local staging snapshot yet. Run the authenticated roundtrip probe to populate this preview.</p>}
+  </article>
+</BaseLayout>
+<style>
+  .slot-probe{max-width:920px;margin:auto;padding:32px;background:white}
+  .slot-probe h1{margin:0 0 14px;color:var(--et-blue)}
+  .slot-probe>p{line-height:1.65}
+  .probe-meta{font-size:13px;color:#586b7a}
+  .probe-body{display:grid;gap:16px;margin-top:24px}
+  .withheld-slot{border:1px solid #c9d8e7;border-left:5px solid var(--et-orange);border-radius:7px;background:#f5f9fc;padding:18px;display:grid;gap:7px}
+  .withheld-slot span{color:#315371}
+  .withheld-slot p{margin:0}
+  @media(max-width:600px){.slot-probe{padding:20px}}
+</style>

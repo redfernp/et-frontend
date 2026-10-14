@@ -1,0 +1,12 @@
+---
+import Home from './pilot/home.astro';
+import { latestContentSnapshot } from '../lib/migration-preview.mjs';
+import { priorityPagePreviewRecord } from '../lib/staging-priority-page-cms.mjs';
+
+const snapshot = await latestContentSnapshot();
+if (!snapshot) throw new Error('Exact homepage preview requires the dated WordPress snapshot');
+const exactRecord = [...snapshot.posts, ...snapshot.pages].find((record) => record.uri === '/');
+if (!exactRecord) throw new Error('Missing exact WordPress homepage');
+const pageRecord = await priorityPagePreviewRecord(exactRecord);
+---
+<Home exactRecord={pageRecord} />

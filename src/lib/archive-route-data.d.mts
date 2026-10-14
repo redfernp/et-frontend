@@ -1,0 +1,23 @@
+export type ArchiveEntry = { databaseId?: number; uri: string; title: string; date?: string };
+export type ArchiveRoute = {
+  path: string;
+  title: string;
+  template: string;
+  legacyIndexability: string;
+  legacyCanonical: string | null;
+  key: string;
+  page: number;
+  sourceName: string | null;
+  sourceCount: number;
+  entries: ArchiveEntry[];
+  hasPrevious: boolean;
+  hasNext: boolean;
+  snapshotDate: string;
+};
+export const ARCHIVE_PAGE_SIZE: number;
+export function parseCrawlCsv(source: string): Record<string, string>[];
+export function archiveRouteKey(path: string): string;
+export function archiveRoutePage(path: string): number;
+export function archivePagePath(path: string, page: number): string;
+export function buildArchiveRoutes(crawl: Record<string, string>[], snapshot: { generatedAt?: string; blogPosts: ArchiveEntry[]; archives: Record<string, { name: string; posts: ArchiveEntry[] } | null> }, occupiedPaths?: Set<string>): ArchiveRoute[];
+export function loadArchiveRoutes(): Promise<ArchiveRoute[]>;

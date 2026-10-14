@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import ColumnArchive from '../../../../components/ColumnArchive.astro';
+import { archiveEntriesForPage, archivePageCount, columnArchives } from '../../../../lib/column-archives';
+
+export function getStaticPaths() {
+  return Object.values(columnArchives).flatMap((archive) =>
+    Array.from({ length: archivePageCount(archive) - 1 }, (_, index) => {
+      const page = index + 2;
+      return { params: { column: archive.slug, page: String(page) }, props: { archive, page } };
+    }),
+  );
+}
+
+const { archive, page } = Astro.props;
+---
+<BaseLayout title={`${archive.pageTitle} — page ${page}`} sidebar={true} relatedTopic={archive.relatedTopic} robots="noindex,follow">
+  <ColumnArchive {...archive} entries={archiveEntriesForPage(archive, page)} page={page} totalPages={archivePageCount(archive)} />
+</BaseLayout>

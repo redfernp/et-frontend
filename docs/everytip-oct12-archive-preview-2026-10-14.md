@@ -1,0 +1,9 @@
+# 12 October extra-place article: dated exact-route preview
+
+Local preview only: `/extra-place-races-today-tips-12-october.html` (live WordPress post 91093). On 14 October 2026 a read-only public REST check verified its published ID, slug, exact path, published/modified timestamps, rendered-body SHA-256, all 14 six-column race rows, two model-analysis phrases and three original offer CTA positions. The source lock is executable with `node scripts/verify-oct12-extra-place-source.mjs` and fails closed if the original changes.
+
+The Astro page preserves all fourteen historical selections, forecast/tissue-price analysis and visible date. It is `noindex,nofollow`, labels the original bookmaker/place columns as unverified historical claims, and contains no `/go/` links, sign-up prompts or current-tip framing. The original how-to-bet instructions, active CTAs and offer terms are deliberately withheld. The preview is **not** current racing advice or approved public SEO parity: the live source is indexable with a different Yoast title, description and canonical.
+
+Focused tests and `npm run check` passed; a default `npm run build` emitted the exact `.html` asset. The same guarded design is now also implemented for `/extra-place-races-today-tips-11-october.html` (post 91076): all seven five-column historical rows and the original model/tissue analysis survive. Its separate source lock is checked with `node scripts/verify-oct11-extra-place-source.mjs`. Both routes are local noindex previews only.
+
+Together these add two of the 31 previously missing live-only paths, leaving 29 from the 13 October dated inventory. A full-domain switch still requires either reviewed exact routes or a tested WordPress-origin fallback for those 29, plus the separate owner-managed rewrite paths. Do not infer launch readiness from these extra preview assets.

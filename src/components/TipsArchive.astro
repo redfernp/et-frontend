@@ -1,0 +1,14 @@
+---
+import TipsTable from './TipsTable.astro';
+import type { Tip } from '../lib/pilot-data';
+const { rows } = Astro.props as { rows: Tip[] };
+const dates = [...new Set(rows.map((row) => row.published))].sort().reverse();
+---
+<section aria-labelledby="archive-heading" class="archive">
+  <h2 id="archive-heading">Previous tips</h2>
+  <p>Earlier selections stay visible and are grouped by publication date.</p>
+  {dates.length === 0 ? <p>No earlier selections yet.</p> : dates.map((date) => <details>
+    <summary>{new Date(`${date}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}</summary>
+    <TipsTable rows={rows.filter((row) => row.published === date)} idPrefix={`archive-${date}`} />
+  </details>)}
+</section>

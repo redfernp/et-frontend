@@ -1,0 +1,7 @@
+---
+import ExactWeeklyColumnArchive from '../components/ExactWeeklyColumnArchive.astro';
+import { archivePageEntries, weeklyColumnArchivePreview } from '../lib/weekly-column-archive.mjs';
+
+const archive = archivePageEntries(await weeklyColumnArchivePreview('saturday-horse-racing-tips'), 1);
+---
+<ExactWeeklyColumnArchive archive={archive} />

@@ -1,0 +1,15 @@
+---
+import type { Offer } from '../lib/pilot-data';
+const { offer, rank, bestFor, verdict } = Astro.props as { offer: Offer; rank: number; bestFor: string; verdict: string };
+---
+<article class="offer-card">
+  <span class="offer-rank" aria-label={`Rank ${rank}`}>{rank}</span>
+  <div class="offer-body">
+    <div class="offer-eyebrow">{offer.bookmaker} · {bestFor}</div>
+    <h3>{offer.headline}</h3>
+    <p>{verdict}</p>
+    <p class="compact-terms"><strong>Terms:</strong> {offer.compactTerms}</p>
+    <details><summary>Full offer terms</summary><p>{offer.fullTerms}</p></details>
+  </div>
+  <span class="offer-disabled">Preview only</span>
+</article>

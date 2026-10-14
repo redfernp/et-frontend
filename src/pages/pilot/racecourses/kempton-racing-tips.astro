@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TipsTable from '../../../components/TipsTable.astro';
+import TipsArchive from '../../../components/TipsArchive.astro';
+import { tipsForCourse } from '../../../lib/pilot-data';
+const rows = tipsForCourse('kempton');
+const latest = rows.map((row) => row.published).sort().reverse()[0];
+---
+<BaseLayout title="Kempton racing tips — pilot">
+  <article><p class="kicker">Racecourse guide</p><h1>Kempton racing tips</h1>
+    <p class="lede">The Kempton view filters the same selections used on the Dark Horse hub; “Kempton (AW)” and “KEMPTON” resolve to one course identity.</p>
+    <section class="kempton-course-facts" aria-labelledby="kempton-course-facts-title">
+      <div class="kempton-course-facts-heading"><p class="kicker">Course configuration</p><h2 id="kempton-course-facts-title">Kempton Polytrack</h2><p>All-weather · right-handed</p></div>
+      <div class="kempton-course-facts-grid"><div><h3>Inner course</h3><p>5f and 1m2f races</p></div><div><h3>Outer course</h3><p>6f, 7f, 1m, 1m3f, 1m4f and 2m races</p></div></div>
+      <p class="kempton-course-facts-note">Configuration supplied for this local preview; verify against a primary source before publication.</p>
+    </section>
+    <section><h2>Latest Kempton tips</h2><TipsTable rows={rows.filter((row) => row.published === latest)} idPrefix="kempton-latest" /></section>
+    <TipsArchive rows={rows.filter((row) => row.published !== latest)} />
+    <section class="editorial"><h2>About Kempton</h2><p>Editable racecourse copy, fixtures, travel information and course navigation will be separate WordPress fields or datasets. Fixtures will not be mixed into the predictions archive.</p></section>
+  </article>
+</BaseLayout>
+<style>
+  .kempton-course-facts{margin:27px 0 38px;padding:21px 24px;border:1px solid #dfe7ed;border-radius:10px;background:#f7fafc}
+  .kempton-course-facts-heading .kicker{margin:0 0 3px}
+  .kempton-course-facts h2{margin:0;color:#183f5f;font-size:25px}
+  .kempton-course-facts-heading>p:last-child{margin:3px 0 17px;color:#536574;font-size:14px}
+  .kempton-course-facts-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .kempton-course-facts-grid>div{padding:14px 16px;border-left:4px solid #f26800;border-radius:5px;background:#fff}
+  .kempton-course-facts-grid>div+div{border-left-color:#256dae}
+  .kempton-course-facts h3{margin:0 0 4px;color:#183f5f;font-size:16px}
+  .kempton-course-facts-grid p{margin:0;color:#334d60;font-size:14px}
+  .kempton-course-facts-note{margin:13px 0 0;color:#657581;font-size:11px}
+  @media(max-width:600px){.kempton-course-facts{padding:17px}.kempton-course-facts-grid{grid-template-columns:1fr}}
+</style>

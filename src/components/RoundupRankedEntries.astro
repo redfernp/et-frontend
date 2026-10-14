@@ -1,0 +1,35 @@
+---
+type Entry = { bestFor: string; editorialVerdict: string; offer?: { nodes?: { databaseId: number }[] } };
+type BookmakerIdentity = { bookmaker: string; logoUrl: string; brandColor: string; logoOnLight?: boolean };
+const {
+  entries, identityByOfferId,
+  heading = 'PayPal betting site picks',
+  description = 'Order, “best for” labels and verdicts come from ACF on the staging WordPress draft. Offer copy and links remain withheld until approved.',
+  kicker = 'Editor-ranked picks',
+  bestForLabel = 'Best for',
+  sourceLabel = 'Staging ACF offer reference',
+} = Astro.props as { entries: Entry[]; identityByOfferId: Record<number, BookmakerIdentity>; heading?: string; description?: string; kicker?: string; bestForLabel?: string; sourceLabel?: string };
+---
+<section id="structured-entry" class="paypal-section ranked-section">
+  <div class="paypal-section-head"><p class="kicker">{kicker}</p><h2>{heading}</h2><p>{description}</p></div>
+  <ol class="paypal-picks">
+    {entries.map((entry, index) => {
+      const offerId = entry.offer?.nodes?.[0]?.databaseId;
+      const bookmaker = offerId ? identityByOfferId[offerId] : undefined;
+      return <li class="paypal-pick" style={`--paypal-brand:${bookmaker?.brandColor ?? '#1c5f95'}`}>
+        <span class="paypal-rank">{index + 1}</span>
+        <div class:list={['paypal-pick-logo', { 'logo-on-light': bookmaker?.logoOnLight }]}>
+          {bookmaker ? <img src={bookmaker.logoUrl} alt={bookmaker.bookmaker} loading="lazy" /> : <strong>Bookmaker</strong>}
+        </div>
+        <div class="paypal-pick-copy"><span class="paypal-best-for">{bestForLabel} {entry.bestFor}</span><h3>{bookmaker?.bookmaker ?? 'Bookmaker pending mapping'}</h3><p>{entry.editorialVerdict}</p><small>{sourceLabel} {offerId ?? 'missing'} · unpublished</small></div>
+        <div class="paypal-pick-action"><span aria-label="Offer link disabled in staging preview">Offer withheld</span><small>Verified terms and destination will resolve from the central offer record.</small></div>
+      </li>;
+    })}
+  </ol>
+  <p class="identity-note">Bookmaker logos and brand colours are pilot display mappings. The production identity must resolve from each linked WordPress bookmaker record.</p>
+</section>
+<style>
+  .ranked-section { width:min(100%,1000px); margin:36px auto 0; }
+  .identity-note { margin:12px 0 0; color:#657580; font-size:11px; }
+  .paypal-pick-logo strong { color:#fff; font-size:13px; }
+</style>

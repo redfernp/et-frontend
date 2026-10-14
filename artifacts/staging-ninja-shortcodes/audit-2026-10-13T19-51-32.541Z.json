@@ -1,0 +1,796 @@
+{
+  "source": "authenticated staging REST raw read",
+  "capturedAt": "2026-10-13T19:51:32.541Z",
+  "inspected": 1188,
+  "posts": 15,
+  "pages": 29,
+  "tableIds": [
+    "56582",
+    "56583",
+    "56585",
+    "56586",
+    "56590",
+    "56591",
+    "56592",
+    "56593",
+    "59016",
+    "65364",
+    "65526",
+    "65527",
+    "66322",
+    "67299",
+    "72084",
+    "72501",
+    "83235",
+    "83239",
+    "83242",
+    "83380",
+    "86625",
+    "86633",
+    "86635",
+    "86667",
+    "86671",
+    "86674",
+    "86677",
+    "86679",
+    "86684",
+    "86686",
+    "86688",
+    "86691",
+    "86694",
+    "86699",
+    "86701",
+    "86703",
+    "86706",
+    "86709",
+    "86711",
+    "86713",
+    "86717",
+    "86719",
+    "86721",
+    "86724",
+    "86727",
+    "86730",
+    "86732",
+    "86734",
+    "86737"
+  ],
+  "rows": [
+    {
+      "type": "posts",
+      "id": 113,
+      "uri": "/football-correct-score-tips.html",
+      "modified": "2026-09-30T08:20:41",
+      "shortcodes": [
+        {
+          "tableId": "67299",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "posts",
+      "id": 171,
+      "uri": "/templegates-tips.html",
+      "modified": "2026-09-30T08:14:58",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "posts",
+      "id": 44979,
+      "uri": "/lucky-15-tips.html",
+      "modified": "2026-09-30T07:40:10",
+      "shortcodes": [
+        {
+          "tableId": "83380",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "posts",
+      "id": 49871,
+      "uri": "/under-over-1-5-goals-tips.html",
+      "modified": "2026-09-30T08:20:37",
+      "shortcodes": [
+        {
+          "tableId": "65364",
+          "filter": null
+        },
+        {
+          "tableId": "56582",
+          "filter": null
+        },
+        {
+          "tableId": "56585",
+          "filter": null
+        },
+        {
+          "tableId": "56583",
+          "filter": null
+        },
+        {
+          "tableId": "56586",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "posts",
+      "id": 70812,
+      "uri": "/horse-racing-treble-tips.html",
+      "modified": "2026-09-30T08:20:34",
+      "shortcodes": [
+        {
+          "tableId": "72084",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "posts",
+      "id": 5372,
+      "uri": "/over-2-5-goals-tips.html",
+      "modified": "2026-09-30T08:20:32",
+      "shortcodes": [
+        {
+          "tableId": "65526",
+          "filter": null
+        },
+        {
+          "tableId": "56590",
+          "filter": null
+        },
+        {
+          "tableId": "56592",
+          "filter": null
+        },
+        {
+          "tableId": "56593",
+          "filter": null
+        },
+        {
+          "tableId": "56591",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "posts",
+      "id": 66803,
+      "uri": "/1x2-betting-tips.html",
+      "modified": "2026-09-30T08:21:25",
+      "shortcodes": [
+        {
+          "tableId": "66322",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "posts",
+      "id": 65325,
+      "uri": "/football-accumulator-tips.html",
+      "modified": "2026-09-30T08:21:29",
+      "shortcodes": [
+        {
+          "tableId": "66322",
+          "filter": null
+        },
+        {
+          "tableId": "65526",
+          "filter": null
+        },
+        {
+          "tableId": "65527",
+          "filter": null
+        },
+        {
+          "tableId": "65364",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "posts",
+      "id": 44981,
+      "uri": "/nap-of-the-day.html",
+      "modified": "2026-09-30T08:16:07",
+      "shortcodes": [
+        {
+          "tableId": "83235",
+          "filter": null
+        },
+        {
+          "tableId": "83239",
+          "filter": null
+        },
+        {
+          "tableId": "83242",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "posts",
+      "id": 51334,
+      "uri": "/both-teams-to-score-btts-tips.html",
+      "modified": "2026-09-30T08:16:25",
+      "shortcodes": [
+        {
+          "tableId": "65527",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "posts",
+      "id": 72421,
+      "uri": "/value-bet-tips-dark-horses.html",
+      "modified": "2026-09-30T08:20:45",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "posts",
+      "id": 87305,
+      "uri": "/uefa-champions-league-betting-tips-predictions.html",
+      "modified": "2026-09-08T19:15:54",
+      "shortcodes": [
+        {
+          "tableId": "66322",
+          "filter": "UEFA Champions League"
+        },
+        {
+          "tableId": "65526",
+          "filter": "UEFA Champions League"
+        },
+        {
+          "tableId": "65527",
+          "filter": "UEFA Champions League"
+        },
+        {
+          "tableId": "65364",
+          "filter": "UEFA Champions League"
+        }
+      ]
+    },
+    {
+      "type": "posts",
+      "id": 58743,
+      "uri": "/best-paypal-betting-sites.html",
+      "modified": "2026-09-25T18:21:16",
+      "shortcodes": [
+        {
+          "tableId": "59016",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "posts",
+      "id": 88792,
+      "uri": "/world-cup-2026-betting-tips.html",
+      "modified": "2026-07-19T09:09:57",
+      "shortcodes": [
+        {
+          "tableId": "67299",
+          "filter": "World Cup"
+        },
+        {
+          "tableId": "66322",
+          "filter": "World Cup"
+        },
+        {
+          "tableId": "65526",
+          "filter": "World Cup"
+        },
+        {
+          "tableId": "65527",
+          "filter": "World Cup"
+        },
+        {
+          "tableId": "65364",
+          "filter": "World Cup"
+        }
+      ]
+    },
+    {
+      "type": "posts",
+      "id": 87292,
+      "uri": "/english-premier-league-betting-tips.html",
+      "modified": "2026-03-22T19:37:02",
+      "shortcodes": [
+        {
+          "tableId": "65364",
+          "filter": null
+        },
+        {
+          "tableId": "66322",
+          "filter": null
+        },
+        {
+          "tableId": "65526",
+          "filter": null
+        },
+        {
+          "tableId": "65527",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 73041,
+      "uri": "/cheltenham-racing-tips",
+      "modified": "2026-02-24T16:21:12",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "CHELTENHAM"
+        },
+        {
+          "tableId": "86699",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 73006,
+      "uri": "/ascot-racing-tips",
+      "modified": "2026-02-24T15:34:17",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "ASCOT"
+        },
+        {
+          "tableId": "86679",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 72995,
+      "uri": "/york-racing-tips",
+      "modified": "2026-02-24T17:52:33",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "YORK"
+        },
+        {
+          "tableId": "86732",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 73979,
+      "uri": "/racecourses/hamilton-park-racing-tips",
+      "modified": "2026-02-24T17:51:32",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "HAMILTON"
+        },
+        {
+          "tableId": "86737",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 45714,
+      "uri": "/racecourses/chester-racing-tips",
+      "modified": "2026-02-24T16:34:21",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "CHESTER"
+        },
+        {
+          "tableId": "86703",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 73050,
+      "uri": "/epsom-downs-racing-tips",
+      "modified": "2026-02-24T16:49:19",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "EPSOM"
+        },
+        {
+          "tableId": "86709",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 45997,
+      "uri": "/racecourses/beverley-racing-tips",
+      "modified": "2026-02-24T15:56:18",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "BEVERLEY"
+        },
+        {
+          "tableId": "86686",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 46440,
+      "uri": "/racecourses/fakenham-racing-tips",
+      "modified": "2026-02-24T17:04:20",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "FAKENHAM"
+        },
+        {
+          "tableId": "86711",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 73957,
+      "uri": "/racecourses/redcar-racing-tips",
+      "modified": "2026-02-24T17:46:32",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "REDCAR"
+        },
+        {
+          "tableId": "86734",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 45272,
+      "uri": "/racecourses/southwell-racing-tips",
+      "modified": "2026-02-24T14:59:08",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "SOUTHWELL"
+        },
+        {
+          "tableId": "86667",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 45999,
+      "uri": "/racecourses/bath-racing-tips",
+      "modified": "2026-02-24T15:38:47",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "BATH"
+        },
+        {
+          "tableId": "86684",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 46322,
+      "uri": "/racecourses/catterick-racing-tips",
+      "modified": "2026-02-24T16:14:44",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "CATTERICK"
+        },
+        {
+          "tableId": "86694",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 45850,
+      "uri": "/racecourses/ayr-racing-tips",
+      "modified": "2026-02-24T15:28:08",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "AYR"
+        },
+        {
+          "tableId": "86677",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 45395,
+      "uri": "/racecourses/chelmsford-city-racing-tips",
+      "modified": "2026-02-24T15:14:16",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "CHELMSFORD"
+        },
+        {
+          "tableId": "86674",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 46442,
+      "uri": "/racecourses/ffos-las-racing-tips",
+      "modified": "2026-02-24T17:08:06",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "FFOS LAS"
+        },
+        {
+          "tableId": "86713",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 50329,
+      "uri": "/racecourses/leicester-racing-tips",
+      "modified": "2026-02-24T17:16:10",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "LEICESTER"
+        },
+        {
+          "tableId": "86719",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 50039,
+      "uri": "/racecourses/doncaster-racing-tips",
+      "modified": "2026-02-24T16:40:44",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "DONCASTER"
+        },
+        {
+          "tableId": "86706",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 46325,
+      "uri": "/racecourses/chepstow-racing-tips",
+      "modified": "2026-02-24T16:26:31",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "CHEPSTOW"
+        },
+        {
+          "tableId": "86701",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 46158,
+      "uri": "/racecourses/carlisle-racing-tips",
+      "modified": "2026-02-24T16:09:14",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "CARLISLE"
+        },
+        {
+          "tableId": "86691",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 45847,
+      "uri": "/racecourses/haydock-racing-tips",
+      "modified": "2026-02-24T17:11:55",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "HAYDOCK"
+        },
+        {
+          "tableId": "86717",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 50411,
+      "uri": "/racecourses/musselburgh-racing-tips",
+      "modified": "2026-02-24T17:19:35",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "MUSSELBURGH"
+        },
+        {
+          "tableId": "86721",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 50327,
+      "uri": "/racecourses/wetherby-racing-tips",
+      "modified": "2026-02-24T17:39:44",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "WETHERBY"
+        },
+        {
+          "tableId": "86730",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 48068,
+      "uri": "/racecourses/sandown-racing-tips",
+      "modified": "2026-02-24T17:29:46",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "SANDOWN"
+        },
+        {
+          "tableId": "86727",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 50413,
+      "uri": "/racecourses/newbury-racing-tips",
+      "modified": "2026-02-24T17:24:06",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "NEWBURY"
+        },
+        {
+          "tableId": "86724",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 45276,
+      "uri": "/racecourses/wolverhampton-racing-tips",
+      "modified": "2026-02-23T20:34:45",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "WOLVERHAMPTON"
+        },
+        {
+          "tableId": "86625",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 45270,
+      "uri": "/racecourses/kempton-racing-tips",
+      "modified": "2026-02-24T15:00:27",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "KEMPTON"
+        },
+        {
+          "tableId": "86633",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 45274,
+      "uri": "/racecourses/lingfield-racing-tips",
+      "modified": "2026-02-24T14:59:59",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "LINGFIELD"
+        },
+        {
+          "tableId": "86635",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 45390,
+      "uri": "/racecourses/newcastle-racing-tips",
+      "modified": "2026-02-24T15:06:11",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "NEWCASTLE"
+        },
+        {
+          "tableId": "86671",
+          "filter": null
+        }
+      ]
+    },
+    {
+      "type": "pages",
+      "id": 46160,
+      "uri": "/racecourses/brighton-racing-tips",
+      "modified": "2026-02-24T16:05:28",
+      "shortcodes": [
+        {
+          "tableId": "72501",
+          "filter": "BRIGHTON "
+        },
+        {
+          "tableId": "86688",
+          "filter": null
+        }
+      ]
+    }
+  ]
+}

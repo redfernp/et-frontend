@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { latestContentSnapshot } from '../lib/migration-preview.mjs';
+import { seasonArchiveAvailablePaths, seasonArchiveBuildEnabled, seasonArchivePaths, seasonArchivePreview } from '../lib/season-archive-preview.mjs';
+import { getWordPressMenu } from '../lib/wordpress-menu.ts';
+import { previewPublicPaths } from '../lib/preview-public-paths.ts';
+
+export async function getStaticPaths() {
+  if (!seasonArchiveBuildEnabled()) return [];
+  const snapshot = await latestContentSnapshot();
+  if (!snapshot) throw new Error('Season archive previews require a WordPress snapshot');
+  const availablePaths = await seasonArchiveAvailablePaths();
+  return seasonArchivePaths.map((path) => {
+    const record = snapshot.pages.find((item: { uri: string }) => item.uri === path);
+    if (!record) throw new Error(`Missing WordPress season archive: ${path}`);
+    return { params: { slug: path.slice(1) }, props: { archive: seasonArchivePreview(record, snapshot, availablePaths), snapshotDate: snapshot.generatedAt } };
+  });
+}
+
+const { archive, snapshotDate } = Astro.props;
+const menuItems = (await getWordPressMenu('PRIMARY')).items;
+---
+<BaseLayout title={archive.title} wide publicPage previewOnly menuItems={menuItems} verifiedPublicPaths={previewPublicPaths} seo={{ title: archive.seo?.title, description: archive.seo?.metaDesc }} previewMessage="Historical season archive · dated WordPress snapshot · local noindex preview">
+  <article class="season-archive">
+    <p class="kicker">John Newsome · season archive</p>
+    <h1>{archive.title}</h1>
+    <p class="lede">Browse the original weekly Premier League columns for this season. Each link points to its exact legacy article path.</p>
+    <p class="archive-note">Snapshot {snapshotDate.slice(0, 10)} · {archive.links.length} verified local article links{archive.withheld ? ` · ${archive.withheld} source links withheld pending route checks` : ''}. Historical predictions are not current betting advice.</p>
+    <ol class="archive-list">{archive.links.map((item) => <li><a href={item.href}>{item.title}</a></li>)}</ol>
+  </article>
+</BaseLayout>
+<style>
+  .season-archive{max-width:900px;margin:auto}.season-archive .lede{font-size:17px;line-height:1.55}.archive-note{padding:12px 15px;background:#fff3e7;border-left:4px solid var(--et-orange);color:#654521;font-size:13px}.archive-list{list-style:none;padding:0;margin:28px 0 0;display:grid;gap:9px;counter-reset:archive}.archive-list li{counter-increment:archive;border:1px solid #d7e4ed;background:#f9fcfe;padding:13px 16px;display:flex;gap:14px;align-items:baseline}.archive-list li::before{content:counter(archive, decimal-leading-zero);color:var(--et-orange-ink);font-weight:900;font-size:12px}.archive-list a{font-weight:750;line-height:1.35;text-decoration-thickness:1px;text-underline-offset:3px}@media(max-width:600px){.archive-list li{padding:12px;gap:10px}}
+</style>

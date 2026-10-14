@@ -1,0 +1,66 @@
+---
+const { headers, rows } = Astro.props as { headers: string[]; rows: string[][] };
+const detailLabels = ['Deposit minimum', 'Deposit maximum', 'Deposit fee', 'Withdrawal minimum', 'Withdrawal maximum', 'Withdrawal fee'];
+const detailIndexes = [2, 3, 4, 6, 7, 8];
+---
+<div class="payment-table-wrap">
+  <p class="payment-table-caveat">Legacy payment figures shown for layout review. Verify every bookmaker’s current limits, fees and processing times before publication.</p>
+  <table class="payment-table">
+    <thead><tr>{headers.map((header, index) => <th scope="col" class:list={[index === 0 && 'payment-name', ![0, 1, 5].includes(index) && 'payment-extra']}>{header}</th>)}</tr></thead>
+    <tbody>{rows.map((row, index) => {
+      const detailsId = `paypal-payment-${index}`;
+      return <>
+        <tr class="payment-main-row">
+          <th scope="row" class="payment-name"><button type="button" class="payment-expand" aria-expanded="false" aria-controls={detailsId} aria-label={`Show more payment details for ${row[0]}`} data-payment-expand>+</button><span>{row[0]}</span></th>
+          {row.slice(1).map((value, cellIndex) => <td class:list={[![0, 4].includes(cellIndex) && 'payment-extra']}>{value || '—'}</td>)}
+        </tr>
+        <tr id={detailsId} class="payment-detail-row" hidden><td colspan="3"><dl>{detailIndexes.map((cellIndex, detailIndex) => <div><dt>{detailLabels[detailIndex]}</dt><dd>{row[cellIndex] || 'Not stated'}</dd></div>)}</dl></td></tr>
+      </>;
+    })}</tbody>
+  </table>
+</div>
+<script>
+  document.addEventListener('click', (event) => {
+    const button = (event.target as Element).closest<HTMLButtonElement>('[data-payment-expand]');
+    if (!button) return;
+    const details = document.getElementById(button.getAttribute('aria-controls') ?? '');
+    if (!details) return;
+    const expanded = button.getAttribute('aria-expanded') !== 'true';
+    const name = button.closest('tr')?.querySelector('.payment-name > span')?.textContent?.trim() ?? 'bookmaker';
+    button.setAttribute('aria-expanded', String(expanded));
+    button.setAttribute('aria-label', `${expanded ? 'Hide' : 'Show'} more payment details for ${name}`);
+    button.textContent = expanded ? '−' : '+';
+    details.hidden = !expanded;
+  });
+</script>
+<style>
+  .payment-table-wrap { max-width:100%; overflow-x:auto; margin:20px 0 30px; }
+  .payment-table-caveat { margin:0 0 10px; padding:10px 13px; max-width:none; background:#fff8ec; border-left:4px solid var(--et-orange); color:#754109; font-size:12px; }
+  .payment-table { display:table; width:100%; min-width:900px; border-collapse:collapse; font-size:13px; }
+  .payment-table th, .payment-table td { padding:10px 9px; border:1px solid #d5e1e9; text-align:left; }
+  .payment-table thead th { background:#1b496c; color:#fff; line-height:1.25; }
+  .payment-main-row:nth-of-type(4n + 1) { background:#f0f6fa; }
+  .payment-main-row .payment-name { background:#205780; color:#fff; font-weight:800; }
+  .payment-expand, .payment-detail-row { display:none; }
+  @media (max-width:600px) {
+    .payment-table-wrap { overflow-x:visible; }
+    .payment-table { min-width:0; table-layout:fixed; font-size:12px; }
+    .payment-table th, .payment-table td { padding:9px 6px; overflow-wrap:anywhere; }
+    .payment-table thead th { font-size:11px; }
+    .payment-table .payment-name { width:42%; }
+    .payment-table .payment-extra { display:none; }
+    .payment-main-row { background:#236da6; color:#fff; }
+    .payment-main-row:nth-of-type(4n + 1) { background:#2c85c5; }
+    .payment-main-row .payment-name { color:#fff; }
+    .payment-expand { display:inline-grid; place-items:center; width:25px; height:25px; margin-right:5px; padding:0; border:0; background:transparent; color:#fff; font-size:20px; font-weight:800; line-height:1; cursor:pointer; }
+    .payment-expand:focus-visible { outline:2px solid #fff; outline-offset:2px; }
+    .payment-detail-row:not([hidden]) { display:table-row; }
+    .payment-detail-row > td { padding:5px; background:#2b85c5; }
+    .payment-detail-row dl { margin:0; border:1px solid #164568; }
+    .payment-detail-row dl > div { display:grid; grid-template-columns:50% 50%; }
+    .payment-detail-row dt, .payment-detail-row dd { margin:0; padding:9px 8px; color:#fff; }
+    .payment-detail-row dt { background:#1b496c; font-weight:700; }
+    .payment-detail-row dd { background:#2c85c5; }
+    .payment-detail-row dl > div:nth-child(even) dd { background:#3a94d3; }
+  }
+</style>

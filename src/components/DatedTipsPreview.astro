@@ -1,0 +1,48 @@
+---
+import TipsTable from './TipsTable.astro';
+import type { Tip } from '../lib/pilot-data';
+const { rows, feedDate, uploadId, title, idPrefix, emptyMessage } = Astro.props as {
+  rows: Tip[]; feedDate: string; uploadId: string; title: string; idPrefix: string; emptyMessage: string;
+};
+---
+<section class="dated-tip-preview" aria-label={title}>
+  <p class="tip-feed-status" role="status" data-tip-feed-status>Tips table feed unavailable. This dated local upload is shown only on its verified UK race day.</p>
+  <div class="dated-tip-body" data-dated-tip-body data-feed-date={feedDate} hidden>
+    <div class="dated-tip-heading"><div><p class="tip-kicker">Dated local upload · preview only</p><h2>{title}</h2></div><span class="tip-date">Race day {feedDate}</span></div>
+    {rows.length ? <TipsTable rows={rows} idPrefix={idPrefix} /> : <p class="tip-empty">{emptyMessage}</p>}
+    <p class="tip-source">Local upload {uploadId}. No affiliate links or historical Ninja rows are active. This is not a live publication feed.</p>
+  </div>
+</section>
+<script>
+  function londonToday() {
+    const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
+    const get = (type: string) => parts.find((part) => part.type === type)?.value;
+    return `${get('year')}-${get('month')}-${get('day')}`;
+  }
+  function updateDatedTips() {
+    const today = londonToday();
+    for (const body of document.querySelectorAll<HTMLElement>('[data-dated-tip-body]')) {
+      const status = body.parentElement?.querySelector<HTMLElement>('[data-tip-feed-status]');
+      if (!status) continue;
+      const current = body.dataset.feedDate === today;
+      body.hidden = !current;
+      status.hidden = current;
+    }
+  }
+  updateDatedTips();
+  document.addEventListener('visibilitychange', updateDatedTips);
+  window.setInterval(updateDatedTips, 60_000);
+</script>
+<style>
+  [hidden]{display:none!important}
+  .dated-tip-preview{margin:26px 0;border:1px solid #cadce9;border-top:5px solid #286da5;border-radius:8px;background:#fff;overflow:hidden}
+  .tip-feed-status{margin:0;padding:18px 22px;color:#514639;background:#fff6ec;border-left:4px solid var(--et-orange)}
+  .dated-tip-body{padding:20px}
+  .dated-tip-heading{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:15px}
+  .dated-tip-heading h2{margin:0;color:#173e5e;font-size:clamp(21px,3vw,27px)}
+  .tip-kicker{margin:0 0 5px;color:#b94f00;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  .tip-date{color:#476579;font-size:13px;white-space:nowrap}
+  .tip-empty{padding:16px;background:#f4f9fc;color:#30495c}
+  .tip-source{margin:15px 0 0;color:#607582;font-size:12px}
+  @media(max-width:600px){.dated-tip-body{padding:14px}.dated-tip-heading{display:block}.tip-date{display:block;margin-top:6px}}
+</style>

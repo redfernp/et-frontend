@@ -1,0 +1,252 @@
+{
+  "savedAt": "2026-10-04T20:14:19.922Z",
+  "plan": "plan-2026-10-04T19-20-38.441Z.json",
+  "expected": {
+    "id": 56946,
+    "slug": "saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz",
+    "uri": "/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html",
+    "family": "seymour",
+    "date": "2022-08-25T18:10:47",
+    "currentDate": "2022-08-25T18:10:47",
+    "status": "publish",
+    "robotsIndex": "index",
+    "robotsFollow": "follow",
+    "reason": null,
+    "needsUpdate": true
+  },
+  "wordpress": {
+    "id": 56946,
+    "date": "2022-08-25T18:10:47",
+    "slug": "saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz",
+    "status": "publish",
+    "yoast_head_json": {
+      "title": "Saturday's Horse Racing Preview & Tips- 27th August 2022 – Seymour Biz - Every Tip",
+      "description": "Saturday Horse Racing Preview & Tips for 27th August by our horse racing feature writer Seymour Biz. Do not miss his Sat Lucky 15 tips!",
+      "robots": {
+        "index": "index",
+        "follow": "follow",
+        "max-snippet": "max-snippet:-1",
+        "max-image-preview": "max-image-preview:large",
+        "max-video-preview": "max-video-preview:-1"
+      },
+      "canonical": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html",
+      "og_locale": "en_GB",
+      "og_type": "article",
+      "og_title": "Saturday's Horse Racing Preview & Tips- 27th August 2022 – Seymour Biz - Every Tip",
+      "og_description": "Saturday Horse Racing Preview & Tips for 27th August by our horse racing feature writer Seymour Biz. Do not miss his Sat Lucky 15 tips!",
+      "og_url": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html",
+      "og_site_name": "Every Tip",
+      "article_publisher": "https://www.facebook.com/everytipsite/",
+      "article_published_time": "2022-08-25T16:10:47+00:00",
+      "og_image": [
+        {
+          "url": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2019/03/saturday-horse-racing-tips-and-previews-from-expert-tipster-seymour-biz-on-everytip.png",
+          "type": "",
+          "width": "",
+          "height": ""
+        }
+      ],
+      "author": "Everytip",
+      "twitter_card": "summary_large_image",
+      "twitter_creator": "@everytipsite",
+      "twitter_site": "@everytipsite",
+      "twitter_misc": {
+        "Written by": "Everytip",
+        "Estimated reading time": "5 minutes"
+      },
+      "schema": {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Article",
+            "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html#article",
+            "isPartOf": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html"
+            },
+            "author": {
+              "name": "Everytip",
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#/schema/person/4b745c4a63b14b6328944f3b7bb1aff8"
+            },
+            "headline": "Saturday&#8217;s Horse Racing Preview &#038; Tips- 27th August 2022 – Seymour Biz",
+            "datePublished": "2022-08-25T16:10:47+00:00",
+            "mainEntityOfPage": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html"
+            },
+            "wordCount": 1053,
+            "publisher": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#organization"
+            },
+            "image": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html#primaryimage"
+            },
+            "thumbnailUrl": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2019/03/saturday-horse-racing-tips-and-previews-from-expert-tipster-seymour-biz-on-everytip.png",
+            "articleSection": [
+              "Seymour Biz"
+            ],
+            "inLanguage": "en-GB"
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html",
+            "url": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html",
+            "name": "Saturday's Horse Racing Preview & Tips- 27th August 2022 – Seymour Biz - Every Tip",
+            "isPartOf": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#website"
+            },
+            "primaryImageOfPage": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html#primaryimage"
+            },
+            "image": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html#primaryimage"
+            },
+            "thumbnailUrl": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2019/03/saturday-horse-racing-tips-and-previews-from-expert-tipster-seymour-biz-on-everytip.png",
+            "datePublished": "2022-08-25T16:10:47+00:00",
+            "description": "Saturday Horse Racing Preview & Tips for 27th August by our horse racing feature writer Seymour Biz. Do not miss his Sat Lucky 15 tips!",
+            "breadcrumb": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html#breadcrumb"
+            },
+            "inLanguage": "en-GB",
+            "potentialAction": [
+              {
+                "@type": "ReadAction",
+                "target": [
+                  "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html"
+                ]
+              }
+            ]
+          },
+          {
+            "@type": "ImageObject",
+            "inLanguage": "en-GB",
+            "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html#primaryimage",
+            "url": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2019/03/saturday-horse-racing-tips-and-previews-from-expert-tipster-seymour-biz-on-everytip.png",
+            "contentUrl": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2019/03/saturday-horse-racing-tips-and-previews-from-expert-tipster-seymour-biz-on-everytip.png",
+            "width": 205,
+            "height": 232,
+            "caption": "saturday horse racing tips and previews from expert tipster seymour biz on everytip"
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://wordpress-159231-2098144.cloudwaysapps.com/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Seymour Biz",
+                "item": "https://wordpress-159231-2098144.cloudwaysapps.com/seymour-biz"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Saturday&#8217;s Horse Racing Preview &#038; Tips- 27th August 2022 – Seymour Biz"
+              }
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#website",
+            "url": "https://wordpress-159231-2098144.cloudwaysapps.com/",
+            "name": "Every Tip",
+            "description": "",
+            "publisher": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#organization"
+            },
+            "potentialAction": [
+              {
+                "@type": "SearchAction",
+                "target": {
+                  "@type": "EntryPoint",
+                  "urlTemplate": "https://wordpress-159231-2098144.cloudwaysapps.com/?s={search_term_string}"
+                },
+                "query-input": {
+                  "@type": "PropertyValueSpecification",
+                  "valueRequired": true,
+                  "valueName": "search_term_string"
+                }
+              }
+            ],
+            "inLanguage": "en-GB"
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#organization",
+            "name": "EveryTip",
+            "url": "https://wordpress-159231-2098144.cloudwaysapps.com/",
+            "logo": {
+              "@type": "ImageObject",
+              "inLanguage": "en-GB",
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#/schema/logo/image/",
+              "url": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2017/07/EveryTip.png",
+              "contentUrl": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2017/07/EveryTip.png",
+              "width": 450,
+              "height": 120,
+              "caption": "EveryTip"
+            },
+            "image": {
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#/schema/logo/image/"
+            },
+            "sameAs": [
+              "https://www.facebook.com/everytipsite/",
+              "https://x.com/everytipsite",
+              "https://www.pinterest.com/everytipsite/",
+              "https://www.youtube.com/c/Everytip"
+            ]
+          },
+          {
+            "@type": "Person",
+            "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/#/schema/person/4b745c4a63b14b6328944f3b7bb1aff8",
+            "name": "Everytip",
+            "image": {
+              "@type": "ImageObject",
+              "inLanguage": "en-GB",
+              "@id": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2025/06/cropped-ET-96x96.jpg",
+              "url": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2025/06/cropped-ET-96x96.jpg",
+              "contentUrl": "https://wordpress-159231-2098144.cloudwaysapps.com/wp-content/uploads/2025/06/cropped-ET-96x96.jpg",
+              "caption": "Everytip"
+            },
+            "url": "https://wordpress-159231-2098144.cloudwaysapps.com/author/erick"
+          }
+        ]
+      }
+    }
+  },
+  "yoast": {
+    "post_id": 56946,
+    "post_title": "Saturday&#8217;s Horse Racing Preview &#038; Tips- 27th August 2022 – Seymour Biz",
+    "permalink": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html",
+    "post_type": "post",
+    "post_status": "publish",
+    "seo_title": null,
+    "seo_title_rendered": "Saturday's Horse Racing Preview & Tips- 27th August 2022 – Seymour Biz - Every Tip",
+    "meta_description": "Saturday Horse Racing Preview & Tips for 27th August by our horse racing feature writer Seymour Biz. Do not miss his Sat Lucky 15 tips!",
+    "meta_description_rendered": "Saturday Horse Racing Preview & Tips for 27th August by our horse racing feature writer Seymour Biz. Do not miss his Sat Lucky 15 tips!",
+    "focus_keyphrase": null,
+    "canonical": null,
+    "canonical_rendered": "https://wordpress-159231-2098144.cloudwaysapps.com/saturdays-horse-racing-preview-tips-27th-august-2022-seymour-biz.html",
+    "is_cornerstone": false,
+    "noindex": null,
+    "nofollow": false,
+    "noimageindex": false,
+    "noarchive": false,
+    "nosnippet": false,
+    "open_graph_title": null,
+    "open_graph_title_rendered": "Saturday's Horse Racing Preview & Tips- 27th August 2022 – Seymour Biz - Every Tip",
+    "open_graph_description": null,
+    "open_graph_description_rendered": "Saturday Horse Racing Preview & Tips for 27th August by our horse racing feature writer Seymour Biz. Do not miss his Sat Lucky 15 tips!",
+    "twitter_title": null,
+    "twitter_title_rendered": null,
+    "twitter_description": null,
+    "twitter_description_rendered": null,
+    "schema_page_type": null,
+    "schema_article_type": null,
+    "seo_score": "na",
+    "readability_score": "bad",
+    "inclusive_language_score": "na"
+  }
+}

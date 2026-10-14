@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "acf/everytip-offer-slot",
+  "title": "EveryTip Offer Slot",
+  "description": "Place a centrally managed offer in an article without copying its headline, link or terms.",
+  "category": "widgets",
+  "icon": "tickets-alt",
+  "keywords": ["offer", "bookmaker", "EveryTip"],
+  "acf": {
+    "mode": "preview",
+    "renderTemplate": "render.php",
+    "postTypes": ["post", "page"]
+  },
+  "supports": {
+    "anchor": false,
+    "align": false,
+    "className": false,
+    "color": false,
+    "customClassName": false,
+    "html": false,
+    "multiple": true
+  }
+}

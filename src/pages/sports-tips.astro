@@ -1,0 +1,7 @@
+---
+import ExactArchiveRoute from '../components/ExactArchiveRoute.astro';
+import { loadArchiveRoutes } from '../lib/archive-route-data.mjs';
+const archive = (await loadArchiveRoutes()).find((item) => item.path === '/sports-tips');
+if (!archive) throw new Error('Missing /sports-tips crawl route');
+---
+<ExactArchiveRoute archive={archive} />

@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ColumnArchive from '../../components/ColumnArchive.astro';
+import { archiveEntriesForPage, archivePageCount, columnArchives } from '../../lib/column-archives';
+
+const archive = columnArchives['english-premier-league-predictions-for-saturday'];
+---
+<BaseLayout title={archive.pageTitle} sidebar={true} relatedTopic={archive.relatedTopic} robots="noindex,follow">
+  <ColumnArchive {...archive} entries={archiveEntriesForPage(archive, 1)} page={1} totalPages={archivePageCount(archive)} />
+</BaseLayout>

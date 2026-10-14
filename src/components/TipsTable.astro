@@ -1,0 +1,56 @@
+---
+import type { Tip } from '../lib/pilot-data';
+const { rows, idPrefix = 'tips' } = Astro.props as { rows: Tip[]; idPrefix?: string };
+---
+<div class="table-scroll tips-table-wrap">
+  <table class="tips-table">
+    <thead><tr>
+      <th scope="col" class="tip-time">Time</th>
+      <th scope="col" class="tip-course">Course</th>
+      <th scope="col" class="tip-horse">Horse Name</th>
+      <th scope="col" class="tip-forecast">Forecast SP</th>
+      <th scope="col" class="tip-extra">Jockey</th>
+      <th scope="col" class="tip-extra">Trainer</th>
+      <th scope="col" class="tip-extra">Tissue Value Price</th>
+    </tr></thead>
+    <tbody>{rows.map((tip, index) => {
+      const detailsId = `${idPrefix}-${tip.published}-${tip.courseId}-${tip.time.replace(':', '')}-${index}`;
+      return <>
+        <tr class="tip-main-row">
+          <td class="tip-time">
+            <button class="tip-expand" type="button" aria-expanded="false" aria-controls={detailsId} aria-label={`Show more details for ${tip.horse}`} data-tip-expand>+</button>
+            <span>{tip.time}</span>
+          </td>
+          <td class="tip-course">{tip.course}</td>
+          <th scope="row" class="tip-horse">{tip.horse}</th>
+          <td class="tip-forecast">{tip.forecast}</td>
+          <td class="tip-extra">{tip.jockey}</td>
+          <td class="tip-extra">{tip.trainer}</td>
+          <td class="tip-extra">{tip.tissue}</td>
+        </tr>
+        <tr id={detailsId} class="tip-mobile-details" hidden>
+          <td colspan="4">
+            <dl>
+              <div><dt>Jockey</dt><dd>{tip.jockey}</dd></div>
+              <div><dt>Trainer</dt><dd>{tip.trainer}</dd></div>
+              <div><dt>Tissue Value Price</dt><dd>{tip.tissue}</dd></div>
+            </dl>
+          </td>
+        </tr>
+      </>;
+    })}</tbody>
+  </table>
+</div>
+<script>
+  document.addEventListener('click', (event) => {
+    const button = (event.target as Element).closest<HTMLButtonElement>('[data-tip-expand]');
+    if (!button) return;
+    const details = document.getElementById(button.getAttribute('aria-controls') ?? '');
+    if (!details) return;
+    const expanded = button.getAttribute('aria-expanded') !== 'true';
+    button.setAttribute('aria-expanded', String(expanded));
+    button.setAttribute('aria-label', `${expanded ? 'Hide' : 'Show'} more details for ${button.closest('tr')?.querySelector('.tip-horse')?.textContent?.trim() ?? 'selection'}`);
+    button.textContent = expanded ? '−' : '+';
+    details.hidden = !expanded;
+  });
+</script>

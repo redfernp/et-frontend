@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RoundupGuideShell from '../../components/RoundupGuideShell.astro';
+import RoundupCapturedBody from '../../components/RoundupCapturedBody.astro';
+import RoundupRankedEntries from '../../components/RoundupRankedEntries.astro';
+import { latestContentSnapshot } from '../../lib/migration-preview.mjs';
+import { roundupSnapshotPreview } from '../../lib/roundup-snapshot-preview.mjs';
+import { splitLowDepositRoundup } from '../../lib/low-deposit-roundup.mjs';
+import { stagingLowDepositRoundupFixture } from '../../lib/low-deposit-roundup-fixture.mjs';
+import { roundupDraftPreview } from '../../lib/staging-roundup-cms.mjs';
+import { featuredOfferPreview } from '../../lib/pilot-data';
+
+const uri = '/low-or-no-minimum-deposit-betting-sites.html';
+const snapshot = await latestContentSnapshot();
+const { source, hero, blockCount } = roundupSnapshotPreview(snapshot, uri);
+const fixture = await roundupDraftPreview('lowDeposit', stagingLowDepositRoundupFixture);
+const { intro, body, withheldNodes } = splitLowDepositRoundup(fixture ? { uri, content: fixture.content } : source, hero);
+const betfred = featuredOfferPreview.find((item) => item.id === 'betfred');
+if (!betfred) throw new Error('Betfred preview identity missing');
+const identityByOfferId = { 90846: betfred };
+const fallbackEntries = [{
+  bestFor: 'Low-deposit guide readers',
+  editorialVerdict: 'Betfred is the only detailed bookmaker profile in the legacy guide. Its deposit limits and welcome-offer eligibility need a current check before publication.',
+  offer: { nodes: [{ databaseId: 90846 }] },
+}];
+const entries = fixture?.rankedEntries ?? fallbackEntries;
+---
+<BaseLayout title="Low or no minimum deposit betting sites — roundup migration preview" seo={{ title: source.seo?.title, description: source.seo?.metaDesc }} wide={true} robots="noindex,nofollow" previewMessage="Local roundup template · captured WordPress copy · offers and links disabled">
+  <RoundupGuideShell
+    title="Low or no minimum deposit betting sites"
+    deck="The approved roundup layout applied to the guide’s existing editorial copy, with its legacy Betfred promotion separated into a structured bookmaker card."
+    byline={`WordPress source ${source.databaseId} · staging Gutenberg draft 90880 · ${fixture ? `${fixture.sourceMode === 'fresh-staging-wpgraphql-preview' ? 'fresh WPGraphQL read' : 'dated WPGraphQL capture'} ${fixture.capturedAt.slice(0, 10)}` : `${blockCount} core blocks in local conversion`} · not published`}
+    image={hero}
+    imageAlt="Low or no minimum deposit betting sites guide artwork"
+    disclosure="This is a local design and content-migration preview. All links are disabled. Any bookmaker minimum-deposit figures, welcome offers and payment rules in the legacy copy need checking before publication."
+    toc={[{ href: '#structured-entry', label: 'Bookmaker profile' }, { href: '#guide-content', label: 'Read the guide' }, { href: '#conversion-notes', label: 'Migration notes' }]}
+  >
+    <div class="roundup-intro" set:html={intro} />
+    <RoundupRankedEntries
+      entries={entries}
+      identityByOfferId={identityByOfferId}
+      kicker="Featured bookmaker · migration preview"
+      heading="Low-deposit bookmaker profile"
+      description={fixture ? 'The editor-controlled verdict and central offer reference come from ACF on the staging Gutenberg draft. Old promotional copy and deposit figures are held back pending verification.' : 'The legacy guide has one detailed Betfred section. Its old promotional copy and deposit figures are held back while the central offer and bookmaker facts are verified.'}
+      bestForLabel="Guide focus"
+      sourceLabel={fixture ? 'Staging ACF offer reference' : 'Pilot central-offer reference'}
+    />
+    <p class="withheld-note">{withheldNodes} legacy bookmaker/promotion elements are withheld from this frontend preview for editorial review; the original source and staging conversion draft retain them.</p>
+    <RoundupCapturedBody body={body} blockCount={blockCount} />
+  </RoundupGuideShell>
+</BaseLayout>
+<style>
+  .roundup-intro { width:min(100%,1000px); margin:25px auto 0; line-height:1.7; }
+  .roundup-intro :global(p) { max-width:none; }
+  .withheld-note { width:min(100%,1000px); margin:12px auto 0; color:#657580; font-size:12px; }
+</style>

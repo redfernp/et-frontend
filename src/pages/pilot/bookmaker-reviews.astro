@@ -1,0 +1,15 @@
+---
+import DirectoryHub from '../../components/DirectoryHub.astro';
+const groups = [
+  { key: 'sportsbooks', label: 'Sportsbook reviews', description: 'Independent operator reviews, with dated testing and a separate central record for any eligible offer.' },
+  { key: 'exchanges', label: 'Betting exchanges', description: 'Products where matched bets, lay liability, liquidity and commission need a different review framework.' },
+  { key: 'services', label: 'Tipster services', description: 'Subscription products assessed for record transparency, achievable odds, fees and practical fit.' },
+];
+const entries = [
+  { title: 'Bet365 review', group: 'sportsbooks', summary: 'A full bookmaker-review example with first-hand testing, strengths and trade-offs.', meta: 'Local design pilot · claims to recheck', href: '/pilot/bet365-review/', label: 'View review design' },
+  { title: 'More sportsbook reviews', group: 'sportsbooks', summary: 'The remaining review URLs use the same framework only after each operator’s text, images, rating and offer relationship are audited.', meta: 'Mapped collection · not a ranking' },
+  { title: 'Betfair Exchange review', group: 'exchanges', summary: 'A separate exchange assessment focused on the mechanics and real-world use of back and lay markets.', meta: 'Local design pilot · no current score', href: '/pilot/betfair-exchange-review.html/', label: 'View exchange design' },
+  { title: 'Subscription-service reviews', group: 'services', summary: 'Older service pages require availability and performance-claim checks before any card or referral link is restored.', meta: 'Neutral service-review design', href: '/pilot/tipster-service-review/', label: 'View service-review design' },
+];
+---
+<DirectoryHub title="Bookmaker and betting-service reviews" eyebrow="EveryTip reviews" deck="Find the right kind of review first. A sportsbook, an exchange and a paid tipster service should not be scored or presented as though they were the same product." note="The mapped legacy reviews include products that may have changed or closed. This directory preview shows no current score, rank or welcome promotion until each review is checked." groups={groups} entries={entries} footer="The production directory will query review records by product type in WPGraphQL. Cards should use one canonical review URL, reviewer and last-tested date; live offer text remains in the separate ACF offer record. 18+ · Gamble responsibly." />

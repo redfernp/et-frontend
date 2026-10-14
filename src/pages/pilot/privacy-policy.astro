@@ -1,0 +1,6 @@
+---
+import PolicyShell from '../../components/PolicyShell.astro';
+import { getLegalPageByUri } from '../../lib/wpgraphql';
+const page = await getLegalPageByUri('/privacy-policy');
+---
+<PolicyShell title="Privacy notice and cookies" kind="Privacy page" intro="The current EveryTip privacy and cookie wording, made easier to read and navigate." content={page.content} modified={page.modified} reviewNote="This existing notice names older email and opt-in providers. It must be updated for the actual Sendfox, ConvertBox, Cloudflare and tracking setup before launch; this preview is not a sign-off of its accuracy." />

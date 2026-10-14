@@ -1,0 +1,12 @@
+---
+import FreeBets from './pilot/bookie-free-bets-bonus-offers.astro';
+import { latestContentSnapshot } from '../lib/migration-preview.mjs';
+import { priorityPagePreviewRecord } from '../lib/staging-priority-page-cms.mjs';
+
+const snapshot = await latestContentSnapshot();
+if (!snapshot) throw new Error('Exact free-bets preview requires the dated WordPress snapshot');
+const exactRecord = [...snapshot.posts, ...snapshot.pages].find((record) => record.uri === '/bookie-free-bets-bonus-offers');
+if (!exactRecord) throw new Error('Missing exact WordPress free-bets page');
+const pageRecord = await priorityPagePreviewRecord(exactRecord);
+---
+<FreeBets exactRecord={pageRecord} />

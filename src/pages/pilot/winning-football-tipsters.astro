@@ -1,0 +1,15 @@
+---
+import DirectoryHub from '../../components/DirectoryHub.astro';
+const groups = [
+  { key: 'football', label: 'Football tipsters', description: 'Start with the football service’s record, tip frequency, leagues and odds accessibility—not a profit slogan.' },
+  { key: 'racing', label: 'Horse racing tipsters', description: 'Check staking, each-way assumptions, typical timing and the length of the settled record.' },
+  { key: 'other', label: 'Other sports', description: 'Only populate a sport when an active service has passed the same editorial checks.' },
+];
+const entries = [
+  { title: 'Football shortlist', group: 'football', summary: 'The researched Tipstrr comparison is the current starting point. It records practical differences and links to source profiles rather than freezing ROI in this directory.', meta: 'Research snapshot · 30 September 2026', href: '/pilot/professional-winning-tipsters-comparison-table/', label: 'Compare researched profiles' },
+  { title: 'Football service reviews', group: 'football', summary: 'Dedicated service reviews can sit here after membership status, recent activity, pricing and evidence have been checked.', meta: 'Review slots · no endorsement' },
+  { title: 'Racing shortlist', group: 'racing', summary: 'Racing entries should link to one maintained tipster record, with market, bank and achievable-price caveats.', meta: 'Editorial verification required', href: '/pilot/professional-winning-tipsters-comparison-table/', label: 'See the comparison design' },
+  { title: 'Greyhounds, cricket and more', group: 'other', summary: 'An empty category is better than an inactive service or a short run of unusually good results being presented as proof.', meta: 'No endorsed shortlist in this pilot' },
+];
+---
+<DirectoryHub title="Find a professional tipster" eyebrow="Paid tipster directory" deck="A sport-first way to browse service reviews and the researched Tipstrr shortlist, without the legacy page’s claims of consistent profits." note="The older football-tipster page has dated performance claims. This local directory does not repeat them or activate a new paid subscription flow. All entries need a monthly availability and evidence check." groups={groups} entries={entries} footer="Tipster cards should be WP records with sport, provider, review date, active status, source URL and editorial caveats. Rankings and actual performance claims require a documented method. 18+ · Gamble responsibly." />

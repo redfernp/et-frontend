@@ -1,0 +1,9 @@
+# Free horse racing tips exact-route preview — 13 October 2026
+
+Source: staging WordPress snapshot page **41881**, exact path `/free-horse-racing-tips`, last modified **20 October 2025**. The September live crawl recorded this URL as 200/indexable with SEO title `Free Horse Racing Tips | UK, Ireland & Worldwide | Updated Today`. The snapshot body is structurally safe HTML, but it is not a current tips feed.
+
+The source begins with a long “today” card directory dated 18–20 October 2025, then an old bookmaker-offer grid with affiliate links and terms. Reusing that whole body would present stale selections and offers as current. The dedicated exact route therefore retains source text only for four evergreen editorial groups—how selections are researched, how tips are used, racing angles, and trust/corrections—plus four explanatory FAQs and the responsible-gambling reminder. Source links are stripped by the allowlist sanitizer. It excludes the full dated tips directory, bookmaker block, “Updated Today” SEO claim, and current bookmaker CTAs.
+
+The page is **noindex,nofollow preview-only**, with a visible source date and “today’s tips withheld” notice. The exact URL is preserved, but this is not SEO/indexability parity: a trusted dated tip feed, editorial accuracy review, current affiliate offer records, and refreshed metadata are required before public launch. The generic exact-route planner separately reserves this path to prevent a duplicate static asset. `/free-horse-racing-tips/` and `/racing-tips/` were redirect variants in the crawl and must not become competing 200 pages.
+
+Focused tests validate WordPress identity and source section boundaries, at least 5,000 characters of evergreen text, responsible-gambling copy, and the absence of 2025 card dates, bookmaker offer phrases and active links. No WordPress or deployment write was made.

@@ -1,0 +1,10 @@
+---
+import ExactArchiveRoute from '../../components/ExactArchiveRoute.astro';
+import { loadArchiveRoutes } from '../../lib/archive-route-data.mjs';
+export async function getStaticPaths() {
+  return (await loadArchiveRoutes()).filter((item) => item.path.startsWith('/tag/'))
+    .map((archive) => ({ params: { slug: archive.path.slice('/tag/'.length) }, props: { archive } }));
+}
+const { archive } = Astro.props;
+---
+<ExactArchiveRoute archive={archive} />

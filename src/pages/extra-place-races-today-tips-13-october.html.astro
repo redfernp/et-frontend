@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { readOct13ExtraPlacePreview, oct13ExtraPlacePath } from '../lib/oct13-extra-place-preview.mjs';
+import { previewPublicPaths } from '../lib/preview-public-paths.ts';
+
+const article = await readOct13ExtraPlacePreview();
+if (Astro.url.pathname.replace(/\/$/, '') !== oct13ExtraPlacePath) throw new Error('13 October extra-place exact URL mismatch');
+---
+<BaseLayout title="Extra place races — 13 October 2026" sidebar withholdSidebarOffers
+  publicPage previewOnly verifiedPublicPaths={previewPublicPaths} relatedTopic="racing"
+  seo={{ title: 'Extra Place Races — 13 October 2026 | EveryTip', description: 'Historical EveryTip racing-tip record for 13 October 2026. No current selections or bookmaker offers are shown.' }}
+  robots="noindex,nofollow" previewMessage="Exact historical racing article preview · noindex · offers and commercial links withheld">
+  <article class="dated-extra-place">
+    <p class="kicker">Horse-racing archive · 13 October 2026</p>
+    <h1>Extra place races and tips — 13 October 2026</h1>
+    <p class="meta"><time datetime="2026-10-13">13 October 2026</time> · EveryTip editor · WordPress post {article.id}</p>
+    <div class="status" role="note"><strong>Historical record, not today’s tips.</strong> These eight selections, runner counts, forecast prices and place claims came from the article published on 13 October 2026. They must not be used as a current race feed. The three offer CTAs, all links, how-to-bet instructions and dated offer terms are withheld.</div>
+    <div class="copy" set:html={article.introHtml} />
+    <section class="results" aria-label="Historical extra place race selections">
+      <p class="table-label">Archived selections · 13 October 2026</p>
+      <div class="table-scroll"><table><thead><tr>{article.headers.map((header: string) => <th scope="col">{header}</th>)}</tr></thead><tbody>{article.rows.map((row: string[]) => <tr>{row.map((cell: string) => <td>{cell}</td>)}</tr>)}</tbody></table></div>
+      <div class="mobile-rows">{article.rows.map((row: string[]) => <details><summary><span class="expand" aria-hidden="true">+</span><strong>{row[0]} {row[1]}</strong><span>{row[5]}</span></summary><dl>{article.headers.slice(2).map((header: string, index: number) => <div><dt>{header}</dt><dd>{row[index + 2]}</dd></div>)}</dl></details>)}</div>
+    </section>
+    <div class="copy" set:html={article.afterHtml} />
+    <p class="source-note">Source-locked public WordPress article {article.id}, published 13 October 2026. Historical table: eight rows, six columns; source SHA-256 <code>{article.sourceHash.slice(0, 12)}…</code>. This local noindex preview is not approved for publication or current offers.</p>
+  </article>
+</BaseLayout>
+<style>
+  .dated-extra-place{min-width:0;background:#fff;padding:clamp(20px,3vw,36px);color:#173b58}.kicker,.table-label{text-transform:uppercase;letter-spacing:.1em;color:#bd4b00;font-size:.78rem;font-weight:800}.dated-extra-place h1{font-size:clamp(2rem,3.5vw,3.1rem);line-height:1.1;margin:.2em 0 .5em}.meta,.source-note{font-size:.85rem;color:#5e7487}.status{padding:16px 19px;background:#fff3e8;border-left:5px solid #f36b00;line-height:1.6;margin:24px 0}.copy{line-height:1.72;overflow-wrap:anywhere}.copy :global(h2){margin-top:30px;color:#174c76}.copy :global(p){margin:0 0 17px}.results{margin:22px 0 30px}.table-scroll{overflow-x:auto;border:1px solid #d1dee8;border-radius:7px}.results table{border-collapse:collapse;width:100%;font-size:.88rem}.results th{background:#174c76;color:#fff;text-align:left;padding:11px 10px}.results td{padding:12px 10px;border-top:1px solid #d1dee8;vertical-align:top}.results tr:nth-child(even){background:#edf5f9}.results th:nth-child(3),.results td:nth-child(3),.results th:nth-child(5),.results td:nth-child(5){white-space:nowrap}.mobile-rows{display:none}.source-note{border-top:1px solid #d1dee8;padding-top:17px;margin-top:30px}.source-note code{overflow-wrap:anywhere}@media(max-width:700px){.table-scroll{display:none}.mobile-rows{display:block}.mobile-rows details{border:1px solid #bfd3e0;border-radius:6px;margin:8px 0;overflow:hidden}.mobile-rows summary{display:grid;grid-template-columns:24px 1fr;gap:2px 9px;align-items:center;cursor:pointer;padding:12px;background:#19618f;color:#fff}.mobile-rows summary span:last-child{grid-column:2;font-size:.86rem}.mobile-rows .expand{font-size:1.3rem;font-weight:800}.mobile-rows details[open] .expand{transform:rotate(45deg)}.mobile-rows dl{margin:0}.mobile-rows dl div{display:grid;grid-template-columns:43% 57%;border-top:1px solid #d6e3eb}.mobile-rows dt,.mobile-rows dd{margin:0;padding:10px}.mobile-rows dt{font-weight:700;background:#e8f1f6}.mobile-rows dd{background:#f9fcfd}}
+</style>

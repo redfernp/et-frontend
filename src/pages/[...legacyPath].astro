@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { exactRoutePreviewPaths } from '../lib/exact-route-preview.mjs';
+import { previewHtml, withholdsSnapshotTipTables } from '../lib/migration-preview.mjs';
+import ColumnistProfile from '../components/ColumnistProfile.astro';
+import { columnistKeyForUri, legacyColumnistPortraitPaths } from '../lib/columnist-profiles.mjs';
+import { resolvePublicSeo } from '../lib/public-seo.mjs';
+import { loadOptedInDailyTipSnapshot } from '../lib/opted-in-daily-tip-snapshot.mjs';
+import { resolveValueTipPlacement, valueTipPlacements } from '../lib/value-tip-placement.mjs';
+import DatedTipsPreview from '../components/DatedTipsPreview.astro';
+
+interface Props {
+  record: { uri: string; title: string; date: string; databaseId: number; content: string; sourceMode?: string };
+  contentKind: 'post' | 'page';
+  crawlRow: { path: string; indexability: string; canonical?: string; title?: string; meta_description?: string; robots?: string; verified_sidebar_setting?: string; unverified_crawl_path?: boolean; withheld_widget?: string };
+  snapshotDate: string;
+  columnist: { name: string; slug: string; role: string; bio: string; image: string } | null;
+  curatedSections?: { kind: string; text: string }[];
+}
+
+export const getStaticPaths = exactRoutePreviewPaths;
+
+const { record, contentKind, crawlRow, snapshotDate, columnist, curatedSections } = Astro.props as Props;
+if (decodeURIComponent(Astro.url.pathname).replace(/\/$/, '') !== record.uri) throw new Error(`Exact route mismatch: ${record.uri}`);
+const columnistKey = columnistKeyForUri(record.uri);
+const showSidebar = !curatedSections && contentKind === 'post' && crawlRow.verified_sidebar_setting !== 'No Sidebars';
+const relatedTopic = columnistKey === 'john' || /(?:football|epl|premier-league|soccer|fa-cup)/i.test(record.uri) ? 'football' : 'racing';
+const body = curatedSections ? '' : previewHtml(record, { excludedImagePaths: columnistKey ? legacyColumnistPortraitPaths[columnistKey] : [] });
+const tipPlacement = valueTipPlacements[record.uri];
+const importedTipSnapshot = tipPlacement ? await loadOptedInDailyTipSnapshot() : null;
+const tipSnapshot = tipPlacement ? resolveValueTipPlacement({
+  path: record.uri,
+  reference: { type: 'tip-table-reference', ...tipPlacement },
+  snapshot: importedTipSnapshot,
+}) : null;
+const tableFeedUnavailable = !curatedSections && withholdsSnapshotTipTables(record) && !tipSnapshot;
+const sourceSeo = resolvePublicSeo({ path: record.uri, crawlRow, yoast: (record as typeof record & { seo?: Record<string, string> }).seo, publishedLocal: record.date });
+const sourceLabel = record.sourceMode === 'fresh-staging-wpgraphql-preview' ? 'Fresh staging WPGraphQL read'
+  : record.sourceMode === 'owner-rewrite-handoff-2026-10-04' ? 'Owner rewrite handoff' : 'Snapshot';
+---
+<BaseLayout title={`${record.title} — exact-URL preview`} wide={!showSidebar} sidebar={showSidebar} relatedTopic={relatedTopic} robots="noindex, nofollow" seo={{ title: sourceSeo.title, description: sourceSeo.description }} previewMessage="Exact legacy URL test · links disabled · not for publication">
+  <article class="exact-preview">
+    <p class="kicker">Legacy URL content preview</p>
+    <h1>{record.title}</h1>
+    {columnist && <ColumnistProfile profile={columnist} variant="byline" />}
+    <p class="exact-preview-meta">{record.sourceMode === 'owner-rewrite-handoff-2026-10-04' ? 'Owner rewrite captured' : 'Published'} {record.date?.slice(0, 10)} · WordPress {contentKind} {record.databaseId} · exact path <code>{record.uri}</code></p>
+    <p class="exact-preview-warning">{record.sourceMode === 'owner-rewrite-handoff-2026-10-04' ? 'Dated owner rewrite for local route review only. Affiliate calls to action and legacy layout shortcodes are withheld. Current legal, country, offer and promotional claims have not been reverified; this is not approved for publication.' : curatedSections ? 'Partial editorial extraction from a dated WordPress snapshot. Builder and embedded elements, promotional passages, links and unreviewed sections are withheld. This is not a complete migration or an approved article.' : crawlRow.withheld_widget === 'patent-calculator' ? 'Dated editorial preview. The legacy interactive patent-bet calculator is withheld; calculations and staking examples need independent review before this page can replace WordPress. Commercial links are disabled.' : crawlRow.unverified_crawl_path ? 'Published staging WordPress path absent from the dated live crawl. Noindex route preview only; live URL, editorial copy, claims, SEO and media need review. Commercial links are disabled.' : 'Local route test only. Commercial links are disabled; editorial copy, offer claims, SEO fields, media and page-family presentation still need review before this route can replace WordPress.'}</p>
+    {tableFeedUnavailable && <p class="exact-preview-warning" role="status">Tips table feed unavailable in this preview. Historical Ninja Tables rows have been withheld; no current selections are shown.</p>}
+    {tipSnapshot && <DatedTipsPreview rows={tipSnapshot.rows} feedDate={tipSnapshot.feedDate} uploadId={tipSnapshot.uploadId} title={tipPlacement.filter === 'KEMPTON' ? 'Kempton racing tips' : 'Dark Horse value tips'} idPrefix={tipPlacement.filter === 'KEMPTON' ? 'kempton-upload' : 'dark-horse-upload'} emptyMessage={tipSnapshot.emptyCourse ? 'No Kempton selections are recorded in this dated upload.' : 'No selections are recorded in this dated upload.'} />}
+    {curatedSections ? <div class="exact-preview-body curated-preview-body">
+      {curatedSections.map((section) => section.kind === 'h2' ? <h2>{section.text}</h2> : section.kind === 'h3' ? <h3>{section.text}</h3> : section.kind === 'li' ? <p class="curated-list-line">{section.text}</p> : <p>{section.text}</p>)}
+    </div> : <div class="exact-preview-body" set:html={body} />}
+    {columnist && <ColumnistProfile profile={columnist} variant="full" />}
+    <p class="exact-preview-source">{sourceLabel} {snapshotDate.slice(0, 10)} · {crawlRow.unverified_crawl_path ? 'Absent from dated crawl; live status checked separately' : `Live crawl: ${crawlRow.indexability}`} · Intended live canonical: {crawlRow.canonical || 'none'}</p>
+  </article>
+</BaseLayout>
+<style>
+  .exact-preview{margin:auto;max-width:980px;padding:32px;background:#fff}
+  .exact-preview-meta,.exact-preview-source{color:#60717e;font-size:12px}
+  .exact-preview-meta code{overflow-wrap:anywhere}
+  .exact-preview-warning{padding:13px 16px;border-left:4px solid var(--et-orange);background:#fff6ec;color:#514639}
+  .exact-preview-body{line-height:1.7;overflow-wrap:anywhere}
+  .exact-preview-body :global(img){max-width:100%;height:auto}
+  .exact-preview-body :global(figure){margin:22px 0}
+  .exact-preview-body :global(table){display:block;max-width:100%;overflow-x:auto}
+  .curated-preview-body{max-width:760px}
+  .curated-list-line{padding-left:17px;border-left:3px solid #d5e5ef}
+  .exact-preview-source{margin-top:35px;border-top:1px solid #dfe7ed;padding-top:12px}
+  :global(.page-shell.with-sidebar) .exact-preview{max-width:none;padding:0}
+  :global(.page-shell.with-sidebar) .exact-preview-body{max-width:none}
+  @media(max-width:600px){.exact-preview{padding:20px}}
+</style>

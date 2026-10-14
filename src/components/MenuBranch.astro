@@ -1,0 +1,19 @@
+---
+import type { NavigationItem } from '../lib/menu-tree';
+import MenuBranch from './MenuBranch.astro';
+interface Props { items: NavigationItem[] }
+const { items } = Astro.props;
+---
+<ul class="cms-menu-branch">
+  {items.map((item) => <li>
+    <span class="cms-menu-label">{item.label}</span>
+    <code>{item.href ?? 'submenu label'}</code>
+    {item.children.length > 0 && <MenuBranch items={item.children} />}
+  </li>)}
+</ul>
+<style>
+  .cms-menu-branch{list-style:none;margin:0;padding:0 0 0 16px;border-left:2px solid #dbe8f1}
+  .cms-menu-branch li{padding:5px 0}
+  .cms-menu-label{font-weight:750;margin-right:8px}
+  code{font-size:11px;color:#647886;overflow-wrap:anywhere}
+</style>

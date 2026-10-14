@@ -1,0 +1,10 @@
+---
+import EvergreenGuide from '../../components/EvergreenGuide.astro';
+const sections = [
+  { id: 'understand', eyebrow: 'Mechanics', title: 'Understand how an acca works', summary: 'Explain the linked selections and why the bet only wins if every leg qualifies under the operator’s rules. This section can hold a simple visual example without promising a successful outcome.', points: ['Define the number of legs and markets in plain language.', 'Show how decimal prices combine, then explain the all-legs risk.', 'Separate the guide from current fixture predictions.'] },
+  { id: 'research', eyebrow: 'Research', title: 'Research each selection', summary: 'This is the home for the original guide’s research discussion. Eric can edit and update the prose in WordPress, with source links and a last-checked date for any statistics.', points: ['Check relevant team news and fixture context.', 'Compare prices and understand that higher prices do not guarantee value.', 'Avoid adding a leg merely to reach a larger headline return.'] },
+  { id: 'terms', eyebrow: 'Rules', title: 'Read the bookmaker’s rules', summary: 'Markets, void legs, cash-out and special acca offers can be handled differently. The published copy should point to the current operator rules and a centrally managed offer record only when one is relevant.' },
+  { id: 'limits', eyebrow: 'Responsible play', title: 'Set a limit before placing a bet', summary: 'The page should keep a practical risk reminder close to the decision point. Betting is entertainment, not a dependable way to earn income, and losses must be affordable.' },
+];
+---
+<EvergreenGuide title="How to understand football accumulators" deck="A clearer home for the existing long-form guide: definitions, research, worked examples, terms and questions, with each claim editable in WordPress." category="Football betting guide" sections={sections} author="JP, Chief Editor" updated="1 October 2026 design preview" relatedHref="/pilot/english-premier-league-betting-tips/" relatedLabel="Browse current football tips" />

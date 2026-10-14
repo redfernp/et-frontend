@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RoundupGuideShell from '../components/RoundupGuideShell.astro';
+import { bookmakerFeaturePreviewRoutes } from '../lib/bookmaker-feature-preview.mjs';
+import { getWordPressMenu } from '../lib/wordpress-menu.ts';
+import { previewPublicPaths } from '../lib/preview-public-paths.ts';
+
+export const getStaticPaths = bookmakerFeaturePreviewRoutes;
+const { record, crawlRow, snapshotDate, editorial } = Astro.props;
+if (Astro.url.pathname.replace(/\/$/, '') !== record.uri) throw new Error(`Bookmaker feature route mismatch: ${record.uri}`);
+const menuItems = (await getWordPressMenu('PRIMARY')).items;
+---
+<BaseLayout title={`${record.title} — feature preview`} wide={true} publicPage previewOnly menuItems={menuItems} verifiedPublicPaths={previewPublicPaths} seo={{ title: record.seo?.title, description: record.seo?.metaDesc }} previewMessage="Exact bookmaker-feature preview · historic claims need review · no offers active">
+  <RoundupGuideShell
+    exactPath
+    title={record.title}
+    deck="A content-migration preview of the existing bookmaker guide. Product features, market availability and promotion terms must be checked against current operator information before publication."
+    byline={`WordPress source ${record.databaseId} · snapshot ${snapshotDate.slice(0, 10)} · exact legacy path`}
+    kicker="Bookmaker feature guide · migration preview"
+    disclosure="Historical WordPress guide copy only. Legacy affiliate links, CTA modules and unverified terms are withheld. This page does not confirm that a bookmaker feature or offer is currently available."
+  >
+    <section class="feature-editorial" set:html={editorial.html} />
+    <aside class="feature-status">{editorial.withheld} non-editorial or terms/module elements withheld from {editorial.sourceNodeCount} source elements. Live crawl: {crawlRow.indexability}; intended canonical: {crawlRow.canonical || 'none recorded'}. This is not publication approval.</aside>
+  </RoundupGuideShell>
+</BaseLayout>
+<style>
+  .feature-editorial,.feature-status{width:min(100%,1000px);margin-inline:auto}
+  .feature-editorial{padding-top:28px;line-height:1.72;color:#294861;overflow-wrap:anywhere}
+  .feature-editorial :global(h2){margin:34px 0 13px;color:#183f5f;font-size:clamp(24px,2.8vw,32px)}
+  .feature-editorial :global(h3){margin:26px 0 10px;color:#205c89;font-size:21px}
+  .feature-editorial :global(p){max-width:none}
+  .feature-status{margin-top:35px;padding:16px 20px;border-left:4px solid #286da5;background:#edf5fa;color:#4c6272;font-size:13px}
+</style>

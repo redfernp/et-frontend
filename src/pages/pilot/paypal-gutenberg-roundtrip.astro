@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { stagingPaypalRoundupFixture } from '../../lib/paypal-roundup-fixture.mjs';
+import { roundupDraftPreview } from '../../lib/staging-roundup-cms.mjs';
+import { splitOfferSlots } from '../../lib/offer-slots.mjs';
+import { latestContentSnapshot, previewHtml } from '../../lib/migration-preview.mjs';
+import { extractFeaturedPayPalCards } from '../../lib/paypal-featured-cards.mjs';
+import { splitPayPalPaymentTable } from '../../lib/paypal-payment-table.mjs';
+import PayPalPaymentTable from '../../components/PayPalPaymentTable.astro';
+import RoundupRankedEntries from '../../components/RoundupRankedEntries.astro';
+import RoundupGuideShell from '../../components/RoundupGuideShell.astro';
+import { featuredOfferPreview } from '../../lib/pilot-data';
+
+const fixture = await roundupDraftPreview('paypal', stagingPaypalRoundupFixture);
+const paypalSource = (await latestContentSnapshot())?.posts.find((record: { uri: string }) => record.uri === '/best-paypal-betting-sites.html');
+type FeaturedCard = { type: 'featured-card'; name: string; logo: string; brandColor: string; facts: { label: string; value: string }[]; editorial: string[] };
+type ContentPiece = { type: 'html'; html: string } | { type: 'offer-slot'; offerId: number; heading: string } | { type: 'payment-table'; headers: string[]; rows: string[][] } | FeaturedCard;
+const pieces: ContentPiece[] = [];
+if (fixture) {
+  for (const piece of extractFeaturedPayPalCards(fixture.content) as ({ type: 'html'; html: string } | FeaturedCard)[]) {
+    if (piece.type === 'html') {
+      for (const inner of splitOfferSlots(piece.html) as ({ type: 'html'; html: string } | { type: 'offer-slot'; offerId: number; heading: string })[]) {
+        if (inner.type === 'html') pieces.push(...splitPayPalPaymentTable(inner.html) as ContentPiece[]);
+        else pieces.push(inner);
+      }
+    }
+    else pieces.push(piece);
+  }
+}
+const rankedEntries: { bestFor: string; editorialVerdict: string; offer?: { nodes?: { databaseId: number }[] } }[] = fixture?.rankedEntries ?? [];
+const rankedOfferIds = new Set(rankedEntries.map((entry) => entry.offer?.nodes?.[0]?.databaseId).filter((id): id is number => typeof id === 'number'));
+// The converted draft retains only these source-backed editorial destinations.
+// Commercial /go/ URLs and unreviewed destinations remain inert in preview.
+const editorialHrefs = ['/bet365-review', '/betfred-review', '/how-to-lay-a-horse-to-lose-on-betfair.html', '/betfair-sportsbook-review', 'https://www.paypal.com/'];
+// Preview-only identity adapter. The final GraphQL data layer will follow the
+// offer → bookmaker relationship instead of carrying these local logo mappings.
+const identityByOfferId = Object.fromEntries([
+  [90846, 'betfred'], [90850, 'betway'], [90849, 'spreadex'], [90852, '10bet'],
+].map(([offerId, key]) => [offerId, featuredOfferPreview.find((item) => item.id === key)!]));
+---
+<BaseLayout title="Best PayPal betting sites — WordPress content in Astro" seo={{ title: paypalSource?.seo?.title, description: paypalSource?.seo?.metaDesc }} wide={true} robots="noindex,nofollow" previewMessage="Staging WordPress draft in the Astro roundup layout · offers disabled">
+  <RoundupGuideShell
+    title="Best PayPal betting sites"
+    kicker="Betting guide · staging content preview"
+    deck="The approved EveryTip roundup design with the actual converted Gutenberg content from the staging WordPress draft."
+    byline={`Draft ${fixture?.postId ?? 90868} · WPGraphQL capture ${fixture?.capturedAt?.slice(0, 10) ?? 'unavailable'} · not published`}
+    image="https://www.everytip.co.uk/wp-content/uploads/2022/11/Betting-Sites-That-Accept-Paypal.jpg"
+    imageAlt="EveryTip betting sites that accept PayPal guide artwork"
+    disclosure={fixture?.sourceMode === 'fresh-staging-wpgraphql-preview' ? 'This is a fresh read of a private staging draft, not a publication feed. Legacy payment claims still need checking. Central offer records are withheld: there are no active affiliate links or unverified offer terms in this preview.' : 'This is a dated capture, not a live WordPress feed. Legacy payment claims still need checking. Central offer records are withheld: there are no active affiliate links or unverified offer terms in this preview.'}
+    toc={[{href:'#structured-entry',label:'Ranked picks'},{href:'#wordpress-content',label:'WordPress editorial content'},{href:'/pilot/best-paypal-betting-sites/',label:'Design-only reference'}]}
+  >
+
+    {fixture ? <>
+      <RoundupRankedEntries entries={rankedEntries} identityByOfferId={identityByOfferId} />
+      <section id="wordpress-content" class="paypal-section paypal-editorial">
+        <div class="paypal-section-head"><p class="kicker">The real copy</p><h2>WordPress editorial content</h2><p>The body below comes from the staging Gutenberg draft via WPGraphQL. Its wording and order are intact; Astro controls the presentation.</p></div>
+        <div class="roundup-content">{pieces.map((piece) => piece.type === 'html'
+          ? piece.html.trim() && <div class="editorial-fragment" set:html={previewHtml({ uri: '/staging-paypal-roundup.html', content: piece.html }, { allowedEditorialHrefs: editorialHrefs })} />
+          : piece.type === 'payment-table'
+            ? <PayPalPaymentTable headers={piece.headers} rows={piece.rows} />
+          : piece.type === 'featured-card'
+            ? <section class="paypal-profile featured-bookmaker" style={`--paypal-brand:${piece.brandColor}`}>
+                <div class="featured-card-top">
+                  <div class="featured-logo" set:html={previewHtml({ uri: '/staging-paypal-card-logo.html', content: piece.logo })} />
+                  <div class="paypal-profile-heading"><span>Bookmaker payment profile</span><h3>{piece.name} PayPal deposits and withdrawals</h3></div>
+                </div>
+                <p class="fact-warning">Payment figures below are from the legacy page and have not been rechecked.</p>
+                <div class="paypal-facts">{piece.facts.map((fact) => <div><strong>{fact.label}</strong><span set:html={previewHtml({ uri: '/staging-paypal-card-fact.html', content: fact.value })} /></div>)}</div>
+                <div class="featured-editorial">{piece.editorial.map((paragraph) => <p set:html={previewHtml({ uri: '/staging-paypal-card-paragraph.html', content: paragraph }, { allowedEditorialHrefs: editorialHrefs })} />)}</div>
+                <div class="featured-actions"><span class="commercial-action">Sign-up link withheld</span><span class="review-action">Review link pending mapping</span></div>
+              </section>
+            : rankedOfferIds.has(piece.offerId) ? null : <div class="offer-reference"><strong>{piece.heading || 'Bookmaker offer'}</strong><span>Central offer reference {piece.offerId} · draft offer withheld pending verification</span></div>)}</div>
+      </section>
+    </> : <p>Local capture not available yet. Run the staging PayPal roundup render probe.</p>}
+  </RoundupGuideShell>
+</BaseLayout>
+<style>
+  .integrated-roundup { min-width:0; }
+  #wordpress-content > .paypal-section-head { width:min(100%,1000px); margin-inline:auto; padding-inline:clamp(0px,1.5vw,16px); }
+  .roundup-content { max-width:100%; line-height:1.72; overflow-wrap:anywhere; }
+  .roundup-content .editorial-fragment { width:min(100%,1000px); min-width:0; margin-inline:auto; padding-inline:clamp(0px,1.5vw,16px); }
+  .roundup-content :global(h2) { margin:38px 0 12px; color:#193f5e; font-size:clamp(24px,2.8vw,32px); }
+  .roundup-content :global(h3) { margin:28px 0 10px; color:#1d5480; font-size:clamp(19px,2.2vw,24px); }
+  .editorial-fragment :global(p), .editorial-fragment :global(li) { max-width:none; }
+  .roundup-content :global(img) { max-width:100%; height:auto; }
+  .roundup-content :global(figure) { max-width:100%; margin:25px 0; }
+  .editorial-fragment :global(table) { display:block; max-width:100%; overflow-x:auto; border-collapse:collapse; font-size:14px; }
+  .editorial-fragment :global(th), .editorial-fragment :global(td) { padding:10px 12px; border:1px solid #dce6ee; text-align:left; }
+  .editorial-fragment :global(th) { background:#1b527e; color:#fff; }
+  .roundup-content :global(.payment-table-wrap) { width:min(100%,1000px); margin-inline:auto; }
+  .roundup-content .featured-bookmaker { width:min(100%,1000px); margin:25px auto; max-width:none; border-radius:5px; box-shadow:0 3px 14px rgb(18 52 78 / .06); }
+  .featured-card-top { display:flex; align-items:center; gap:20px; padding-bottom:16px; border-bottom:1px solid #dce6ee; }
+  .featured-bookmaker .paypal-profile-heading { display:block; }
+  .featured-bookmaker .paypal-profile-heading span { display:block; font-size:12px; text-transform:uppercase; letter-spacing:.06em; }
+  .featured-bookmaker .paypal-profile-heading h3 { margin:3px 0 0; }
+  .featured-logo { flex:none; display:grid; place-items:center; width:160px; height:78px; padding:10px; border-radius:4px; background:var(--paypal-brand); overflow:hidden; }
+  .featured-logo :global(figure) { display:grid; place-items:center; width:100%; margin:0; }
+  .featured-logo :global(img) { display:block; max-width:136px; max-height:48px; width:auto; height:auto; object-fit:contain; }
+  .fact-warning { color:#864507; font-size:12px; font-weight:700; }
+  .featured-bookmaker .paypal-facts { margin:12px 0 19px; }
+  .featured-bookmaker .paypal-facts :global(strong) { display:inline; }
+  .featured-editorial { max-width:none; }
+  .featured-editorial p { margin:0 0 13px; }
+  .featured-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+  .featured-actions span { display:inline-flex; align-items:center; justify-content:center; min-height:54px; padding:10px 15px; border:2px solid transparent; border-radius:4px; font-size:12px; font-weight:800; text-align:center; cursor:not-allowed; }
+  .featured-actions .commercial-action { width:min(100%,260px); background:var(--et-commercial); color:#fff; border-color:var(--et-commercial); }
+  .featured-actions .review-action { width:min(100%,220px); background:#fff; color:var(--et-blue-ink); border-color:var(--et-blue); }
+  .offer-reference { width:min(100%,1000px); margin:23px auto; padding:18px 20px; border:1px solid #c9d8e7; border-left:5px solid var(--et-orange); border-radius:4px; background:#f5f9fc; display:grid; gap:5px; }
+  .offer-reference strong { color:#193f5e; }
+  .offer-reference span { color:#44617a; font-size:13px; }
+  @media (max-width:600px) { .offer-reference { padding:15px; } .featured-card-top { flex-direction:column; align-items:flex-start; gap:12px; } .featured-logo { align-self:center; } .featured-actions .commercial-action, .featured-actions .review-action { width:100%; } }
+</style>

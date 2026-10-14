@@ -8,6 +8,8 @@ Move EveryTip from a plugin-heavy WordPress implementation to an Astro build tha
 
 This first planning pass is based on the live EveryTip WordPress footprint checked on 2026-07-10 and the proven Oddstips Astro/WordPress/Cloudflare Pages pattern in `C:\Users\jpred\Documents\Oddstips\paul365\ot-frontend`.
 
+The authenticated staging audit completed on 2026-09-20 is recorded in `docs/everytip-staging-audit-2026-09-20.md`. Its findings supersede the older object counts below for implementation planning.
+
 - Sitemap index: `https://www.everytip.co.uk/sitemap.xml`
 - Robots file: `https://www.everytip.co.uk/robots.txt`
 - WordPress REST posts: `https://www.everytip.co.uk/wp-json/wp/v2/posts?per_page=1`
@@ -56,6 +58,7 @@ Robots currently blocks `/wp-admin/`, `/cgi-bin/`, `/tmp/`, `/go/`, feeds, and B
 6. Keep affiliate links and bookmaker outbound links behind a central link registry so `sponsored`, `nofollow`, UTM, and compliance attributes are consistent.
 7. Validate SEO-critical output before launch: canonical, title, description, robots, schema, breadcrumbs, internal links, hreflang if added later, and XML sitemap membership.
 8. Use WPGraphQL as the frontend data contract and REST API endpoints for backend tips/content automation, rebuild control, and scheduled jobs.
+9. Make an authenticated EveryTip MCP server a first-class editorial interface for Codex and Claude. Routine content work should be possible from chat without opening wp-admin; WordPress remains the canonical editor/data store and an administrative fallback.
 
 ## Target Information Architecture
 
@@ -67,10 +70,12 @@ Recommended Astro content model:
 | `pages` | Evergreen landing pages, review pages, guides, and static pages | WPGraphQL pages and page metadata |
 | `categories` | Indexable category hub metadata and intro copy | WPGraphQL categories, Yoast SEO fields, and SCN workbook decisions |
 | `authors` | Expert/columnist profiles and author schema | WPGraphQL users/authors plus editorial metadata |
-| `bookmakers` | Operator facts, offers, review ratings, compliance copy | WordPress fields or local registry, reviewed periodically |
+| `bookmakers` | Operator facts, review ratings, compliance copy, and default offer relationships | WordPress bookmaker custom post type with ACF Pro fields exposed through WPGraphQL |
+| `offers` | Welcome offers, existing-customer offers, event campaigns, exact terms, compact terms, dates, and CTA data | WordPress offer custom post type with ACF Pro fields exposed through WPGraphQL |
+| `offerPlacements` | Ordered selections for the homepage ladder, free-bets pages, sidebars, reviews, and articles | WordPress ACF Pro relationship fields exposed through WPGraphQL |
 | `racecourses` | Racecourse guide metadata and internal-link targets | WordPress page/post data and SCN workbook route policy |
 | `redirects` | One row per legacy URL requiring redirect or keep-live decision | SCN/topical authority workbook export |
-| `affiliateLinks` | Canonical outbound link definitions | WordPress/REST-backed registry or local data file, kept out of body copy where possible |
+| `affiliateLinks` | Canonical outbound destinations and internal `/go/` slugs | ACF Pro fields on bookmaker or offer records, exposed through WPGraphQL and kept out of body copy |
 
 Recommended route handling:
 
@@ -88,23 +93,31 @@ Astro-specific decisions should follow the current official guidance:
 - Use configured redirects for explicit old-to-new URL movement, but handle trailing-slash normalization at the hosting layer because Astro redirects are not the right tool for that case.
 - Store local migrated images in `src/` when Astro should optimize them; use `public/` only for assets that must be served as-is.
 - For remote WordPress/CDN images during transition, authorize remote image sources in Astro config before using Astro image optimization.
-- Keep the build fully static on Cloudflare Pages unless a specific runtime endpoint is needed. If runtime endpoints are needed for forms/tracking, isolate them in Pages Functions or Workers rather than making content pages SSR.
-- Copy the Oddstips rebuild model: WordPress changes trigger a debounced Cloudflare Pages deploy hook, plus a scheduled fallback rebuild.
+- Keep content pages statically built, deployed as Cloudflare Workers static assets. Isolate runtime forms/tracking in Worker routes rather than making content pages SSR.
+- Copy the Oddstips debounced-rebuild pattern, but target the Workers build/deployment pipeline rather than a Pages deploy hook; retain a scheduled fallback rebuild.
 
 ## Repo And Go-Live Plan
 
-Use GitHub repo `redfernp/et-frontend` as the EveryTip Astro frontend project. Do not create a separate Cloudways staging WordPress site for this migration unless a later blocker proves we need one.
+### Exact legacy URL parity is a launch gate (1 October 2026)
+
+The September crawl confirms that all **805 known WordPress posts** with a 200 response use an exact `.html` path, while all **118 known pages** use an extensionless path. Another 134 successful URLs lack a confirmed WordPress type (74 end in `.html`, 60 do not). The generated route must therefore use the existing WordPress `uri`/verified crawl path as its source of truth, not blindly append or strip `.html` based on content type. Preserve case, nesting, trailing slash, query/canonical policy and existing redirect behaviour. A migrated 200 URL must remain a direct 200 at its current path, without a migration-created redirect.
+
+**Deployment decision:** host the Astro output on **Cloudflare Workers with static assets**, not Cloudflare Pages. Pages' default HTML serving redirects `/file.html` to `/file`, which violates the legacy post URL contract. Configure Workers assets with `html_handling: "none"`; generate posts as exact `.html` assets and route extensionless pages to their generated HTML without changing the browser URL. The route registry comes from each verified WordPress `uri`/crawl path, not from a guessed post-type suffix rule. Test representative `.html` posts, extensionless pages, nested racecourse pages, and existing 301s on the Workers preview. Do not switch DNS until request/response tests show the correct status, final URL and canonical for every mapped legacy route. The current `/pilot/` output is design-only and does not meet this gate.
+
+The local routing layer now uses Astro's directory output for extensionless pages, normalizes any `.html/index.html` build output into an exact `.html` asset, and uses an asset-first Worker to resolve extensionless page paths internally. See `wrangler.jsonc`, `src/worker/index.mjs`, `scripts/normalize-html-routes.mjs`, and `tests/legacy-routing.test.mjs`. This is **locally tested only**; Cloudflare preview behaviour and a full legacy URL crawl remain launch gates. No production page is emitted yet from the WordPress content snapshot.
+
+Use GitHub repo `redfernp/et-frontend` as the EveryTip Astro frontend project. Build against the planned staging copy of the EveryTip WordPress site until launch. Production WordPress remains untouched by frontend-development work until the migration has passed content, SEO, compliance, and visual QA.
 
 1. Assign local project `et-astro` to `https://github.com/redfernp/et-frontend`.
 2. Build the Astro frontend as `et-frontend`.
-3. Use the chosen EveryTip WordPress install as the CMS source through WPGraphQL.
-4. Install/verify WPGraphQL, Yoast SEO GraphQL exposure, and any required ACF/custom-field GraphQL exposure on WordPress.
-5. Use Cloudflare Pages preview deployments for frontend QA.
+3. Use the EveryTip staging WordPress copy as the development CMS source through WPGraphQL.
+4. Install/verify ACF Pro, WPGraphQL, WPGraphQL for ACF, and Yoast SEO GraphQL exposure on staging.
+5. Use Cloudflare Workers static-assets preview deployments for frontend QA.
 6. Keep canonical URLs pointed at `https://www.everytip.co.uk` on Cloudflare previews, and ensure previews are not discoverable/indexable.
-7. Trigger production rebuilds through the Cloudflare Pages deploy hook once the frontend is ready.
+7. Trigger production rebuilds through the Workers deployment pipeline once the frontend is ready.
 8. Change routing/DNS/proxy rules only after the final crawl, redirect checks, and tracking checks pass.
 
-Recommended Cloudflare Pages project settings:
+Workers static-assets project settings:
 
 | Setting | Value |
 | --- | --- |
@@ -112,7 +125,8 @@ Recommended Cloudflare Pages project settings:
 | Build command | `npm run build` |
 | Output directory | `dist` |
 | Build mode | Static Astro output |
-| Production branch | To be decided once repository is created |
+| Asset HTML handling | `none` (exact `.html` request path) |
+| Production branch | Set in the Workers build/deployment pipeline |
 
 Recommended environment variables:
 
@@ -123,7 +137,7 @@ Recommended environment variables:
 | `WP_BASIC_AUTH_PASSWORD` | Optional basic auth password if the WordPress source is protected |
 | `PUBLIC_SITE_URL` | Canonical public site URL, normally `https://www.everytip.co.uk` |
 | `PUBLIC_GA4_ID` | Optional reporting analytics ID |
-| `CF_PAGES_DEPLOY_HOOK_URL` | Stored in WordPress/server cron, not exposed to the browser |
+| Protected build trigger | Stored server-side; starts the Workers build/deployment pipeline and is never exposed to the browser |
 | `EVERYTIP_AUTOMATION_KEY` | Secret header for protected WordPress REST automation endpoints |
 
 ## WordPress Data And Rebuild Architecture
@@ -132,9 +146,9 @@ EveryTip should reuse the Oddstips separation of concerns:
 
 | Lane | Tooling | Responsibility |
 | --- | --- | --- |
-| Frontend content | WPGraphQL | Posts, pages, categories, menus, Yoast SEO fields, author data, featured images, rendered content |
+| Frontend content | WPGraphQL | Posts, pages, categories, menus, Yoast SEO fields, author data, featured images, rendered content, bookmakers, offers, and offer placements |
 | Backend automation | WordPress REST API | Tip generation, content updates, offer updates, snapshot generation if used, rebuild triggers |
-| Deployment | Cloudflare Pages deploy hook | Rebuild Astro after WordPress changes |
+| Deployment | Protected CI trigger + Cloudflare Workers deployment | Rebuild Astro after WordPress changes |
 | Reliability fallback | Cloudways cron | Scheduled rebuilds and scheduled automation runs |
 
 Initial recommendation:
@@ -142,17 +156,170 @@ Initial recommendation:
 - Start with WPGraphQL build-time queries because EveryTip's current footprint is moderate: 962 posts, 205 pages, and 8 categories.
 - Batch GraphQL queries wherever possible. Avoid one network request per page if a paginated all-posts/all-pages query can feed `getStaticPaths`.
 - Cache GraphQL responses in module-level build memory, as Oddstips does for menus.
-- Add build health checks so a failed or partial WordPress response cannot deploy a thin broken site over the last healthy Cloudflare Pages build.
+- Add build health checks so a failed or partial WordPress response cannot deploy a thin broken site over the last healthy Workers deployment.
 - If GraphQL build volume becomes slow or flaky, add an EveryTip snapshot endpoint that emits WPGraphQL-shaped JSON to `/wp-content/uploads/everytip-snapshot.json`, then have Astro fetch that once per build.
+
+## ACF Pro Bookmaker And Offer Architecture
+
+WordPress is the single source of truth for all bookmaker and offer data. Do not hard-code live offer headlines, terms, eligibility, expiry dates, or affiliate destinations in Astro or MDX.
+
+Create a `bookmaker` custom post type with ACF Pro fields for:
+
+- Public name, slug, logo, brand colours, active state, and display priority.
+- Review-page relationship, rating data, licensing facts, and responsible-gambling information.
+- Default affiliate redirect and primary welcome-offer relationship.
+
+Create an `offer` custom post type with ACF Pro fields for:
+
+- Stable internal offer ID and bookmaker relationship.
+- Offer type, including welcome, existing customer, enhanced odds, free bet, money back, racing, football, and event campaign.
+- Customer eligibility, jurisdiction, public headline, CTA label, and landing/affiliate destination.
+- Main display copy, exact full terms, and separately approved compact or space-restricted terms. Compact terms must not be generated by truncating the full terms.
+- Start date, expiry date, status, event/campaign relationship, source URL, last checked date, checked-by user, and compliance notes.
+
+Create reusable offer-placement fields for:
+
+- Homepage offer ladder.
+- Free-bets pages.
+- Football, racing, and generic sidebars.
+- Bookmaker reviews and offer bridge pages.
+- Offer-led news articles and newsletter landing stories.
+
+Each placement stores ordered relationships to `offer` records plus presentation settings such as maximum items. Astro components resolve the related offer records at build time. Updating an offer once in WordPress must update every placement that references it after the next successful rebuild.
+
+Expose all required ACF field groups and relationships through WPGraphQL. GraphQL queries should return typed bookmaker, offer, and placement data rather than requiring Astro to parse offer facts from rendered page HTML.
+
+Offer saves, status changes, scheduling changes, expiries, and placement changes must enqueue a debounced Astro rebuild. A scheduled server job should also detect newly active or expired offers and trigger a rebuild so time-sensitive promotions cannot remain stale merely because no editor pressed Update.
+
+## Roundup Guide Editing Model
+
+### Editorial implementation decision (2 October 2026)
+
+Use a **Gutenberg + ACF Pro hybrid**, not an ACF-only page builder. Astro owns the page-family layout; WordPress owns the editable content. Ordinary paragraphs, headings, lists, images, quotes and internal links belong in native Gutenberg blocks. ACF Pro owns records or fields that must be shared, validated or ordered: bookmakers, offers, exact/compact terms, review facts, ranked entries, placement relationships and racecourse/tips-table references. A deliberately small set of ACF custom blocks lets an editor place those structured modules *between* native prose blocks. Register those blocks using `block.json`; the first is an offer slot containing a relationship/reference, presentation variant and optional contextual heading, never a duplicate of terms or an affiliate URL.
+
+The page families are not all edited alike:
+
+| Page family | WordPress editing surface | Astro responsibility |
+| --- | --- | --- |
+| Daily tips and standard/offer-news articles | Native Gutenberg prose, plus optional offer-slot or tips-table reference block | Article chrome, author cards, sidebar, offer rendering and exact `.html` route |
+| Roundup and free-bets guides | Gutenberg intro/supporting prose, ACF ordered ranked-entry/offer relationships and optional approved callout blocks | Ranking cards, comparison table, responsive layout and central offer terms |
+| Bookmaker reviews | Gutenberg analysis, ACF bookmaker facts/ratings/default offer and optional offer slot | Brand treatment, verdict, sticky mobile CTA and disclosure |
+| Racecourse and Dark Horse pages | Gutenberg guide prose, ACF tips-feed/table reference and course facts | Current tips table, mobile expansion and historical archive presentation |
+| Homepage, archives and category hubs | ACF placements and WP menu/metadata; selected Gutenberg intro where needed | Overall layout, pagination, index rules and navigation |
+| Legal pages | Native Gutenberg copy, reviewed against the existing site | Consistent legal footer and page chrome |
+
+Do not turn existing Beaver/Thrive markup into a giant Custom HTML block. Convert the editorial prose to native blocks, transfer only approved structured facts into ACF, and compare each converted page against its live source before publishing. WordPress remains available for advanced admin work, while Eric's routine text/SEO/offer editing can later be performed through per-user authenticated REST/MCP actions with read-back and revision checks. WPGraphQL remains the Astro read path; verify the actual output of ACF blocks before treating their rendered HTML as a stable data contract. ACF block references should be resolved centrally in Astro rather than copying volatile offer copy into post content.
+
+The first implementation batch is one representative staging **draft** in each of three families: a normal tips article, a bookmaker review and a ranked roundup. It must preserve the original slug and Yoast state, keep offers unpublished until verified, and demonstrate text editing without breaking the fixed Astro layout. No bulk conversion or public-path build is authorized by a successful pilot alone.
+
+Best-bookmaker, best-betting-site, free-bets, and similar commercial roundup guides should use a fixed Astro template backed by structured WordPress fields. Editors control content and ordering; Astro controls layout, responsive behaviour, offer rendering, sidebars, CTA markup, and compliance presentation.
+
+Use a dedicated roundup page template or `roundup_guide` content type with these top-level fields:
+
+- WordPress title, slug, author, publish/update dates, and Yoast SEO fields.
+- Introductory rich text, short editorial summary, methodology copy, disclosure, and last-reviewed details.
+- Roundup type, audience, sport/event, default sidebar preset, and related content relationships.
+- FAQ rows and supporting long-form guide sections.
+
+Use an ordered ACF repeater for ranked entries. Each entry should contain:
+
+- A required `bookmaker` relationship.
+- An optional `offer` override; otherwise use the bookmaker's current primary offer.
+- `best_for` label, short verdict, editorial review text, key features, and pros/cons.
+- Optional guide-specific score or badge when the template requires one.
+
+Rank numbers come from repeater order. Eric can drag entries to reorder them without editing ranks, HTML, CSS, CTA URLs, logos, or terms. Offer headlines, affiliate destinations, exact terms, and compact terms always resolve from the related central offer record and are not copied into the roundup page.
+
+For supporting copy below or between ranked sections, provide a small allowlist of structured section types rather than an unrestricted page builder:
+
+- Heading plus rich text.
+- Methodology or editorial-policy callout.
+- Automatically generated comparison table.
+- FAQ group.
+- Related-guides block.
+- Newsletter signup block.
+
+Restrict rich-text toolbars and disallow raw HTML, arbitrary colours, custom inline styles, manually entered affiliate URLs, and copied offer terms. Add field validation, character guidance, safe frontend fallbacks, WordPress revisions, and an Astro preview link. Template-critical fields should have clear required-state validation, but a missing optional field must collapse cleanly rather than leave an empty card or broken grid.
+
+Use WordPress block locking or equivalent role restrictions so Eric can edit text and reorder approved sections without deleting required structural controls. Changes to roundup editorial copy can follow the normal publishing workflow. Central offer terms and destinations need an explicit diff, confirmation, source/checked-date record and revision history; an additional human reviewer is an optional workflow for exceptional changes, not a blanket dependency for Eric.
+
+## Inline Offer Blocks And Country Targeting
+
+Replace the relevant Ad Inserter Pro offer functionality with a controlled ACF Pro block named `EveryTip Offer Slot`. Register it through `block.json` and restrict it to supported posts/pages.
+
+The block stores references and presentation choices, not copied commercial content:
+
+- Required offer-placement relationship.
+- Optional explicit offer override for a campaign-specific article.
+- Approved layout: inline card, compact card, ladder, or comparison row.
+- Optional editor-written heading or contextual introduction.
+- Approved terms mode: full or compact, subject to template rules.
+- Fallback behaviour when no eligible offer exists: hide cleanly or show an approved neutral module.
+
+The block must not allow manual affiliate URLs, copied offer headlines, copied terms, arbitrary HTML, or custom styling. It resolves bookmaker, offer, destination, eligibility, and terms from the central ACF records.
+
+Use two placement modes for daily tip posts:
+
+1. A template-controlled default slot inserted automatically in the standard daily-tip layout, selected by sport/category and requiring no action from Eric.
+2. An optional editor-inserted ACF block for special event or offer-led articles where the offer should appear at a chosen point in the copy.
+
+The WordPress render callback should emit a stable offer-slot marker containing only the placement/block identifier needed by Astro. WPGraphQL may continue returning normal post content as rendered HTML; if structured block data is needed later, use the supported WPGraphQL content-block route rather than parsing fragile page-builder markup.
+
+Astro pages remain static and must not bake a visitor country into the build. At request time, a small Cloudflare Worker endpoint resolves the slot using the visitor's Cloudflare country code and the offer's eligible/excluded-country fields. The frontend replaces the marker with the eligible offer component. Cache the response by slot and country, and fail closed: an unknown or ineligible country receives no bookmaker offer rather than a guessed UK offer.
+
+Cloudflare IP geolocation is a targeting signal, not proof of legal location or eligibility. The bookmaker's own checks and the published terms remain authoritative. Country targeting must not be the only compliance control.
+
+During the migration, Ad Inserter Pro can continue serving the legacy WordPress frontend. Remove its offer-rendering responsibility only after the Astro slot system has passed country, mobile, terms, link, cache, and no-eligible-offer QA.
 
 Recommended WordPress REST endpoints:
 
 | Endpoint | Method | Purpose |
 | --- | --- | --- |
-| `/wp-json/everytip/v1/trigger-rebuild` | `POST` | Protected endpoint that calls the Cloudflare Pages deploy hook |
+| `/wp-json/everytip/v1/trigger-rebuild` | `POST` | Protected endpoint that starts the Workers build/deployment pipeline |
 | `/wp-json/everytip/v1/generate-snapshot` | `POST` | Optional later endpoint to generate a build snapshot file |
 | `/wp-json/everytip/v1/automation/tips` | `POST` | Backend tip/content automation entrypoint |
 | `/wp-json/everytip/v1/offers/refresh` | `POST` | Offer review/update automation |
+
+## Chat-Driven WordPress Editorial Workflow (Codex / Claude MCP)
+
+Build one purpose-built EveryTip MCP server that can be connected to Codex and Claude; do not duplicate the WordPress logic separately for each assistant. The server uses authenticated WordPress REST API calls for *writes* and controlled read-back, while Astro continues to use WPGraphQL for frontend build-time *reads*. It must expose task-level tools rather than an unrestricted `request(url, method, body)` proxy.
+
+The everyday goal is that JP or Eric can say “draft this offer news post”, “change this guide paragraph”, “replace this image”, “update the welcome-offer terms”, or “import today’s tips” here. The tool finds the exact WordPress object, shows the proposed change, applies only the requested fields, reads the saved object back, and provides a preview/verification result. Gutenberg blocks or Classic-editor body content may hold flexible prose; ACF Pro holds structured template fields and canonical bookmaker/offer facts. New content must not depend on editing Beaver Builder or Thrive Architect modules. Existing builder content needs a one-time conversion and visual/SEO audit. wp-admin remains available for advanced setup, complex exceptions and recovery; avoiding routine logins is a workflow goal, not a prohibition.
+
+Two-person access plan:
+
+- Share one maintained MCP server *codebase and tool design*, not one WordPress login or Application Password. JP and Eric each use their own WordPress account, with capabilities appropriate to their jobs, so permissions and revisions identify the real editor.
+- For the local pilot, each person runs the MCP server under their own computer login. Give each person a separate, revocable WordPress Application Password for **staging**; create separate **production** credentials only after the staging workflow passes. If Codex and Claude are separate clients, separate passwords per client are preferable for independent revocation. Never copy a shared `.env` between people.
+- Store each person's secrets in their own OS credential store where practical, or in a local, ignored `.env.local` as an interim setup. The project contains an `.env.example` with variable names only. MCP client configuration contains the server command and environment-variable names, not literal passwords; never commit, paste into chat, or expose the secret in tool output.
+- Eric needs editorial access to create, edit and publish articles, upload and attach media, update canonical ACF offer records (including their terms), and edit the approved Yoast SEO fields. He does not need plugin, user, theme, ACF field-group or site-settings administration. Design and test a suitable editorial role/capability set on staging rather than giving him a shared administrator login. The MCP tools must honor those capabilities, show a confirmation/diff for offer and SEO changes, and retain revisions and actor attribution. Eric can complete ordinary editorial updates himself; JP review can be reserved for exceptional changes if the team chooses that workflow, not imposed as a blanket blocker.
+- If both need this from phones or several devices later, move the same MCP service behind an authenticated HTTPS gateway with separate per-person sign-in and server-side secret storage. Do not put a common WordPress password in a publicly reachable MCP configuration.
+
+Initial MCP tool surface:
+
+| Tool | Purpose | Default side effect |
+| --- | --- | --- |
+| `search_content`, `get_content`, `get_offer`, `get_revisions` | Resolve exact IDs, statuses, current fields, SEO data and history | Read-only |
+| `prepare_content_change`, `compare_change` | Validate a proposed patch and return a field-level diff plus preview URL | Read-only |
+| `create_draft`, `update_draft` | Create/update posts, pages and approved custom types, including allowed Gutenberg blocks, Classic content, categories and author | Draft-only write |
+| `update_offer` | Change ACF offer facts and compact/full terms in the single canonical offer record | Confirmed editorial write with diff; exceptional changes may use an agreed reviewer |
+| `upload_media`, `attach_media` | Upload and relate images with alt text, attribution and size checks | Media write |
+| `import_tips` | Validate and idempotently ingest a dated football/racing input file through the protected REST importer | Batch draft/data write |
+| `request_preview`, `publish_content` | Trigger preview/rebuild, then publish an approved object | Explicit publish action |
+
+Implementation requirements:
+
+- Use WordPress HTTPS Application Passwords or another approved authentication mechanism; each credential belongs to an individual WordPress account and is revocable per client and environment. Application Passwords authenticate as that account, so enforce actual editing scope with WordPress roles/capabilities and the MCP tool allowlist rather than treating the password itself as a field-level scope. Never put credentials, affiliate destinations or deploy hooks in MCP responses or client-visible URLs.
+- Default the MCP client to **staging**. Production must be an explicit environment selection, with the target site and post/offer identity echoed in the preview. No automatic promotion from staging to live or bulk live publish.
+- Enforce WordPress capabilities and a server-side allowlist of post types, fields and operations. Validate ACF field schemas, relationship IDs, permitted blocks, HTML sanitisation and media types. Do not let a generic model-generated payload edit arbitrary metadata, roles, plugins, settings or affiliate URLs.
+- Return current `modified_gmt`/revision identifiers with reads. Require a matching expected version on updates so an assistant cannot silently overwrite Eric’s newer edit. Preserve WordPress revisions and keep a concise audit log of actor, tool, object ID, before/after fields and outcome.
+- Make repeated creation/import requests idempotent using a stable external key (for example source file/date/selection ID); reject duplicates or return the existing object. Validate the complete daily file before writing, and report per-row failures without leaving a half-published day.
+- Keep article body text and Gutenberg block content independently editable from ACF template fields. Prefer a small allowlist of editor blocks/ACF section types and locked structure for money pages. Use the Classic editor only where useful; it must not become a path for manually duplicating offer terms or affiliate links.
+- Treat offer updates, exact/space-restricted terms, geo eligibility, outbound affiliate destinations and legal/support text as higher-risk changes: show a diff and verification date, require the intended reviewer/approval state, and do not auto-publish from a casual chat instruction. An offer placement stores an ID; all sitewide renderings read the one approved offer record.
+- After a write, read the REST object back, query the relevant WPGraphQL fields, and check the Astro preview for title, body, ACF relationships, offer terms, image, SEO metadata and intended robots state. A successful REST status alone is not completion. Trigger a debounced rebuild only after the saved state is verified.
+- Test API limits and failure cases: retries/backoff, payload sizes, media errors, stale version conflicts, permission denials, WPGraphQL lag and failed rebuilds. Rate-limit writes and cap batch size; the MCP server must not expose an unbounded WordPress write surface.
+- If Yoast SEO or another plugin does not expose the required metadata for authenticated REST writes, add a narrow permission-checked EveryTip REST endpoint for those approved fields; do not assume the default WordPress posts endpoint covers them.
+
+The first acceptance test is a staging-only round trip performed entirely through MCP: create a draft article, edit its prose and ACF fields, attach media, inspect the diff and revisions, verify the WPGraphQL/Astro preview, then publish only after explicit approval. Repeat for an offer record and one dated tips import. Once this works, Eric’s ordinary editorial workflow can be chat-driven; wp-admin remains available for initial setup, credentials, plugin/field-group administration and emergency recovery.
 
 Protected endpoints should require a secret header, for example `X-EveryTip-Key: <secret>`, and should never expose Cloudflare deploy hook URLs in frontend code or public Git history.
 
@@ -275,9 +442,10 @@ Schema must not advertise ratings, FAQs, offers, or authors that are not visible
 ## Affiliate And Compliance Requirements
 
 - Centralize bookmaker CTA generation.
+- Source bookmaker and offer claims from the ACF Pro records exposed through WPGraphQL.
 - Apply `rel="nofollow sponsored"` on bookmaker outbound CTAs unless compliance/SEO explicitly approves a different policy.
 - Keep affiliate redirect paths such as `/go/` blocked if they remain internal tracking routes.
-- Do not expose affiliate IDs in editorial MDX where a registry entry can be used.
+- Do not expose affiliate IDs in editorial body content where a bookmaker or offer ACF relationship can be used.
 - Preserve age-gating and responsible gambling copy on bookmaker offer/review pages.
 - Track every offer claim with last reviewed date, reviewer, jurisdiction, and source URL.
 - Add an editorial review date field to high-risk YMYL/commercial pages.
@@ -287,9 +455,9 @@ Schema must not advertise ratings, FAQs, offers, or authors that are not visible
 Recommended stack for the first implementation phase:
 
 - Astro with TypeScript.
-- Content collections for posts, pages, authors, categories, bookmakers, and racecourses.
-- MDX only where the content needs components such as bookmaker tables, pros/cons, offer boxes, or calculators.
-- Plain Markdown for straightforward informational content.
+- A typed WPGraphQL data layer for posts, pages, authors, categories, bookmakers, offers, offer placements, and racecourses.
+- WordPress remains the editable source for page copy, on-page SEO text, and structured commercial content.
+- Reusable Astro components render bookmaker tables, offer ladders, sidebars, pros/cons, offer boxes, FAQs, and calculators from WordPress data.
 - One SEO component that owns title, description, canonical, robots, Open Graph, Twitter, and schema injection.
 - One breadcrumb component fed by the route/content model.
 - One affiliate CTA component fed by the bookmaker/link registry.
@@ -386,12 +554,12 @@ Set launch acceptance targets for representative page templates:
 
 | Decision | Owner | Default recommendation |
 | --- | --- | --- |
-| Keep WordPress as headless CMS or fully migrate to files | Product/SEO/Engineering | Fully migrate stable content to files; keep WP only if editorial workflow requires it |
+| Keep WordPress as headless CMS or fully migrate to files | Product/SEO/Engineering | **Decided:** keep WordPress as the canonical CMS and expose content through WPGraphQL |
 | Preserve `.html` post URLs | SEO | Preserve where currently canonical |
 | Normalize trailing slash | Engineering/SEO | Decide once at host level, then enforce consistently |
 | Keep author/column archives noindex | SEO | Yes, unless unique author hubs are intentionally built |
 | Rebuild Beaver Builder bridge pages in Astro | Product/Engineering | Yes, as noindex controlled templates |
-| Use MDX for bookmaker cards and tables | Engineering | Yes, but keep data in structured files |
+| Store bookmaker and offer data in Astro/MDX or WordPress | Engineering/Affiliate | **Decided:** ACF Pro custom post types and relationships exposed through WPGraphQL |
 | Migrate media locally or use remote image source | Engineering | Local for high-value evergreen assets; remote authorized during transition |
 
 ## SCN Workbook Specification
@@ -421,8 +589,18 @@ Workbook formulas should calculate:
 
 ## Immediate Next Steps
 
-1. Complete the SCN/topical authority workbook.
-2. Run a full sitemap crawl and REST export into `data/raw/`.
-3. Produce a normalized URL inventory CSV.
-4. Review duplicate bookmaker review URLs, especially Bet365 variants.
-5. Approve route and redirect policies before implementation starts.
+1. Confirm a fresh Cloudways backup and duplicate the server into an isolated test server. Live and staging share the existing server, so do not change its PHP version.
+2. Disable or isolate live email, automation, production traffic, and production tracking on the duplicate.
+3. Upgrade only the isolated duplicate from PHP 7.4.33 to PHP 8.3 if the required legacy stack supports it; use PHP 8.2 as the compatibility fallback.
+4. Regression-test the homepage, representative daily posts, money pages, Beaver/Thrive editing, sidebars, menus, redirects, affiliate links, and ConvertBox after the PHP change.
+5. Update Yoast SEO and Thrive Architect on the duplicate, resolving the Ultimate Addons for Beaver Builder update/licence warning, then repeat the regression tests.
+6. Review the simultaneous Object Cache Pro/Redis Object Cache and Wordfence/Sucuri installations using performance and security evidence. Do not remove plugins without an explicit decision and rollback point.
+7. Install and verify ACF Pro, WPGraphQL, WPGraphQL for ACF, and the selected Yoast GraphQL integration on the isolated duplicate.
+8. Approve the bookmaker, offer, offer-placement, roundup-guide, and inline-offer field groups before entering production data.
+9. Populate a small test dataset and prove the WPGraphQL contract, exact/compact terms reuse, country rules, and relationship queries.
+10. Build the staging-only EveryTip MCP/REST editorial bridge and prove a full draft → diff → save → read-back → GraphQL preview → approved publish round trip from Codex (and separately verify Claude can connect to the same MCP server).
+11. Complete the SCN/topical authority workbook.
+12. Run a full sitemap crawl and REST/WPGraphQL export into `data/raw/`.
+13. Produce a normalized URL inventory CSV, including actual Beaver Builder and Thrive Architect usage by page rather than inferring usage from editor links.
+14. Review duplicate bookmaker review URLs, especially Bet365 variants.
+15. Approve route, redirect, sidebar, and legacy-builder migration policies before Astro implementation starts.

@@ -1,0 +1,11 @@
+---
+export type DirectoryLink = { label: string; href: string };
+export type DirectoryGroup = { title: string; links: DirectoryLink[] };
+const { groups } = Astro.props as { groups: DirectoryGroup[] };
+---
+<nav class="tip-directory" aria-label="Free betting tips by sport and tipster">
+  {groups.map((group) => <section class="tip-directory-group">
+    <h3>{group.title}</h3>
+    <ul>{group.links.map((link) => <li><a href={link.href}>{link.label}<span aria-hidden="true">→</span></a></li>)}</ul>
+  </section>)}
+</nav>

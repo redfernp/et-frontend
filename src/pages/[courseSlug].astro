@@ -1,0 +1,9 @@
+---
+import RacecoursePreview from '../components/RacecoursePreview.astro';
+import { topLevelRacecoursePreviewPaths } from '../lib/racecourse-preview.mjs';
+
+export const getStaticPaths = topLevelRacecoursePreviewPaths;
+const { record, editorial, snapshotDate, crawlRow } = Astro.props;
+if (Astro.url.pathname.replace(/\/$/, '') !== record.uri) throw new Error(`Top-level racecourse route mismatch: ${record.uri}`);
+---
+<RacecoursePreview record={record} editorial={editorial} snapshotDate={snapshotDate} crawlRow={crawlRow} />

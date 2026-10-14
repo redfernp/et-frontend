@@ -20,16 +20,46 @@ EveryTip should own a first-party event trail:
 - Structured around content pillars and bookmaker intent.
 - Synced into the email platform as clean fields/tags.
 
+## Current Operating Baseline
+
+- Approximately 300 new email signups per month.
+- Active list intentionally maintained between 3,000 and 5,000 contacts.
+- Minimum acceptable open rate: 25%.
+- Current reported open rate: approximately 35%.
+
+The initial system should be designed for list quality and useful intent signals rather than maximum contact accumulation. Infrastructure should remain simple at this volume, while preserving a clean upgrade path if traffic, event volume, or subscriber counts increase materially.
+
+List-hygiene decisions should use clicks, confirmed site visits, recency, and sequence engagement alongside reported opens. Open tracking alone is not reliable enough to decide whether an individual subscriber should be retained or removed.
+
 ## High-Level Architecture
 
 | Layer | Recommended Tooling | Responsibility |
 | --- | --- | --- |
 | Frontend | Astro on Cloudflare Pages | Render pages, emit consent-aware events |
-| Event collector | Cloudflare Pages Functions or Worker | Accept first-party tracking and form events |
-| Event store | To be selected | Store page, engagement, signup, and CTA events |
-| Contact sync | Worker/server function | Push clean traits/tags to email platform |
-| Email platform | To be selected | Soap opera sequences and offer follow-up |
+| Email capture | ConvertBox | Continue presenting and optimizing signup forms on EveryTip and Oddstips |
+| Event collector | Cloudflare Worker or Pages Functions | Accept first-party tracking and form events |
+| Event buffer | Cloudflare Queues | Move event processing and SendFox API calls out of the visitor request path, with retries |
+| Event store | Cloudflare D1 | Store consent-aware page, engagement, signup, identity-link, scoring, and CTA events |
+| Contact sync | Cloudflare Worker queue consumer | Push distilled fields, tags, and list membership to SendFox |
+| Email platform | SendFox | Send newsletters, soap opera sequences, and offer follow-up |
 | Reporting | GA4, Search Console, event dashboard | Aggregate performance and content insights |
+
+Pabbly Connect is optional rather than part of the core website-to-email path. Use it only for integrations with other services where maintaining a custom API connection is not worthwhile. EveryTip frontend events, identity resolution, lead scoring, and SendFox synchronization should remain first-party through Cloudflare.
+
+## ConvertBox Signup Flow
+
+Keep ConvertBox as the visible email-capture and conversion layer. Do not replace its forms during the Astro migration.
+
+Use its integrations in parallel:
+
+1. ConvertBox's direct SendFox integration adds the subscriber to the approved main signup list, preserving reliable capture even if the attribution service is temporarily unavailable.
+2. A ConvertBox JSON webhook sends the email, referrer, campaign name, ConvertBox name/ID, and approved custom fields to a protected Cloudflare endpoint.
+3. A first-party post-submit browser signal supplies the current anonymous visitor/session ID so Cloudflare can link the signup to the consented pre-signup event trail.
+4. Cloudflare deduplicates the signup, stores the consent and attribution record, enriches the SendFox contact, and applies the appropriate interest tags or sequence-entry list once.
+
+Do not let both the direct ConvertBox integration and the Cloudflare sync independently start the same automation. ConvertBox owns the base capture/welcome-list action; Cloudflare owns enrichment and behavioural sequence routing.
+
+Treat the ConvertBox webhook as untrusted public input unless ConvertBox provides a verifiable signature. Use an unguessable rotating endpoint secret, rate limits, strict schema validation, timestamp/idempotency checks, and server-side SendFox contact lookup. A webhook failure must not prevent the ConvertBox thank-you action or the subscriber's base SendFox capture.
 
 ## Identity Model
 
@@ -51,6 +81,8 @@ After signup:
 - Continue tracking against `anonymous_id`.
 - Link future events to the known contact when consent allows.
 - Avoid sending raw browsing trails into email tools unless absolutely needed.
+- Keep the email address and SendFox contact mapping server-side. The browser should use an opaque visitor ID rather than an email address or SendFox contact ID.
+- For cross-device recognition, use an opaque, revocable link token in email links or an authenticated account. A hash of an email address must not be treated as anonymous data.
 
 ## Consent And Compliance Guardrails
 
@@ -154,6 +186,54 @@ Recommended tags:
 - `signup:lead-magnet`
 - `signup:newsletter`
 
+## SendFox Routing Model
+
+SendFox automations are primarily triggered when a contact joins a list. Use dedicated automation-entry lists for sequence routing, for example:
+
+- `sequence:racing-soap-opera`
+- `sequence:football-soap-opera`
+- `sequence:free-bets-soap-opera`
+- `sequence:bookmaker-review-soap-opera`
+- `sequence:betting-guides-soap-opera`
+
+Use tags and custom contact fields for durable profile information, not as the only automation trigger. The Cloudflare sync worker should:
+
+1. Create or update the SendFox contact after a valid signup.
+2. Write the distilled attribution and interest fields.
+3. Apply relevant tags.
+4. Add the contact to one approved automation-entry list.
+5. Record the SendFox contact ID and sync result in D1.
+
+The sync must be idempotent so retries cannot start duplicate journeys. SendFox automations should own email timing and email-interaction branches. Cloudflare should own website behaviour, identity matching, scoring, and routing decisions. Confirm that the selected SendFox plan includes API access before implementation.
+
+### Link-Specific Offer Triggers
+
+Selected links in selected SendFox emails must be able to start a new offer-specific automation. Do not rely on a generic "email clicked" rule when the sequence depends on which offer link was chosen.
+
+Use an EveryTip first-party redirect URL for each triggerable link, for example:
+
+`https://www.everytip.co.uk/email-click/{link_id}?t={opaque_contact_token}`
+
+The Cloudflare Worker should:
+
+1. Validate the link ID and opaque, revocable contact token.
+2. Resolve the email/campaign, placement, bookmaker, offer, and destination from server-side configuration.
+3. Record the click in D1 with the contact, link, offer, campaign, and timestamp.
+4. Enqueue an idempotent SendFox update that applies the relevant fields/tags and adds the contact to the offer-specific automation-entry list.
+5. Redirect immediately to the intended EveryTip article, bridge page, or approved affiliate destination.
+
+The browser-facing URL must not contain an email address, SendFox contact ID, or reusable authentication credential. Repeat clicks must not restart or duplicate the same sequence unless that behaviour is explicitly approved for the campaign.
+
+Example routing:
+
+| Selected email link | Recorded intent | SendFox entry list |
+| --- | --- | --- |
+| Bet365 Cheltenham offer | Racing plus Bet365 campaign interest | `sequence:bet365-cheltenham-offer` |
+| Champions League acca offer | Football acca interest | `sequence:champions-league-acca-offer` |
+| Existing-customer racing boost | Existing-customer racing offer interest | `sequence:racing-existing-customer-offer` |
+
+This first-party redirect pattern is the preferred implementation. Pabbly can perform a similar webhook-to-SendFox list action, but it should remain an optional fallback rather than the source of truth for link identity and behavioural history.
+
 ## Lead Scoring
 
 Start simple and make it auditable.
@@ -198,6 +278,7 @@ Recommended frontend endpoints:
 | `/api/events` | `POST` | Collect first-party behavioural events |
 | `/api/signup` | `POST` | Accept signup, consent, attribution, and contact sync |
 | `/api/cta-click` | `POST` | Record bookmaker/offer CTA clicks before redirect |
+| `/email-click/{link_id}` | `GET` | Record a selected email-link click, enqueue its SendFox sequence trigger, and redirect |
 
 Recommended server-side behaviour:
 
@@ -208,6 +289,39 @@ Recommended server-side behaviour:
 - Normalize URL/path/pillar/cluster fields.
 - Hash or tokenize anything sensitive where raw storage is not required.
 - Do not trust client-provided contact IDs.
+- Process event aggregation and SendFox synchronization asynchronously through Cloudflare Queues.
+- Store an outbox/idempotency key for every SendFox mutation so retries cannot duplicate list-entry actions.
+
+## Cost And Abuse Guardrails
+
+Tracking is non-critical. If a quota, circuit breaker, database, queue, or downstream API fails, the public EveryTip page and affiliate destination must continue to work. Drop tracking work before degrading content delivery or redirects.
+
+Apply layered controls:
+
+- Cloudflare WAF rate limits on tracking and signup paths before requests reach the Worker where possible.
+- Worker rate limits by endpoint, IP, anonymous visitor ID, and signed email token as appropriate.
+- Turnstile and server-side validation on signup and other write-heavy public forms.
+- Strict method, origin, content-type, payload-size, and schema validation.
+- Signed, expiring, revocable email-link tokens; never accept a client-supplied SendFox contact ID.
+- Idempotency keys for signup, click, and SendFox mutations.
+- Bounded Queue retries plus a dead-letter queue. Never create an unbounded retry or self-enqueue loop.
+- Indexed D1 queries and bounded retention for raw events.
+- A global daily circuit breaker that stops low-value behavioural ingestion when configured request, event, D1-write, Queue-operation, or SendFox-action thresholds are reached.
+- Preserve signup, unsubscribe, consent, and approved email-link redirects while disabling page-view and scroll tracking first.
+- Budget alerts and usage dashboards as secondary warnings, not as the primary protection.
+
+Initial endpoint limits should be conservative and adjusted after observing legitimate traffic. A suitable starting policy is:
+
+| Endpoint | Initial application limit | Additional control |
+| --- | --- | --- |
+| `/api/events` | 30 requests per IP per minute, with a small bounded event batch | Drop duplicate/noisy events first |
+| `/api/signup` | 5 attempts per IP per hour | Turnstile, email validation, and idempotency |
+| `/api/cta-click` | 30 requests per IP per minute | Allowlisted destination IDs only |
+| `/email-click/{link_id}` | One sequence trigger per contact/link combination | Valid signed token, expiry, and redirect even if tracking is unavailable |
+
+Throttle SendFox synchronization below the documented API limit and apply exponential backoff. The queue consumer must not retry permanent `4xx` validation or authentication errors.
+
+Email-security scanners can prefetch or click links. Treat the first email-link request as a pending signal where necessary and confirm it with a subsequent browser/page signal before starting a high-value offer sequence. At minimum, exclude known automated traffic and make every trigger reversible and auditable.
 
 ## Preview And Development Rules
 
@@ -239,10 +353,10 @@ Cloudflare previews and local development must not pollute production automation
 
 ### Phase 3 - Email Platform Sync
 
-- Pick email platform.
-- Map fields/tags.
-- Build signup sync.
-- Build first journeys.
+- Configure SendFox API access, custom fields, tags, and automation-entry lists.
+- Map D1 profile fields to SendFox fields/tags.
+- Build the queued, idempotent signup and profile sync.
+- Build the first SendFox journeys.
 - Test preview/dev isolation.
 
 ### Phase 4 - QA And Reporting

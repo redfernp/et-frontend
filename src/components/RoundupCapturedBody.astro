@@ -1,0 +1,24 @@
+---
+const { body, blockCount } = Astro.props as { body: string; blockCount: number };
+---
+<section id="guide-content" class="paypal-section roundup-editorial">
+  <div class="paypal-section-head"><p class="kicker">The existing guide</p><h2>WordPress editorial content</h2><p>The text below is taken from the captured staging WordPress page. Astro provides the new presentation; the published page has not been changed.</p></div>
+  <div class="roundup-prose" set:html={body} />
+</section>
+<aside id="conversion-notes" class="conversion-note">
+  <strong>Next editorial pass</strong>
+  <p>The local converter can express this page as {blockCount} editable core Gutenberg blocks. Before publication, reusable bookmaker/offer cards need ACF references and current commercial facts need verification. The published WordPress page remains untouched.</p>
+</aside>
+<style>
+  .roundup-editorial { width:min(100%,1000px); margin-inline:auto; line-height:1.72; }
+  .roundup-editorial .paypal-section-head { margin-bottom:25px; }
+  .roundup-prose { overflow-wrap:anywhere; }
+  .roundup-prose :global(h2) { margin:38px 0 12px; color:#193f5e; font-size:clamp(24px,2.8vw,32px); }
+  .roundup-prose :global(h3) { margin:28px 0 10px; color:#1d5480; font-size:clamp(19px,2.2vw,24px); }
+  .roundup-prose :global(h4) { margin:22px 0 8px; color:#1d5480; font-size:18px; }
+  .roundup-prose :global(p), .roundup-prose :global(li) { max-width:none; }
+  .roundup-prose :global(img) { display:block; max-width:100%; height:auto; margin:20px auto; }
+  .conversion-note { width:min(100%,1000px); margin:40px auto 0; padding:19px 22px; border-left:5px solid var(--et-orange); background:#f3f8fb; color:#193f5e; }
+  .conversion-note p { margin:7px 0 0; }
+  @media (max-width:600px) { .roundup-editorial, .conversion-note { width:100%; } .conversion-note { padding:15px; } }
+</style>

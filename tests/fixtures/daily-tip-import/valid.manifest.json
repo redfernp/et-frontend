@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "producer": "everytip-daily-tool",
+  "feed_date": "2026-10-13",
+  "upload_id": "fixture-20261013-001",
+  "generated_at": "2026-10-13T19:00:00Z",
+  "source_sha256": "aa742ea167012243c00e39b3c093c1ba2fb55898ac51e365bcbbb90efe1c80b1"
+}

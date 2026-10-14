@@ -1,0 +1,15 @@
+---
+import FreeTipsHub from './pilot/free-betting-tips.astro';
+import { latestContentSnapshot } from '../lib/migration-preview.mjs';
+import { priorityPagePreviewRecord } from '../lib/staging-priority-page-cms.mjs';
+import { freeTipsDraftReadEnabled, readStagingFreeTipsEditorialDraft } from '../lib/staging-free-tips-editorial-draft.mjs';
+
+const snapshot = await latestContentSnapshot();
+if (!snapshot) throw new Error('Exact free tips preview requires the dated WordPress snapshot');
+const exactRecord = [...snapshot.posts, ...snapshot.pages].find((record) => record.uri === '/free-betting-tips');
+if (!exactRecord) throw new Error('Missing exact WordPress free tips page');
+const pageRecord = await priorityPagePreviewRecord(exactRecord);
+const editorialOverride = freeTipsDraftReadEnabled()
+  ? await readStagingFreeTipsEditorialDraft(exactRecord) : null;
+---
+<FreeTipsHub exactRecord={pageRecord} editorialOverride={editorialOverride} />

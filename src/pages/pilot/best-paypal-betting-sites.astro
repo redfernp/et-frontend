@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { featuredOfferPreview } from '../../lib/pilot-data';
+
+// The live guide's four featured brands are a visual snapshot, not an eligibility claim.
+// Offer wording, terms, URLs and PayPal facts must resolve from approved WP records.
+const picks = [
+  { id: 'betfred', bestFor: 'Racing and mobile betting', verdict: 'A familiar racing-led choice in the current guide. Eric can write the PayPal-specific verdict without changing the shared bookmaker or offer record.' },
+  { id: 'betway', bestFor: 'Mobile markets', verdict: 'The current guide highlights its mobile experience and range of markets. Payment and welcome-offer eligibility need their own verification.' },
+  { id: 'spreadex', bestFor: 'Fixed odds and spreads', verdict: 'The guide gives this a distinctive position. Any spread-betting warning belongs beside the centrally managed offer terms.' },
+  { id: '10bet', bestFor: 'Site experience', verdict: 'A useful test for the template because its live payment facts disagree across modules. Leave disputed figures unpublished until checked.' },
+].map((entry) => ({ ...entry, bookmaker: featuredOfferPreview.find((offer) => offer.id === entry.id)! }));
+
+const paymentRows = [
+  { name: 'Betfred', note: 'Detailed section and table on live page' },
+  { name: 'Betway', note: 'Featured card and table on live page' },
+  { name: 'Spreadex Sports', note: 'Featured card; payment row to verify' },
+  { name: '10Bet', note: 'Conflicting minimum/limit figures on live page' },
+];
+
+const sections = [
+  { id: 'how-paypal-works', title: 'How PayPal deposits and withdrawals work', copy: 'Eric’s step-by-step explanation can stay as ordinary WordPress editorial content. The template supplies heading hierarchy, spacing and callouts; the editor supplies the words, internal links and supporting images.' },
+  { id: 'payment-limits', title: 'Limits, fees and processing times', copy: 'The current guide has a nine-column Ninja Table. In the new frontend, these values should come from dated, bookmaker-specific payment facts rather than a second manually maintained table or copied paragraphs.' },
+  { id: 'welcome-eligibility', title: 'Can a PayPal deposit qualify for a welcome offer?', copy: 'PayPal acceptance and promotion eligibility are separate questions. Each linked offer needs its own payment exclusions and qualifying-deposit rule. If that rule has not been checked, this guide should say so instead of implying that the offer is available.' },
+  { id: 'choosing-site', title: 'How we choose a PayPal betting site', copy: 'Keep JP’s editorial ranking rationale here: usability, racing and football markets, withdrawal experience, support and promotion conditions. These judgements belong to this guide, not to the centrally reused offer terms.' },
+];
+---
+<BaseLayout title="Best PayPal betting sites — roundup pilot" wide={true}>
+  <article class="paypal-guide">
+    <nav class="paypal-breadcrumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><span>Betting guides</span></nav>
+    <header class="paypal-hero">
+      <div class="paypal-hero-copy">
+        <p class="kicker">Betting guide · roundup pilot</p>
+        <h1>Best PayPal betting sites</h1>
+        <p class="paypal-deck">Compare the bookmakers, understand their payment rules, and check whether a PayPal deposit actually qualifies for the offer you want.</p>
+        <p class="paypal-byline">By JP, Chief Editor · Based on the live 2026 guide · Payment facts require a fresh check before launch</p>
+      </div>
+      <img src="https://www.everytip.co.uk/wp-content/uploads/2022/11/Betting-Sites-That-Accept-Paypal.jpg" alt="EveryTip betting sites that accept PayPal guide artwork" width="1008" height="301" />
+    </header>
+
+    <div class="paypal-disclosure"><strong>How to read this preview</strong><p>The bookmaker lineup mirrors the current guide for design review. Offer links are disabled, terms are not reproduced, and PayPal availability, limits and bonus eligibility are not asserted until Eric verifies them.</p></div>
+    <nav class="paypal-toc" aria-label="On this guide"><strong>On this page</strong><a href="#quick-picks">Quick picks</a><a href="#comparison">Payment comparison</a><a href="#bookmakers">Bookmaker details</a><a href="#guide">PayPal guide</a><a href="#faq">Questions</a></nav>
+
+    <section id="quick-picks" class="paypal-section">
+      <div class="paypal-section-head"><p class="kicker">Start here</p><h2>Our PayPal betting site picks</h2><p>Four featured bookmakers appear in the live guide. The final ranking and any payment claim must pass an editorial check.</p></div>
+      <ol class="paypal-picks">
+        {picks.map((pick, index) => <li class="paypal-pick" style={`--paypal-brand:${pick.bookmaker.brandColor}`}>
+          <span class="paypal-rank">{index + 1}</span>
+          <div class:list={['paypal-pick-logo', { 'logo-on-light': pick.bookmaker.logoOnLight }]}><img src={pick.bookmaker.logoUrl} alt={pick.bookmaker.bookmaker} loading="lazy" /></div>
+          <div class="paypal-pick-copy"><span class="paypal-best-for">Best for {pick.bestFor}</span><h3>{pick.bookmaker.bookmaker}</h3><p>{pick.verdict}</p><small>PayPal support and welcome-offer payment rules: check pending</small></div>
+          <div class="paypal-pick-action"><span aria-label="Offer link disabled in template preview">Offer preview</span><small>Central ACF offer terms will appear here.</small></div>
+        </li>)}
+      </ol>
+    </section>
+
+    <section id="comparison" class="paypal-section paypal-comparison">
+      <div class="paypal-section-head"><p class="kicker">At a glance</p><h2>Compare PayPal deposits and withdrawals</h2><p>A phone-friendly summary comes first; the complete limits and fees can follow once the existing Ninja Table data has been checked and migrated.</p></div>
+      <div class="paypal-comparison-grid">
+        {paymentRows.map((row) => <article><h3>{row.name}</h3><dl><div><dt>Deposits</dt><dd>Check pending</dd></div><div><dt>Withdrawals</dt><dd>Check pending</dd></div><div><dt>Welcome offer</dt><dd>Check terms</dd></div></dl><p>{row.note}</p></article>)}
+      </div>
+      <details class="paypal-data-note"><summary>What happens to the full payment table?</summary><p>The live table has nine columns and 37 bookmaker rows. The final Astro template can show a compact mobile summary with expandable details, backed by one structured payment dataset. We should not republish its current numbers blindly: some page sections contradict the table.</p></details>
+    </section>
+
+    <section id="bookmakers" class="paypal-section">
+      <div class="paypal-section-head"><p class="kicker">The detail</p><h2>PayPal bookmaker profiles</h2><p>Each ranked entry has an editable verdict and payment notes. The bookmaker identity and current offer remain linked records, so Eric changes the text without touching the card layout.</p></div>
+      <div class="paypal-profiles">{picks.map((pick, index) => <section class="paypal-profile" style={`--paypal-brand:${pick.bookmaker.brandColor}`}>
+        <div class="paypal-profile-heading"><span>{String(index + 1).padStart(2, '0')}</span><h3>{pick.bookmaker.bookmaker} PayPal deposits and withdrawals</h3></div>
+        <p>{pick.verdict}</p>
+        <div class="paypal-facts"><div><strong>Deposit minimum</strong><span>Verify</span></div><div><strong>Withdrawal time</strong><span>Verify</span></div><div><strong>Fees &amp; limits</strong><span>Verify</span></div><div><strong>Offer eligibility</strong><span>Verify</span></div></div>
+        <p class="paypal-profile-note">The complete editorial review, checked facts and dated source notes will be editable in WordPress.</p>
+      </section>)}</div>
+      <details class="paypal-other-sites"><summary>What about the other bookmakers in the live guide?</summary><p>The live page names many more operators in paragraphs and a ranked list. Before importing those entries, we need to confirm each one still serves the relevant market and supports the claimed PayPal deposit and withdrawal options. The template supports additional entries without a new layout.</p></details>
+    </section>
+
+    <section id="guide" class="paypal-section paypal-editorial"><div class="paypal-section-head"><p class="kicker">The useful guide</p><h2>Using PayPal for betting</h2><p>The long-form SEO content stays editable in WordPress as constrained content sections. Astro fixes the presentation, not Eric’s wording.</p></div>{sections.map((section) => <section id={section.id} class="paypal-editorial-block"><h3>{section.title}</h3><p>{section.copy}</p></section>)}</section>
+    <section id="faq" class="paypal-section paypal-faq"><div class="paypal-section-head"><p class="kicker">Common questions</p><h2>PayPal betting FAQs</h2></div><details><summary>Can I deposit with PayPal at every bookmaker listed?</summary><p>Availability may vary by bookmaker and location. Each site’s payment methods need a current, dated check before publication.</p></details><details><summary>Does a PayPal deposit qualify for a welcome offer?</summary><p>Not necessarily. We will show the linked offer’s exact qualifying-payment rule, sourced from its single ACF offer record.</p></details><details><summary>Where will the full terms appear?</summary><p>Beside every offer placement, with the same centrally managed compact terms and an accessible full-terms disclosure.</p></details></section>
+    <footer class="paypal-footer"><strong>Editorial and affiliate disclosure</strong><p>This is an inert design pilot. The eventual guide will retain JP’s independent analysis and show approved offer terms, payment limitations and safer-gambling information wherever relevant. 18+ only.</p></footer>
+  </article>
+</BaseLayout>

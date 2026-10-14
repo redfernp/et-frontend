@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RoundupGuideShell from '../../components/RoundupGuideShell.astro';
+import RoundupCapturedBody from '../../components/RoundupCapturedBody.astro';
+import RoundupRankedEntries from '../../components/RoundupRankedEntries.astro';
+import { latestContentSnapshot } from '../../lib/migration-preview.mjs';
+import { roundupSnapshotPreview } from '../../lib/roundup-snapshot-preview.mjs';
+import { splitPaymentMethodRoundup } from '../../lib/payment-method-roundup.mjs';
+import { splitBasketballRoundup } from '../../lib/basketball-roundup.mjs';
+import { stagingRoundupFamilyFixture } from '../../lib/roundup-family-fixture.mjs';
+import { roundupDraftPreview } from '../../lib/staging-roundup-cms.mjs';
+import { featuredOfferPreview } from '../../lib/pilot-data';
+
+export async function getStaticPaths() {
+  const family = [
+    '/online-bookmakers-that-accept-neteller.html',
+    '/best-betting-sites-for-basketball.html',
+    '/online-bookmakers-that-accept-skrill.html',
+  ];
+  const snapshot = await latestContentSnapshot();
+  if (!snapshot) throw new Error('Roundup previews require the staging WordPress snapshot');
+  return family.map((uri) => ({
+    params: { roundup: uri.slice(1, -'.html'.length) },
+    props: { preview: roundupSnapshotPreview(snapshot, uri) },
+  }));
+}
+const { preview } = Astro.props;
+const { source, hero, body, blockCount } = preview;
+const method = source.uri.includes('neteller') ? 'Neteller' : source.uri.includes('skrill') ? 'Skrill' : null;
+const basketball = source.uri === '/best-betting-sites-for-basketball.html';
+const fixtureKey = method?.toLowerCase() ?? (basketball ? 'basketball' : null);
+const fixture = fixtureKey ? await roundupDraftPreview(fixtureKey, () => stagingRoundupFamilyFixture(fixtureKey)) : null;
+const contentRecord = fixture ? { uri: source.uri, content: fixture.content } : source;
+const sections = method ? splitPaymentMethodRoundup(contentRecord, method, hero) : basketball ? splitBasketballRoundup(contentRecord, hero) : null;
+const identityByOfferId = Object.fromEntries([[90846, 'betfred'], [90851, 'netbet'], [90850, 'betway']]
+  .map(([offerId, key]) => [offerId, featuredOfferPreview.find((item) => item.id === key)]));
+const paymentEntries = method ? [
+  { bestFor: `${method} guide`, editorialVerdict: `Betfred appears in the legacy ${method} guide. Current ${method} support and offer payment eligibility need checking before publication.`, offer: { nodes: [{ databaseId: 90846 }] } },
+  { bestFor: `${method} guide`, editorialVerdict: `NetBet appears in the legacy ${method} guide. Its payment support and any linked promotion require a current editorial and compliance review.`, offer: { nodes: [{ databaseId: 90851 }] } },
+] : basketball ? [
+  { bestFor: 'Basketball guide', editorialVerdict: 'Betway is the only bookmaker in the legacy basketball shortlist that is currently mapped to an EveryTip partner record. Its basketball markets and offer eligibility require a fresh check.', offer: { nodes: [{ databaseId: 90850 }] } },
+] : [];
+const rankedEntries = fixture?.rankedEntries ?? paymentEntries;
+---
+<BaseLayout title={`${source.title} — roundup migration preview`} seo={{ title: source.seo?.title, description: source.seo?.metaDesc }} wide={true} robots="noindex,nofollow" previewMessage="Local roundup template · captured WordPress copy · offers and links disabled">
+  <RoundupGuideShell
+    title={source.title}
+    deck={method ? `The approved roundup design applied to the ${method} guide, with old promotional modules separated from the editorial copy.` : basketball ? 'The approved roundup design applied to the basketball guide, separating its old bookmaker shortlist from the betting analysis.' : 'The approved EveryTip roundup layout applied to this guide’s captured WordPress editorial copy.'}
+    byline={`Source ${source.databaseId} · ${fixture ? `staging Gutenberg draft ${fixture.postId} · ${fixture.sourceMode === 'fresh-staging-wpgraphql-preview' ? 'fresh WPGraphQL read' : 'dated WPGraphQL capture'} ${fixture.capturedAt.slice(0, 10)}` : `${blockCount} core blocks in local conversion dry-run`} · not published`}
+    image={hero}
+    imageAlt={`${source.title} guide artwork`}
+    disclosure="This is a local design and content-migration preview. All links are disabled. Legacy bookmaker rankings, payment details and offer claims need a current editorial check before publication."
+    toc={sections ? [{ href: '#structured-entry', label: 'Bookmaker profiles' }, { href: '#guide-content', label: 'Read the guide' }, { href: '#conversion-notes', label: 'Migration notes' }] : [{ href: '#guide-content', label: 'Read the guide' }, { href: '#conversion-notes', label: 'Migration notes' }]}
+  >
+    {sections && <>
+      <div class="roundup-intro" set:html={sections.intro} />
+      <RoundupRankedEntries
+        entries={rankedEntries}
+        identityByOfferId={identityByOfferId}
+        kicker="Legacy guide shortlist · migration preview"
+        heading={method ? `${method} bookmaker profiles` : 'Basketball bookmaker profile'}
+        description={fixture ? `Order and editorial verdicts come from the staging draft’s ACF ranked entries. ${method ? `${method} payment availability` : 'Basketball markets'} and offer eligibility are not verified; old promotional modules are withheld.` : method ? `Betfred and NetBet are current EveryTip partner records listed in this legacy ${method} guide. Payment availability and offer eligibility are not yet verified; the old promotional modules are withheld.` : 'Betway is a current partner listed in this legacy basketball guide. Its basketball and offer claims are unverified; the old bookmaker shortlist is withheld for editorial review.'}
+        bestForLabel="Listed in"
+        sourceLabel={fixture ? 'Staging ACF offer reference' : 'Pilot central-offer reference'}
+      />
+      <p class="withheld-note">{sections.withheldNodes} legacy bookmaker/promotion elements are withheld from this frontend preview for editorial review. They remain in the original WordPress source.</p>
+    </>}
+    <RoundupCapturedBody body={sections?.body ?? body} blockCount={blockCount} />
+  </RoundupGuideShell>
+</BaseLayout>
+<style>
+  .roundup-intro { width:min(100%,1000px); margin:25px auto 0; line-height:1.7; }
+  .roundup-intro :global(p) { max-width:none; }
+  .withheld-note { width:min(100%,1000px); margin:12px auto 0; color:#657580; font-size:12px; }
+</style>

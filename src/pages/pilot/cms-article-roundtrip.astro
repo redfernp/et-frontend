@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ColumnistProfile from '../../components/ColumnistProfile.astro';
+import { getColumnistProfiles, legacyColumnistPortraitPaths } from '../../lib/columnist-profiles.mjs';
+import { previewHtml } from '../../lib/migration-preview.mjs';
+import { representativeArticlePreview } from '../../lib/staging-article-cms.mjs';
+
+const article = await representativeArticlePreview();
+const { john } = await getColumnistProfiles();
+const body = previewHtml(article, { excludedImagePaths: legacyColumnistPortraitPaths.john });
+const fresh = article.sourceMode === 'fresh-staging-wpgraphql-preview';
+---
+<BaseLayout title={`${article.title} — CMS article roundtrip`} wide robots="noindex,nofollow" previewMessage="Local CMS article roundtrip · not for publication · commercial links disabled">
+  <article class="cms-article-preview">
+    <p class="kicker">{fresh ? 'Fresh staging WPGraphQL read' : 'Dated snapshot preview'}</p>
+    <h1>{article.title}</h1>
+    <ColumnistProfile profile={john} variant="byline" />
+    <p class="cms-meta">Published {article.date.slice(0, 10)} · updated {article.modified.slice(0, 10)} · WordPress post {article.databaseId}</p>
+    <aside class="cms-notice">This local preview keeps the exact WordPress article body and SEO fields in the data contract. Links and old offer placements are disabled. The source article’s index setting is <strong>{article.seo?.metaRobotsNoindex ?? 'unknown'}</strong>, but this preview is always noindex until the full page is reviewed.</aside>
+    <div class="cms-body" set:html={body} />
+    <ColumnistProfile profile={john} variant="full" />
+    <p class="cms-source">{fresh ? 'Read directly from staging WPGraphQL' : `Snapshot captured ${article.fetchedAt.slice(0, 10)}`} · exact legacy URL <code>{article.uri}</code></p>
+  </article>
+</BaseLayout>
+<style>
+  .cms-article-preview{width:min(100%,980px);margin:auto;padding:clamp(20px,3vw,36px);background:#fff}
+  .cms-article-preview h1{font-size:clamp(30px,4vw,44px);line-height:1.13;color:#183f60}
+  .cms-meta,.cms-source{font-size:12px;color:#657687}
+  .cms-notice{margin:22px 0;padding:15px 17px;border-left:4px solid var(--et-orange);background:#fff4e9;font-size:13px;line-height:1.55}
+  .cms-body{overflow-wrap:anywhere;line-height:1.72}
+  .cms-body :global(img){max-width:100%;height:auto}
+  .cms-body :global(table){display:block;max-width:100%;overflow-x:auto}
+  .cms-source{border-top:1px solid #d9e5ec;margin-top:30px;padding-top:13px}
+  .cms-source code{overflow-wrap:anywhere}
+</style>

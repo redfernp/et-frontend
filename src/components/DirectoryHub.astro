@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+interface DirectoryEntry { title: string; group: string; summary: string; meta: string; href?: string; label?: string }
+interface Props { title: string; eyebrow: string; deck: string; note: string; groups: { key: string; label: string; description: string }[]; entries: DirectoryEntry[]; footer: string }
+const { title, eyebrow, deck, note, groups, entries, footer } = Astro.props;
+---
+<BaseLayout title={`${title} — directory pilot`} wide={true}>
+  <article class="directory-hub">
+    <nav class="dh-crumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><span>{title}</span></nav>
+    <header class="dh-hero"><p class="kicker">{eyebrow} · design pilot</p><h1>{title}</h1><p>{deck}</p><div class="dh-meta"><span>1 October 2026 preview</span><span>{groups.length} sections</span><span>No live ranking implied</span></div></header>
+    <div class="dh-note"><strong>Editorial check</strong><span>{note}</span></div>
+    <nav class="dh-jump" aria-label="Directory sections">{groups.map((group) => <a href={`#${group.key}`}>{group.label}</a>)}</nav>
+    {groups.map((group) => {
+      const groupEntries = entries.filter((entry) => entry.group === group.key);
+      return <section class="dh-section" id={group.key}>
+        <div class="dh-heading"><div><p class="kicker">Browse by type</p><h2>{group.label}</h2><p>{group.description}</p></div><span>{groupEntries.length} preview {groupEntries.length === 1 ? 'entry' : 'entries'}</span></div>
+        <div class="dh-grid">{groupEntries.map((entry) => <article class="dh-card"><span class="dh-card-label">{group.label}</span><h3>{entry.title}</h3><p>{entry.summary}</p><span class="dh-card-meta">{entry.meta}</span>{entry.href ? <a href={entry.href}>{entry.label ?? 'Open pilot'} <span aria-hidden="true">→</span></a> : <span class="dh-pending">Detailed record pending editorial review</span>}</article>)}</div>
+      </section>;
+    })}
+    <footer class="dh-footer">{footer}</footer>
+  </article>
+</BaseLayout>
+<style>
+  .directory-hub{color:#263c4d}.dh-crumb{display:flex;gap:8px;margin-bottom:20px;color:#627c8c;font-size:12px}.dh-hero{padding:28px;background:linear-gradient(110deg,#e8f3fa,#fff);border-top:5px solid var(--et-orange)}.dh-hero h1{margin:3px 0 10px}.dh-hero>p:not(.kicker){max-width:760px;font-size:17px;line-height:1.5}.dh-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.dh-meta span{padding:7px 10px;background:#fff;color:#456b82;font-size:11px;font-weight:800}.dh-note{display:grid;gap:4px;margin:15px 0;padding:13px 16px;background:#fff4e8;border-left:4px solid var(--et-orange);font-size:12px}.dh-jump{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0;padding-bottom:14px;border-bottom:1px solid #d8e5ec}.dh-jump a{padding:8px 11px;background:#e7f1f8;text-decoration:none;font-size:12px;font-weight:800}.dh-section{scroll-margin-top:20px;margin:34px 0}.dh-heading{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:15px}.dh-heading h2{margin:3px 0 7px}.dh-heading p:not(.kicker){margin:0;color:#5e7483}.dh-heading>span{flex:none;color:#648092;font-size:11px;font-weight:800}.dh-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.dh-card{display:flex;flex-direction:column;min-width:0;padding:17px;background:#fff;border:1px solid #d7e5ed;border-top:5px solid var(--et-blue)}.dh-card-label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#a64d00;font-weight:850}.dh-card h3{margin:8px 0 5px;color:#1c5079}.dh-card p{margin:0 0 11px;color:#566e80;font-size:13px;line-height:1.5}.dh-card-meta{margin-top:auto;padding:9px 0;border-top:1px solid #e1ebf0;color:#657d8e;font-size:11px}.dh-card a{display:flex;justify-content:space-between;align-items:center;margin-top:9px;padding:9px 12px;background:var(--et-blue);color:#fff!important;text-decoration:none;font-weight:800;font-size:12px}.dh-card a:hover{filter:brightness(.9)}.dh-pending{display:block;margin-top:9px;padding:9px 12px;background:#eef3f6;color:#60798a;font-size:11px;font-weight:750}.dh-footer{padding:15px 0;margin-top:31px;border-top:1px solid #d8e5ec;color:#61798a;font-size:11px}@media(max-width:800px){.dh-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:580px){.dh-hero{padding:20px 15px}.dh-hero>p:not(.kicker){font-size:15px}.dh-heading{display:block}.dh-heading>span{display:block;margin-top:9px}.dh-grid{grid-template-columns:1fr}}
+</style>

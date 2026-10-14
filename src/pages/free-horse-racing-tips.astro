@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { latestContentSnapshot } from '../lib/migration-preview.mjs';
+import { extractRacingHubEditorial } from '../lib/free-horse-racing-hub.mjs';
+
+const snapshot = await latestContentSnapshot();
+if (!snapshot) throw new Error('Exact racing tips hub requires the dated WordPress snapshot');
+const records = [...snapshot.pages, ...snapshot.posts].filter((record) => record.uri === '/free-horse-racing-tips');
+if (records.length !== 1) throw new Error('Missing or duplicate exact racing tips hub');
+const editorial = extractRacingHubEditorial(records[0]);
+const sourceDate = new Date(editorial.modified).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const verifiedPublicPaths = ['/', '/free-betting-tips', '/free-horse-racing-tips', '/saturday-horse-racing-tips', '/value-bet-tips-dark-horses.html', '/safer-gambling', '/terms-conditions', '/privacy-policy'];
+---
+<BaseLayout title="Free Horse Racing Tips | EveryTip" publicPage previewOnly wide
+  seo={{ title: 'Free Horse Racing Tips | EveryTip', description: 'How EveryTip researches horse-racing selections, how to use free tips, and safer-betting guidance. Dated noindex editorial preview.' }}
+  previewMessage="Noindex racing hub preview · 2025 WordPress source · current tips and bookmaker offers withheld"
+  verifiedPublicPaths={verifiedPublicPaths}>
+  <article class="racing-hub">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">EveryTip</a><span aria-hidden="true">/</span><span>Horse racing tips</span></nav>
+    <header class="hero"><div><p class="eyebrow">EveryTip racing</p><h1>Free horse racing tips</h1><p class="deck">Explore the approach behind our selections, the racing details we examine and ways to use tips with perspective. The current daily picks are not available in this preview.</p></div><div class="hero-mark" aria-hidden="true">ET<span>Racing</span></div></header>
+    <div class="status" role="note"><strong>Today’s tips are withheld.</strong> The saved WordPress page was last changed {sourceDate} and contains a 2025 daily-tip directory. A trusted, dated tips feed must be connected before this page can show current selections. Commercial offer links are disabled.</div>
+    <div class="columns">
+      <div class="body">
+        <nav class="jump" aria-label="On this page"><strong>On this page</strong>{editorial.sections.map((section, index) => <a href={`#racing-guide-${index + 1}`}>{section.heading}</a>)}<a href="#racing-faq">FAQs</a></nav>
+        {editorial.sections.map((section, index) => <section class="guide" id={`racing-guide-${index + 1}`}><span class="section-number">{String(index + 1).padStart(2, '0')}</span><h2>{section.heading}</h2><div class="source-copy" set:html={section.html} /></section>)}
+        <section class="faq" id="racing-faq"><p class="eyebrow">Common questions</p><h2>Horse racing tips and bet types</h2>{editorial.faq.map((item) => <details><summary>{item.question}</summary><div class="source-copy" set:html={item.html} /></details>)}</section>
+      </div>
+      <aside class="rail" aria-label="Racing hub notes"><section><p class="eyebrow">Finding your way</p><h2>Explore EveryTip</h2><a href="/free-betting-tips">All free tips <span aria-hidden="true">→</span></a><a href="/saturday-horse-racing-tips">Seymour Biz archive <span aria-hidden="true">→</span></a><a href="/value-bet-tips-dark-horses.html">Dark Horse guide <span aria-hidden="true">→</span></a></section><section class="rail-safety"><p class="eyebrow">Player protection</p><h2>Keep it enjoyable</h2><div class="source-copy" set:html={editorial.responsibleHtml} /><a href="/safer-gambling">Safer gambling help <span aria-hidden="true">→</span></a></section></aside>
+    </div>
+    <footer class="source-note">Editorial guidance from WordPress page 41881, last modified {sourceDate}. This noindex preview excludes its dated 2025 tip listings, bookmaker rankings and promotional terms. All currentness and factual claims require review before public release.</footer>
+  </article>
+</BaseLayout>
+<style>
+  .racing-hub{min-width:0;background:#fff;padding:clamp(18px,3vw,40px);color:#173b58}.breadcrumbs{display:flex;gap:9px;font-size:.85rem;color:#5e7487}.breadcrumbs a,.rail a{color:#135884}.hero{display:flex;justify-content:space-between;align-items:center;gap:24px;border-bottom:4px solid #f36b00;padding:30px 0}.eyebrow{font-size:.78rem;letter-spacing:.11em;text-transform:uppercase;color:#b74700;font-weight:800;margin:0 0 8px}.hero h1{font-size:clamp(2.2rem,4vw,3.7rem);line-height:1.08;margin:0 0 14px}.deck{font-size:1.14rem;max-width:70ch;line-height:1.6;margin:0}.hero-mark{flex:none;display:grid;place-items:center;width:150px;height:150px;border-radius:50%;background:#174c76;color:#fff;font-size:3rem;font-weight:900;border:8px solid #e6f0f5}.hero-mark span{display:block;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;margin-top:-48px}.status{background:#fff3e8;border-left:5px solid #f36b00;padding:17px 20px;line-height:1.55;margin:28px 0}.columns{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:36px}.body{min-width:0}.jump{display:flex;flex-wrap:wrap;gap:9px 18px;align-items:center;background:#eaf2f7;padding:16px 18px;border-radius:7px}.jump a{color:#135884;font-weight:700;font-size:.87rem}.guide{padding:31px 0;border-bottom:1px solid #d0dfe8}.section-number{display:inline-block;background:#174c76;color:#fff;border-radius:50%;width:34px;height:34px;text-align:center;line-height:34px;font-weight:800;font-size:.8rem}.guide h2,.faq h2{font-size:clamp(1.5rem,2.5vw,2rem);margin:12px 0 18px}.source-copy{line-height:1.7}.source-copy :global(p){margin:0 0 16px}.source-copy :global(ul){margin:0 0 18px;padding-left:22px}.source-copy :global(li){margin:0 0 8px}.source-copy :global(h3){font-size:1.15rem;margin:23px 0 9px}.faq{padding:32px 0}.faq details{border:1px solid #d0dfe8;border-radius:7px;margin:9px 0}.faq summary{cursor:pointer;padding:15px 18px;font-weight:800;color:#174c76}.faq details .source-copy{padding:0 18px 15px}.rail section{border:1px solid #d0dfe8;border-top:4px solid #f36b00;border-radius:7px;padding:20px;margin-bottom:18px}.rail h2{font-size:1.25rem;margin:0 0 12px}.rail a{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-top:1px solid #e1e9ee;font-weight:700}.rail-safety{background:#edf5f8}.source-note{border-top:1px solid #d0dfe8;padding-top:19px;font-size:.86rem;color:#60768a}@media(max-width:760px){.columns{grid-template-columns:1fr}.hero-mark{width:90px;height:90px;font-size:1.8rem;border-width:5px}.hero-mark span{font-size:.56rem;margin-top:-29px}.rail{display:grid;grid-template-columns:1fr 1fr;gap:12px}.rail section{margin:0}}@media(max-width:520px){.hero-mark{display:none}.rail{grid-template-columns:1fr}.jump{display:grid}}
+</style>

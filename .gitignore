@@ -5,5 +5,13 @@
 node_modules/
 dist/
 .astro/
+.wrangler/
+.wrangler-auth/
+.wrangler-dryrun/
+preview-dist/
 outputs/
+artifacts/daily-tip-imports/
+data/raw/
 *.log
+__pycache__/
+*.pyc
