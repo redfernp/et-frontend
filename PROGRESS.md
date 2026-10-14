@@ -45,7 +45,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 ## Decisions (section 5)
 - [x] D1: staging WPGraphQL comes across with cutover; no separate live installation.
 - [x] D2: seven offers approved, UK only, checked 14 Oct 2026. Copy exact headlines/terms from 56315, derive eligibility from terms, publish on staging. Full terms and official terms URL already optional in the local display model. CMS publication and slot wiring pending.
-- [x] D3: GBP 20 in Bet365 staging Yoast description; CMS change pending.
+- [x] D3 COMPLETE: page 87553 staging Yoast description changed from GBP 30 to GBP 20 via authenticated REST; one readback verified description, identity and status. Related GraphQL cache invalidated.
 - [x] D4: migrate free bets as supplied. Flag risk-free/win-win only outside offer blocks. No extra offer-claim approval gate.
 - [x] D5: no live noindex work; fix staging post 70985. CMS change pending.
 - [x] D6: superseded by section 0: no Tier C list for now; no redirects created.
