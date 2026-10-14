@@ -10,6 +10,9 @@ Updated: 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md; supersedes earlie
 - Stopped per-post Gutenberg conversion and general live/staging drift work.
 - Read all D1–D6 answers. No owner decision is outstanding.
 
+- Generic builder cleanup implemented: strips builder wrappers/styles while retaining headings, prose, images, tables, links and ACF slot markers. Applied by markup detection; final Tier B membership awaits GSC. Two cleanup/link tests pass.
+- Affiliate links in rendered content retain existing www.everytip.co.uk/go destinations and receive sponsored/nofollow. Moving /go handling to Workers is still unverified.
+
 ## In progress
 - Section 6 task 3: full fresh build running; remote read succeeded. Endpoint is WPGRAPHQL_ENDPOINT. Full source coverage is not yet verified.
 
@@ -42,7 +45,7 @@ Updated: 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md; supersedes earlie
 2. [x] Create this single progress file.
 3. [ ] Fresh staging WPGraphQL build.
 4. [ ] GSC builder tiers (12-month clicks and referring domains required).
-5. [ ] Generic builder cleanup for Tier B.
+5. [ ] Generic builder cleanup implemented and tested; fresh rendered sampling and final Tier B inventory pending.
 6. [ ] Tier A Gutenberg + ACF on staging. The user's explicit prohibition on live writes overrides section 3a's live wording.
 7. [ ] Publish seven staging offers and wire slots.
 8. [ ] Workers launch checklist.

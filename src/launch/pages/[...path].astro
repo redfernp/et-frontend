@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { launchContent, robotsFor } from '../../lib/launch-content.mjs';
+import { launchContent, robotsFor, endpoint } from '../../lib/launch-content.mjs';
+import { launchHtml } from '../../lib/builder-cleanup.mjs';
 
 export async function getStaticPaths() {
   const records = await launchContent();
@@ -21,7 +22,7 @@ const seo = {
 <BaseLayout title={record.title} publicPage={true} seo={seo} verifiedPublicPaths={paths}>
   <article class="cms-content">
     <h1 set:html={record.title} />
-    <div set:html={record.content} />
+    <div set:html={launchHtml(record.content, endpoint)} />
   </article>
 </BaseLayout>
 <style>
