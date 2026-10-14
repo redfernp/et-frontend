@@ -1,0 +1,40 @@
+name: Staging Workers preview
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [everytip-content-saved]
+  schedule:
+    - cron: '17,47 * * * *'
+permissions:
+  contents: read
+concurrency:
+  group: everytip-staging-preview
+  cancel-in-progress: false
+jobs:
+  build-preview:
+    if: vars.EVERYTIP_PREVIEW_BUILDS_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      WPGRAPHQL_ENDPOINT: ${{ vars.WPGRAPHQL_ENDPOINT || 'https://wordpress-159231-2098144.cloudwaysapps.com/graphql' }}
+      WPGRAPHQL_FRESH: '1'
+      CLOUDFLARE_API_TOKEN: ${{ secrets.EVERYTIP_PREVIEW_CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.EVERYTIP_PREVIEW_CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: node scripts/check-launch-parity.mjs --fresh
+      - run: node scripts/prepare-cloudflare-preview.mjs
+      # Preview deployment only. Never deploy the production Worker or DNS.
+      - run: npx wrangler preview --config wrangler.preview.jsonc --name everytip-review --worker-name everytip-astro-preview --ignore-base-config
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: launch-check-results
+          path: |
+            outputs/launch-parity.json

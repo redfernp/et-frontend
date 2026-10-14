@@ -27,7 +27,8 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 
 ## Blocked
 - D2 / tasks 6–7: authenticated OPTIONS /wp-json/wp/v2/et_offer/90846 exposes acf as an object with zero properties; authenticated edit read returns acf []. ACF offer fields need SSH (or an explicitly exposed write route). Do not publish incomplete draft offers. Exact D2 headline/terms and UK/date field plans are committed in data/approved-offer-copy.json; eligibility retains the complete source terms. Central slot rendering is implemented and tested, ready for published ACF records. Generic Tier A Gutenberg converter and 27 local content plans are prepared; CMS replacement and ACF slot wiring remain pending this dependency. Evidence: outputs/staging-writes/offers-schema.json and 90846-read.json.
-- Full launch checks, archives, offers, tracking and rebuild automation remain unfinished work, not approved launch gates.
+- Rebuild automation: preview-only GitHub workflow (manual, save-dispatch and 30-minute fallback) plus debounced WordPress save hook prepared locally. GitHub currently has no repository Actions secrets. Needs EVERYTIP_PREVIEW_CLOUDFLARE_API_TOKEN, EVERYTIP_PREVIEW_CLOUDFLARE_ACCOUNT_ID and EVERYTIP_PREVIEW_BUILDS_ENABLED=true; SSH deployment of rebuild-hook.php and EVERYTIP_PREVIEW_DISPATCH_TOKEN in wp-config.php. No webhook or scheduled build has been verified. PHP CLI is unavailable locally, so PHP lint also remains pending.
+- Full launch checks, archives, offers and tracking remain unfinished work, not approved launch gates.
 
 ## Launch checklist (section 4)
 - [ ] Fresh staging WPGraphQL build with one endpoint variable. Complete 1,188-route build passed; final fresh-cache-bypass check remains.
@@ -64,7 +65,7 @@ Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RE
 ## Cutover morning checklist for Paul
 1. Before pushing, re-apply only desired live edits to staging. Check exact offer texts on 56315, the eight owner rewrites and the unpublished records below. For Paddy Power 34795, ensure rewritten post_content renders instead of the old Thrive content; use page SEO from ../legacy-rewrites/manifest.json where needed.
 2. Early morning before daily tips, push staging to live through Cloudways.
-3. Set WPGRAPHQL_ENDPOINT=https://www.everytip.co.uk/graphql in the build environment. Point the save webhook at the Workers build and verify the scheduled fallback.
+3. Set WPGRAPHQL_ENDPOINT=https://www.everytip.co.uk/graphql in the build environment. Point the save webhook at the Workers build and verify the scheduled fallback. Ensure the WordPress GraphQL origin remains reachable after DNS cutover; www/graphql must not resolve to a static-asset 404.
 4. Rebuild and pass the complete section 4 checklist. Smoke-test homepage, hubs, reviews, five posts and /go links on Workers preview. Do not cut over while any launch gate is open.
 5. Paul switches DNS/routing. Codex makes no DNS or Cloudflare production changes.
 6. Add that morning's tips normally; confirm the rebuild updates rendered tables. Retain prior deployment and WordPress backup for rollback.
