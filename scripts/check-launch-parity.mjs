@@ -13,6 +13,8 @@ if (process.argv.includes('--fresh') && (source.mode !== 'fresh' || !source.rece
 let checked = 0;
 let ninjaTables = 0;
 let ninjaRows = 0;
+let matchingSourceRedirects = 0;
+let stagingQueue=Promise.resolve();
 function elements(node, name) {
   return [...(node.name === name ? [node] : []), ...(node.children ?? []).flatMap(child => elements(child, name))];
 }
@@ -23,7 +25,20 @@ async function inspect(record) {
   try {
     if(origin){
       const response=await fetch(new URL(record.uri,origin),{redirect:'manual',signal:AbortSignal.timeout(30000)});
-      if(response.status!==200){failures.push({path:record.uri,field:'http-status',expected:200,actual:response.status,location:response.headers.get('location')});await response.body?.cancel();return;}
+      if(response.status!==200){
+        const location=response.headers.get('location');
+        await response.body?.cancel();
+        if(response.status===301 && verifiedLegacyRedirects.has(record.uri)){
+          const check=stagingQueue.then(async()=>{
+            const staging=await fetch(new URL(record.uri,source.endpoint),{method:'HEAD',redirect:'manual',signal:AbortSignal.timeout(30000)});
+            const expected=staging.headers.get('location');
+            return staging.status===301 && expected && new URL(expected,source.endpoint).pathname===new URL(location,origin).pathname;
+          });
+          stagingQueue=check.catch(()=>{});
+          if(await check){matchingSourceRedirects++;return;}
+        }
+        failures.push({path:record.uri,field:'http-status',expected:200,actual:response.status,location});return;
+      }
       html=await response.text();
     }else html = await readFile(asset, 'utf8');
   } catch(error) { failures.push({ path: record.uri, field: 'asset', error: origin?error.message:'missing' }); return; }
@@ -45,7 +60,8 @@ async function inspect(record) {
   for (const field of Object.keys(expected)) if (actual[field] !== expected[field]) failures.push({ path: record.uri, field, expected: expected[field], actual: actual[field] });
   const sitemapPath = new URL(record.uri, 'https://www.everytip.co.uk').href.replaceAll('&', '&amp;');
   const included = sitemap.includes(`<loc>${sitemapPath}</loc>`);
-  if (included === robotsFor(record).includes('noindex')) failures.push({ path: record.uri, field: 'sitemap' });
+  const expectedInSitemap = !robotsFor(record).includes('noindex') && !verifiedLegacyRedirects.has(record.uri);
+  if (included !== expectedInSitemap) failures.push({ path: record.uri, field: 'sitemap' });
   for (const a of elements(doc, 'a')) if (/\/go\//.test(a.attribs.href ?? '') && !['sponsored','nofollow'].every(rel => (a.attribs.rel ?? '').split(/\s+/).includes(rel))) failures.push({ path: record.uri, field: 'affiliate-rel' });
 }
 const remaining=[...source.records];
@@ -61,7 +77,7 @@ if(origin){
     if(response.status!==expected.status||response.headers.get('location')!==location)failures.push({path,field:'redirect',expected,actual:{status:response.status,location:response.headers.get('location')}});
   }
 }
-const result = { fetchedAt: source.fetchedAt, origin:origin||'local assets', checked, redirectsChecked, ninjaTables, ninjaRows, failures, scope: 'Post/page and discovered archive routes; browser QA is separate.' };
+const result = { fetchedAt: source.fetchedAt, origin:origin||'local assets', checked, matchingSourceRedirects, redirectsChecked, ninjaTables, ninjaRows, failures, scope: 'Post/page and discovered archive routes; browser QA is separate.' };
 await writeFile(origin?'outputs/launch-network-parity.json':'outputs/launch-parity.json', JSON.stringify(result, null, 2));
 console.log(JSON.stringify({ checked, ninjaTables, ninjaRows, failures: failures.length, firstFailures: failures.slice(0, 10) }));
 if (failures.length) process.exitCode = 1;

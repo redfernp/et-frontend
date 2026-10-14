@@ -1,88 +1,84 @@
 # EveryTip launch progress
 
-Updated 14 October 2026, evening section 0 override. Authority: CODEX-HANDOFF-RESCOPE.md. Earlier lanes and dated gates are superseded. D1-D6 are answered.
+Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 0. Earlier lanes and dated gates are superseded. D1-D6 are answered.
 
 ## Done
-- Baseline committed (0928025) and pushed to redfernp/et-frontend/main. Explicitly using the existing redfernp GitHub credential resolves the default-account 403.
-- Created this single progress file with sections 4 and 5 as checklists.
-- Default Astro entry point now reads fresh paginated staging WPGraphQL through WPGRAPHQL_ENDPOINT. No October snapshot fallback or live-only overlays; section 0 permits resumable local response caching. Shared layout retained; old pilot routes are outside the default build.
-- Removed per-article live modules, their snapshot scripts and obsolete overlay tests. Stopped classic post conversions and general live/staging drift work.
-- Generic builder cleanup strips builder wrappers/styles and retains prose, headings, images, tables, links and ACF slot markers. Applied by markup detection; fixed tier inventory is in data/builder-tiers.json.
-- Rendered affiliate links retain existing www.everytip.co.uk/go paths and receive sponsored/nofollow. All 79 distinct /go paths in the source were checked against current redirects without visiting partners: 79 resolved, zero failures. Worker routing preserves their observed status and destination; local network checks passed for all 79 affiliate and 14 legacy redirects; remote checks pending.
-- Sitemap uses source robots. Added a section 4 gate for built assets, Yoast parity, sitemap membership, affiliate relations and unresolved offer slots.
-- Uploaded the noindex Workers preview: https://everytip-review-everytip-astro-preview.jpredfern1979.workers.dev (version 738b435f-6e9e-4c57-be25-3be03ca33d87). Production and DNS unchanged. The final refresh changed only sitemap.xml; the other 1,231 assets were reused.
-- Latest Astro check: zero errors/warnings/hints. Twenty-two focused source, cache, archive, offer and routing tests passed.
+- Baseline committed and pushed to redfernp/et-frontend/main; this single progress file is maintained in place. Completed work and preparation checkpoints have been committed and pushed separately.
+- Task 3: the default Astro entry point reads staging WPGraphQL through one WPGRAPHQL_ENDPOINT. Five-record pages, sequential requests, backoff and atomic on-disk response caching are implemented. No October snapshot fallback or live-only overlays. Initial complete content fetch/build passed; the latest archive-inclusive cached build produced 1,230 pages in 23.25 seconds, including 983 exact .html paths.
+- Removed the per-article live modules and their snapshot scripts. Stopped classic-column conversions and general live/staging drift work.
+- Task 4: fixed inventory in data/builder-tiers.json: 28 Tier A routes, 87 Tier B pages. Another 227 classic posts contain builder fragments and receive render cleanup only, never Gutenberg conversion. ComeOn sportsbook review 25354 is included; casino-only and tipster reviews are excluded. No GSC tiering or Tier C list.
+- Task 5: generic builder cleanup retains text, headings, images, tables, links and ACF slot markers. Ten random Tier B pages and the initial 27 Tier A routes passed 74 mobile/desktop render checks; added ComeOn was checked in the final sample. Fixed a Worker bug that turned valid cached 304 responses into 404s.
+- Archives: 42 archive/pagination routes added from fresh category/tag/author membership and WordPress's 100-post page size. Generic redirected archive landing pages reconstruct query-loop lists omitted from GraphQL content. Rendered archive metadata preserves actual pagination SEO. Eleven observed archive redirects are retained.
+- D3: page 87553 staging Yoast description changed from GBP 30 to GBP 20. One authenticated readback verified description, identity and status; affected source cache invalidated.
+- D5: staging post 70985 set to noindex. One authenticated readback verified noindex while preserving title, description, canonical, nofollow and publish status; affected source cache invalidated.
+- All 79 /go paths in the source were checked against current redirects without visiting partners. Worker routing preserves their status and destination; rendered links have sponsored/nofollow.
+- Workers preview uploaded: https://everytip-review-everytip-astro-preview.jpredfern1979.workers.dev (version 738b435f-6e9e-4c57-be25-3be03ca33d87). Preview responses have HTTP noindex protection while retaining staging Yoast meta. Final refresh changed only sitemap.xml; the other 1,231 assets were reused.
+- Local parity: all 1,230 assets passed SEO/sitemap checks. All 3,105 rows in 97 Ninja tables retain the source row text. Sitemap omits noindexed and redirected paths.
+- Remote parity: 1,217 HTML responses matched source metadata with zero differences. Two additional paths correctly match staging 301s. All 104 redirect checks passed (79 affiliate, 14 legacy, 11 archive). The 11 remaining HTTP-status failures are the confirmed staging conflicts below, not unexplained metadata differences.
+- Browser QA: 36 pages at 375px and desktop, 72 checks, zero layout/footer/affiliate-rel failures. Includes hubs, reviews, five Tier B pages, five classic posts, five columnist posts, ComeOn and five archive routes. Selected mobile/desktop screenshots visually inspected.
+- Tracking: existing GTM-TJ4SSH4 loaded in all 72 browser checks. GA4 collection requests were observed on mobile and desktop after a seven-second settling period. Existing tracking configuration was retained.
+- Task 9: cutover checklist and narrowly scoped differences completed below. All seven approved offer headlines and compact terms match live word for word; previous timeout unknowns are resolved.
+- Validation: Astro check covers 367 files with zero errors/warnings/hints. Twenty-two focused cache, source, archive, offer and routing tests passed; affected archive/routing tests were rerun after implementation. Workflow YAML parses successfully.
 
 ## In progress
-- Task 3 COMPLETE: sequential five-record GraphQL pages with exponential backoff and atomic on-disk caching. Full staging build: 1,188 pages, 983 exact .html routes, 15m 11s. Cached rebuild: 1,188 pages in 5.91s. Final launch still requires cache bypass.
-- Task 5 COMPLETE: 10 random Tier B pages plus all 27 fixed Tier A routes passed 74 mobile/desktop render checks. Visual mobile and desktop samples inspected. Fixed conditional asset responses incorrectly becoming 404; regression test passes.
-- Task 8 archives COMPLETE locally: 1,230 pages including 42 archive/pagination routes, reconstructed query-loop lists on redirected archive landing pages, and 11 observed archive redirects. Cached rebuild: 31.05 seconds. All 1,230 asset SEO/sitemap checks passed; all 3,105 rows in 97 Ninja tables retained. Remote network/browser launch checks running.
-- Task 9 COMPLETE: cutover checklist and scoped differences below; exact offer-copy match and all prior timeout cases resolved.
+- Tasks 6-7: generic Gutenberg conversion code, 28 local Tier A content plans, exact seven-offer field plans and central ACF slot rendering are prepared. CMS replacement, offer publication and slot wiring are pending the field-access blocker below.
+- Task 8: preview checks have completed with the documented status conflicts. Launch is not approved. Final WPGRAPHQL_FRESH=1 build/check remains to run after CMS and automation work is complete.
 
-## Current section 0 instructions
-- Fixed Tier A: homepage, /free-betting-tips, /bookie-free-bets-bonus-offers, every bookmaker review and sign-up offer page. Every other builder page is Tier B. No GSC ranking or Tier C list.
-- Single-record authenticated staging REST writes are authorised; read each back once. Only fields genuinely inaccessible over REST need SSH.
-- Small sequential WPGraphQL pages, backoff and completed-page disk cache are authorised for local builds. Final launch check must bypass cache with WPGRAPHQL_FRESH=1.
-- Task 3 completed with resumable five-record pages, six-attempt exponential backoff and atomic cache writes. Cache resume, endpoint isolation, fresh bypass and sequential-request tests pass.
-
-## Blocked
-- D2 / tasks 6–7: authenticated OPTIONS /wp-json/wp/v2/et_offer/90846 exposes acf as an object with zero properties; authenticated edit read returns acf []. ACF offer fields need SSH (or an explicitly exposed write route). Do not publish incomplete draft offers. Exact D2 headline/terms and UK/date field plans are committed in data/approved-offer-copy.json; eligibility retains the complete source terms. Central slot rendering is implemented and tested, ready for published ACF records. Generic Tier A Gutenberg converter and 28 local content plans are prepared; CMS replacement and ACF slot wiring remain pending this dependency. Evidence: outputs/staging-writes/offers-schema.json and 90846-read.json.
-- Rebuild automation: preview-only GitHub workflow (manual, save-dispatch and 30-minute fallback) plus debounced WordPress save hook prepared locally. GitHub currently has no repository Actions secrets. Needs EVERYTIP_PREVIEW_CLOUDFLARE_API_TOKEN, EVERYTIP_PREVIEW_CLOUDFLARE_ACCOUNT_ID and EVERYTIP_PREVIEW_BUILDS_ENABLED=true; SSH deployment of rebuild-hook.php and EVERYTIP_PREVIEW_DISPATCH_TOKEN in wp-config.php. No webhook or scheduled build has been verified. PHP CLI is unavailable locally, so PHP lint also remains pending.
-- Offers, automation activation and final fresh launch verification remain unfinished. Final remote network check is in progress; 72 browser checks and tracking checks have passed.
-- Four pre-existing staging archive redirects (/john-newsome/page/2 through /page/5) point to malformed /john-newsome-football-betting-tipspage/N destinations returning 404. Targets are preserved, not silently changed. Paul should correct the source redirect rules.
+## Blocked / required next inputs
+- D2 / tasks 6-7: authenticated OPTIONS /wp-json/wp/v2/et_offer/90846 exposes acf with zero properties; the edit read returns acf []. The public GraphQL offer catalogue is empty. These ACF fields need SSH or an explicitly exposed write route. Per section 0, no incomplete draft offers were published and work moved on. Exact approved headlines/terms, UK and 14 October date plans are in data/approved-offer-copy.json; eligibility retains the complete source terms. Central slot rendering is ready for published records. Evidence: outputs/staging-writes/offers-schema.json and 90846-read.json.
+- Rebuild automation: preview-only GitHub workflow (manual, save-dispatch and 30-minute fallback) and debounced WordPress save hook are committed. Repository Actions secrets are empty and EVERYTIP_PREVIEW_BUILDS_ENABLED is unset. Needs EVERYTIP_PREVIEW_CLOUDFLARE_API_TOKEN, enabling that flag, and SSH deployment of the complete content-model plugin folder plus EVERYTIP_PREVIEW_DISPATCH_TOKEN in wp-config.php. The preview account is already pinned in wrangler.preview.jsonc. No save-trigger or scheduled rebuild has been verified. PHP CLI is unavailable locally; lint the hook on the server before activation. This workflow targets previews only; Paul must configure the production build target at cutover.
+- Eleven existing legacy redirect sources still return 200 on staging but correctly return their established 301 on the preview. Paul must align the pre-push statuses/rules listed below. Do not claim complete staging HTTP parity until that is done.
+- Four existing staging archive redirects, /john-newsome/page/2 through /page/5, point to malformed /john-newsome-football-betting-tipspage/N destinations returning 404. Existing targets are preserved; Paul should correct the source redirect rules.
 
 ## Launch checklist (section 4)
-- [ ] Fresh staging WPGraphQL build with one endpoint variable. Complete 1,188-route build passed; final fresh-cache-bypass check remains.
-- [ ] Every staging 200 URL returns 200 at its exact Workers path, including archives.
-- [ ] Existing 301s retain targets. Worker map retained; network parity unverified.
-- [ ] Indexable title/description/canonical/robots match staging Yoast; zero unexplained differences.
-- [ ] Sitemap contains all indexable URLs and no noindexed URLs.
-- [ ] All /go links resolve to existing destinations and use sponsored/nofollow.
-- [ ] Homepage, free tips, free bets and every review use current ACF offers.
-- [x] Ninja Tables: 97 rendered tables with 3,105 rows match staging source row text exactly; table pages included in browser sampling. No rows withheld.
-- [x] Analytics: existing GTM-TJ4SSH4 loaded in all 72 browser checks; GA4 collection requests to region1.google-analytics.com were observed on mobile and desktop after a seven-second settling period. No tracking configuration was changed.
-- [ ] Save webhook and scheduled fallback rebuild work.
-- [x] 36-page QA at 375px and desktop: 72 checks, zero layout/footer/affiliate-rel failures. Includes hubs, reviews, five Tier B pages, five classic posts, five columnist posts and five archive routes; ComeOn added. Selected desktop/mobile screenshots visually inspected. Evidence: outputs/launch-render-result.json and outputs/rescope-tracking-render.log.
+- [ ] Final fresh staging build with one endpoint variable. Source integration and complete resumable builds pass; final cache bypass is still required by section 0.
+- [ ] Every staging 200 URL returns 200 at its exact Workers path. Eleven confirmed legacy status conflicts remain.
+- [x] Existing 301s retain targets: 14 legacy and 11 archive redirect checks passed.
+- [ ] Complete indexable SEO parity. All 1,217 served HTML responses match source Yoast; the 11 status conflicts prevent the complete gate passing.
+- [x] Sitemap includes indexable served routes and excludes noindexed/redirected paths.
+- [x] All 79 /go paths retain current destinations; sponsored/nofollow verified in rendered HTML.
+- [ ] Homepage, free tips, free bets and every review use current ACF offers. Publication/slot wiring blocked on ACF write access.
+- [x] Ninja tables render without withheld rows: 97 tables, 3,105 matching rows.
+- [x] Analytics and tracking fire on preview; GTM and GA4 requests verified.
+- [ ] Save webhook and scheduled fallback rebuild work. Code prepared; activation and verification pending.
+- [x] Thirty-page minimum QA at 375px and desktop exceeded: 36 pages, 72 passing checks.
 
 ## Decisions (section 5)
-- [x] D1: staging WPGraphQL comes across with cutover; no separate live installation.
-- [x] D2: seven offers approved, UK only, checked 14 Oct 2026. Copy exact headlines/terms from 56315, derive eligibility from terms, publish on staging. Full terms and official terms URL already optional in the local display model. CMS publication and slot wiring pending.
-- [x] D3 COMPLETE: page 87553 staging Yoast description changed from GBP 30 to GBP 20 via authenticated REST; one readback verified description, identity and status. Related GraphQL cache invalidated.
-- [x] D4: migrate free bets as supplied. Flag risk-free/win-win only outside offer blocks. No extra offer-claim approval gate.
-- [x] D5 COMPLETE: staging post 70985 set to noindex via the authenticated Yoast ability; one readback verified noindex and preserved title, description, canonical, nofollow and publish status. Related GraphQL cache invalidated.
-- [x] D6: superseded by section 0: no Tier C list for now; no redirects created.
+- [x] D1: staging WPGraphQL comes across at cutover; no separate live installation.
+- [x] D2: seven offers approved, UK only, checked 14 Oct 2026. Exact source copy and field plans prepared; full terms and official terms URL are optional in the display model. CMS publication and slot wiring remain blocked on field access, not copy approval.
+- [x] D3: GBP 20 description implemented and verified on staging page 87553.
+- [x] D4: migrate free bets as supplied. General-prose flags below; no additional offer-claim gate.
+- [x] D5: staging post 70985 noindex implemented and verified; no live noindex work.
+- [x] D6: section 0 supersedes Tier C; no Tier C list or redirects created.
 
 ## Order of work
 1. [x] Commit and push baseline.
 2. [x] Create PROGRESS.md.
-3. [x] Resilient staging build and cached rebuild completed.
-4. [x] Fixed tiers committed in data/builder-tiers.json: 28 Tier A routes; 87 Tier B pages. ComeOn sportsbook review 25354 was added after a complete review-path check; casino-only and tipster reviews are excluded. Another 227 classic posts contain embedded builder fragments and receive render cleanup only, never Gutenberg conversion.
-5. [x] Generic cleanup applied; 37 sampled routes passed at both viewport sizes.
-6. [ ] Tier A Gutenberg + ACF: authorised through single-record staging REST. Use staging; user's no-live-write instruction overrides section 3a's live wording.
-7. [ ] Publish seven offers and wire slots through single-record staging REST.
-8. [ ] Workers launch checklist: not passed.
-9. [x] Cutover checklist and scoped differences completed; Paul must apply the listed pre-push changes.
+3. [x] Resilient staging build and complete cached rebuild.
+4. [x] Fixed Tier A/Tier B inventory.
+5. [x] Generic cleanup and rendered sampling.
+6. [ ] Tier A Gutenberg + ACF: preparation complete; CMS writes blocked on central offer field access.
+7. [ ] Publish seven offers and wire ACF slots: exact-copy plans and renderer prepared; needs SSH.
+8. [ ] Workers launch checklist: checks run, remaining blockers documented.
+9. [x] Cutover morning checklist and scoped difference list.
 
 ## Cutover morning checklist for Paul
-1. Before pushing, re-apply only desired live edits to staging. Check exact offer texts on 56315, the eight owner rewrites and the unpublished records below. For Paddy Power 34795, ensure rewritten post_content renders instead of the old Thrive content; use page SEO from ../legacy-rewrites/manifest.json where needed.
-2. Early morning before daily tips, push staging to live through Cloudways.
-3. Set WPGRAPHQL_ENDPOINT=https://www.everytip.co.uk/graphql in the build environment. Point the save webhook at the Workers build and verify the scheduled fallback. Ensure the WordPress GraphQL origin remains reachable after DNS cutover; www/graphql must not resolve to a static-asset 404.
-4. Rebuild and pass the complete section 4 checklist. Smoke-test homepage, hubs, reviews, five posts and /go links on Workers preview. Do not cut over while any launch gate is open.
-5. Paul switches DNS/routing. Codex makes no DNS or Cloudflare production changes.
-6. Add that morning's tips normally; confirm the rebuild updates rendered tables. Retain prior deployment and WordPress backup for rollback.
+1. Before pushing, apply the desired owner rewrites and unpublished statuses listed below to staging. Recheck the seven offer texts on 56315; they matched live in this run. Use ../legacy-rewrites/manifest.json for page SEO. Disable Thrive on Paddy Power 34795 so post_content renders.
+2. Complete Tier A/ACF publication and activate/test the save hook and scheduled fallback. Resolve the status conflicts. Run the full WPGRAPHQL_FRESH=1 build and launch gate without reused responses.
+3. Early morning before daily tips, push staging to live through Cloudways.
+4. Set WPGRAPHQL_ENDPOINT=https://www.everytip.co.uk/graphql in the build environment and point the webhook/fallback at the production Workers build. Keep WordPress origin routes (/graphql, /wp-json, /wp-admin and /wp-content) reachable after frontend routing changes; GraphQL and existing media must not become static-asset 404s.
+5. Rebuild and smoke-test homepage, hubs, reviews, five posts, archive pagination and /go links on preview. Re-run the full checklist. Do not cut over with launch gates open.
+6. Paul switches DNS/routing. Codex makes no DNS or Cloudflare production changes.
+7. Add that morning's tips normally and confirm the rebuild updates rendered tables. Retain the previous deployment and WordPress backup for rollback.
 
-## Narrow cutover differences (14 October verified results)
-Scope is only section 4a; no general live/staging sync was performed.
-- Free bets 56315: all seven offer headlines and compact terms match live word for word. Wrapper HTML differs but the approved offer copy does not. Evidence: outputs/cutover-offer-copy.json.
-- All eight owner rewrites (56061, 72881, 60150, 12138, 7945, 10754, 1482, 34795) have different rendered body text on staging. All eight live public reads succeeded; previous timeout unknowns are resolved. Paul should re-apply the intended rewrites before push, using ../legacy-rewrites/manifest.json for page SEO. For Paddy Power 34795, disable Thrive so post_content is used.
-- Confirmed meta-description differences on posts 12138 (old RaceBets promotion), 7945 (old full-time earnings pitch), 10754 (old GBP 100/week claim), and 1482 (old daily tips wording). Live has the owner's replacement descriptions; stage those before push.
-- Fourteen records identified as unpublished by the owner are still published in the complete staging source: 59675, 59683, 88734, 89134, 37819, 5438, 11716, 11710, 11708, 20902, 19627, 11057, 89061, 89063. Record 33064 is absent from the published source. Paul must align these statuses before cutover.
-- Existing redirect sources still published in staging create a conflict between retaining the known 301s and returning 200 for every staging page. Existing 301 behavior is retained; do not claim launch parity until the statuses are aligned.
-- D4 prose-only flags outside the seven offer blocks: ?free bets are a win-win?; the ?Risk-Free Bets? section says ?you?re in a win-win situation?; the comparison text uses ?risk-free bet?; final thoughts says ?a risk-free way to enjoy your favourite games?. Flagged for Paul, not rewritten or used to block approved offers.
-- Evidence: outputs/cutover-final-scope.json. No changes made to live WordPress or to these staging records.
+## Narrow cutover differences (section 4a only)
+- Free bets 56315: all seven offer headlines and compact terms match live word for word. Wrapper HTML differs. Evidence: outputs/cutover-offer-copy.json.
+- All eight owner rewrites have different rendered body text on staging: 56061, 72881, 60150, 12138, 7945, 10754, 1482, 34795. All eight live reads succeeded. Re-apply intended rewrites before push; use the manifest for page SEO. Paddy Power 34795 needs Thrive disabled to render the rewritten post_content.
+- Confirmed meta-description differences on 12138 (old RaceBets promotion), 7945 (old full-time earnings pitch), 10754 (old GBP 100/week claim), and 1482 (old daily-tips wording). Live has the owner's replacement descriptions.
+- Fourteen owner-unpublished records are still published in staging: 59675, 59683, 88734, 89134, 37819, 5438, 11716, 11710, 11708, 20902, 19627, 11057, 89061, 89063. Record 33064 is absent from the published source and its staging public path returns 404.
+- Eleven of those published records are legacy redirect conflicts: 59675, 59683, 88734, 89134, 37819, 5438, 20902, 19627, 11057, 89061, 89063. Their staging paths return 200 while the preview retains established 301s. The two older aliases /free-betting-tips-old and /live-streaming-top-bookmakers already 301 on staging and match preview.
+- D4 flags outside the seven offer blocks: "free bets are a win-win"; the "Risk-Free Bets" section says "you're in a win-win situation"; comparison text uses "risk-free bet"; final thoughts says "a risk-free way to enjoy your favourite games". Flagged for Paul; not rewritten and not used to block approved offers.
+- Evidence: outputs/cutover-final-scope.json, outputs/staging-legacy-http.json and outputs/launch-network-parity.json. No live writes or broad drift audit performed.
 
-## Boundaries
-No DNS, Cloudflare production settings, live WordPress writes, Tier C redirects, new dated reports, classic post conversions or general drift audits. Existing dated docs remain historical, not current instructions.
-
-## Active checkpoint
-Tasks 3–5 complete. Tasks 6–7 have a concrete ACF REST field blocker; conversion/exact-copy extraction code prepared. Moving to independently accessible launch checks. Prior timeout stop checkpoint is superseded by section 0. Only D3/D5 staging SEO writes completed; no remote deployment this turn. Archive membership fetch and pagination implementation in progress.
+## Boundaries and stopping checkpoint
+Tasks 3-5 and 9 are complete. Task 8 has a working noindex preview, passing layout/tracking/table checks and the documented status conflicts. Tasks 6-7 await ACF field access; automation awaits its credentials and plugin installation; final uncached launch verification remains pending. Only the two authorised D3/D5 staging SEO writes were made. No classic post conversions, DNS changes, Cloudflare production changes, live WordPress writes, Tier C redirects or new dated reports. All completed work and this checkpoint are committed and pushed.
