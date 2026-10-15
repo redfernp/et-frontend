@@ -29,7 +29,7 @@ Updated 15 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 - 15 October: fourteen owner-unpublished records changed from publish to draft with status-only authenticated REST writes, sequentially, one readback each. Before/after snapshots saved under outputs/staging-writes/<ID>-draft-20261015-{before,after}.json. Raw content, raw titles and stored REST metadata are unchanged. Draft preview URLs and generated Yoast schema timestamps changed naturally; no SEO fields were submitted.
 
 ## In progress
-- Task 8: 15 October full WPGRAPHQL_FRESH=1 build and fresh launch gate are running following the fourteen status corrections. Archive redirect edits require server access; rebuild automation remains unverified.
+- Task 8: The first 15 October uncached build completed with 490 uncached receipts and all fourteen records absent. Additional staging HTTP checks found empty tag archives still return 200, while discovery omitted empty terms. Generic archive discovery now includes empty terms/authors and preserves only those serving 200 (404 empties stay absent), with regression coverage. The corrected build has 1,220 pages; a new fully uncached run is starting for final verification. Archive redirect edits require server access; rebuild automation remains unverified.
 
 ## Blocked / required next inputs
 - Rebuild automation: preview-only GitHub workflow (manual, save-dispatch and 30-minute fallback) and debounced WordPress save hook are committed. Repository Actions secrets are empty and EVERYTIP_PREVIEW_BUILDS_ENABLED is unset. Needs EVERYTIP_PREVIEW_CLOUDFLARE_API_TOKEN, enabling that flag, and SSH deployment of the complete content-model plugin folder plus EVERYTIP_PREVIEW_DISPATCH_TOKEN in wp-config.php. The preview account is already pinned in wrangler.preview.jsonc. No save-trigger or scheduled rebuild has been verified. PHP CLI is unavailable locally; lint the hook on the server before activation. This workflow targets previews only; Paul must configure the production build target at cutover.
@@ -43,9 +43,9 @@ Updated 15 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 
 ## Launch checklist (section 4)
 - [ ] Final fresh staging build with one endpoint variable. Source integration and complete resumable builds pass; final cache bypass is still required by section 0.
-- [ ] Every staging 200 URL returns 200 at its exact Workers path. Eleven confirmed legacy status conflicts remain.
+- [ ] Every staging 200 URL returns 200 at its exact Workers path. The eleven conflicts are cleared; fresh preview verification is running.
 - [x] Existing 301s retain targets: 14 legacy and 11 archive redirect checks passed.
-- [ ] Complete indexable SEO parity. All 1,217 served HTML responses match source Yoast; the 11 status conflicts prevent the complete gate passing.
+- [ ] Complete indexable SEO parity. The 14 October baseline passed metadata comparisons; fresh verification after drafting is running.
 - [x] Sitemap includes indexable served routes and excludes noindexed/redirected paths.
 - [x] All 79 /go paths retain current destinations; sponsored/nofollow verified in rendered HTML.
 - [x] Homepage, free tips, free bets and every Tier A review use current ACF offers: seven published records, 28 pages, 76 placements, verified on preview.
@@ -74,7 +74,7 @@ Updated 15 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 9. [x] Cutover morning checklist and scoped difference list.
 
 ## Cutover morning checklist for Paul
-1. Before pushing, apply the desired owner rewrites and unpublished statuses listed below to staging. Recheck the seven offer texts on 56315; they matched live in this run. Use ../legacy-rewrites/manifest.json for page SEO. Disable Thrive on Paddy Power 34795 so post_content renders.
+1. Before pushing, apply the desired owner rewrites listed below to staging. The fourteen unpublished statuses are already applied. Recheck the seven offer texts on 56315; they matched live in this run. Use ../legacy-rewrites/manifest.json for page SEO. Disable Thrive on Paddy Power 34795 so post_content renders.
 2. Tier A/ACF publication is complete. Activate/test the save hook and scheduled fallback. Resolve the status conflicts. Run the full WPGRAPHQL_FRESH=1 build and launch gate without reused responses.
 3. Early morning before daily tips, push staging to live through Cloudways.
 4. Set WPGRAPHQL_ENDPOINT=https://www.everytip.co.uk/graphql in the build environment and point the webhook/fallback at the production Workers build. Keep WordPress origin routes (/graphql, /wp-json, /wp-admin and /wp-content) reachable after frontend routing changes; GraphQL and existing media must not become static-asset 404s.
@@ -87,13 +87,13 @@ Updated 15 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 - All eight owner rewrites have different rendered body text on staging: 56061, 72881, 60150, 12138, 7945, 10754, 1482, 34795. All eight live reads succeeded. Re-apply intended rewrites before push; use the manifest for page SEO. Paddy Power 34795 needs Thrive disabled to render the rewritten post_content.
 - Confirmed meta-description differences on 12138 (old RaceBets promotion), 7945 (old full-time earnings pitch), 10754 (old GBP 100/week claim), and 1482 (old daily-tips wording). Live has the owner's replacement descriptions.
 - Fourteen owner-unpublished records are now verified draft in staging (15 October): 59675, 59683, 88734, 89134, 37819, 5438, 11716, 11710, 11708, 20902, 19627, 11057, 89061, 89063. Record 33064 is absent from the published source and its staging public path returns 404.
-- Eleven of those published records are legacy redirect conflicts: 59675, 59683, 88734, 89134, 37819, 5438, 20902, 19627, 11057, 89061, 89063. Their staging paths now return 404 following the authorised draft changes; the preview retains established 301s. The two older aliases /free-betting-tips-old and /live-streaming-top-bookmakers already 301 on staging and match preview.
+- Eleven drafted records were the former legacy redirect conflicts: 59675, 59683, 88734, 89134, 37819, 5438, 20902, 19627, 11057, 89061, 89063. Their staging paths now return 404 following the authorised draft changes; the preview retains established 301s. The two older aliases /free-betting-tips-old and /live-streaming-top-bookmakers already 301 on staging and match preview.
 - D4 flags outside the seven offer blocks: "free bets are a win-win"; the "Risk-Free Bets" section says "you're in a win-win situation"; comparison text uses "risk-free bet"; final thoughts says "a risk-free way to enjoy your favourite games". Flagged for Paul; not rewritten and not used to block approved offers.
 - Evidence: outputs/cutover-final-scope.json, outputs/staging-legacy-http.json and outputs/launch-network-parity.json. No live writes or broad drift audit performed.
 
 ## Boundaries and stopping checkpoint
 Tasks 3-7 and 9 are complete. Seven offers are published on staging with GB, active status, 14 October 2026 last-checked date and eligibility from the approved terms. Existing headlines/terms were retained word for word; only Betway/Betwright differ from the original source in ordinary versus non-breaking spaces. All 28 Tier A pages have core blocks and functioning ACF slots; their existing prose/promotions were retained. Betfred table 57082 remains a dynamic Ninja shortcode. The full build, local parity, 76 preview offer placements and 78 browser checks pass.
 
-Task 8 remains open for the existing 11 staging/legacy redirect conflicts, four malformed archive redirects, rebuild automation credentials/plugin activation, and the final uncached launch check after those blockers are resolved. No new permission or copy decision is blocking offers/Tier A. The Offer Details field group is still not REST exposed; it was unnecessary to change its existing approved wording. Only Offer Publishing show_in_rest was changed in the repo plugin.
+15 October checkpoint: all fourteen status-only draft writes and their saved readbacks are complete; all former URLs return staging 404, clearing the eleven staging-200 conflicts. The fully uncached build is running. Task 8 remains open for four server-level archive redirect corrections, rebuild automation credentials/plugin activation, and completion of this fresh launch check. No new permission or copy decision is blocking offers/Tier A. The Offer Details field group is still not REST exposed; it was unnecessary to change its existing approved wording. Only Offer Publishing show_in_rest was changed in the repo plugin.
 
 All requested staging changes, implementation fixes and this checkpoint are committed and pushed. No DNS, Cloudflare production or live WordPress writes; no classic-column conversions, Tier C redirects or new dated reports. Preview: https://everytip-review-everytip-astro-preview.jpredfern1979.workers.dev.

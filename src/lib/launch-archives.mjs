@@ -30,7 +30,7 @@ export async function archiveMembership(query) {
 
 export function paginateArchive(posts, pageSize) {
   if (!Number.isSafeInteger(pageSize) || pageSize < 1) throw new Error('Invalid WordPress archive page size');
-  return Array.from({length: Math.ceil(posts.length / pageSize)}, (_, index) => posts.slice(index * pageSize, (index + 1) * pageSize));
+  return Array.from({length: Math.max(1, Math.ceil(posts.length / pageSize))}, (_, index) => posts.slice(index * pageSize, (index + 1) * pageSize));
 }
 
 const elements = (node, name) => [...(node.name === name ? [node] : []), ...(node.children ?? []).flatMap(child => elements(child, name))];
@@ -86,14 +86,14 @@ export async function launchArchives(records, {query, endpoint, fresh=false, rec
   for (const kind of ['categories','tags','users']) {
     let after=null; const cursors=new Set();
     do {
-      const data=await query(`query LaunchArchives($after:String){${kind}(first:5,after:$after${kind==='users'?'':',where:{hideEmpty:true}'}){nodes{databaseId name uri}pageInfo{endCursor hasNextPage}}}`,{after});
+      const data=await query(`query LaunchArchives($after:String){${kind}(first:5,after:$after${kind==='users'?'':',where:{hideEmpty:false}'}){nodes{databaseId name uri}pageInfo{endCursor hasNextPage}}}`,{after});
       const connection=data[kind];
       for(const node of connection.nodes) {
         const selected=posts.filter(post=>{
           const m=byId.get(post.databaseId);
           return kind==='users' ? m.author?.node?.databaseId===node.databaseId : m[kind].nodes.some(t=>t.databaseId===node.databaseId);
         });
-        if(selected.length) archives.push({...node,posts:selected});
+        archives.push({...node,posts:selected});
       }
       if(!connection.pageInfo.hasNextPage) break;
       after=connection.pageInfo.endCursor;
@@ -136,7 +136,10 @@ export async function launchArchives(records, {query, endpoint, fresh=false, rec
         }
         continue;
       }
-      if(result.missing)throw new Error(`Published archive not found: ${uri}`);
+      if(result.missing) {
+        if (!archive.posts.length) continue; // Empty terms/authors may legitimately return 404.
+        throw new Error(`Published archive not found: ${uri}`);
+      }
       routes.push({uri,title:archive.name,kind:'archive',seo:result.seo,posts:pages[index],page:index+1,pageCount:pages.length,archiveBase:base});
       console.log(`Archive route: ${uri}`);
     }
