@@ -104,3 +104,18 @@ test('verified WordPress redirects remain 301 rather than becoming preview pages
     assert.equal(response.headers.get('location'), `https://preview.example${target}`);
   }
 });
+
+// Explicit expectations ensure source observations cannot reintroduce the malformed chain.
+test('John Newsome pagination redirects directly to a served final archive', async () => {
+  for (const page of [2, 3, 4, 5]) {
+    const target = `https://preview.example/english-premier-league-predictions-for-saturday/page/${page}`;
+    for (const method of ['GET', 'HEAD']) {
+      const response = await worker.fetch(new Request(`https://preview.example/john-newsome/page/${page}`, { method }), env);
+      assert.equal(response.status, 301);
+      assert.equal(response.headers.get('location'), target);
+      const final = await worker.fetch(new Request(target, { method }), env);
+      assert.equal(final.status, 200);
+      assert.equal(final.headers.get('location'), null);
+    }
+  }
+});

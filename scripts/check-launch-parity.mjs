@@ -3,6 +3,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { parseDocument } from 'htmlparser2';
 import { robotsFor } from '../src/lib/launch-content.mjs';
 import { verifiedLegacyRedirects } from '../src/lib/legacy-redirects.mjs';
+import { workerArchiveRedirects } from '../src/lib/archive-redirects.mjs';
 const source = JSON.parse(await readFile('outputs/launch-source.json', 'utf8'));
 const origin = process.argv.find(arg=>arg.startsWith('--origin='))?.slice('--origin='.length);
 const sitemap = origin ? await (await fetch(new URL('/sitemap.xml',origin))).text() : await readFile('dist/sitemap.xml', 'utf8');
@@ -77,7 +78,7 @@ await Promise.all(Array.from({length:origin?5:1},async()=>{while(remaining.lengt
 let redirectsChecked=0;
 if(origin){
   const affiliate=JSON.parse(await readFile('data/affiliate-redirects.json','utf8')).redirects;
-  const redirects={...affiliate,...Object.fromEntries([...verifiedLegacyRedirects].map(([path,location])=>[path,{status:301,location}])),...source.archiveRedirects};
+  const redirects={...affiliate,...Object.fromEntries([...verifiedLegacyRedirects].map(([path,location])=>[path,{status:301,location}])),...workerArchiveRedirects(source.archiveRedirects)};
   for(const[path,expected]of Object.entries(redirects)){
     const response=await fetch(new URL(path,origin),{method:'HEAD',redirect:'manual',signal:AbortSignal.timeout(30000)});
     redirectsChecked++;

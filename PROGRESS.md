@@ -2,6 +2,10 @@
 
 Updated 15 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 0. Earlier lanes and dated gates are superseded. D1-D6 are answered.
 
+## Current work: owner approval, 15 October
+- Completed Worker correction: /john-newsome/page/2 through /page/5 now 301 directly to /english-premier-league-predictions-for-saturday/page/N. Persistent overrides are shared by the Worker and parity gate; staging server rules are deliberately unchanged. All ten routing tests passed, 1,220-page cached rebuild completed, preview version 8b02bb95 deployed. All four redirects and final 200 destinations verified; preview alias initially propagated old responses, with fresh-query checks confirming the new version.
+- In progress: applying the eight supplied owner rewrites to staging with original backups, manifest SEO and Paddy Power Thrive disabled where supported.
+
 ## Done
 - Baseline committed and pushed to redfernp/et-frontend/main; this single progress file is maintained in place. Completed work and preparation checkpoints have been committed and pushed separately.
 - Task 3: the default Astro entry point reads staging WPGraphQL through one WPGRAPHQL_ENDPOINT. Five-record pages, sequential requests, backoff and atomic on-disk response caching are implemented. No October snapshot fallback or live-only overlays. Final 15 October WPGRAPHQL_FRESH=1 build passed: 1,220 pages in 37m 8s, including 979 exact .html paths. All 499 source receipts are uncached: 979 published posts, 195 pages and 46 archive/pagination routes. All fourteen drafted records are absent.

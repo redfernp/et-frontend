@@ -1,6 +1,9 @@
 import { verifiedLegacyRedirects } from '../lib/legacy-redirects.mjs';
 import affiliateInventory from '../../data/affiliate-redirects.json' with { type: 'json' };
-import archiveRedirects from '../../outputs/archive-redirects.json' with { type: 'json' };
+import { workerArchiveRedirects } from '../lib/archive-redirects.mjs';
+import observedArchiveRedirects from '../../outputs/archive-redirects.json' with { type: 'json' };
+
+const archiveRedirects = workerArchiveRedirects(observedArchiveRedirects);
 
 // Static assets are tried first by Cloudflare except for /index.html aliases
 // and verified redirects, which Wrangler routes here first.
