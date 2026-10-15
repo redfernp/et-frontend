@@ -1,6 +1,6 @@
 # EveryTip launch progress
 
-Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 0. Earlier lanes and dated gates are superseded. D1-D6 are answered.
+Updated 15 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 0. Earlier lanes and dated gates are superseded. D1-D6 are answered.
 
 ## Done
 - Baseline committed and pushed to redfernp/et-frontend/main; this single progress file is maintained in place. Completed work and preparation checkpoints have been committed and pushed separately.
@@ -26,13 +26,20 @@ Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 
 - Tasks 6-7 CMS work: all 28 fixed Tier A records rebuilt as core blocks plus ACF offer slots, sequential authenticated REST writes with one readback each. Every raw-content, identity and slot-render check passed. All existing prose retained, accounting only for removed CSS, whitespace and WordPress smart punctuation. Hubs have all seven offers; matching-brand reviews have their central offer; other reviews have a labelled comparison section. Existing embedded promotions remain as supplied. WordPress revisions and ignored before/after evidence support rollback.
 
+- 15 October: fourteen owner-unpublished records changed from publish to draft with status-only authenticated REST writes, sequentially, one readback each. Before/after snapshots saved under outputs/staging-writes/<ID>-draft-20261015-{before,after}.json. Raw content, raw titles and stored REST metadata are unchanged. Draft preview URLs and generated Yoast schema timestamps changed naturally; no SEO fields were submitted.
+
 ## In progress
-- Task 8: refreshed preview checks have completed with the documented status conflicts. Launch is not approved. Final WPGRAPHQL_FRESH=1 build/check remains to run after CMS and automation work is complete.
+- Task 8: 15 October full WPGRAPHQL_FRESH=1 build and fresh launch gate are running following the fourteen status corrections. Archive redirect edits require server access; rebuild automation remains unverified.
 
 ## Blocked / required next inputs
 - Rebuild automation: preview-only GitHub workflow (manual, save-dispatch and 30-minute fallback) and debounced WordPress save hook are committed. Repository Actions secrets are empty and EVERYTIP_PREVIEW_BUILDS_ENABLED is unset. Needs EVERYTIP_PREVIEW_CLOUDFLARE_API_TOKEN, enabling that flag, and SSH deployment of the complete content-model plugin folder plus EVERYTIP_PREVIEW_DISPATCH_TOKEN in wp-config.php. The preview account is already pinned in wrangler.preview.jsonc. No save-trigger or scheduled rebuild has been verified. PHP CLI is unavailable locally; lint the hook on the server before activation. This workflow targets previews only; Paul must configure the production build target at cutover.
-- Eleven existing legacy redirect sources still return 200 on staging but correctly return their established 301 on the preview. Paul must align the pre-push statuses/rules listed below. Do not claim complete staging HTTP parity until that is done.
-- Four existing staging archive redirects, /john-newsome/page/2 through /page/5, point to malformed /john-newsome-football-betting-tipspage/N destinations returning 404. Existing targets are preserved; Paul should correct the source redirect rules.
+- The eleven staging-200/legacy-301 conflicts are cleared: all fourteen drafted source URLs now return staging 404. Their established preview redirects are retained; full fresh preview parity is running.
+- Archive redirect correction requires Paul/Cloudways access. All 48 Redirection rules (both groups) and all six Code Snippets were inspected via authenticated REST; none contains this rule. Free Yoast has no redirect manager. Responses have no X-Redirect-By and concatenate the path suffix, suggesting a server-level prefix redirect (inference; exact configuration file is not REST-visible). Observed prefix behaviour: /john-newsome/ -> /john-newsome-football-betting-tips, omitting the joining slash. No REST-editable rule was found, so no override was created.
+  - /john-newsome/page/2: current /john-newsome-football-betting-tipspage/2; correct /john-newsome-football-betting-tips/page/2.
+  - /john-newsome/page/3: current /john-newsome-football-betting-tipspage/3; correct /john-newsome-football-betting-tips/page/3.
+  - /john-newsome/page/4: current /john-newsome-football-betting-tipspage/4; correct /john-newsome-football-betting-tips/page/4.
+  - /john-newsome/page/5: current /john-newsome-football-betting-tipspage/5; correct /john-newsome-football-betting-tips/page/5.
+  - The corrected destination prefix already 301s onward to /english-premier-league-predictions-for-saturday/page/N; all four final destinations return 200. Paul should inspect the staging Cloudways/nginx/Apache .htaccess redirect configuration and restore the joining slash. Evidence: outputs/staging-writes/redirects-{page0,groups,snippets,john-http,john-chain}.json.
 
 ## Launch checklist (section 4)
 - [ ] Final fresh staging build with one endpoint variable. Source integration and complete resumable builds pass; final cache bypass is still required by section 0.
@@ -79,8 +86,8 @@ Updated 14 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 - Free bets 56315: all seven offer headlines and compact terms match live word for word. Wrapper HTML differs. Evidence: outputs/cutover-offer-copy.json.
 - All eight owner rewrites have different rendered body text on staging: 56061, 72881, 60150, 12138, 7945, 10754, 1482, 34795. All eight live reads succeeded. Re-apply intended rewrites before push; use the manifest for page SEO. Paddy Power 34795 needs Thrive disabled to render the rewritten post_content.
 - Confirmed meta-description differences on 12138 (old RaceBets promotion), 7945 (old full-time earnings pitch), 10754 (old GBP 100/week claim), and 1482 (old daily-tips wording). Live has the owner's replacement descriptions.
-- Fourteen owner-unpublished records are still published in staging: 59675, 59683, 88734, 89134, 37819, 5438, 11716, 11710, 11708, 20902, 19627, 11057, 89061, 89063. Record 33064 is absent from the published source and its staging public path returns 404.
-- Eleven of those published records are legacy redirect conflicts: 59675, 59683, 88734, 89134, 37819, 5438, 20902, 19627, 11057, 89061, 89063. Their staging paths return 200 while the preview retains established 301s. The two older aliases /free-betting-tips-old and /live-streaming-top-bookmakers already 301 on staging and match preview.
+- Fourteen owner-unpublished records are now verified draft in staging (15 October): 59675, 59683, 88734, 89134, 37819, 5438, 11716, 11710, 11708, 20902, 19627, 11057, 89061, 89063. Record 33064 is absent from the published source and its staging public path returns 404.
+- Eleven of those published records are legacy redirect conflicts: 59675, 59683, 88734, 89134, 37819, 5438, 20902, 19627, 11057, 89061, 89063. Their staging paths now return 404 following the authorised draft changes; the preview retains established 301s. The two older aliases /free-betting-tips-old and /live-streaming-top-bookmakers already 301 on staging and match preview.
 - D4 flags outside the seven offer blocks: "free bets are a win-win"; the "Risk-Free Bets" section says "you're in a win-win situation"; comparison text uses "risk-free bet"; final thoughts says "a risk-free way to enjoy your favourite games". Flagged for Paul; not rewritten and not used to block approved offers.
 - Evidence: outputs/cutover-final-scope.json, outputs/staging-legacy-http.json and outputs/launch-network-parity.json. No live writes or broad drift audit performed.
 
