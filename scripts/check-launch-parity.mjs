@@ -1,4 +1,5 @@
 // Section 4 launch gate: compare the build's fresh-source receipt with its assets.
+import { canonicalFor } from '../src/lib/launch-templates.mjs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { parseDocument } from 'htmlparser2';
 import { robotsFor } from '../src/lib/launch-content.mjs';
@@ -72,7 +73,7 @@ async function inspect(record) {
   const meta = Object.fromEntries(elements(doc, 'meta').map(node => [node.attribs.name, node.attribs.content]));
   const canonical = elements(doc, 'link').find(node => node.attribs.rel === 'canonical')?.attribs.href ?? '';
   const actual = { title: text(elements(doc, 'title')[0]), description: meta.description ?? '', canonical, robots: meta.robots };
-  const expected = { title: record.seo?.title || text(parseDocument(record.title)), description: record.seo?.metaDesc || '', canonical: record.seo?.canonical || '', robots: robotsFor(record) };
+  const expected = { title: record.seo?.title || text(parseDocument(record.title)), description: record.seo?.metaDesc || '', canonical: canonicalFor(record), robots: robotsFor(record) };
   for (const field of Object.keys(expected)) if (actual[field] !== expected[field]) failures.push({ path: record.uri, field, expected: expected[field], actual: actual[field] });
   const sitemapPath = new URL(record.uri, 'https://www.everytip.co.uk').href.replaceAll('&', '&amp;');
   const included = sitemap.includes(`<loc>${sitemapPath}</loc>`);

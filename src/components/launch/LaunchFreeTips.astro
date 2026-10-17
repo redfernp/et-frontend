@@ -10,7 +10,7 @@ const { record, records, paths, offers, seo } = Astro.props;
 const available = new Set(paths);
 const live = 'https://www.everytip.co.uk';
 const allGroups = [
-  { title: 'Sports betting tips', links: [
+  { title: 'Football betting tips', links: [
     { label: 'John Newsome', href: '/pilot/english-premier-league-predictions-for-saturday/' },
     { label: 'Football correct scores', href: `${live}/football-correct-score-tips.html` },
     { label: 'Champions League', href: `${live}/uefa-champions-league-betting-tips-predictions.html` },
@@ -19,8 +19,6 @@ const allGroups = [
     { label: 'Over/under 2.5 goals', href: `${live}/over-2-5-goals-tips.html` },
     { label: 'Both teams to score', href: `${live}/both-teams-to-score-btts-tips.html` },
     { label: 'Football accumulators', href: `${live}/football-accumulator-tips.html` },
-    { label: 'Greyhound racing', href: `${live}/greyhound-tips.html` },
-    { label: 'Cricket', href: `${live}/cricket-betting-tips.html` },
   ]},
   { title: 'UK & Irish racing tips', links: [
     { label: 'Daily treble', href: `${live}/horse-racing-treble-tips.html` },
@@ -44,6 +42,10 @@ const allGroups = [
     { label: 'Mauritius', href: `${live}/mauritius-horse-racing-tips.html` },
     { label: 'Meydan', href: `${live}/dubai-horse-racing-tips.html` },
   ]},
+  { title: 'Sports betting tips', links: [
+    { label: 'Greyhound racing', href: `${live}/greyhound-tips.html` },
+    { label: 'Cricket', href: `${live}/cricket-betting-tips.html` },
+  ]},
   { title: 'Weekend football tipsters', links: [
     { label: 'Alan Shearer tips', href: `${live}/alan-shearer-football-tips.html` },
     { label: 'Peter Crouch tips', href: `${live}/peter-crouch-football-tips.html` },
@@ -63,7 +65,8 @@ const pilotMap = { '/english-premier-league-predictions-for-saturday': '/english
 const tipGroups = allGroups.map((group) => ({ ...group, links: group.links
   .map((link) => { const href = local(link.href); return { ...link, href: pilotMap[href] ?? href }; })
   .filter((link) => available.has(link.href)) })).filter((group) => group.links.length);
-const news = latestPosts(records, 5);
+const news = latestPosts(records, 40);
+const perPage = 10;
 const editorial = launchHtml(contentFromHeading(record.content, /^Free Sports Betting Tips From Professional/i), endpoint);
 const formatDate = (value) => new Date(`${value}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 ---
@@ -97,11 +100,16 @@ const formatDate = (value) => new Date(`${value}T12:00:00Z`).toLocaleDateString(
       <a class="hub-commercial-cta" href={offers[0].ctaPath} rel="sponsored nofollow">{offers[0].ctaLabel}</a>
     </section>}
 
-    <section class="hub-news" aria-labelledby="hub-news-title">
+    <section class="hub-news" aria-labelledby="hub-news-title" data-news-pager>
       <div class="hub-section-heading"><p class="kicker">Latest from EveryTip</p><h2 id="hub-news-title">Today’s Betting Tips &amp; Offer News</h2></div>
-      <div class="hub-news-list">
-        {news.map((item) => <article><time datetime={item.date}>{formatDate(item.date)}</time><h3><a href={item.uri}>{item.title}</a></h3></article>)}
+      <div class="hub-news-list news-two-col">
+        {news.map((item, index) => <article data-news-page={Math.floor(index / perPage) + 1} hidden={index >= perPage}><time datetime={item.date}>{formatDate(item.date)}</time><h3><a href={item.uri}>{item.title}</a></h3></article>)}
       </div>
+      {news.length > perPage && <nav class="news-pager" aria-label="Older tips and news">
+        <button type="button" data-news-prev disabled>← Newer</button>
+        <span data-news-status>Page 1 of {Math.ceil(news.length / perPage)}</span>
+        <button type="button" data-news-next>Older →</button>
+      </nav>}
     </section>
 
     <section class="hub-directory-section" aria-labelledby="hub-directory-title">
@@ -114,7 +122,31 @@ const formatDate = (value) => new Date(`${value}T12:00:00Z`).toLocaleDateString(
     </section>
   </div>
 </BaseLayout>
+<script>
+  // Page through the latest posts without new URLs.
+  for (const pager of document.querySelectorAll('[data-news-pager]')) {
+    const items = [...pager.querySelectorAll('[data-news-page]')];
+    const pages = Math.max(...items.map((item) => Number(item.dataset.newsPage)));
+    const prev = pager.querySelector('[data-news-prev]');
+    const next = pager.querySelector('[data-news-next]');
+    const status = pager.querySelector('[data-news-status]');
+    let page = 1;
+    const show = () => {
+      for (const item of items) item.hidden = Number(item.dataset.newsPage) !== page;
+      prev.disabled = page === 1; next.disabled = page === pages;
+      status.textContent = `Page ${page} of ${pages}`;
+    };
+    prev?.addEventListener('click', () => { page--; show(); });
+    next?.addEventListener('click', () => { page++; show(); });
+  }
+</script>
 <style>
+  .news-two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px}
+  .news-two-col article[hidden]{display:none}
+  .news-pager{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;font-size:13px;font-weight:700;color:#536371}
+  .news-pager button{padding:8px 14px;border:1px solid var(--et-blue-ink);border-radius:4px;background:#fff;color:var(--et-blue-ink);font-weight:800;cursor:pointer}
+  .news-pager button:disabled{opacity:.4;cursor:default}
+  @media(max-width:700px){.news-two-col{grid-template-columns:1fr}}
   .cms-content :global(img){max-width:100%;height:auto}
   .cms-content :global(.offer-slot){margin:24px 0;padding:18px 20px;border:1px solid #d5e2ea;border-left:5px solid var(--et-orange);background:#fff}
   .cms-content :global(.offer-slot h2){margin:.25rem 0 .6rem;font-size:21px}

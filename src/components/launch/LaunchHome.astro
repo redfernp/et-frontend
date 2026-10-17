@@ -2,15 +2,19 @@
 // Live homepage: the approved pilot design fed by staging WordPress and the active ACF offers.
 import '../../styles/global.css';
 import '../../styles/design-refresh.css';
+import '../../styles/launch.css';
 import HomeOfferLadder from '../HomeOfferLadder.astro';
 import SiteFooter from '../SiteFooter.astro';
 import { publicMenuFallback, publicNavigation } from '../../lib/menu-tree';
+import { launchHtml } from '../../lib/builder-cleanup.mjs';
+import { endpoint } from '../../lib/launch-content.mjs';
 import { homeEditorialHtml, columnistCards, launchMenuItems } from '../../lib/launch-templates.mjs';
 
 const { record, records, paths, offers, seo } = Astro.props;
 const available = new Set(paths);
 const navigation = publicNavigation(await launchMenuItems(), paths);
-const editorial = homeEditorialHtml(record);
+// Same link rewriting as every other page, so staging hosts become site-relative paths.
+const editorial = homeEditorialHtml({ ...record, content: launchHtml(record.content, endpoint) });
 const cards = columnistCards(records);
 const linkIf = (entries) => entries.filter(([, href]) => available.has(href));
 
@@ -44,7 +48,7 @@ const guides = linkIf([
   ['Best betting sites for basketball', '/best-betting-sites-for-basketball.html'],
 ]);
 const quickLinks = [
-  ['Newsletter', '#newsletter'],
+  ['Newsletter', '/daily-newsletter'],
   ['Free tipsters', '#free-tips'],
   ['Guides', '#latest-guides'],
   ['Free bets', '#offers'],
@@ -89,7 +93,7 @@ const quickLinks = [
         <p class="kicker">EveryTip newsletter</p>
         <h2 id="newsletter-title">The best tips and offers in your inbox</h2>
         <p>Horse racing, football and other free tips, plus timely offer news, straight to your inbox.</p>
-        {available.has('/free-betting-tips-previews-analysis-by-email') && <a class="home-newsletter-preview" href="/free-betting-tips-previews-analysis-by-email">Sign up for free tips</a>}
+        <a class="home-newsletter-preview" href="/daily-newsletter">Sign up for free tips</a>
       </section>
 
       {cards.length > 0 && <section class="home-section" aria-labelledby="features-title">
@@ -106,7 +110,7 @@ const quickLinks = [
 
       {editorial && <section class="home-section home-intro" aria-labelledby="intro-title">
         <h2 id="intro-title">Free Betting Tips Published Every Day On EveryTip</h2>
-        <div set:html={editorial} />
+        <div class="home-intro-card" set:html={editorial} />
       </section>}
 
       <section id="free-tips" class="home-section" aria-labelledby="tips-title">

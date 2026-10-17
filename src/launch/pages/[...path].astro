@@ -4,12 +4,14 @@ import LaunchHome from '../../components/launch/LaunchHome.astro';
 import LaunchFreeTips from '../../components/launch/LaunchFreeTips.astro';
 import LaunchFreeBets from '../../components/launch/LaunchFreeBets.astro';
 import LaunchBet365Review from '../../components/launch/LaunchBet365Review.astro';
+import LaunchColumnArchive from '../../components/launch/LaunchColumnArchive.astro';
 import ColumnistProfile from '../../components/ColumnistProfile.astro';
 import { launchContent, robotsFor, endpoint } from '../../lib/launch-content.mjs';
 import { launchOfferLineup } from '../../lib/launch-offers.mjs';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
+import { rebuildRankedCards, fillEmptyLinkCells } from '../../lib/ranked-cards.mjs';
 import { columnistKeyForUri, legacyColumnistPortraitPaths } from '../../lib/columnist-profiles.mjs';
-import { articleCategory, columnistArchives, launchColumnists, isGuide, withHeadingIds } from '../../lib/launch-templates.mjs';
+import { canonicalFor, articleCategory, columnistArchives, launchColumnists, isGuide, withHeadingIds } from '../../lib/launch-templates.mjs';
 
 export async function getStaticPaths() {
   const records = await launchContent();
@@ -24,14 +26,16 @@ const offers = launchOfferLineup();
 const seo = {
   title: record.seo?.title || record.title,
   description: record.seo?.metaDesc || '',
-  canonical: record.seo?.canonical || null,
+  // Canonicals always name the public site, whichever WordPress host the build reads.
+  canonical: canonicalFor(record),
   robots: robotsFor(record),
 };
 const isHome = record.uri === '/';
+const archiveColumnist = record.posts?.length ? Object.keys(columnistArchives).find((key) => columnistArchives[key] === record.archiveBase) : null;
 const columnist = columnistKeyForUri(record.uri);
 const profile = columnist ? (await launchColumnists())[columnist] : null;
 const category = articleCategory(record);
-let body = record.content ? launchHtml(record.content, endpoint) : '';
+let body = record.content ? fillEmptyLinkCells(rebuildRankedCards(launchHtml(record.content, endpoint))) : '';
 // Columnist posts carry an old portrait banner that the author box replaces.
 if (columnist) for (const path of legacyColumnistPortraitPaths[columnist]) {
   body = body.replace(new RegExp(`<img[^>]*${path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^>]*>`, 'g'), '');
@@ -39,13 +43,16 @@ if (columnist) for (const path of legacyColumnistPortraitPaths[columnist]) {
 const guide = isGuide(record) ? withHeadingIds(body) : null;
 if (guide) body = guide.html;
 // Tip-table pages need the full width for their seven columns.
-const hasTipTable = /ninja_table|ninja-table|footable/i.test(record.content ?? '');
+const hasTipTable = /ninja_table|ninja-table|footable/i.test(record.content ?? '')
+  // Comparison and award pages built around tables use the full width too.
+  || (record.kind === 'pages' && /<table/i.test(record.content ?? ''));
 const published = record.date?.slice(0, 10);
 const modified = record.modified?.slice(0, 10);
 const formatDate = (value) => value ? new Date(`${value}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
 ---
 {isHome ? <LaunchHome record={record} records={records} paths={paths} offers={offers} seo={seo} /> :
  record.uri === '/bookie-free-bets-bonus-offers' ? <LaunchFreeBets record={record} paths={paths} offers={offers} seo={seo} /> :
+ archiveColumnist ? <LaunchColumnArchive record={record} records={records} paths={paths} offers={offers} seo={seo} columnist={archiveColumnist} /> :
  record.uri === '/bet365-review' ? <LaunchBet365Review record={record} paths={paths} offers={offers} seo={seo} /> :
  record.uri === '/free-betting-tips' ? <LaunchFreeTips record={record} records={records} paths={paths} offers={offers} seo={seo} /> :
 guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo} verifiedPublicPaths={paths} offers={offers}>
@@ -109,7 +116,8 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
   .cms-content :global(h3){margin:24px 0 8px;color:#183f60}
   .cms-content :global(p){max-width:770px}
   .cms-content :global(img){max-width:100%;height:auto}
-  .cms-content :global(table){display:block;width:100%;min-width:0;max-width:100%;overflow-x:auto;border-collapse:collapse}
+  .cms-content :global(table){display:table;width:100%;max-width:100%;border-collapse:collapse}
+  @media(max-width:720px){.cms-content :global(table){display:block;overflow-x:auto}}
   .cms-content :global(th),.cms-content :global(td){padding:7px 9px;border:1px solid #dce7ed}
   .cms-content :global(iframe){max-width:100%}
   .cms-content :global(figure){max-width:100%;margin:1rem 0}

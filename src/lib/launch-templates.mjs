@@ -76,6 +76,7 @@ export function contentBeforeHeading(html, heading) {
 
 // Roundups and how-to guides use the approved roundup guide header.
 export function isGuide(record) {
+  if (record.kind === 'pages') return /^\/(best-|high-stakes-)/.test(record.uri);
   return record.kind === 'posts' && /^\/(best-(?!backed-horses)|online-bookmakers-|low-or-no-|how-to-|bookmakers-|which-bookies-)/.test(record.uri);
 }
 
@@ -107,4 +108,15 @@ export function launchMenuItems() {
       console.warn(`WordPress menu unavailable, using fallback: ${error.message}`);
       return (await import('./menu-tree.ts')).publicMenuFallback;
     });
+}
+
+const publicOrigin = 'https://www.everytip.co.uk';
+// Yoast's canonical on the public host; a page without one is self-canonical.
+export function canonicalFor(record) {
+  const source = record.seo?.canonical;
+  if (!source) return `${publicOrigin}${record.uri}`;
+  try {
+    const url = new URL(source, publicOrigin);
+    return `${publicOrigin}${url.pathname}${url.search}`;
+  } catch { return `${publicOrigin}${record.uri}`; }
 }

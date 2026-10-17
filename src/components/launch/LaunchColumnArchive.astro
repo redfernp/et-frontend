@@ -1,0 +1,64 @@
+---
+// Live columnist hub (John Newsome / Seymour Biz): the approved column archive design.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { launchColumnists, plainTitle } from '../../lib/launch-templates.mjs';
+
+const { record, records, paths, offers, seo, columnist } = Astro.props;
+const profile = (await launchColumnists())[columnist];
+const meta = columnist === 'john'
+  ? { title: 'English Premier League Predictions For Saturday', subtitle: 'Football correct score betting tips', discipline: 'Football', accent: '#1d5f94', siblingLabel: 'Seymour Biz’s racing column', siblingHref: '/saturday-horse-racing-tips' }
+  : { title: 'Saturday Horse Racing Tips', subtitle: 'Weekend racing previews', discipline: 'Horse racing', accent: '#f26800', siblingLabel: 'John Newsome’s football column', siblingHref: '/english-premier-league-predictions-for-saturday' };
+const stockOpening = /^(?:Find all previous|You can view all previous)[^.]*\.\s*/i;
+const byUri = new Map(records.map((item) => [item.uri, item]));
+const excerpt = (uri) => {
+  // Skip the stock "Find all previous … column" opening line.
+  const text = plainTitle(byUri.get(uri)?.content ?? '').replace(stockOpening, '');
+  return text.length > 190 ? `${text.slice(0, 190).replace(/\s+\S*$/, '')}…` : text;
+};
+const formatDate = (value) => new Date(`${value.slice(0, 10)}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const entries = record.posts.map((post) => ({ href: post.uri, title: plainTitle(post.title), dateLabel: formatDate(post.date), excerpt: excerpt(post.uri) }));
+// The hub's own intro: the first substantial paragraphs of the WordPress page.
+const hub = byUri.get(record.archiveBase) ?? record;
+// Stop at the first paragraph that is really a post excerpt from the page's post loop.
+const excerptStarts = new Set(entries.map((entry) => entry.excerpt.slice(0, 50)));
+const intro = [];
+for (const m of (hub.content ?? '').matchAll(/<p[^>]*>([\s\S]*?)<\/p>/g)) {
+  const text = plainTitle(m[1]).replace(stockOpening, '');
+  if (excerptStarts.has(text.slice(0, 50))) break;
+  if (text.length > 80 && !/^#Ad/i.test(text)) intro.push(text);
+  if (intro.length === 2) break;
+}
+const page = record.page;
+const totalPages = record.pageCount;
+const latest = page === 1 ? entries[0] : undefined;
+const previous = page === 1 ? entries.slice(1) : entries;
+const pagePath = (number) => number === 1 ? record.archiveBase : `${record.archiveBase}/page/${number}`;
+---
+<BaseLayout title={meta.title} publicPage={true} seo={seo} verifiedPublicPaths={paths} sidebar={true} offers={offers}>
+  <article class="column-archive" style={`--column-accent:${meta.accent}`}>
+    <nav class="column-breadcrumb" aria-label="Breadcrumb"><a href="/">EveryTip</a><span aria-hidden="true">›</span><a href="/free-betting-tips">Free tips</a><span aria-hidden="true">›</span><span>{profile.name}</span></nav>
+    <header class="column-hero">
+      <p class="kicker">{meta.discipline} · weekly column</p>
+      <h1>{meta.title}{page > 1 ? ` — page ${page}` : ''}</h1>
+      <div class="column-identity"><img src={profile.image} alt="" width="100" height="100" /><div><h2>{meta.subtitle}</h2><p>By {profile.name} · EveryTip feature columnist</p></div></div>
+    </header>
+    {page === 1 && intro.length > 0 && <div class="column-intro">{intro.map((text) => <p>{text}</p>)}</div>}
+    <nav class="column-jump" aria-label="Column navigation">{latest && <a href="#latest">Latest column</a>}<a href="#previous">{page === 1 ? 'Previous columns' : `Archive page ${page}`}</a><a href={meta.siblingHref}>{meta.siblingLabel}</a></nav>
+
+    {latest && <section id="latest" class="column-latest" aria-labelledby="column-latest-heading">
+      <div class="column-section-heading"><p class="kicker">Fresh from {profile.name}</p><h2 id="column-latest-heading">Latest column</h2></div>
+      <article class="column-feature"><div class="column-feature-copy"><span class="column-date">{latest.dateLabel}</span><h3><a href={latest.href}>{latest.title}</a></h3><p>{latest.excerpt}</p><a class="column-read" href={latest.href}>Read the column <span aria-hidden="true">→</span></a></div><div class="column-feature-side"><img src={profile.image} alt="" width="100" height="100" /><span>{profile.name}</span></div></article>
+    </section>}
+
+    <section id="previous" class="column-previous" aria-labelledby="column-previous-heading">
+      <div class="column-section-heading"><p class="kicker">The archive</p><h2 id="column-previous-heading">{page === 1 ? 'Previous columns' : `Previous columns — page ${page}`}</h2><p>Page {page} of {totalPages}.</p></div>
+      <div class="column-list">{previous.map((entry) => <article class="column-entry"><div><span class="column-date">{entry.dateLabel}</span></div><h3><a href={entry.href}>{entry.title}</a></h3><p>{entry.excerpt}</p><a class="column-entry-link" href={entry.href}>Read more <span aria-hidden="true">→</span></a></article>)}</div>
+      <nav class="column-pagination" aria-label={`${profile.name} archive pages`}>
+        {page > 1 ? <a class="column-page-direction" href={pagePath(page - 1)} rel="prev">← Newer</a> : <span class="column-page-spacer" aria-hidden="true"></span>}
+        <span class="column-page-numbers">{Array.from({ length: totalPages }, (_, index) => index + 1).map((number) => number === page ? <span class="column-page-current" aria-current="page">{number}</span> : <a href={pagePath(number)} aria-label={`Page ${number}`}>{number}</a>)}</span>
+        {page < totalPages ? <a class="column-page-direction" href={pagePath(page + 1)} rel="next">Older →</a> : <span class="column-page-spacer" aria-hidden="true"></span>}
+      </nav>
+    </section>
+    <footer class="column-footer"><p>18+ · Please gamble responsibly · <a href="https://www.begambleaware.org/" rel="noopener">BeGambleAware.org</a></p></footer>
+  </article>
+</BaseLayout>

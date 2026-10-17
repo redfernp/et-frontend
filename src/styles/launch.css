@@ -1,0 +1,70 @@
+/* Live-site refinements on top of the approved design (Paul's review, 17 October). */
+
+/* Main navigation: menu items with and without submenus share one style and baseline. */
+.site-header .public-nav { align-items: center; }
+.site-header .public-nav > a,
+.site-header .public-nav-group > summary,
+.site-header .public-nav-group > summary > a { display: inline-flex; align-items: center; color: #fff; font-size: 14px; font-weight: 700; line-height: 1.2; text-decoration: none; }
+.site-header .public-nav-group > summary::after { content: '▾'; margin-left: 5px; font-size: 10px; opacity: .8; }
+.home-header.cms-nav nav { align-items: center; }
+.home-header.cms-nav nav > a,
+.home-header.cms-nav .home-nav-group > summary,
+.home-header.cms-nav .home-nav-group > summary > a { display: inline-flex; align-items: center; color: #1d5684; font-size: 13px; font-weight: 750; line-height: 1.2; text-decoration: none; }
+.home-header.cms-nav nav > a:hover,
+.home-header.cms-nav .home-nav-group > summary > a:hover { text-decoration: underline; text-decoration-color: var(--et-orange); text-decoration-thickness: 2px; text-underline-offset: 5px; }
+
+/* Sidebar: space between the heading bar and the first offer. */
+.featured-offers > h2 { margin-bottom: 12px; }
+
+/* In-copy links. Editorial (internal, non-commercial): blue with a light underline.
+   Commercial (affiliate, /go/, sponsored, Amazon): bold dark text with an orange underline. */
+.cms-content a,
+.home-intro-card a { color: var(--et-blue-ink); text-decoration: underline; text-decoration-color: #8fb2ce; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.cms-content a:hover,
+.home-intro-card a:hover { text-decoration-color: var(--et-blue-ink); }
+.cms-content a:is([rel~="sponsored"], [href*="/go/"], [href*="amazon."], [href*="amzn."]),
+.home-intro-card a:is([rel~="sponsored"], [href*="/go/"]) { color: #263748; font-weight: 800; text-decoration-color: var(--et-commercial); text-decoration-thickness: 3px; }
+.cms-content a:has(img) { text-decoration: none; }
+
+/* Lists in articles (for example "Related reading"): tighter rows. */
+.cms-content :is(ul, ol) { margin: 10px 0 18px; padding-left: 22px; }
+.cms-content li { margin: 0 0 4px; line-height: 1.5; }
+.cms-content li > p { margin: 0; }
+
+/* Article body fills its column when the sidebar is present. */
+.page-shell.with-sidebar .exact-preview-body { max-width: none; }
+
+/* Homepage intro copy as a designed editorial card. */
+.home-intro-card { padding: clamp(20px, 3vw, 32px); background: #fff; border: 1px solid #dce7ee; border-left: 5px solid var(--et-orange); border-radius: 8px; }
+.home-intro-card p { max-width: 82ch; margin: 0 0 14px; line-height: 1.7; }
+.home-intro-card p:last-child { margin-bottom: 0; }
+
+/* Free tips hub: news and spotlight use the full hub width like the directory. */
+.free-tips-hub .hub-news { max-width: none; }
+.free-tips-hub .hub-spotlight { max-width: none; }
+
+/* Ranked bookmaker cards rebuilt from the old builder ladders on award and guide pages. */
+.rank-card { position: relative; display: grid; grid-template-columns: 170px minmax(0, 1fr) auto; gap: 18px; align-items: center; margin: 14px 0; padding: 18px 20px 18px 30px; background: #fff; border: 1px solid #d8e4ec; border-left: 5px solid var(--et-blue); border-radius: 8px; box-shadow: 0 3px 12px #183f5f0d; }
+.rank-number { position: absolute; left: -15px; top: 50%; transform: translateY(-50%); display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--et-blue-ink); color: #fff; font-weight: 900; font-size: 14px; border: 3px solid #fff; }
+.rank-logo { display: grid; place-items: center; min-height: 70px; padding: 10px; border-radius: 6px; }
+.rank-logo img { display: block; max-width: 150px; max-height: 50px; width: auto; height: auto; }
+.rank-logo a { text-decoration: none; }
+.rank-body h3 { margin: 0 0 6px; font-size: 19px; line-height: 1.25; color: #183f60; }
+.rank-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 0 0 6px; font-size: 13px; }
+.rank-stars { color: #f2a900; letter-spacing: 1px; font-size: 15px; }
+.cms-content .rank-meta a { font-weight: 700; }
+.rank-facts { margin: 4px 0 6px !important; padding-left: 18px !important; font-size: 14px; }
+.rank-specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin: 8px 0; }
+.rank-specs div { padding: 8px 10px; background: #f2f7fa; border-radius: 6px; }
+.rank-specs dt { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: #5b6f7f; }
+.rank-specs dd { margin: 2px 0 0; font-weight: 800; color: #183f60; }
+.rank-terms { margin: 6px 0 0 !important; font-size: 11px; line-height: 1.5; color: #5f6f7b; }
+.cms-content .rank-cta a { display: inline-block; padding: 12px 18px; border-radius: 5px; background: var(--et-commercial); color: #fff; font-weight: 900; text-decoration: none; white-space: nowrap; }
+@media (max-width: 720px) {
+  .rank-card { grid-template-columns: 1fr; padding: 18px; text-align: left; }
+  .rank-number { left: auto; right: 12px; top: 12px; transform: none; }
+  .rank-cta a { display: block; text-align: center; }
+}
+
+/* Buttons filled into comparison-table "Link" cells. */
+.cms-content a.table-cta { display: inline-block; padding: 7px 12px; border-radius: 4px; background: var(--et-commercial); color: #fff; font-weight: 800; font-size: 13px; text-decoration: none; white-space: nowrap; }
