@@ -9,7 +9,7 @@ import ColumnistProfile from '../../components/ColumnistProfile.astro';
 import { launchContent, robotsFor, endpoint } from '../../lib/launch-content.mjs';
 import { launchOfferLineup } from '../../lib/launch-offers.mjs';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
-import { rebuildRankedCards, fillEmptyLinkCells } from '../../lib/ranked-cards.mjs';
+import { rebuildRankedCards, fillEmptyLinkCells, responsiveNinjaTables } from '../../lib/ranked-cards.mjs';
 import { columnistKeyForUri, legacyColumnistPortraitPaths } from '../../lib/columnist-profiles.mjs';
 import { canonicalFor, articleCategory, columnistArchives, launchColumnists, isGuide, withHeadingIds } from '../../lib/launch-templates.mjs';
 
@@ -35,7 +35,7 @@ const archiveColumnist = record.posts?.length ? Object.keys(columnistArchives).f
 const columnist = columnistKeyForUri(record.uri);
 const profile = columnist ? (await launchColumnists())[columnist] : null;
 const category = articleCategory(record);
-let body = record.content ? fillEmptyLinkCells(rebuildRankedCards(launchHtml(record.content, endpoint))) : '';
+let body = record.content ? responsiveNinjaTables(fillEmptyLinkCells(rebuildRankedCards(launchHtml(record.content, endpoint)))) : '';
 // Columnist posts carry an old portrait banner that the author box replaces.
 if (columnist) for (const path of legacyColumnistPortraitPaths[columnist]) {
   body = body.replace(new RegExp(`<img[^>]*${path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^>]*>`, 'g'), '');
@@ -43,9 +43,9 @@ if (columnist) for (const path of legacyColumnistPortraitPaths[columnist]) {
 const guide = isGuide(record) ? withHeadingIds(body) : null;
 if (guide) body = guide.html;
 // Tip-table pages need the full width for their seven columns.
-const hasTipTable = /ninja_table|ninja-table|footable/i.test(record.content ?? '')
-  // Comparison and award pages built around tables use the full width too.
-  || (record.kind === 'pages' && /<table/i.test(record.content ?? ''));
+// Comparison and award pages built around tables use the full width; tips posts keep the
+// sidebar like the live site, with responsive Ninja tables.
+const hasTipTable = record.kind === 'pages' && /<table/i.test(record.content ?? '');
 const published = record.date?.slice(0, 10);
 const modified = record.modified?.slice(0, 10);
 const formatDate = (value) => value ? new Date(`${value}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
@@ -94,6 +94,47 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
     <p class="exact-preview-source">18+ · Please gamble responsibly · <a href="https://www.begambleaware.org/" rel="noopener">BeGambleAware.org</a></p>
   </article>
 </BaseLayout>}
+<script>
+  // "+" expander for Ninja tip-table columns hidden at the current width (as on the live site).
+  function setUpTipTables() {
+    for (const table of document.querySelectorAll('table.nt-responsive')) {
+      const refresh = () => {
+        table.querySelectorAll('.nt-detail').forEach((row) => row.remove());
+        table.querySelectorAll('.nt-toggle').forEach((button) => button.remove());
+        for (const row of table.querySelectorAll('tbody tr')) {
+          const hidden = [...row.children].filter((cell) => cell.classList.contains('nt-col') && getComputedStyle(cell).display === 'none');
+          if (!hidden.length) continue;
+          const first = [...row.children].find((cell) => getComputedStyle(cell).display !== 'none');
+          if (!first) continue;
+          const button = document.createElement('button');
+          button.type = 'button'; button.className = 'nt-toggle'; button.textContent = '+';
+          button.setAttribute('aria-expanded', 'false'); button.setAttribute('aria-label', 'Show more details');
+          button.addEventListener('click', () => {
+            const open = row.nextElementSibling?.classList.contains('nt-detail');
+            if (open) { row.nextElementSibling.remove(); button.textContent = '+'; button.setAttribute('aria-expanded', 'false'); return; }
+            const detail = document.createElement('tr');
+            detail.className = 'nt-detail';
+            const cell = document.createElement('td');
+            cell.colSpan = [...row.children].filter((c) => getComputedStyle(c).display !== 'none').length;
+            const list = document.createElement('dl');
+            for (const item of hidden) {
+              const term = document.createElement('dt'); term.textContent = item.dataset.label || '';
+              const value = document.createElement('dd'); value.innerHTML = item.innerHTML;
+              list.append(term, value);
+            }
+            cell.append(list); detail.append(cell); row.after(detail);
+            button.textContent = '−'; button.setAttribute('aria-expanded', 'true');
+          });
+          first.prepend(button);
+        }
+      };
+      refresh();
+      let width = table.parentElement.clientWidth;
+      new ResizeObserver(() => { const now = table.parentElement.clientWidth; if (now !== width) { width = now; refresh(); } }).observe(table.parentElement);
+    }
+  }
+  setUpTipTables();
+</script>
 <style>
   .exact-preview{margin:auto;max-width:980px;padding:32px;background:#fff}
   .exact-preview .kicker{margin:0 0 6px;font-weight:800;color:#a84c00}
@@ -104,12 +145,10 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
   :global(.page-shell.with-sidebar) .exact-preview{max-width:none;padding:0}
   @media(max-width:600px){.exact-preview{padding:20px}}
   .launch-article{min-width:0}
-  .cms-content :global(table th){background:#1d5f94;color:#fff;text-align:left}
-  .cms-content :global(table tr:nth-child(even) td){background:#f3f8fb}
-  .cms-content :global(table td:first-child),.cms-content :global(table th:first-child){white-space:nowrap}
-  @media(max-width:620px){
-    .cms-content :global(table:has(th:nth-child(7)) :is(th,td):is(:nth-child(4),:nth-child(5),:nth-child(6))){display:none}
-  }
+  .cms-content :global(table:not(.nt-responsive) th){background:#1d5f94;color:#fff;text-align:left}
+  .cms-content :global(table:not(.nt-responsive) tr:nth-child(even) td){background:#f3f8fb}
+  .cms-content :global(table:not(.nt-responsive) td:first-child),.cms-content :global(table:not(.nt-responsive) th:first-child){white-space:nowrap}
+
   .guide-body{max-width:none;margin-top:28px}
   .cms-content{max-width:100%;line-height:1.72;overflow-wrap:anywhere;color:#263849}
   .cms-content :global(h2){margin:30px 0 10px;font-size:25px;color:#183f60}
@@ -117,7 +156,7 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
   .cms-content :global(p){max-width:770px}
   .cms-content :global(img){max-width:100%;height:auto}
   .cms-content :global(table){display:table;width:100%;max-width:100%;border-collapse:collapse}
-  @media(max-width:720px){.cms-content :global(table){display:block;overflow-x:auto}}
+  @media(max-width:720px){.cms-content :global(table:not(.nt-responsive)){display:block;overflow-x:auto}}
   .cms-content :global(th),.cms-content :global(td){padding:7px 9px;border:1px solid #dce7ed}
   .cms-content :global(iframe){max-width:100%}
   .cms-content :global(figure){max-width:100%;margin:1rem 0}

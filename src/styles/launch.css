@@ -74,6 +74,32 @@
 .home-header.cms-nav { z-index: 40; }
 .site-header { position: relative; z-index: 40; }
 
-/* Homepage intro card: use the full width on desktop. */
+/* Homepage intro card: one column across the full width of the card. */
 .home-intro-card p { max-width: none; }
-@media (min-width: 1000px) { .home-intro-card { column-count: 2; column-gap: 44px; } .home-intro-card p { break-inside: avoid; } }
+
+/* Ninja tips tables, matching the live site: blue inverted table, striped rows, white text.
+   Columns hide by the width of the article column (FooTable breakpoints), not the window. */
+.cms-content { container-type: inline-size; }
+.cms-content table.nt-responsive { display: table; width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: 5px; background: #2987ce; color: #fff; font-size: 14px; margin: 12px 0 24px; }
+.cms-content table.nt-responsive th { background: #17476c; color: #fff; font-weight: 700; text-align: left; padding: 9px 10px; border: 0; }
+.cms-content table.nt-responsive td { padding: 7px 10px; border: 0; color: #fff; background: transparent; vertical-align: middle; }
+.cms-content table.nt-responsive tbody tr:nth-child(even) td { background: rgba(255, 255, 255, .07) !important; }
+.cms-content table.nt-responsive tbody tr:nth-child(odd) td { background: transparent !important; }
+.cms-content table.nt-responsive tbody tr:hover td { background: rgba(255, 255, 255, .12); }
+.cms-content table.nt-responsive td:first-child, .cms-content table.nt-responsive th:first-child { white-space: normal; }
+.cms-content table.nt-responsive a { color: #fff; text-decoration-color: #ffffff99; }
+@container (max-width: 480px) { .cms-content .nt-responsive .nt-col.xs { display: none; } }
+@container (min-width: 481px) and (max-width: 768px) { .cms-content .nt-responsive .nt-col.sm { display: none; } }
+@container (min-width: 769px) and (max-width: 992px) { .cms-content .nt-responsive .nt-col.md { display: none; } }
+@container (min-width: 993px) and (max-width: 1200px) { .cms-content .nt-responsive .nt-col.lg { display: none; } }
+/* Row expander for hidden columns. */
+.cms-content .nt-toggle { display: inline-grid; place-items: center; width: 18px; height: 18px; margin-right: 7px; border: 0; border-radius: 50%; background: #fff; color: #17476c; font-weight: 900; font-size: 13px; line-height: 1; cursor: pointer; vertical-align: middle; }
+.cms-content .nt-detail td { background: rgba(0, 0, 0, .12) !important; padding: 8px 12px 10px 36px; }
+.cms-content .nt-detail dl { display: grid; grid-template-columns: max-content 1fr; gap: 3px 14px; margin: 0; }
+.cms-content .nt-detail dt { font-weight: 800; }
+.cms-content .nt-detail dd { margin: 0; }
+.cms-content table.nt-responsive tbody tr { background: transparent !important; }
+.cms-content table.nt-responsive tbody tr:not(.nt-detail):hover td { background: rgba(255, 255, 255, .14) !important; }
+.cms-content table.nt-responsive td, .cms-content table.nt-responsive th { overflow-wrap: normal; word-break: normal; }
+@container (max-width: 480px) { .cms-content table.nt-responsive { font-size: 13px; } .cms-content table.nt-responsive :is(td, th) { padding: 7px 6px; } }
+.cms-content table.nt-responsive { min-width: 0 !important; }

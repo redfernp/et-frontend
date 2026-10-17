@@ -123,3 +123,29 @@ export function fillEmptyLinkCells(html) {
   }
   return changed ? render(doc) : html;
 }
+
+// Ninja Tables mark each column with the screen sizes it hides at (xs sm md lg) on the
+// header only. Copy those classes onto every cell so CSS can hide whole columns, as the
+// live site's FooTable script does, and label each cell for the "+" row expander.
+export function responsiveNinjaTables(html) {
+  if (!html || !/ninja_footable/.test(html)) return html;
+  const doc = parseDocument(html, { decodeEntities: true });
+  let changed = false;
+  for (const table of doc.children.flatMap((node) => tags(node, 'table'))) {
+    if (!/ninja_footable/.test(table.attribs.class ?? '')) continue;
+    const headers = tags(table, 'th');
+    const hideAt = headers.map((th) => (th.attribs.class ?? '').split(/\s+/).filter((name) => /^(xs|sm|md|lg)$/.test(name)));
+    const labels = headers.map((th) => clean(text(th)));
+    for (const [index, th] of headers.entries()) if (hideAt[index].length) th.attribs.class = `${th.attribs.class} nt-col`;
+    for (const row of tags(table, 'tbody').flatMap((body) => tags(body, 'tr'))) {
+      row.children.filter((child) => child.type === 'tag' && child.name === 'td').forEach((cell, index) => {
+        const classes = hideAt[index] ?? [];
+        if (classes.length) cell.attribs.class = [cell.attribs.class, 'nt-col', ...classes].filter(Boolean).join(' ');
+        if (labels[index]) cell.attribs['data-label'] = labels[index];
+      });
+    }
+    table.attribs.class = `${table.attribs.class} nt-responsive`;
+    changed = true;
+  }
+  return changed ? render(doc) : html;
+}
