@@ -51,3 +51,24 @@ export function articleCategory(record) {
 }
 
 export const plainTitle = plain;
+
+// WordPress HTML from the first <h2> matching `heading` to the end. Designed hubs replace
+// the flattened legacy layout above it with their own header and directory.
+export function contentFromHeading(html, heading) {
+  const matches = [...(html ?? '').matchAll(/<h2[^>]*>([\s\S]*?)<\/h2>/g)];
+  const match = matches.find((m) => heading.test(plain(m[1])));
+  return match ? html.slice(match.index) : html;
+}
+
+// Newest published posts for hub news lists.
+export function latestPosts(records, count = 5) {
+  return records.filter((record) => record.kind === 'posts').sort((a, b) => b.date.localeCompare(a.date)).slice(0, count)
+    .map((record) => ({ uri: record.uri, title: plain(record.title), date: record.date.slice(0, 10) }));
+}
+
+// WordPress HTML before the first <h2> matching `heading` (for example the trailing offer list).
+export function contentBeforeHeading(html, heading) {
+  const matches = [...(html ?? '').matchAll(/<h2[^>]*>([\s\S]*?)<\/h2>/g)];
+  const match = matches.find((m) => heading.test(plain(m[1])));
+  return match ? html.slice(0, match.index) : html;
+}

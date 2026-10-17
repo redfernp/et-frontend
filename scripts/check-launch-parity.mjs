@@ -51,11 +51,11 @@ async function inspect(record) {
   const sourceOffers = elements(parseDocument(record.content || ''), 'aside').filter(node => node.attribs['data-offer-id']);
   const builtOffers = elements(doc, 'aside').filter(node => node.attribs['data-offer-id']);
   offerPlacements += builtOffers.length;
-  if (tierAIds.has(record.databaseId) && !builtOffers.length && record.uri !== '/') failures.push({path:record.uri,field:'missing-tier-a-offers'});
+  const ladder = elements(doc, 'li').filter(node => node.attribs['data-offer-id']);
+  if (tierAIds.has(record.databaseId) && !builtOffers.length && !ladder.length) failures.push({path:record.uri,field:'missing-tier-a-offers'});
   const offerSignature = nodes => nodes.map(node => ({id:node.attribs['data-offer-id'],text:text(node),ctas:elements(node,'a').map(a => ({path:new URL(a.attribs.href,'https://www.everytip.co.uk').pathname,rel:a.attribs.rel}))}));
-  if (record.uri === '/') {
-    // The homepage shows its offers in the designed ladder rather than as inline slots.
-    const ladder = elements(doc, 'li').filter(node => node.attribs['data-offer-id']);
+  if (ladder.length && !builtOffers.length) {
+    // Designed hubs show their offers in the ladder rather than as inline slots.
     offerPlacements += ladder.length;
     const key = nodes => nodes.map(node => `${node.attribs['data-offer-id']} ${elements(node,'a').map(a => new URL(a.attribs.href,'https://www.everytip.co.uk').pathname).join(',')}`).sort();
     const sourceKeys = new Set(key(sourceOffers));

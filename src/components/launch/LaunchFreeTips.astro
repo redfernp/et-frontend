@@ -1,0 +1,124 @@
+---
+// Live free tips hub: the approved directory design over the staging page content.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FreeTipsDirectory from '../FreeTipsDirectory.astro';
+import { launchHtml } from '../../lib/builder-cleanup.mjs';
+import { endpoint } from '../../lib/launch-content.mjs';
+import { contentFromHeading, latestPosts } from '../../lib/launch-templates.mjs';
+
+const { record, records, paths, offers, seo } = Astro.props;
+const available = new Set(paths);
+const live = 'https://www.everytip.co.uk';
+const allGroups = [
+  { title: 'Sports betting tips', links: [
+    { label: 'John Newsome', href: '/pilot/english-premier-league-predictions-for-saturday/' },
+    { label: 'Football correct scores', href: `${live}/football-correct-score-tips.html` },
+    { label: 'Champions League', href: `${live}/uefa-champions-league-betting-tips-predictions.html` },
+    { label: '1X2 tips', href: `${live}/1x2-betting-tips.html` },
+    { label: 'Over/under 1.5 goals', href: `${live}/under-over-1-5-goals-tips.html` },
+    { label: 'Over/under 2.5 goals', href: `${live}/over-2-5-goals-tips.html` },
+    { label: 'Both teams to score', href: `${live}/both-teams-to-score-btts-tips.html` },
+    { label: 'Football accumulators', href: `${live}/football-accumulator-tips.html` },
+    { label: 'Greyhound racing', href: `${live}/greyhound-tips.html` },
+    { label: 'Cricket', href: `${live}/cricket-betting-tips.html` },
+  ]},
+  { title: 'UK & Irish racing tips', links: [
+    { label: 'Daily treble', href: `${live}/horse-racing-treble-tips.html` },
+    { label: 'Dark Horse value tips', href: '/pilot/value-bet-tips-dark-horses/' },
+    { label: 'Seymour Biz', href: '/pilot/saturday-horse-racing-tips/' },
+    { label: 'Nap of the day', href: `${live}/nap-of-the-day.html` },
+    { label: 'Daily Lucky 15', href: `${live}/lucky-15-tips.html` },
+    { label: 'Templegate', href: `${live}/templegates-tips.html` },
+    { label: 'Channel 4 racing', href: `${live}/channel-4-racing-tips-morning-line.html` },
+    { label: 'Greg Wood', href: `${live}/greg-woods-tips.html` },
+    { label: 'ITV Racing', href: `${live}/itv-racing-tips.html` },
+    { label: 'Ireland', href: `${live}/irish-horse-racing-tips.html` },
+  ]},
+  { title: 'Overseas racing tips', links: [
+    { label: 'South Africa', href: `${live}/south-africa-racing-tips.html` },
+    { label: 'France', href: `${live}/france-horse-racing-tips.html` },
+    { label: 'Japan', href: `${live}/japan-horse-racing-tips.html` },
+    { label: 'Hong Kong', href: `${live}/hong-kong-horse-racing-tips.html` },
+    { label: 'Singapore', href: `${live}/singapore-horse-racing-tips.html` },
+    { label: 'India', href: `${live}/indian-horse-racing-tips.html` },
+    { label: 'Mauritius', href: `${live}/mauritius-horse-racing-tips.html` },
+    { label: 'Meydan', href: `${live}/dubai-horse-racing-tips.html` },
+  ]},
+  { title: 'Weekend football tipsters', links: [
+    { label: 'Alan Shearer tips', href: `${live}/alan-shearer-football-tips.html` },
+    { label: 'Peter Crouch tips', href: `${live}/peter-crouch-football-tips.html` },
+  ]},
+  { title: 'Weekend racing tipsters', links: [
+    { label: 'Matt Chapman', href: `${live}/matt-chapmans-horse-racing-tips.html` },
+    { label: 'Mick Fitzgerald', href: `${live}/mick-fitzgeralds-horse-racing-tips.html` },
+    { label: 'Ruby Walsh', href: `${live}/ruby-walsh-horse-racing-tips.html` },
+    { label: 'Kevin Blake', href: `${live}/kevin-blake-horse-racing-tips-for-today.html` },
+    { label: 'Jason Weaver', href: `${live}/jason-weaver-horse-racing-tips.html` },
+  ]},
+];
+
+const local = (href) => href.startsWith(`${live}/`) ? href.slice(live.length) : href.replace(/^\/pilot(\/.*?)\/?$/, '$1');
+const pilotMap = { '/english-premier-league-predictions-for-saturday': '/english-premier-league-predictions-for-saturday',
+  '/value-bet-tips-dark-horses': '/value-bet-tips-dark-horses.html', '/saturday-horse-racing-tips': '/saturday-horse-racing-tips' };
+const tipGroups = allGroups.map((group) => ({ ...group, links: group.links
+  .map((link) => { const href = local(link.href); return { ...link, href: pilotMap[href] ?? href }; })
+  .filter((link) => available.has(link.href)) })).filter((group) => group.links.length);
+const news = latestPosts(records, 5);
+const editorial = launchHtml(contentFromHeading(record.content, /^Free Sports Betting Tips From Professional/i), endpoint);
+const formatDate = (value) => new Date(`${value}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+---
+<BaseLayout title={record.title} wide={true} publicPage={true} seo={seo} verifiedPublicPaths={paths} offers={offers}>
+  <div class="free-tips-hub">
+    <header class="hub-heading">
+      <p class="kicker">Free tips, updated daily</p>
+      <h1>Free Betting Tips</h1>
+      <p>Explore horse racing and football selections by sport and tipster, plus the latest betting offer news.</p>
+    </header>
+
+    <section class="hub-tipster-banners" aria-label="Featured tipsters">
+      <a class="hub-columnist-card" href="/saturday-horse-racing-tips">
+        <img src={`${live}/wp-content/uploads/2025/06/Seymour-Biz-Horse-Racing-Feature-Writer-100x100.png`} alt="" width="100" height="100" />
+        <span><strong>Seymour Biz</strong><small>Saturday horse racing previews &amp; tips</small><em>Read Seymour’s column →</em></span>
+      </a>
+      <a class="hub-columnist-card" href="/english-premier-league-predictions-for-saturday">
+        <img src={`${live}/wp-content/uploads/2025/06/John-Newsome-Everytip-Football-Feature-Writer-100x100.png`} alt="" width="100" height="100" />
+        <span><strong>John Newsome</strong><small>Premier League predictions &amp; analysis</small><em>Read John’s column →</em></span>
+      </a>
+    </section>
+
+    <nav class="hub-editorial-links" aria-label="Featured betting guides">
+      {available.has('/which-bookies-paying-5-places-each-way.html') && <a href="/which-bookies-paying-5-places-each-way.html"><span aria-hidden="true">👉</span> Who’s paying five places or more today?</a>}
+      {available.has('/best-odds-guaranteed-bookies.html') && <a href="/best-odds-guaranteed-bookies.html"><span aria-hidden="true">👉</span> Best odds guaranteed bookmakers</a>}
+    </nav>
+
+    {offers[0] && <section class="hub-spotlight" aria-label="Featured bookmaker offer" style={`--spotlight-brand:${offers[0].brandColor}`}>
+      <div class="hub-spotlight-logo"><img src={offers[0].logoUrl} alt={offers[0].bookmaker} width="150" height="40" /></div>
+      <div class="hub-spotlight-copy"><span>Featured bookmaker · #Ad</span><h2>{offers[0].headline}</h2><p>{offers[0].compactTerms}</p></div>
+      <a class="hub-commercial-cta" href={offers[0].ctaPath} rel="sponsored nofollow">{offers[0].ctaLabel}</a>
+    </section>}
+
+    <section class="hub-news" aria-labelledby="hub-news-title">
+      <div class="hub-section-heading"><p class="kicker">Latest from EveryTip</p><h2 id="hub-news-title">Today’s Betting Tips &amp; Offer News</h2></div>
+      <div class="hub-news-list">
+        {news.map((item) => <article><time datetime={item.date}>{formatDate(item.date)}</time><h3><a href={item.uri}>{item.title}</a></h3></article>)}
+      </div>
+    </section>
+
+    <section class="hub-directory-section" aria-labelledby="hub-directory-title">
+      <div class="hub-section-heading"><p class="kicker">Find your tips</p><h2 id="hub-directory-title">Browse Free Tips by Sport &amp; Tipster</h2></div>
+      <FreeTipsDirectory groups={tipGroups} />
+    </section>
+
+    <section class="hub-seo-copy" aria-label="Free tips guide">
+      <div class="hub-wordpress-copy cms-content" set:html={editorial} />
+    </section>
+  </div>
+</BaseLayout>
+<style>
+  .cms-content :global(img){max-width:100%;height:auto}
+  .cms-content :global(.offer-slot){margin:24px 0;padding:18px 20px;border:1px solid #d5e2ea;border-left:5px solid var(--et-orange);background:#fff}
+  .cms-content :global(.offer-slot h2){margin:.25rem 0 .6rem;font-size:21px}
+  .cms-content :global(.offer-slot p){font-size:13px}
+  .cms-content :global(.offer-bookmaker){font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#a74a04;margin:0}
+  .cms-content :global(.offer-slot a){display:inline-block;padding:10px 16px;border-radius:4px;background:var(--et-commercial);color:#fff;font-weight:900;text-decoration:none}
+</style>

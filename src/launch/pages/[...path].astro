@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import LaunchHome from '../../components/launch/LaunchHome.astro';
+import LaunchFreeTips from '../../components/launch/LaunchFreeTips.astro';
+import LaunchFreeBets from '../../components/launch/LaunchFreeBets.astro';
 import ColumnistProfile from '../../components/ColumnistProfile.astro';
 import { launchContent, robotsFor, endpoint } from '../../lib/launch-content.mjs';
 import { launchOfferLineup } from '../../lib/launch-offers.mjs';
@@ -38,6 +40,8 @@ const modified = record.modified?.slice(0, 10);
 const formatDate = (value) => value ? new Date(`${value}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
 ---
 {isHome ? <LaunchHome record={record} records={records} paths={paths} offers={offers} seo={seo} /> :
+ record.uri === '/bookie-free-bets-bonus-offers' ? <LaunchFreeBets record={record} paths={paths} offers={offers} seo={seo} /> :
+ record.uri === '/free-betting-tips' ? <LaunchFreeTips record={record} records={records} paths={paths} offers={offers} seo={seo} /> :
 <BaseLayout title={record.title} publicPage={true} seo={seo} verifiedPublicPaths={paths} sidebar={true} offers={offers}>
   <article class="exact-preview launch-article">
     {category ? <p class="kicker"><a href={category.href}>{category.label}</a></p> : null}
