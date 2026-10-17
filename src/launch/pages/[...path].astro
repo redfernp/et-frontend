@@ -10,7 +10,7 @@ import ColumnistProfile from '../../components/ColumnistProfile.astro';
 import { launchContent, robotsFor, endpoint } from '../../lib/launch-content.mjs';
 import { launchOfferLineup } from '../../lib/launch-offers.mjs';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
-import { rebuildRankedCards, fillEmptyLinkCells, responsiveNinjaTables } from '../../lib/ranked-cards.mjs';
+import { rebuildRankedCards, fillEmptyLinkCells, responsiveNinjaTables, polishContent } from '../../lib/ranked-cards.mjs';
 import { columnistKeyForUri, legacyColumnistPortraitPaths } from '../../lib/columnist-profiles.mjs';
 import { bookmakerReviews, canonicalFor, articleCategory, columnistArchives, launchColumnists, isGuide, withHeadingIds } from '../../lib/launch-templates.mjs';
 
@@ -36,7 +36,7 @@ const archiveColumnist = record.posts?.length ? Object.keys(columnistArchives).f
 const columnist = columnistKeyForUri(record.uri);
 const profile = columnist ? (await launchColumnists())[columnist] : null;
 const category = articleCategory(record);
-let body = record.content ? responsiveNinjaTables(fillEmptyLinkCells(rebuildRankedCards(launchHtml(record.content, endpoint)))) : '';
+let body = record.content ? polishContent(responsiveNinjaTables(fillEmptyLinkCells(rebuildRankedCards(launchHtml(record.content, endpoint))))) : '';
 // Columnist posts carry an old portrait banner that the author box replaces.
 if (columnist) for (const path of legacyColumnistPortraitPaths[columnist]) {
   body = body.replace(new RegExp(`<img[^>]*${path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^>]*>`, 'g'), '');

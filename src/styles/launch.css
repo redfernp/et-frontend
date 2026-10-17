@@ -117,3 +117,14 @@ html .page-shell:not(.with-sidebar) .cms-content p, html .page-shell:not(.with-s
 .cms-content .nt-filters select { width: 100%; padding: 8px 10px; border: 1px solid #c9d6e0; border-radius: 4px; background: #fff; font: inherit; font-size: 14px; color: #263748; }
 .cms-content .nt-filters + table.nt-responsive { margin-top: 0; border-radius: 0 0 5px 5px; }
 .cms-content table.nt-responsive tbody tr[hidden] { display: none; }
+
+/* "Sign up" + "Read full review" link pairs as buttons. */
+.cms-content p.link-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 26px; }
+.cms-content p.link-buttons a { display: inline-block; padding: 11px 18px; border-radius: 5px; font-weight: 800; text-decoration: none; border: 2px solid var(--et-blue-ink); color: var(--et-blue-ink); background: #fff; }
+.cms-content p.link-buttons a[href*="/go/"] { background: var(--et-commercial); border-color: var(--et-commercial); color: #fff; }
+/* Stand-alone offer terms: small and quiet. */
+.cms-content p.ad-terms { font-size: 12px; line-height: 1.5; color: #5f6f7b; }
+/* A bookmaker's stats under its own heading: logo plus stat tiles, no rank. */
+.rank-card.stats-card { grid-template-columns: 170px minmax(0, 1fr); padding-left: 20px; border-left-color: var(--et-orange); }
+.rank-card.stats-card .rank-specs { margin: 0; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 720px) { .rank-card.stats-card { grid-template-columns: 1fr; } .rank-card.stats-card .rank-specs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

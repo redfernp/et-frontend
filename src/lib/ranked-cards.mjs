@@ -31,7 +31,11 @@ function logoOf(node) {
 }
 
 const isBreak = (node) => node.type === 'tag' && (/^h[1-6]$/.test(node.name) || ['table', 'ul', 'ol', 'figure', 'aside', 'blockquote'].includes(node.name));
-const isLongProse = (node) => { const t = clean(text(node)); return t.length > 280 && !/^#Ad/i.test(t); };
+// Offer terms, with or without the "#Ad" prefix.
+const isTermsText = (value) => /^#Ad/i.test(value) || (value.length > 60 && /(T&Cs|terms (and conditions )?apply|new (uk )?customers only|18\+)/i.test(value));
+// A full paragraph of prose ends a card; card notes are short one-liners.
+const isLongProse = (node) => { const t = clean(text(node)); return t.length > 140 && !isTermsText(t); };
+const strongOnlyNode = (node) => node?.type === 'tag' && tags(node, 'strong').length > 0 && clean(tags(node, 'strong').map(text).join('')) === clean(text(node));
 
 function buildCard(logo, members, rank) {
   let stars = 0;
@@ -42,7 +46,7 @@ function buildCard(logo, members, rank) {
   const facts = [];
   const pairs = [];
   let pendingLabel = null;
-  for (const node of members) {
+  for (const [position, node] of members.entries()) {
     if (node.type === 'tag') stars += tags(node, 'i').filter((i) => /fa-star\b/.test(i.attribs.class ?? '')).length
       + (node.name === 'i' && /fa-star\b/.test(node.attribs.class ?? '') ? 1 : 0);
     const value = clean(text(node));
@@ -52,31 +56,39 @@ function buildCard(logo, members, rank) {
     if (goLink && clean(text(goLink)) === value) { cta ??= { href: goLink.attribs.href, label: value }; continue; }
     const reviewLink = links.find((a) => !isGo(a.attribs.href) && /review/i.test(text(a)));
     if (reviewLink && clean(text(reviewLink)) === value) { review ??= { href: reviewLink.attribs.href, label: value }; continue; }
-    if (/^#Ad/i.test(value)) { terms ??= value; continue; }
+    if (isTermsText(value)) { terms ??= value; continue; }
     if (/^(GambleAware\s*\|?\s*18\+|18\+\s*\|?\s*GambleAware)$/i.test(value)) continue;
     const strongOnly = node.type === 'tag' && tags(node, 'strong').length > 0 && clean(tags(node, 'strong').map(text).join('')) === value;
     if (pendingLabel) { pairs.push([pendingLabel, value]); pendingLabel = null; continue; }
-    // Spec labels ("Minimum Deposit", "Payment Option") carry no figures; offer headlines do.
-    if (strongOnly && value.length <= 30 && !/[\d£€$%]/.test(value) && /^(minimum|maximum|payment|withdrawal|deposit|min|max|odds|rating|licen|app|support|markets?)/i.test(value)) { pendingLabel = value; continue; }
     if (/^[\w'’ .-]+ review$/i.test(value)) continue;
+    // Stat rows: a plain label ("Deposit Limit") followed by a bold value ("£5,500").
+    const nextNode = members.slice(position + 1).find((item) => clean(text(item)));
+    if (!strongOnly && value.length <= 30 && !/[\d£€$%]/.test(value) && strongOnlyNode(nextNode) && clean(text(nextNode)).length <= 30) { pendingLabel = value; continue; }
+    // Spec labels ("Minimum Deposit", "Payment Option") carry no figures; offer headlines do.
+    if (strongOnly && value.length <= 30 && !/[\d£€$%]/.test(value) && /^(minimum|maximum|payment|withdrawal|deposit|min\b|max\b|odds|rating|licen|app|support|markets?)/i.test(value)) { pendingLabel = value; continue; }
     if (!headline && strongOnly && value.length >= 8 && value.length < 120 && /[a-z]/i.test(value)) { headline = value; continue; }
     if (value.length < 200) facts.push(value);
   }
   if (!headline && !cta && !pairs.length) return null;
+  // A logo with stats only (a bookmaker's section under its own heading) is not a ranked entry.
+  const statsOnly = !headline && !cta && pairs.length > 0;
+  if (statsOnly) rank = null;
   const logoHtml = logo.link ? `<a href="${escape(logo.link.attribs.href)}"${logo.link.attribs.rel ? ` rel="${escape(logo.link.attribs.rel)}"` : ''}>${render(logo.image)}</a>` : render(logo.image);
-  const name = clean(logo.image.attribs.alt ?? '').replace(/[-_ ]?\d+x\d+.*$/i, '').replace(/\.(png|jpe?g|webp)$/i, '').replace(/[-_]?logo.*$/i, '');
-  return `<div class="rank-card">
+  const rawName = clean(logo.image.attribs.alt ?? '').replace(/[-_ ]?\d+x\d+.*$/i, '').replace(/\.(png|jpe?g|webp)$/i, '').replace(/[-_]?logo.*$/i, '');
+  const name = rawName.replace(/[-_]+/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+  return `<div class="rank-card${statsOnly ? ' stats-card' : ''}">
   ${rank ? `<span class="rank-number" aria-label="Rank ${rank}">${rank}</span>` : ''}
   <div class="rank-logo" style="background:${brandOf(logo.link?.attribs.href ?? cta?.href)}">${logoHtml}</div>
   <div class="rank-body">
-    ${headline ? `<h3>${escape(headline)}</h3>` : name ? `<h3>${escape(name)}</h3>` : ''}
+    ${headline ? `<h3>${escape(headline)}</h3>` : name && !statsOnly ? `<h3>${escape(name)}</h3>` : ''}
     ${stars || review ? `<p class="rank-meta">${stars ? `<span class="rank-stars" aria-label="${stars} out of 5">${'★'.repeat(Math.min(stars, 5))}</span>` : ''}${review ? `<a href="${escape(review.href)}">${escape(review.label)}</a>` : ''}</p>` : ''}
-    ${facts.length ? `<ul class="rank-facts">${facts.map((fact) => `<li>${escape(fact)}</li>`).join('')}</ul>` : ''}
+    ${facts.length && !statsOnly ? `<ul class="rank-facts">${facts.map((fact) => `<li>${escape(fact)}</li>`).join('')}</ul>` : ''}
     ${pairs.length ? `<dl class="rank-specs">${pairs.map(([label, value]) => `<div><dt>${escape(label)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>` : ''}
     ${terms ? `<p class="rank-terms">${escape(terms)}</p>` : ''}
   </div>
   ${cta ? `<div class="rank-cta"><a href="${escape(cta.href)}" rel="sponsored nofollow">${escape(cta.label)}</a></div>` : ''}
-</div>`;
+</div>${statsOnly ? facts.map((fact) => `
+<p>${escape(fact)}</p>`).join('') : ''}`;
 }
 
 export function rebuildRankedCards(html) {
@@ -94,7 +106,7 @@ export function rebuildRankedCards(html) {
     while (next < nodes.length && !logoOf(nodes[next]) && !isBreak(nodes[next]) && !isLongProse(nodes[next])) members.push(nodes[next++]);
     const card = buildCard(logo, members, rank + 1);
     if (!card) { out.push(render(nodes[index])); continue; }
-    rank++;
+    if (!card.includes('stats-card')) rank++;
     changed = true;
     out.push(card);
     index = next - 1;
@@ -146,6 +158,27 @@ export function responsiveNinjaTables(html) {
     }
     table.attribs.class = `${table.attribs.class} nt-responsive`;
     changed = true;
+  }
+  return changed ? render(doc) : html;
+}
+
+// Button rows ("Sign Up to Bet365" + "Read Full Review") and stand-alone #Ad terms get their own styles.
+export function polishContent(html) {
+  if (!html) return html;
+  const doc = parseDocument(html, { decodeEntities: true });
+  const squash = (value) => value.replace(/\s+/g, '');
+  let changed = false;
+  for (const p of doc.children.flatMap((node) => tags(node, 'p'))) {
+    const value = clean(text(p));
+    const links = tags(p, 'a').filter((a) => clean(text(a)));
+    // The paragraph is nothing but two or more links, one of them commercial.
+    if (links.length >= 2 && links.some((a) => isGo(a.attribs.href)) && squash(links.map(text).join('')) === squash(value)) {
+      p.attribs.class = [p.attribs.class, 'link-buttons'].filter(Boolean).join(' ');
+      changed = true;
+    } else if (/^#Ad/i.test(value) && !links.length) {
+      p.attribs.class = [p.attribs.class, 'ad-terms'].filter(Boolean).join(' ');
+      changed = true;
+    }
   }
   return changed ? render(doc) : html;
 }
