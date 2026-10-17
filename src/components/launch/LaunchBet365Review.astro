@@ -1,0 +1,58 @@
+---
+// Live Bet365 review: the approved review design over Seymour's staging review copy.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ReviewMobileSticky from '../ReviewMobileSticky.astro';
+import { extractBet365ReviewEditorial } from '../../lib/bet365-review-editorial.mjs';
+import { launchHtml } from '../../lib/builder-cleanup.mjs';
+import { endpoint } from '../../lib/launch-content.mjs';
+import { contentFromHeading, plainTitle } from '../../lib/launch-templates.mjs';
+
+const { record, paths, offers, seo } = Astro.props;
+const review = extractBet365ReviewEditorial({ ...record, slug: 'bet365-review' });
+// The welcome offer and its terms are the review's own #Ad copy in WordPress.
+const terms = plainTitle((record.content.match(/<p[^>]*>(?:(?!<\/p>)[\s\S])*?#Ad[\s\S]*?<\/p>/) ?? [''])[0]);
+const headline = plainTitle((record.content.match(/<h2[^>]*>((?:(?!<\/h2>)[\s\S])*?Free Bets(?:(?!<\/h2>)[\s\S])*?)<\/h2>/) ?? ['', 'Bet £10, Get £30 in Free Bets'])[1]);
+const otherOffers = launchHtml(contentFromHeading(record.content, /^Other current bookmaker offers/i), endpoint);
+const updated = new Date(record.modified).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+<BaseLayout title="Bet365 Review 2026" publicPage={true} wide={true} seo={seo} verifiedPublicPaths={paths} offers={offers}>
+  <article class="review" style="--review-green:#1d5b32;--review-green-dark:#144324">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Independent bookmaker review</p>
+        <h1>Bet365 Review 2026</h1>
+        <p class="deck">Seymour Biz tested Bet365 with a real £20 bankroll across ten areas, including racing, football, support, mobile betting and withdrawals.</p>
+        <div class="author"><img src="https://www.everytip.co.uk/wp-content/uploads/2025/06/Seymour-Biz-Horse-Racing-Feature-Writer-100x100.png" alt="" width="80" height="80" /><div><strong>Reviewed by Seymour Biz</strong><span>EveryTip horse racing columnist</span></div></div>
+        <p class="dated">Last updated {updated}.</p>
+      </div>
+      <aside class="offer" id="review-offer" aria-label="Bet365 welcome offer">
+        <img src="https://www.everytip.co.uk/wp-content/uploads/2017/02/Bet365-150x40.png" alt="Bet365" width="150" height="40" />
+        <p class="offer-label">New customer offer · #Ad</p>
+        <h2>{headline}</h2>
+        {terms && <p>{terms}</p>}
+        <a class="disabled-cta live-cta" href="/go/bet365" rel="sponsored nofollow">Claim offer</a>
+      </aside>
+    </header>
+
+    <nav class="jump" aria-label="In this review"><strong>In this review</strong><a href="#review-method">How Seymour tested</a><a href="#review-pros-cons">Pros &amp; cons</a><a href="#review-assessment">Full assessment</a><a href="#review-verdict">Final verdict</a></nav>
+    <section class="method" id="review-method"><p class="eyebrow">First-hand testing</p><h2>How Seymour tested Bet365</h2><div class="editorial" set:html={review.methodHtml} /></section>
+    <section class="pros-cons" id="review-pros-cons"><div><p class="eyebrow">From Seymour’s review</p><h2>What he liked</h2><div class="editorial" set:html={review.prosHtml} /></div><div><p class="eyebrow">What to weigh up</p><h2>Where it fell short</h2><div class="editorial" set:html={review.consHtml} /></div></section>
+    <section class="assessment" id="review-assessment"><div class="section-intro"><p class="eyebrow">The full editorial assessment</p><h2>Seymour’s review in detail</h2></div>
+      {review.sections.map((section) => <section class="review-section" id={`review-area-${section.number}`}><div class="section-heading"><span>{String(section.number).padStart(2, '0')}</span><h3>{section.title}</h3></div><div class="editorial" set:html={section.html} /></section>)}
+    </section>
+    <section class="verdict" id="review-verdict"><p class="eyebrow">Seymour Biz’s final verdict</p><h2>What the testing revealed</h2><div class="editorial" set:html={review.verdictHtml} /></section>
+    <section class="other-offers cms-content" set:html={otherOffers} />
+    <footer class="disclosure"><p><strong>Affiliate disclosure.</strong> EveryTip may earn a commission from bookmaker links.</p><p><strong>Safer gambling.</strong> 18+ only. Please gamble responsibly. <a href="/safer-gambling">Find support and safer-gambling information</a>.</p></footer>
+  </article>
+  <ReviewMobileSticky bookmaker="Bet365" offerHref="/go/bet365" ctaLabel="Claim offer" />
+</BaseLayout>
+<style>
+  .review{color:#173b58}.review :global(p){line-height:1.7}.hero{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(270px,.68fr);gap:32px;align-items:start;margin:24px 0 30px}.eyebrow{text-transform:uppercase;letter-spacing:.12em;color:#b74700;font-weight:800;font-size:.78rem;margin:0 0 10px}.hero h1{font-size:clamp(2.4rem,5vw,4.3rem);line-height:1.04;margin:0 0 20px}.deck{font-size:1.18rem;max-width:62ch}.author{display:flex;align-items:center;gap:14px;background:#eef5f8;padding:12px 16px;border-left:4px solid #f36b00;border-radius:8px;max-width:540px}.author img{width:62px;height:62px;object-fit:cover;border-radius:8px}.author strong,.author span{display:block}.author span{font-size:.84rem;color:#42627a}.dated{font-size:.86rem;color:#52697b}.offer{background:#fff;border:1px solid #c8d8e1;border-top:6px solid var(--review-green);border-radius:10px;padding:24px;box-shadow:0 10px 30px #153e5e0e}.offer img{display:block;margin:auto}.offer-label{color:var(--review-green);font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin-top:20px}.offer h2{margin:0;font-size:1.6rem}.disabled-cta{display:block;text-align:center;background:#d9e0e5;color:#405868;padding:14px;border-radius:6px;font-weight:800;margin-top:20px}.jump{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;padding:17px 22px;background:#eaf2f7;border-radius:8px;margin:24px 0 34px}.jump a{color:#144e7b;font-weight:700}.method,.welcome,.verdict{border-radius:10px;padding:clamp(24px,4vw,42px);margin:26px 0}.method{background:#eff6f8;border-left:5px solid #f36b00}.welcome{background:#fff6eb;border-left:5px solid #f36b00}.verdict{background:#eef5f0;border-left:5px solid var(--review-green)}.method h2,.welcome h2,.verdict h2,.section-intro h2{margin:0 0 14px;font-size:clamp(1.6rem,3vw,2.3rem)}.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:18px}.pros-cons>div{padding:25px;background:#f3f7f9;border:1px solid #ccdde6;border-radius:8px}.pros-cons>div:first-child{border-top:4px solid var(--review-green)}.pros-cons>div:last-child{border-top:4px solid #f36b00}.pros-cons h2{margin:0 0 10px;font-size:1.35rem}.pros-cons :global(ul){margin:0;padding-left:20px}.pros-cons :global(li){margin:0 0 10px;line-height:1.5}.section-intro{margin:45px 0 22px}.review-section{padding:26px 0;border-top:1px solid #cfdee7}.section-heading{display:flex;align-items:flex-start;gap:18px}.section-heading span{background:#174c76;color:#fff;font-weight:800;border-radius:50%;min-width:42px;height:42px;display:grid;place-items:center}.section-heading h3{font-size:1.45rem;margin:5px 0 15px}.editorial{max-width:78ch}.editorial :global(p){margin:0 0 16px}.editorial :global(p:last-child){margin-bottom:0}.disclosure{border-top:1px solid #c6d7e1;padding:20px 0 34px;font-size:.9rem}.disclosure a{color:#144e7b}@media(max-width:760px){.hero,.pros-cons{grid-template-columns:1fr;gap:20px}.offer{padding:20px}.jump{display:grid;gap:8px}.review-section{padding:22px 0}.section-heading{gap:10px}.section-heading h3{font-size:1.2rem}}
+  .live-cta{cursor:pointer;text-decoration:none;background:var(--et-commercial);color:#fff}
+  .other-offers{margin:36px 0}
+  .cms-content :global(.offer-slot){margin:18px 0;padding:18px 20px;border:1px solid #d5e2ea;border-left:5px solid var(--et-orange);background:#fff}
+  .cms-content :global(.offer-slot h2){margin:.25rem 0 .6rem;font-size:21px}
+  .cms-content :global(.offer-slot p){font-size:13px}
+  .cms-content :global(.offer-bookmaker){font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#a74a04;margin:0}
+  .cms-content :global(.offer-slot a){display:inline-block;padding:10px 16px;border-radius:4px;background:var(--et-commercial);color:#fff;font-weight:900;text-decoration:none}
+</style>
