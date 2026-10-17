@@ -22,6 +22,21 @@ Updated 17 October 2026. Authority: CODEX-HANDOFF-RESCOPE.md, including section 
 - Browser QA: all eight changed pages plus ten randomly selected pages, at 375px and desktop, passed 36 checks. Paddy Power/mobile and QuinnBet/desktop screenshots inspected; rewritten content and the QuinnBet ACF card render. Evidence: outputs/owner-rewrite-preview-verification.json, owner-rewrite-qa-paths.json, owner-rewrite-render-qa.json, launch-network-parity.json. Original backups: outputs/staging-writes/<id>-owner-rewrite-20261015-before.json.
 - Remaining manual step: Paddy Power's public WordPress template still uses its old Thrive layout despite accepted REST metadata updates. GraphQL and Astro correctly show the rewrite. Instructions for Paul are below. No task is currently running.
 
+## Design restoration, 17 October (Claude took over from Codex)
+- Problem: commit ee50ca8 switched the build to a single bare catch-all route, so every page lost the approved designs while all automated gates still passed.
+- Restored on the launch build (src/launch, fed by fresh staging WPGraphQL and the live ACF offers):
+  - Homepage: approved design, live offer ladder with working CTAs, latest columnist cards, WordPress intro copy, tip/review/guide links.
+  - All posts and pages: approved article layout, columnist byline and author card, live offer sidebar.
+  - Free tips: approved directory hub (columnist cards, offer spotlight, latest posts, 35-link directory) over the staging guide copy.
+  - Free bets: approved hub with the expanded live offer ladder.
+  - Bet365 review: approved review layout, live claim button and mobile sticky bar.
+  - Roundups and how-to guides (16): approved guide header, disclosure and table of contents.
+  - Tip-table pages: full width, seven columns on desktop, four on phones.
+  - WordPress primary menu on every page.
+- Gate: launch parity 0 failures (1,220 pages, 76 offer placements, 97 tables / 3,105 rows); routing tests 19/19. The parity gate now accepts ladder offers on designed hubs.
+- Staging: three test pages set to draft at Paul's request (90444 /everytip-top-offers-ladder-test, 8158 /test-ground, 7982 /new-design); prior state saved in outputs/staging-writes/.
+- [ ] Design gate: NOT passed until Paul approves the pages on the test site. Other reviews, racecourse pages and archives use the shared article layout for now.
+
 ## Done
 - Baseline committed and pushed to redfernp/et-frontend/main; this single progress file is maintained in place. Completed work and preparation checkpoints have been committed and pushed separately.
 - Task 3: the default Astro entry point reads staging WPGraphQL through one WPGRAPHQL_ENDPOINT. Five-record pages, sequential requests, backoff and atomic on-disk response caching are implemented. No October snapshot fallback or live-only overlays. Final 15 October WPGRAPHQL_FRESH=1 build passed: 1,220 pages in 37m 8s, including 979 exact .html paths. All 499 source receipts are uncached: 979 published posts, 195 pages and 46 archive/pagination routes. All fourteen drafted records are absent.
