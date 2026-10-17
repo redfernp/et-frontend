@@ -30,10 +30,11 @@ const linkHref = (path: string) => preview ? `${prefix}${path}/` : path;
         <p>At everytip.co.uk, we offer free, impartial and independent reviews of betting operators. Our ratings and reviews are made independently of the operator. We accept compensation from companies advertised on this website via their affiliate programmes, and this may affect brand positioning.</p>
       </section>
     </div>
-    <div class="footer-bottom"><span>© {new Date().getFullYear()} EveryTip.co.uk</span><span>18+ · Please gamble responsibly</span>{preview && <span>Local design preview · no sample offer is active</span>}</div>
+    <div class="footer-bottom"><span>© {new Date().getFullYear()} EveryTip.co.uk</span><span>18+ · Please gamble responsibly</span>{preview ? <span>Local design preview · no sample offer is active</span> : <a class="footer-cookie-settings" href="#cookie-settings" data-cookie-settings>Cookie settings</a>}</div>
   </div>
 </footer>
 <style>
+  .footer-cookie-settings{color:#fff;text-decoration:underline}
   .footer-inner{display:grid;gap:23px}
   .footer-top{display:flex;justify-content:space-between;align-items:center;gap:22px;padding-bottom:20px;border-bottom:1px solid #ffffff35}
   .footer-brand{display:flex;align-items:center;gap:12px}

@@ -4,6 +4,8 @@ import '../styles/design-refresh.css';
 import '../styles/launch.css';
 import FeaturedOffersSidebar from '../components/FeaturedOffersSidebar.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import CookieConsent from '../components/launch/CookieConsent.astro';
+import NavMenu from '../components/launch/NavMenu.astro';
 import { publicMenuFallback, publicNavigation, type NavigationItem } from '../lib/menu-tree';
 import { resolvePreviewRobots } from '../lib/preview-robots.mjs';
 import { launchMenuItems } from '../lib/launch-templates.mjs';
@@ -40,25 +42,14 @@ const publicPaths = new Set(verifiedPublicPaths);
     {seo?.description && <meta name="description" content={seo.description} />}
     {publicPage && !previewOnly && seo?.canonical && <link rel="canonical" href={seo.canonical} />}
     <title>{resolvedTitle}</title>
-    {publicPage && !previewOnly && <script is:inline>
-      // Existing staging container, retained for the frontend migration.
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
-      var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-      j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-TJ4SSH4');
-    </script>}
+    {publicPage && !previewOnly && <CookieConsent part="head" />}
   </head>
   <body>
     {(!publicPage || previewOnly) && <div class="preview-banner">{previewMessage}</div>}
     <header class="site-header">
       <div class="wrap header-inner">
         {publicPage ? (publicPaths.has('/') ? <a class="brand" href="/" aria-label="EveryTip home"><span class="brand-wordmark">Every<span>Tip</span></span></a> : <span class="brand"><span class="brand-wordmark">Every<span>Tip</span></span></span>) : <a class="brand" href="/pilot/home/" aria-label="EveryTip pilot home"><span class="brand-wordmark">Every<span>Tip</span></span></a>}
-        {publicPage ? <nav aria-label="Primary navigation" class="public-nav">
-          {publicItems.map((item) => item.children.length ? <details class="public-nav-group">
-            <summary>{item.href ? <a href={item.href}>{item.label}</a> : item.label}</summary>
-            <div class="public-nav-children">{item.children.map((child) => child.href && <a href={child.href}>{child.label}</a>)}</div>
-          </details> : item.href && <a href={item.href}>{item.label}</a>)}
-        </nav> : <nav aria-label="Pilot navigation">
+        {publicPage ? <nav aria-label="Primary navigation" class="public-nav"><NavMenu items={publicItems} variant="bar" /></nav> : <nav aria-label="Pilot navigation">
           <a href="/pilot/home/">Home</a>
           <a href="/pilot/free-betting-tips/">Free tips</a>
           <a href="/pilot/bet365-review/">Bookie review</a>
@@ -87,6 +78,7 @@ const publicPaths = new Set(verifiedPublicPaths);
       </aside>}
     </div>
     <SiteFooter preview={!publicPage} verifiedPublicPaths={verifiedPublicPaths} />
+    {publicPage && !previewOnly && <CookieConsent part="banner" />}
   </body>
 </html>
 <style>

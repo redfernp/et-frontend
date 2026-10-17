@@ -1,0 +1,52 @@
+---
+// The WordPress primary menu at any depth. Desktop: hover/focus dropdowns with side flyouts.
+// Touch and keyboard: the ▾ toggle opens a submenu (focus-within), so "#" headings still work.
+import type { NavigationItem } from '../../lib/menu-tree';
+interface Props { items: NavigationItem[]; variant: 'bar' | 'home'; depth?: number }
+const { items, variant, depth = 0 } = Astro.props;
+---
+<ul class:list={depth === 0 ? ['nav-menu', `nav-${variant}`] : 'nav-sub'}>
+  {items.map((item) => <li class:list={{ 'has-children': item.children.length > 0 }}>
+    {item.href ? <a href={item.href}>{item.label}</a> : <button type="button" class="nav-heading" aria-haspopup="true">{item.label}</button>}
+    {item.children.length > 0 && item.href && <button type="button" class="nav-toggle" aria-label={`Show ${item.label} menu`}>▾</button>}
+    {item.children.length > 0 && !item.href && <span class="nav-caret" aria-hidden="true">▾</span>}
+    {item.children.length > 0 && <Astro.self items={item.children} variant={variant} depth={depth + 1} />}
+  </li>)}
+</ul>
+<style is:global>
+  .nav-menu, .nav-menu .nav-sub { list-style: none; margin: 0; padding: 0; }
+  .nav-menu { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; }
+  .nav-menu li { position: relative; display: flex; align-items: center; }
+  /* Same height for links and dropdown headings, so every item shares one baseline. */
+  .nav-menu > li { min-height: 34px; }
+  .nav-menu > li > a, .nav-menu > li > .nav-heading { display: inline-flex; align-items: center; min-height: 34px; padding: 0; }
+  .nav-menu a, .nav-menu .nav-heading { font: inherit; font-weight: 700; line-height: 1.2; text-decoration: none; background: none; border: 0; padding: 6px 0; cursor: pointer; }
+  .nav-menu .nav-toggle, .nav-menu .nav-caret { font-size: 10px; margin-left: 4px; background: none; border: 0; padding: 4px 2px; cursor: pointer; opacity: .85; color: inherit; }
+  .nav-menu .nav-heading + .nav-caret { margin-left: 3px; }
+  /* Submenus */
+  .nav-menu .nav-sub { display: none; position: absolute; z-index: 30; top: 100%; left: -12px; min-width: 230px; padding: 8px 0; background: #fff; border-top: 3px solid var(--et-orange); box-shadow: 0 10px 28px #102a4033; }
+  .nav-menu .nav-sub .nav-sub { top: -11px; left: 100%; }
+  .nav-menu li:hover > .nav-sub, .nav-menu li:focus-within > .nav-sub { display: block; }
+  .nav-menu .nav-sub li { display: flex; justify-content: space-between; }
+  .nav-menu .nav-sub a, .nav-menu .nav-sub .nav-heading { display: block; flex: 1; padding: 8px 16px; color: #183f60; font-size: 14px; font-weight: 600; text-align: left; white-space: nowrap; }
+  .nav-menu .nav-sub a:hover, .nav-menu .nav-sub .nav-heading:hover { background: #eef5fa; color: var(--et-blue-ink); }
+  .nav-menu .nav-sub .nav-toggle, .nav-menu .nav-sub .nav-caret { color: #183f60; padding-right: 12px; transform: rotate(-90deg); }
+  /* Blue site header */
+  .nav-bar > li > a, .nav-bar > li > .nav-heading, .nav-bar > li > .nav-toggle, .nav-bar > li > .nav-caret { color: #fff; font-size: 14px; }
+  /* Homepage white header */
+  .nav-home { justify-content: center; }
+  .nav-home > li > a, .nav-home > li > .nav-heading, .nav-home > li > .nav-toggle, .nav-home > li > .nav-caret { color: #1d5684; font-size: 13px; }
+  .nav-menu > li > a:hover, .nav-menu > li > .nav-heading:hover { text-decoration: underline; text-decoration-color: var(--et-orange); text-decoration-thickness: 2px; text-underline-offset: 6px; }
+  @media (max-width: 760px) {
+    .nav-menu { gap: 2px 16px; align-items: flex-start; }
+    /* An open submenu takes its own full-width row instead of stretching the header. */
+    .nav-menu > li:focus-within { flex-basis: 100%; }
+    .nav-menu .nav-sub { background: #fff; border-radius: 4px; }
+    .nav-menu li { flex-wrap: wrap; }
+    .nav-menu .nav-sub { position: static; min-width: 0; width: 100%; box-shadow: none; padding: 4px 0 8px 10px; }
+    .nav-menu .nav-sub .nav-sub { padding-left: 14px; }
+    .nav-menu li:hover > .nav-sub { display: none; }
+    .nav-menu li:focus-within > .nav-sub { display: block; }
+    .nav-menu .nav-sub a, .nav-menu .nav-sub .nav-heading { white-space: normal; }
+  }
+</style>

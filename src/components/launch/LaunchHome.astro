@@ -5,16 +5,19 @@ import '../../styles/design-refresh.css';
 import '../../styles/launch.css';
 import HomeOfferLadder from '../HomeOfferLadder.astro';
 import SiteFooter from '../SiteFooter.astro';
+import CookieConsent from './CookieConsent.astro';
+import NavMenu from './NavMenu.astro';
 import { publicMenuFallback, publicNavigation } from '../../lib/menu-tree';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
 import { endpoint } from '../../lib/launch-content.mjs';
-import { homeEditorialHtml, columnistCards, launchMenuItems } from '../../lib/launch-templates.mjs';
+import { homeEditorialHtml, columnistCards, launchMenuItems, linksUnderHeading } from '../../lib/launch-templates.mjs';
 
 const { record, records, paths, offers, seo } = Astro.props;
 const available = new Set(paths);
 const navigation = publicNavigation(await launchMenuItems(), paths);
 // Same link rewriting as every other page, so staging hosts become site-relative paths.
-const editorial = homeEditorialHtml({ ...record, content: launchHtml(record.content, endpoint) });
+const homeHtml = launchHtml(record.content, endpoint);
+const editorial = homeEditorialHtml({ ...record, content: homeHtml });
 const cards = columnistCards(records);
 const linkIf = (entries) => entries.filter(([, href]) => available.has(href));
 
@@ -32,7 +35,10 @@ const tipLinks = linkIf([
   ['Football accumulator tips', '/football-accumulator-tips.html'],
   ['Kempton racing tips', '/racecourses/kempton-racing-tips'],
 ]);
-const reviews = linkIf([
+// Full review and guide lists come from the WordPress homepage; the short lists are a fallback.
+const wpReviews = linkIf(linksUnderHeading(homeHtml, /^Latest Bookmaker Reviews/i));
+const wpGuides = linkIf(linksUnderHeading(homeHtml, /^Betting Guides$/i));
+const fallbackReviews = linkIf([
   ['Betway review', '/betway-review'],
   ['NetBet Sportsbook review', '/netbet-sportsbook-review'],
   ['Bet365 review', '/bet365-review'],
@@ -40,13 +46,15 @@ const reviews = linkIf([
   ['Betfred review', '/betfred-review'],
   ['10Bet review', '/10bet-review'],
 ]);
-const guides = linkIf([
+const fallbackGuides = linkIf([
   ['Best PayPal betting sites', '/best-paypal-betting-sites.html'],
   ['Low or no minimum deposit betting sites', '/low-or-no-minimum-deposit-betting-sites.html'],
   ['Bookmakers that accept Skrill', '/online-bookmakers-that-accept-skrill.html'],
   ['Bookmakers that accept Neteller', '/online-bookmakers-that-accept-neteller.html'],
   ['Best betting sites for basketball', '/best-betting-sites-for-basketball.html'],
 ]);
+const reviews = wpReviews.length ? wpReviews : fallbackReviews;
+const guides = wpGuides.length ? wpGuides : fallbackGuides;
 const quickLinks = [
   ['Newsletter', '/daily-newsletter'],
   ['Free tipsters', '#free-tips'],
@@ -63,19 +71,12 @@ const quickLinks = [
     {seo.description && <meta name="description" content={seo.description} />}
     {seo.canonical && <link rel="canonical" href={seo.canonical} />}
     <title>{seo.title}</title>
-    <script is:inline>
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
-      var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-      j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-TJ4SSH4');
-    </script>
+    <CookieConsent part="head" />
   </head>
   <body class="home-preview">
     <header class="home-header wrap cms-nav">
       <a href="/" aria-label="EveryTip homepage"><img src="https://www.everytip.co.uk/wp-content/uploads/2017/07/EveryTip-300x80.png" alt="EveryTip" width="308" height="80" /></a>
-      <nav aria-label="Primary navigation">
-        {navigation.map((item) => item.children.length ? <details class="home-nav-group"><summary>{item.href ? <a href={item.href}>{item.label}</a> : item.label}</summary><div>{item.children.map((child) => child.href && <a href={child.href}>{child.label}</a>)}</div></details> : item.href && <a href={item.href}>{item.label}</a>)}
-      </nav>
+      <nav aria-label="Primary navigation"><NavMenu items={navigation} variant="home" /></nav>
     </header>
     <main class="home-main wrap">
       <section class="home-hero" aria-labelledby="home-title">
@@ -145,6 +146,7 @@ const quickLinks = [
       </section>
     </main>
     <SiteFooter preview={false} verifiedPublicPaths={paths} />
+    <CookieConsent part="banner" />
   </body>
 </html>
 <style>

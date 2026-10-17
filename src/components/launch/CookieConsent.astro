@@ -1,0 +1,71 @@
+---
+// Cookie consent (UK GDPR/PECR). Google Tag Manager, and so GA4, loads only after the
+// visitor accepts. Consent Mode v2 defaults are set to denied before anything else runs.
+const { part } = Astro.props as { part: 'head' | 'banner' };
+const gtmId = 'GTM-TJ4SSH4';
+---
+{part === 'head' ? <script is:inline define:vars={{ gtmId }}>
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
+    analytics_storage: 'denied', functionality_storage: 'granted', security_storage: 'granted', wait_for_update: 500 });
+  window.everytipLoadTagManager = function () {
+    if (window.everytipTagManagerLoaded) return;
+    window.everytipTagManagerLoaded = true;
+    gtag('consent', 'update', { ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted', analytics_storage: 'granted' });
+    window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtm.js?id=' + gtmId;
+    document.head.appendChild(script);
+  };
+  try { if (localStorage.getItem('everytip-consent') === 'granted') window.everytipLoadTagManager(); } catch (error) {}
+</script> :
+<div class="cookie-banner" data-cookie-banner role="dialog" aria-live="polite" aria-labelledby="cookie-banner-title" hidden>
+  <div class="cookie-banner-inner">
+    <div class="cookie-banner-copy">
+      <h2 id="cookie-banner-title">Cookies on EveryTip</h2>
+      <p>We use analytics cookies to understand how people use the site so we can improve it. We only set them if you accept. Read our <a href="/privacy-policy">privacy policy</a>.</p>
+    </div>
+    <div class="cookie-banner-actions">
+      <button type="button" data-cookie-choice="denied">Reject all</button>
+      <button type="button" data-cookie-choice="granted">Accept all</button>
+    </div>
+  </div>
+</div>}
+{part === 'banner' && <script is:inline>
+  (function () {
+    var banner = document.querySelector('[data-cookie-banner]');
+    var stored = null;
+    try { stored = localStorage.getItem('everytip-consent'); } catch (error) {}
+    if (!stored) banner.hidden = false;
+    document.addEventListener('click', function (event) {
+      var choice = event.target.closest('[data-cookie-choice]');
+      if (choice) {
+        var value = choice.getAttribute('data-cookie-choice');
+        try { localStorage.setItem('everytip-consent', value); } catch (error) {}
+        banner.hidden = true;
+        if (value === 'granted') window.everytipLoadTagManager();
+        // Withdrawing consent after tracking started: switch storage off and reload without GTM.
+        else if (window.everytipTagManagerLoaded) { gtag('consent', 'update', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' }); location.reload(); }
+        return;
+      }
+      if (event.target.closest('[data-cookie-settings]')) { event.preventDefault(); banner.hidden = false; }
+    });
+  })();
+</script>}
+<style>
+  .cookie-banner{position:fixed;z-index:1000;left:0;right:0;bottom:0;padding:16px;background:#183f5f;color:#fff;box-shadow:0 -6px 24px #0b1f3040}
+  .cookie-banner[hidden]{display:none}
+  .cookie-banner-inner{display:flex;align-items:center;justify-content:space-between;gap:16px 28px;max-width:1180px;margin:0 auto;flex-wrap:wrap}
+  .cookie-banner-copy{flex:1 1 420px}
+  .cookie-banner h2{margin:0 0 4px;font-size:17px;color:#fff}
+  .cookie-banner p{margin:0;font-size:14px;line-height:1.5}
+  .cookie-banner a{color:#fff;text-decoration:underline}
+  .cookie-banner-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .cookie-banner-actions button{min-width:130px;padding:11px 18px;border-radius:5px;border:2px solid #fff;font-weight:800;font-size:14px;cursor:pointer}
+  /* Reject and accept carry equal weight, as the ICO expects. */
+  .cookie-banner-actions button{background:#fff;color:#183f5f}
+  .cookie-banner-actions button:hover{background:#e8f1f7}
+  @media(max-width:560px){.cookie-banner-actions{width:100%}.cookie-banner-actions button{flex:1}}
+</style>

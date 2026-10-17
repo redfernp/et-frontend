@@ -68,3 +68,12 @@
 
 /* Buttons filled into comparison-table "Link" cells. */
 .cms-content a.table-cta { display: inline-block; padding: 7px 12px; border-radius: 4px; background: var(--et-commercial); color: #fff; font-weight: 800; font-size: 13px; text-decoration: none; white-space: nowrap; }
+
+/* Menu containers must not clip the dropdowns (the design refresh scrolls the nav on small screens). */
+.site-header nav.public-nav, .home-header.cms-nav nav { overflow: visible; white-space: normal; flex-wrap: wrap; }
+.home-header.cms-nav { z-index: 40; }
+.site-header { position: relative; z-index: 40; }
+
+/* Homepage intro card: use the full width on desktop. */
+.home-intro-card p { max-width: none; }
+@media (min-width: 1000px) { .home-intro-card { column-count: 2; column-gap: 44px; } .home-intro-card p { break-inside: avoid; } }

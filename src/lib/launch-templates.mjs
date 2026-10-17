@@ -120,3 +120,21 @@ export function canonicalFor(record) {
     return `${publicOrigin}${url.pathname}${url.search}`;
   } catch { return `${publicOrigin}${record.uri}`; }
 }
+
+// Links listed under a homepage heading (for example "Latest Bookmaker Reviews"), up to the next heading.
+export function linksUnderHeading(html, heading) {
+  const doc = parseDocument(html ?? '', { decodeEntities: true });
+  const links = [];
+  let inside = false;
+  const visit = (node) => {
+    if (node.type === 'tag' && /^h[1-4]$/.test(node.name)) { inside = heading.test(plain(render(node))); return; }
+    if (inside && node.type === 'tag' && node.name === 'a' && node.attribs.href) {
+      const label = plain(render(node));
+      if (label) links.push([label, node.attribs.href]);
+      return;
+    }
+    for (const child of node.children ?? []) visit(child);
+  };
+  visit(doc);
+  return links;
+}
