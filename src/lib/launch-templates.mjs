@@ -138,3 +138,26 @@ export function linksUnderHeading(html, heading) {
   visit(doc);
   return links;
 }
+
+// Bookmaker reviews that use the approved review design (Bet365 has its own template).
+// partner matches an entry in src/data/offers.json where EveryTip has a live offer.
+export const bookmakerReviews = {
+  '/betfred-review': { name: 'Betfred', partner: 'betfred' },
+  '/quinnbet-review': { name: 'QuinnBet', partner: 'quinnbet' },
+  '/betway-sportsbook-review': { name: 'Betway', partner: 'betway' },
+  '/10bet-review': { name: '10Bet', partner: '10bet' },
+  '/betwright-review': { name: 'BetWright', partner: 'betwright' },
+  '/netbet-review': { name: 'NetBet', partner: 'netbet' },
+  '/netbet-sportsbook-review.html': { name: 'NetBet', partner: 'netbet' },
+  '/spreadex-review': { name: 'Spreadex', partner: 'spreadex' },
+  '/boylesports-review': { name: 'Boylesports', partner: null },
+  '/betfair-sportsbook-review': { name: 'Betfair Sportsbook', partner: null },
+  '/william-hill-review': { name: 'William Hill', partner: null },
+  '/888sport-review': { name: '888sport', partner: null },
+  '/mansionbet-review': { name: 'MansionBet', partner: null },
+  '/paddy-power-review.html': { name: 'Paddy Power', partner: null },
+  '/star-sports-bet-review.html': { name: 'Star Sports', partner: null },
+  '/mr-play-sports-review.html': { name: 'mr.play Sports', partner: null },
+  '/betfair-exchange-review.html': { name: 'Betfair Exchange', partner: null },
+  '/comeon-review-2019.html': { name: 'ComeOn!', partner: null },
+};

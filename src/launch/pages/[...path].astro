@@ -5,13 +5,14 @@ import LaunchFreeTips from '../../components/launch/LaunchFreeTips.astro';
 import LaunchFreeBets from '../../components/launch/LaunchFreeBets.astro';
 import LaunchBet365Review from '../../components/launch/LaunchBet365Review.astro';
 import LaunchColumnArchive from '../../components/launch/LaunchColumnArchive.astro';
+import LaunchReview from '../../components/launch/LaunchReview.astro';
 import ColumnistProfile from '../../components/ColumnistProfile.astro';
 import { launchContent, robotsFor, endpoint } from '../../lib/launch-content.mjs';
 import { launchOfferLineup } from '../../lib/launch-offers.mjs';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
 import { rebuildRankedCards, fillEmptyLinkCells, responsiveNinjaTables } from '../../lib/ranked-cards.mjs';
 import { columnistKeyForUri, legacyColumnistPortraitPaths } from '../../lib/columnist-profiles.mjs';
-import { canonicalFor, articleCategory, columnistArchives, launchColumnists, isGuide, withHeadingIds } from '../../lib/launch-templates.mjs';
+import { bookmakerReviews, canonicalFor, articleCategory, columnistArchives, launchColumnists, isGuide, withHeadingIds } from '../../lib/launch-templates.mjs';
 
 export async function getStaticPaths() {
   const records = await launchContent();
@@ -53,6 +54,7 @@ const formatDate = (value) => value ? new Date(`${value}T12:00:00Z`).toLocaleDat
 {isHome ? <LaunchHome record={record} records={records} paths={paths} offers={offers} seo={seo} /> :
  record.uri === '/bookie-free-bets-bonus-offers' ? <LaunchFreeBets record={record} paths={paths} offers={offers} seo={seo} /> :
  archiveColumnist ? <LaunchColumnArchive record={record} records={records} paths={paths} offers={offers} seo={seo} columnist={archiveColumnist} /> :
+ bookmakerReviews[record.uri] ? <LaunchReview record={record} body={body} paths={paths} offers={offers} seo={seo} bookmaker={bookmakerReviews[record.uri]} /> :
  record.uri === '/bet365-review' ? <LaunchBet365Review record={record} paths={paths} offers={offers} seo={seo} /> :
  record.uri === '/free-betting-tips' ? <LaunchFreeTips record={record} records={records} paths={paths} offers={offers} seo={seo} /> :
 guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo} verifiedPublicPaths={paths} offers={offers}>
@@ -66,7 +68,6 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
         <p class="paypal-byline">By the EveryTip team · Updated {formatDate(modified || published)}</p>
       </div>
     </header>
-    <div class="paypal-disclosure"><strong>#Ad · How this guide earns money</strong><p>EveryTip may receive a commission if you sign up through a bookmaker link in this guide. 18+ · T&amp;Cs apply · Please gamble responsibly.</p></div>
     {guide.toc.length > 1 && <nav class="paypal-toc" aria-label="On this guide"><strong>On this page</strong>{guide.toc.map((item) => <a href={item.href}>{item.label}</a>)}</nav>}
     <div class="exact-preview-body cms-content guide-body" set:html={body} />
   </article>
@@ -96,12 +97,42 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
 </BaseLayout>}
 <script>
   // "+" expander for Ninja tip-table columns hidden at the current width (as on the live site).
+  // Date / Country / League dropdowns, as on the live site, for tables Ninja flags as filterable.
+  function addFilters(table, refresh) {
+    if (!table.classList.contains('ninja_table_has_custom_filter')) return;
+    const headers = [...table.querySelectorAll('thead th')].map((th) => th.textContent.trim());
+    const columns = headers.map((label, index) => ({ label, index })).filter(({ label }) => /^(date|country|league|course|competition|meeting)$/i.test(label));
+    if (!columns.length) return;
+    const rows = [...table.querySelectorAll('tbody tr')];
+    const box = document.createElement('div');
+    box.className = 'nt-filters';
+    const selects = columns.map(({ label, index }) => {
+      const values = [...new Set(rows.map((row) => row.children[index]?.textContent.trim()).filter(Boolean))];
+      if (!/^date$/i.test(label)) values.sort((a, b) => a.localeCompare(b));
+      const field = document.createElement('label');
+      field.innerHTML = `<span>${label}</span>`;
+      const select = document.createElement('select');
+      select.dataset.column = index;
+      select.append(new Option('All', ''), ...values.map((value) => new Option(value, value)));
+      field.append(select);
+      box.append(field);
+      return select;
+    });
+    const apply = () => {
+      for (const row of rows) {
+        row.hidden = selects.some((select) => select.value && row.children[select.dataset.column]?.textContent.trim() !== select.value);
+      }
+      refresh();
+    };
+    selects.forEach((select) => select.addEventListener('change', apply));
+    table.before(box);
+  }
   function setUpTipTables() {
     for (const table of document.querySelectorAll('table.nt-responsive')) {
       const refresh = () => {
         table.querySelectorAll('.nt-detail').forEach((row) => row.remove());
         table.querySelectorAll('.nt-toggle').forEach((button) => button.remove());
-        for (const row of table.querySelectorAll('tbody tr')) {
+        for (const row of table.querySelectorAll('tbody tr:not([hidden])')) {
           const hidden = [...row.children].filter((cell) => cell.classList.contains('nt-col') && getComputedStyle(cell).display === 'none');
           if (!hidden.length) continue;
           const first = [...row.children].find((cell) => getComputedStyle(cell).display !== 'none');
@@ -128,6 +159,7 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
           first.prepend(button);
         }
       };
+      addFilters(table, refresh);
       refresh();
       let width = table.parentElement.clientWidth;
       new ResizeObserver(() => { const now = table.parentElement.clientWidth; if (now !== width) { width = now; refresh(); } }).observe(table.parentElement);

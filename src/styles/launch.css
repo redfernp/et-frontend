@@ -17,13 +17,14 @@
 .featured-offers > h2 { margin-bottom: 12px; }
 
 /* In-copy links. Editorial (internal, non-commercial): blue with a light underline.
-   Commercial (affiliate, /go/, sponsored, Amazon): bold dark text with an orange underline. */
+   Commercial (affiliate, /go/, sponsored, Amazon): the live site style, bold blue with a bright orange underline. */
 .cms-content a,
 .home-intro-card a { color: var(--et-blue-ink); text-decoration: underline; text-decoration-color: #8fb2ce; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .cms-content a:hover,
 .home-intro-card a:hover { text-decoration-color: var(--et-blue-ink); }
 .cms-content a:is([rel~="sponsored"], [href*="/go/"], [href*="amazon."], [href*="amzn."]),
-.home-intro-card a:is([rel~="sponsored"], [href*="/go/"]) { color: #263748; font-weight: 800; text-decoration-color: var(--et-commercial); text-decoration-thickness: 3px; }
+.home-intro-card a:is([rel~="sponsored"], [href*="/go/"]) { color: #1e73be; font-weight: 700; text-decoration-line: underline; text-decoration-color: #f7941d; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.cms-content a:is([rel~="sponsored"], [href*="/go/"], [href*="amazon."], [href*="amzn."]) :is(strong, b) { color: inherit; }
 .cms-content a:has(img) { text-decoration: none; }
 
 /* Lists in articles (for example "Related reading"): tighter rows. */
@@ -103,3 +104,16 @@
 .cms-content table.nt-responsive td, .cms-content table.nt-responsive th { overflow-wrap: normal; word-break: normal; }
 @container (max-width: 480px) { .cms-content table.nt-responsive { font-size: 13px; } .cms-content table.nt-responsive :is(td, th) { padding: 7px 6px; } }
 .cms-content table.nt-responsive { min-width: 0 !important; }
+
+/* Award and guide pages have no sidebar: content and ranked cards use the full width. */
+html.design-refresh .guide-body.exact-preview-body { max-width: none; }
+html .page-shell:not(.with-sidebar) .cms-content p, html .page-shell:not(.with-sidebar) .exact-preview-body { max-width: none; }
+.guide-body .rank-card { max-width: none; }
+
+/* Tip-table filters (Date / Country / League), styled like the live site. */
+.cms-content .nt-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px 14px; margin: 12px 0 0; padding: 14px; border: 1px solid #2987ce; border-bottom: 0; border-radius: 5px 5px 0 0; background: #fff; }
+.cms-content .nt-filters label { display: grid; gap: 4px; }
+.cms-content .nt-filters span { color: #1e73be; font-weight: 700; font-size: 14px; }
+.cms-content .nt-filters select { width: 100%; padding: 8px 10px; border: 1px solid #c9d6e0; border-radius: 4px; background: #fff; font: inherit; font-size: 14px; color: #263748; }
+.cms-content .nt-filters + table.nt-responsive { margin-top: 0; border-radius: 0 0 5px 5px; }
+.cms-content table.nt-responsive tbody tr[hidden] { display: none; }
