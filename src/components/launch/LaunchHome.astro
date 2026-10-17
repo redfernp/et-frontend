@@ -9,6 +9,7 @@ import CookieConsent from './CookieConsent.astro';
 import NavMenu from './NavMenu.astro';
 import { publicMenuFallback, publicNavigation } from '../../lib/menu-tree';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
+import { removeExPartnerPromotion } from '../../lib/ranked-cards.mjs';
 import { endpoint } from '../../lib/launch-content.mjs';
 import { homeEditorialHtml, columnistCards, launchMenuItems, linksUnderHeading } from '../../lib/launch-templates.mjs';
 
@@ -16,7 +17,7 @@ const { record, records, paths, offers, seo } = Astro.props;
 const available = new Set(paths);
 const navigation = publicNavigation(await launchMenuItems(), paths);
 // Same link rewriting as every other page, so staging hosts become site-relative paths.
-const homeHtml = launchHtml(record.content, endpoint);
+const homeHtml = removeExPartnerPromotion(launchHtml(record.content, endpoint));
 const editorial = homeEditorialHtml({ ...record, content: homeHtml });
 const cards = columnistCards(records);
 const linkIf = (entries) => entries.filter(([, href]) => available.has(href));

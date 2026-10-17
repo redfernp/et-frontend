@@ -128,3 +128,8 @@ html .page-shell:not(.with-sidebar) .cms-content p, html .page-shell:not(.with-s
 .rank-card.stats-card { grid-template-columns: 170px minmax(0, 1fr); padding-left: 20px; border-left-color: var(--et-orange); }
 .rank-card.stats-card .rank-specs { margin: 0; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 @media (max-width: 720px) { .rank-card.stats-card { grid-template-columns: 1fr; } .rank-card.stats-card .rank-specs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Offer blocks placed in pages render as cards (numbered when several are in a row). */
+.rank-card.offer-card .offer-bookmaker { margin: 0 0 2px !important; font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: #a74a04; }
+.rank-card.offer-card .rank-reason { margin: 4px 0 6px !important; font-size: 14px; font-weight: 600; color: #2f4a5e; }
+.rank-card.offer-card:not(:has(.rank-number)) { padding-left: 20px; }

@@ -93,5 +93,27 @@
       "logo": "https://www.everytip.co.uk/wp-content/uploads/2025/04/betwright-logo-light-400px.png",
       "brandColor": "#253745"
     }
+  ],
+  "_readmeNotPartners": "Former partners. They never get an offer card, button or affiliate link; they may be named in plain text only. match = lowercase letters/digits that identify them in /go/ links or logo names.",
+  "notPartners": [
+    {
+      "name": "Bet365",
+      "match": [
+        "bet365"
+      ]
+    },
+    {
+      "name": "William Hill",
+      "match": [
+        "williamhill"
+      ]
+    },
+    {
+      "name": "Boylesports",
+      "match": [
+        "boylesports",
+        "boyle"
+      ]
+    }
   ]
 }

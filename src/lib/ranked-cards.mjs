@@ -98,12 +98,23 @@ export function rebuildRankedCards(html) {
   const out = [];
   let rank = 0;
   let changed = false;
+  const exNames = new Set();
+  const named = new Set();
+  const nameExPartners = () => {
+    const fresh = [...exNames].filter((name) => !named.has(name));
+    exNames.clear();
+    if (!fresh.length) return;
+    fresh.forEach((name) => named.add(name));
+    out.push(`<p class="ex-partner-mention">Other bookmakers we cover: ${fresh.join(', ')}.</p>`);
+  };
   for (let index = 0; index < nodes.length; index++) {
     const logo = logoOf(nodes[index]);
-    if (!logo) { out.push(render(nodes[index])); if (isBreak(nodes[index]) || isLongProse(nodes[index])) rank = 0; continue; }
+    if (!logo) { if (isBreak(nodes[index]) || isLongProse(nodes[index])) { nameExPartners(); rank = 0; } out.push(render(nodes[index])); continue; }
     const members = [];
     let next = index + 1;
     while (next < nodes.length && !logoOf(nodes[next]) && !isBreak(nodes[next]) && !isLongProse(nodes[next])) members.push(nodes[next++]);
+    const exCard = exPartnerFor(`${goSlug(logo.link?.attribs.href)} ${logo.image.attribs.alt ?? ''} ${logo.image.attribs.src ?? ''}`);
+    if (exCard) { exNames.add(exCard.name); changed = true; index = next - 1; continue; }
     const card = buildCard(logo, members, rank + 1);
     if (!card) { out.push(render(nodes[index])); continue; }
     if (!card.includes('stats-card')) rank++;
@@ -111,6 +122,7 @@ export function rebuildRankedCards(html) {
     out.push(card);
     index = next - 1;
   }
+  nameExPartners();
   return changed ? out.join('\n') : html;
 }
 
@@ -179,6 +191,35 @@ export function polishContent(html) {
       p.attribs.class = [p.attribs.class, 'ad-terms'].filter(Boolean).join(' ');
       changed = true;
     }
+  }
+  return changed ? render(doc) : html;
+}
+
+// Former partners (src/data/offers.json notPartners): never a card, button, banner or
+// affiliate link. Their names may stay in the text.
+import offerFile from '../data/offers.json' with { type: 'json' };
+const exPartners = offerFile.notPartners ?? [];
+const exKey = (value = '') => value.toLowerCase().replace(/[^a-z0-9]/g, '');
+export const exPartnerFor = (value = '') => exPartners.find((entry) => entry.match.some((key) => exKey(value).includes(key)));
+const goSlug = (href = '') => (href.match(/\/go\/([a-z0-9-]+)/i) ?? [])[1] ?? '';
+
+export function removeExPartnerPromotion(html) {
+  if (!html || !exPartners.length) return html;
+  const doc = parseDocument(html, { decodeEntities: true });
+  let changed = false;
+  const drop = (node) => { const list = node.parent ? node.parent.children : doc.children; list.splice(list.indexOf(node), 1); changed = true; };
+  for (const a of doc.children.flatMap((node) => tags(node, 'a'))) {
+    if (!exPartnerFor(goSlug(a.attribs.href))) continue;
+    if (tags(a, 'img').length) { drop(a); continue; }
+    // Keep the words, lose the link.
+    const list = a.parent ? a.parent.children : doc.children;
+    list.splice(list.indexOf(a), 1, ...a.children);
+    for (const child of a.children) child.parent = a.parent;
+    changed = true;
+  }
+  for (const p of doc.children.flatMap((node) => tags(node, 'p'))) {
+    const value = clean(text(p));
+    if ((/^#Ad/i.test(value) || /^(sign up|visit|claim|open|join|bet now|register)\b/i.test(value)) && exPartnerFor(value)) drop(p);
   }
   return changed ? render(doc) : html;
 }

@@ -4,13 +4,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ReviewMobileSticky from '../ReviewMobileSticky.astro';
 import { splitReview, reviewOwnOffer } from '../../lib/review-sections.mjs';
 import { plainTitle } from '../../lib/launch-templates.mjs';
+import { exPartnerFor } from '../../lib/ranked-cards.mjs';
 
 const { record, body, paths, offers, seo, bookmaker } = Astro.props;
 const review = splitReview(body);
 // The bookmaker's offer from the offers file, otherwise the review's own #Ad copy.
 const fileOffer = offers.find((offer) => offer.id === bookmaker.partner);
 const own = reviewOwnOffer(body, bookmaker.name);
-const offer = fileOffer ? { headline: fileOffer.headline, terms: fileOffer.compactTerms, link: fileOffer.ctaPath, label: fileOffer.ctaLabel, logo: fileOffer.logoUrl, color: fileOffer.brandColor }
+// Former partners keep their review but get no offer card, claim section or sticky bar.
+const exPartner = exPartnerFor(bookmaker.name);
+const offer = exPartner ? null : fileOffer ? { headline: fileOffer.headline, terms: fileOffer.compactTerms, link: fileOffer.ctaPath, label: fileOffer.ctaLabel, logo: fileOffer.logoUrl, color: fileOffer.brandColor }
   : own.link ? { headline: own.headline ? own.headline.charAt(0).toUpperCase() + own.headline.slice(1) : `Join ${bookmaker.name}`, terms: own.terms, link: own.link, label: 'Claim offer', logo: null, color: '#1d5b32' } : null;
 const byline = /seymour biz/i.test(plainTitle(review.introHtml).slice(0, 600)) || /seymour/i.test(review.headline ?? '')
   ? { name: 'Seymour Biz', role: 'EveryTip horse racing columnist', image: 'https://www.everytip.co.uk/wp-content/uploads/2025/06/Seymour-Biz-Horse-Racing-Feature-Writer-100x100.png' }
@@ -52,6 +55,7 @@ const jump = [
       {review.sections.map((section, index) => <section class="review-section"><div class="section-heading"><span>{String(index + 1).padStart(2, '0')}</span><h3>{section.title.replace(/^\d+\.\s*/, '')}</h3></div><div class="editorial" set:html={section.html} /></section>)}
     </section>}
     {review.verdict && <section class="verdict" id="review-verdict"><p class="eyebrow">Final verdict</p><h2>{review.verdict.title}</h2><div class="editorial" set:html={review.verdict.html} /></section>}
+    {!exPartner && review.claimHtml && <section class="other-offers" set:html={review.claimHtml} />}
     {review.otherOffersHtml && <section class="other-offers" set:html={review.otherOffersHtml} />}
     <footer class="disclosure"><p><strong>Affiliate disclosure.</strong> EveryTip may earn a commission from bookmaker links.</p><p><strong>Safer gambling.</strong> 18+ only. Please gamble responsibly. <a href="/safer-gambling">Find support and safer-gambling information</a>.</p></footer>
   </article>

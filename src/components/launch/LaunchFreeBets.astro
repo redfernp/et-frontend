@@ -3,13 +3,14 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import HomeOfferLadder from '../HomeOfferLadder.astro';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
+import { removeExPartnerPromotion } from '../../lib/ranked-cards.mjs';
 import { endpoint } from '../../lib/launch-content.mjs';
 import { contentBeforeHeading } from '../../lib/launch-templates.mjs';
 
 const { record, paths, offers, seo } = Astro.props;
 const available = new Set(paths);
 // The ladder replaces the page's trailing "Current bookmaker offers" list.
-const guide = launchHtml(contentBeforeHeading(record.content, /^Current bookmaker offers/i), endpoint);
+const guide = removeExPartnerPromotion(launchHtml(contentBeforeHeading(record.content, /^Current bookmaker offers/i), endpoint));
 const explainer = [
   { title: 'Check who qualifies', text: 'See whether the offer is for new or existing customers, and whether location or payment-method restrictions apply.' },
   { title: 'Read the qualifying action', text: 'Note the deposit, first-bet amount, minimum odds, opt-in and settlement conditions before you sign up.' },

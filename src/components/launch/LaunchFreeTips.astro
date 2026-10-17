@@ -3,6 +3,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FreeTipsDirectory from '../FreeTipsDirectory.astro';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
+import { removeExPartnerPromotion } from '../../lib/ranked-cards.mjs';
 import { endpoint } from '../../lib/launch-content.mjs';
 import { contentFromHeading, latestPosts } from '../../lib/launch-templates.mjs';
 
@@ -67,7 +68,7 @@ const tipGroups = allGroups.map((group) => ({ ...group, links: group.links
   .filter((link) => available.has(link.href)) })).filter((group) => group.links.length);
 const news = latestPosts(records, 40);
 const perPage = 10;
-const editorial = launchHtml(contentFromHeading(record.content, /^Free Sports Betting Tips From Professional/i), endpoint);
+const editorial = removeExPartnerPromotion(launchHtml(contentFromHeading(record.content, /^Free Sports Betting Tips From Professional/i), endpoint));
 const formatDate = (value) => new Date(`${value}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 ---
 <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo} verifiedPublicPaths={paths} offers={offers}>
