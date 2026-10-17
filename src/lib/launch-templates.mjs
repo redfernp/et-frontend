@@ -98,3 +98,13 @@ export function withHeadingIds(html, limit = 7) {
   });
   return { html: out, toc };
 }
+
+let menu;
+// The WordPress primary menu, read once per build; the stored fallback covers a slow staging read.
+export function launchMenuItems() {
+  return menu ??= import('./wordpress-menu.ts').then((m) => m.getWordPressMenu('PRIMARY')).then((result) => result.items)
+    .catch(async (error) => {
+      console.warn(`WordPress menu unavailable, using fallback: ${error.message}`);
+      return (await import('./menu-tree.ts')).publicMenuFallback;
+    });
+}

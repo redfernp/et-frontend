@@ -5,11 +5,11 @@ import '../../styles/design-refresh.css';
 import HomeOfferLadder from '../HomeOfferLadder.astro';
 import SiteFooter from '../SiteFooter.astro';
 import { publicMenuFallback, publicNavigation } from '../../lib/menu-tree';
-import { homeEditorialHtml, columnistCards } from '../../lib/launch-templates.mjs';
+import { homeEditorialHtml, columnistCards, launchMenuItems } from '../../lib/launch-templates.mjs';
 
 const { record, records, paths, offers, seo } = Astro.props;
 const available = new Set(paths);
-const navigation = publicNavigation(publicMenuFallback, paths);
+const navigation = publicNavigation(await launchMenuItems(), paths);
 const editorial = homeEditorialHtml(record);
 const cards = columnistCards(records);
 const linkIf = (entries) => entries.filter(([, href]) => available.has(href));

@@ -5,6 +5,7 @@ import FeaturedOffersSidebar from '../components/FeaturedOffersSidebar.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { publicMenuFallback, publicNavigation, type NavigationItem } from '../lib/menu-tree';
 import { resolvePreviewRobots } from '../lib/preview-robots.mjs';
+import { launchMenuItems } from '../lib/launch-templates.mjs';
 type Seo = { title?: string; description?: string; canonical?: string | null; robots?: string };
 interface Props {
   title: string;
@@ -25,7 +26,7 @@ interface Props {
 const { title, sidebar = false, withholdSidebarOffers = false, wide = false, relatedTopic = 'racing', robots = 'noindex,nofollow', previewMessage = 'Template preview only · sample content · no active offers or tips', publicPage = false, previewOnly = false, seo = null, menuItems = null, verifiedPublicPaths = [], offers = null } = Astro.props;
 const resolvedTitle = seo?.title?.trim() ? seo.title : (publicPage ? title : `${title} | EveryTip template preview`);
 const resolvedRobots = resolvePreviewRobots({ previewOnly, publicPage, robots, seoRobots: seo?.robots });
-const publicItems = publicPage ? publicNavigation(menuItems ?? publicMenuFallback, verifiedPublicPaths) : [];
+const publicItems = publicPage ? publicNavigation(menuItems ?? await launchMenuItems(), verifiedPublicPaths) : [];
 const publicPaths = new Set(verifiedPublicPaths);
 ---
 <!doctype html>
