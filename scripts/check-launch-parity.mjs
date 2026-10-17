@@ -58,7 +58,8 @@ async function inspect(record) {
   if (ladder.length && !builtOffers.length) {
     // Designed hubs show their offers in the ladder rather than as inline slots.
     offerPlacements += ladder.length;
-    const key = nodes => nodes.map(node => `${node.attribs['data-offer-id']} ${elements(node,'a').map(a => new URL(a.attribs.href,'https://www.everytip.co.uk').pathname).join(',')}`).sort();
+    // Offer cards link from both the logo and the button, so compare each offer's distinct links.
+    const key = nodes => nodes.map(node => `${node.attribs['data-offer-id']} ${[...new Set(elements(node,'a').map(a => new URL(a.attribs.href,'https://www.everytip.co.uk').pathname))].join(',')}`).sort();
     const sourceKeys = new Set(key(sourceOffers));
     if (!ladder.length || key(ladder).some(entry => !sourceKeys.has(entry))) failures.push({path:record.uri,field:'central-offer-content'});
   } else if (JSON.stringify(offerSignature(sourceOffers)) !== JSON.stringify(offerSignature(builtOffers))) failures.push({path:record.uri,field:'central-offer-content'});

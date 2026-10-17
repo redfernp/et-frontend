@@ -183,8 +183,8 @@ export function polishContent(html) {
   for (const p of doc.children.flatMap((node) => tags(node, 'p'))) {
     const value = clean(text(p));
     const links = tags(p, 'a').filter((a) => clean(text(a)));
-    // The paragraph is nothing but two or more links, one of them commercial.
-    if (links.length >= 2 && links.some((a) => isGo(a.attribs.href)) && squash(links.map(text).join('')) === squash(value)) {
+    // "Sign up" (affiliate) + "Read full review" (internal) link pairs; not a sentence split across two affiliate links.
+    if (links.length >= 2 && links.some((a) => isGo(a.attribs.href)) && links.some((a) => !isGo(a.attribs.href)) && squash(links.map(text).join('')) === squash(value)) {
       p.attribs.class = [p.attribs.class, 'link-buttons'].filter(Boolean).join(' ');
       changed = true;
     } else if (/^#Ad/i.test(value) && !links.length) {
@@ -220,6 +220,31 @@ export function removeExPartnerPromotion(html) {
   for (const p of doc.children.flatMap((node) => tags(node, 'p'))) {
     const value = clean(text(p));
     if ((/^#Ad/i.test(value) || /^(sign up|visit|claim|open|join|bet now|register)\b/i.test(value)) && exPartnerFor(value)) drop(p);
+  }
+  return changed ? render(doc) : html;
+}
+
+// Old editors sometimes split one link into two back-to-back anchors with the same address
+// ("Draw 2-2- Get 10/1" + " on Betfred & Claim..."). Join them into a single link.
+export function mergeSplitLinks(html) {
+  if (!html || !/<\/a>\s*<a/i.test(html)) return html;
+  const doc = parseDocument(html, { decodeEntities: true });
+  let changed = false;
+  for (const a of doc.children.flatMap((node) => tags(node, 'a'))) {
+    if (!a.parent && !doc.children.includes(a)) continue;
+    const siblings = a.parent ? a.parent.children : doc.children;
+    let index = siblings.indexOf(a);
+    if (index < 0) continue;
+    while (true) {
+      let next = index + 1;
+      const between = [];
+      while (siblings[next]?.type === 'text' && !siblings[next].data.trim()) between.push(siblings[next++]);
+      const other = siblings[next];
+      if (!(other?.type === 'tag' && other.name === 'a' && other.attribs.href === a.attribs.href)) break;
+      for (const node of [...between, ...other.children]) { node.parent = a; a.children.push(node); }
+      siblings.splice(index + 1, next - index);
+      changed = true;
+    }
   }
   return changed ? render(doc) : html;
 }
