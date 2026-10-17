@@ -84,6 +84,12 @@ Launch happens when all of these pass, and nothing else is required:
 
 Things that are explicitly **not** launch items: converting classic posts to Gutenberg, the columnist rolling-noindex automation, the EveryTip MCP server, Ninja-to-ACF modelling, the tracking/email attribution spec, and moving media off `www.everytip.co.uk`.
 
+## 4b. Post-launch backlog
+
+- **Columnist hubs (decided 15 Oct: after launch, not before).** Today `/john-newsome` 301s to the Thrive page `/english-premier-league-predictions-for-saturday` and `/seymour-biz` 301s to `/saturday-horse-racing-tips`. Keep this as it is for launch. After launch, review how those keyword pages perform on the new site, then decide between: (a) making the category archives the hubs (set them to index, 301 the Thrive pages to them, accept a temporary ranking dip), or (b) keeping the keyword URLs and rebuilding those two pages in Gutenberg plus ACF.
+- Gutenberg conversion of classic posts, only when an editor next edits them.
+- Ninja Tables into an ACF model.
+
 ## 5. Decisions needed from Paul
 
 Codex: add the answers to `PROGRESS.md` as they come in. Until a decision is answered, work on everything else.

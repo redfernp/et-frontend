@@ -111,6 +111,9 @@ wp post meta delete 34795 tve_updated_post
 ```
 Purge the staging page cache, then verify /acca-insurance/paddy-power contains "Terms that have varied" and no longer contains the old opening quoted above. Do not re-paste or overwrite the new post_content. Original REST/SEO backups are outputs/staging-writes/<id>-owner-rewrite-20261015-before.json; Paddy correction evidence is 34795-thrive-{disable,content-disable}-{before,after}.json. No SEO fields require manual entry.
 
+## Post-launch backlog
+- Columnist hubs (Paul, 15 October): keep `/john-newsome` -> `/english-premier-league-predictions-for-saturday` and `/seymour-biz` -> `/saturday-horse-racing-tips` as they are for launch. After launch, review how those keyword pages perform, then choose between making the category archives the hubs (index them, 301 the Thrive pages to them) or keeping the keyword URLs and rebuilding those two pages in Gutenberg plus ACF. See CODEX-HANDOFF-RESCOPE.md section 4b.
+
 ## Boundaries and stopping checkpoint
 Completed: the four Worker redirects, regression test, both preview rebuilds/deployments, eight staging owner rewrites with all manifest SEO fields, per-write backups/readbacks, full local/remote parity and rendered sampling. All eight rewritten texts and all four direct redirects are verified on the named preview and deployment e9e5f20c-e016-4cb5-ae8e-974d2401a5c3. The earlier fourteen draft changes remain intact. Latest build used permitted cache resumption after targeted invalidation; it is not represented as a second fully uncached run.
 
