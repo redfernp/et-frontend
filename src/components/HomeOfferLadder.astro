@@ -2,9 +2,11 @@
 import { featuredOfferPreview } from '../lib/pilot-data';
 import { capturedOfferPreview } from '../lib/offer-preview-capture.mjs';
 
-const { heading = "Today's top offers", description = 'Partner welcome offers and rewards · 18+ · T&Cs apply', expanded = false } = Astro.props;
-const capture = await capturedOfferPreview();
-const displayOffers = featuredOfferPreview.map((offer) => ({ ...offer,
+const { heading = "Today's top offers", description = 'Partner welcome offers and rewards · 18+ · T&Cs apply', expanded = false, offers = null } = Astro.props;
+// Live pages pass the active central offers; pilots keep the disabled preview.
+const live = Array.isArray(offers);
+const capture = live ? null : await capturedOfferPreview();
+const displayOffers = live ? offers : featuredOfferPreview.map((offer) => ({ ...offer,
   headline: capture?.offers[offer.id]?.headline ?? offer.headline,
   compactTerms: capture?.offers[offer.id]?.compactTerms ?? null,
 }));
@@ -17,32 +19,32 @@ const additionalOffers = expanded ? [] : displayOffers.slice(5);
       <h2 id="home-offers-heading">{heading}</h2>
       <p>{description}</p>
     </div>
-    <span class="home-ladder-badge">{expanded ? '7 previews' : 'Top 5'}</span>
+    <span class="home-ladder-badge">{expanded ? `${displayOffers.length} offers` : 'Top 5'}</span>
   </div>
   <ol class="home-ladder-list">
-    {primaryOffers.map((offer, index) => <li class="home-ladder-row" style={`--ladder-brand:${offer.brandColor}`}>
+    {primaryOffers.map((offer, index) => <li class="home-ladder-row" data-offer-id={live ? offer.offerId : undefined} style={`--ladder-brand:${offer.brandColor}`}>
       <span class="home-ladder-rank">{index + 1}</span>
       <span class:list={['home-ladder-logo', { 'logo-on-light': offer.logoOnLight }]}><img src={offer.logoUrl} alt={offer.bookmaker} loading={index < 2 ? 'eager' : 'lazy'} /></span>
       <div class="home-ladder-copy">
         <h3>{offer.headline}</h3>
         <p>{offer.compactTerms ?? '#Ad · 18+ · This is a visual preview. Approved short terms will be supplied by the central ACF offer record.'}</p>
       </div>
-      <span class="home-ladder-cta" aria-label="Offer link disabled in template preview">Offer preview</span>
+      {live ? <a class="home-ladder-cta" href={offer.ctaPath} rel="sponsored nofollow">{offer.ctaLabel}</a> : <span class="home-ladder-cta" aria-label="Offer link disabled in template preview">Offer preview</span>}
     </li>)}
   </ol>
   {!expanded && <details class="home-ladder-more">
-    <summary><span class="show-more">View all seven offers</span><span class="show-less">Show top five only</span></summary>
+    <summary><span class="show-more">View all {displayOffers.length} offers</span><span class="show-less">Show top five only</span></summary>
     <ol class="home-ladder-list" start="6">
-      {additionalOffers.map((offer, index) => <li class="home-ladder-row" style={`--ladder-brand:${offer.brandColor}`}>
+      {additionalOffers.map((offer, index) => <li class="home-ladder-row" data-offer-id={live ? offer.offerId : undefined} style={`--ladder-brand:${offer.brandColor}`}>
         <span class="home-ladder-rank">{index + 6}</span>
         <span class:list={['home-ladder-logo', { 'logo-on-light': offer.logoOnLight }]}><img src={offer.logoUrl} alt={offer.bookmaker} loading="lazy" /></span>
         <div class="home-ladder-copy">
           <h3>{offer.headline}</h3>
           <p>{offer.compactTerms ?? '#Ad · 18+ · This is a visual preview. Approved short terms will be supplied by the central ACF offer record.'}</p>
         </div>
-        <span class="home-ladder-cta" aria-label="Offer link disabled in template preview">Offer preview</span>
+        {live ? <a class="home-ladder-cta" href={offer.ctaPath} rel="sponsored nofollow">{offer.ctaLabel}</a> : <span class="home-ladder-cta" aria-label="Offer link disabled in template preview">Offer preview</span>}
       </li>)}
     </ol>
   </details>}
-  <p class="home-ladder-foot">Please gamble responsibly · 18+ · No affiliate links are active in this preview.{capture && ` ACF draft copy ${capture.sourceMode === 'fresh-staging-wpgraphql-preview' ? 'read from staging WPGraphQL' : 'captured'} ${capture.capturedAt.slice(0, 10)}; current eligibility and full terms still require verification.`}</p>
+  {live ? <p class="home-ladder-foot">Please gamble responsibly · 18+ · BeGambleAware.org</p> : <p class="home-ladder-foot">Please gamble responsibly · 18+ · No affiliate links are active in this preview.{capture && ` ACF draft copy ${capture.sourceMode === 'fresh-staging-wpgraphql-preview' ? 'read from staging WPGraphQL' : 'captured'} ${capture.capturedAt.slice(0, 10)}; current eligibility and full terms still require verification.`}</p>}
 </section>

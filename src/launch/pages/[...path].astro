@@ -1,50 +1,93 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import LaunchHome from '../../components/launch/LaunchHome.astro';
+import ColumnistProfile from '../../components/ColumnistProfile.astro';
 import { launchContent, robotsFor, endpoint } from '../../lib/launch-content.mjs';
+import { launchOfferLineup } from '../../lib/launch-offers.mjs';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
+import { columnistKeyForUri, legacyColumnistPortraitPaths } from '../../lib/columnist-profiles.mjs';
+import { articleCategory, columnistArchives, launchColumnists } from '../../lib/launch-templates.mjs';
 
 export async function getStaticPaths() {
   const records = await launchContent();
   const paths = records.map(record => record.uri);
   return records.map(record => ({
     params: { path: record.uri === '/' ? undefined : record.uri.replace(/^\//, '').replace(/\/$/, '') },
-    props: { record, paths },
+    props: { record, paths, records },
   }));
 }
-const { record, paths } = Astro.props;
+const { record, paths, records } = Astro.props;
+const offers = launchOfferLineup();
 const seo = {
   title: record.seo?.title || record.title,
   description: record.seo?.metaDesc || '',
   canonical: record.seo?.canonical || null,
   robots: robotsFor(record),
 };
+const isHome = record.uri === '/';
+const columnist = columnistKeyForUri(record.uri);
+const profile = columnist ? (await launchColumnists())[columnist] : null;
+const category = articleCategory(record);
+let body = record.content ? launchHtml(record.content, endpoint) : '';
+// Columnist posts carry an old portrait banner that the author box replaces.
+if (columnist) for (const path of legacyColumnistPortraitPaths[columnist]) {
+  body = body.replace(new RegExp(`<img[^>]*${path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^>]*>`, 'g'), '');
+}
+const published = record.date?.slice(0, 10);
+const modified = record.modified?.slice(0, 10);
+const formatDate = (value) => value ? new Date(`${value}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
 ---
-<BaseLayout title={record.title} publicPage={true} seo={seo} verifiedPublicPaths={paths}>
-  <article class="cms-content">
+{isHome ? <LaunchHome record={record} records={records} paths={paths} offers={offers} seo={seo} /> :
+<BaseLayout title={record.title} publicPage={true} seo={seo} verifiedPublicPaths={paths} sidebar={true} offers={offers}>
+  <article class="exact-preview launch-article">
+    {category ? <p class="kicker"><a href={category.href}>{category.label}</a></p> : null}
     <h1 set:html={record.title} />
-    {record.content && <div set:html={launchHtml(record.content, endpoint)} />}
+    {profile && <ColumnistProfile profile={profile} variant="byline" archiveHref={columnistArchives[columnist]} />}
+    {record.kind === 'posts' && published && <p class="exact-preview-meta">
+      {profile ? `By ${profile.name} · ` : ''}Published {formatDate(published)}{modified && modified !== published ? ` · Updated ${formatDate(modified)}` : ''}
+    </p>}
+    {body && <div class="exact-preview-body cms-content" set:html={body} />}
     {record.posts?.length > 0 && <>
       <ol class="archive-posts">
-        {record.posts.map(post => <li><a href={post.uri} set:html={post.title} /><time datetime={post.date}>{post.date.slice(0,10)}</time></li>)}
+        {record.posts.map(post => <li><a href={post.uri} set:html={post.title} /><time datetime={post.date}>{formatDate(post.date.slice(0, 10))}</time></li>)}
       </ol>
-      <nav aria-label="Archive pages">
-        {record.page > 1 && <a rel="prev" href={record.page === 2 ? record.archiveBase : `${record.archiveBase}/page/${record.page-1}`}>Previous</a>}
+      <nav class="archive-pager" aria-label="Archive pages">
+        {record.page > 1 && <a rel="prev" href={record.page === 2 ? record.archiveBase : `${record.archiveBase}/page/${record.page-1}`}>← Newer</a>}
         <span>Page {record.page} of {record.pageCount}</span>
-        {record.page < record.pageCount && <a rel="next" href={`${record.archiveBase}/page/${record.page+1}`}>Next</a>}
+        {record.page < record.pageCount && <a rel="next" href={`${record.archiveBase}/page/${record.page+1}`}>Older →</a>}
       </nav>
     </>}
+    {profile && <ColumnistProfile profile={profile} variant="full" archiveHref={columnistArchives[columnist]} />}
+    <p class="exact-preview-source">18+ · Please gamble responsibly · <a href="https://www.begambleaware.org/" rel="noopener">BeGambleAware.org</a></p>
   </article>
-</BaseLayout>
+</BaseLayout>}
 <style>
-  .cms-content{max-width:100%;line-height:1.7;overflow-wrap:anywhere}
+  .exact-preview{margin:auto;max-width:980px;padding:32px;background:#fff}
+  .exact-preview .kicker{margin:0 0 6px;font-weight:800;color:#a84c00}
+  .exact-preview .kicker a{color:inherit;text-decoration:none}
+  .exact-preview-meta,.exact-preview-source{color:#60717e;font-size:12px}
+  .exact-preview-body{line-height:1.7;overflow-wrap:anywhere}
+  .exact-preview-source{margin-top:35px;border-top:1px solid #dfe7ed;padding-top:12px}
+  :global(.page-shell.with-sidebar) .exact-preview{max-width:none;padding:0}
+  @media(max-width:600px){.exact-preview{padding:20px}}
+  .launch-article{min-width:0}
+  .cms-content{max-width:100%;line-height:1.72;overflow-wrap:anywhere;color:#263849}
+  .cms-content :global(h2){margin:30px 0 10px;font-size:25px;color:#183f60}
+  .cms-content :global(h3){margin:24px 0 8px;color:#183f60}
+  .cms-content :global(p){max-width:770px}
   .cms-content :global(img){max-width:100%;height:auto}
-  .cms-content :global(table){display:block;width:100%;min-width:0;max-width:100%;overflow-x:auto}
+  .cms-content :global(table){display:block;width:100%;min-width:0;max-width:100%;overflow-x:auto;border-collapse:collapse}
+  .cms-content :global(th),.cms-content :global(td){padding:7px 9px;border:1px solid #dce7ed}
   .cms-content :global(iframe){max-width:100%}
   .cms-content :global(figure){max-width:100%;margin:1rem 0}
-  .cms-content :global(.offer-slot){margin:1.5rem 0;padding:1.25rem;border:1px solid #d8e2dc;border-left:4px solid #176b3b;border-radius:.5rem;background:#f5faf7}
-  .cms-content :global(.offer-slot h2){margin:.25rem 0 .75rem}
-  .cms-content :global(.offer-bookmaker){font-weight:700;text-transform:capitalize;margin:0}
-  .cms-content :global(.offer-slot a){display:inline-block;padding:.6rem 1rem;background:#176b3b;color:#fff;border-radius:.25rem;font-weight:700}
-  .archive-posts{padding-left:1.5rem}.archive-posts li{padding:.75rem 0}.archive-posts time{display:block;font-size:.85rem;color:#555}
-  nav{display:flex;gap:1rem;flex-wrap:wrap;margin:2rem 0}
+  .cms-content :global(.offer-slot){margin:32px 0;padding:18px 20px;border:1px solid #d5e2ea;border-left:5px solid var(--et-orange);background:#fff}
+  .cms-content :global(.offer-slot h2){margin:.25rem 0 .6rem;font-size:21px}
+  .cms-content :global(.offer-slot p){font-size:13px}
+  .cms-content :global(.offer-bookmaker){font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#a74a04;margin:0}
+  .cms-content :global(.offer-slot a){display:inline-block;padding:10px 16px;border-radius:4px;background:var(--et-commercial);color:#fff;font-weight:900;text-decoration:none}
+  .archive-posts{list-style:none;padding:0;margin:24px 0}
+  .archive-posts li{padding:13px 0;border-top:1px solid #dce7ed}
+  .archive-posts a{font-weight:800;font-size:17px;text-decoration:none}
+  .archive-posts time{display:block;font-size:12px;color:#627585;margin-top:3px}
+  .archive-pager{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin:2rem 0;font-weight:700}
 </style>

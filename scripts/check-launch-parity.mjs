@@ -51,9 +51,16 @@ async function inspect(record) {
   const sourceOffers = elements(parseDocument(record.content || ''), 'aside').filter(node => node.attribs['data-offer-id']);
   const builtOffers = elements(doc, 'aside').filter(node => node.attribs['data-offer-id']);
   offerPlacements += builtOffers.length;
-  if (tierAIds.has(record.databaseId) && !builtOffers.length) failures.push({path:record.uri,field:'missing-tier-a-offers'});
+  if (tierAIds.has(record.databaseId) && !builtOffers.length && record.uri !== '/') failures.push({path:record.uri,field:'missing-tier-a-offers'});
   const offerSignature = nodes => nodes.map(node => ({id:node.attribs['data-offer-id'],text:text(node),ctas:elements(node,'a').map(a => ({path:new URL(a.attribs.href,'https://www.everytip.co.uk').pathname,rel:a.attribs.rel}))}));
-  if (JSON.stringify(offerSignature(sourceOffers)) !== JSON.stringify(offerSignature(builtOffers))) failures.push({path:record.uri,field:'central-offer-content'});
+  if (record.uri === '/') {
+    // The homepage shows its offers in the designed ladder rather than as inline slots.
+    const ladder = elements(doc, 'li').filter(node => node.attribs['data-offer-id']);
+    offerPlacements += ladder.length;
+    const key = nodes => nodes.map(node => `${node.attribs['data-offer-id']} ${elements(node,'a').map(a => new URL(a.attribs.href,'https://www.everytip.co.uk').pathname).join(',')}`).sort();
+    const sourceKeys = new Set(key(sourceOffers));
+    if (!ladder.length || key(ladder).some(entry => !sourceKeys.has(entry))) failures.push({path:record.uri,field:'central-offer-content'});
+  } else if (JSON.stringify(offerSignature(sourceOffers)) !== JSON.stringify(offerSignature(builtOffers))) failures.push({path:record.uri,field:'central-offer-content'});
   const sourceTables = elements(parseDocument(record.content || ''), 'table').filter(node => /ninja/i.test(JSON.stringify(node.attribs)));
   for (const table of sourceTables) {
     const built = elements(doc, 'table').find(node => node.attribs.id === table.attribs.id);

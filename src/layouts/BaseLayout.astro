@@ -20,8 +20,9 @@ interface Props {
   seo?: Seo | null;
   menuItems?: NavigationItem[] | null;
   verifiedPublicPaths?: string[];
+  offers?: unknown[] | null;
 }
-const { title, sidebar = false, withholdSidebarOffers = false, wide = false, relatedTopic = 'racing', robots = 'noindex,nofollow', previewMessage = 'Template preview only · sample content · no active offers or tips', publicPage = false, previewOnly = false, seo = null, menuItems = null, verifiedPublicPaths = [] } = Astro.props;
+const { title, sidebar = false, withholdSidebarOffers = false, wide = false, relatedTopic = 'racing', robots = 'noindex,nofollow', previewMessage = 'Template preview only · sample content · no active offers or tips', publicPage = false, previewOnly = false, seo = null, menuItems = null, verifiedPublicPaths = [], offers = null } = Astro.props;
 const resolvedTitle = seo?.title?.trim() ? seo.title : (publicPage ? title : `${title} | EveryTip template preview`);
 const resolvedRobots = resolvePreviewRobots({ previewOnly, publicPage, robots, seoRobots: seo?.robots });
 const publicItems = publicPage ? publicNavigation(menuItems ?? publicMenuFallback, verifiedPublicPaths) : [];
@@ -69,7 +70,7 @@ const publicPaths = new Set(verifiedPublicPaths);
     <div class:list={['wrap', 'page-shell', { 'with-sidebar': sidebar, 'wide-page': wide }]}>
       <main id="content"><slot /></main>
       {sidebar && <aside class="sidebar" aria-label="Related content">
-        {withholdSidebarOffers ? <section class="sidebar-card"><h2>Offers withheld</h2><p>Bookmaker headlines, terms and prices are not part of this dated article preview. Check current verified offers separately.</p><a href="/english-premier-league-predictions-for-saturday">John Newsome’s column →</a><a href="/free-betting-tips">Browse free tips →</a></section> : <FeaturedOffersSidebar />}
+        {withholdSidebarOffers ? <section class="sidebar-card"><h2>Offers withheld</h2><p>Bookmaker headlines, terms and prices are not part of this dated article preview. Check current verified offers separately.</p><a href="/english-premier-league-predictions-for-saturday">John Newsome’s column →</a><a href="/free-betting-tips">Browse free tips →</a></section> : <FeaturedOffersSidebar offers={offers} />}
         {!publicPage && (relatedTopic === 'football' ? <section class="sidebar-card">
           <h2>Football tips</h2>
           <p>Find John’s previews and more football predictions.</p>

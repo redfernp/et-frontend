@@ -1,0 +1,158 @@
+---
+// Live homepage: the approved pilot design fed by staging WordPress and the active ACF offers.
+import '../../styles/global.css';
+import '../../styles/design-refresh.css';
+import HomeOfferLadder from '../HomeOfferLadder.astro';
+import SiteFooter from '../SiteFooter.astro';
+import { publicMenuFallback, publicNavigation } from '../../lib/menu-tree';
+import { homeEditorialHtml, columnistCards } from '../../lib/launch-templates.mjs';
+
+const { record, records, paths, offers, seo } = Astro.props;
+const available = new Set(paths);
+const navigation = publicNavigation(publicMenuFallback, paths);
+const editorial = homeEditorialHtml(record);
+const cards = columnistCards(records);
+const linkIf = (entries) => entries.filter(([, href]) => available.has(href));
+
+const tipLinks = linkIf([
+  ['Football correct score tips', '/football-correct-score-tips.html'],
+  ['Dark Horse value tips', '/value-bet-tips-dark-horses.html'],
+  ['Channel 4 racing tips', '/channel-4-racing-tips-morning-line.html'],
+  ['Ireland horse racing tips', '/irish-horse-racing-tips.html'],
+  ['Templegate’s tips', '/templegates-tips.html'],
+  ['Lucky 15 tips for today', '/lucky-15-tips.html'],
+  ['Under/over 2.5 goals tips', '/over-2-5-goals-tips.html'],
+  ['1X2 betting tips', '/1x2-betting-tips.html'],
+  ['Greyhound tips', '/greyhound-tips.html'],
+  ['Cricket betting tips', '/cricket-betting-tips.html'],
+  ['Football accumulator tips', '/football-accumulator-tips.html'],
+  ['Kempton racing tips', '/racecourses/kempton-racing-tips'],
+]);
+const reviews = linkIf([
+  ['Betway review', '/betway-review'],
+  ['NetBet Sportsbook review', '/netbet-sportsbook-review'],
+  ['Bet365 review', '/bet365-review'],
+  ['QuinnBet review', '/quinnbet-review'],
+  ['Betfred review', '/betfred-review'],
+  ['10Bet review', '/10bet-review'],
+]);
+const guides = linkIf([
+  ['Best PayPal betting sites', '/best-paypal-betting-sites.html'],
+  ['Low or no minimum deposit betting sites', '/low-or-no-minimum-deposit-betting-sites.html'],
+  ['Bookmakers that accept Skrill', '/online-bookmakers-that-accept-skrill.html'],
+  ['Bookmakers that accept Neteller', '/online-bookmakers-that-accept-neteller.html'],
+  ['Best betting sites for basketball', '/best-betting-sites-for-basketball.html'],
+]);
+const quickLinks = [
+  ['Newsletter', '#newsletter'],
+  ['Free tipsters', '#free-tips'],
+  ['Guides', '#latest-guides'],
+  ['Free bets', '#offers'],
+];
+---
+<!doctype html>
+<html lang="en-GB" class="design-refresh">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content={seo.robots} />
+    {seo.description && <meta name="description" content={seo.description} />}
+    {seo.canonical && <link rel="canonical" href={seo.canonical} />}
+    <title>{seo.title}</title>
+    <script is:inline>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+      var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+      j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-TJ4SSH4');
+    </script>
+  </head>
+  <body class="home-preview">
+    <header class="home-header wrap cms-nav">
+      <a href="/" aria-label="EveryTip homepage"><img src="https://www.everytip.co.uk/wp-content/uploads/2017/07/EveryTip-300x80.png" alt="EveryTip" width="308" height="80" /></a>
+      <nav aria-label="Primary navigation">
+        {navigation.map((item) => item.children.length ? <details class="home-nav-group"><summary>{item.href ? <a href={item.href}>{item.label}</a> : item.label}</summary><div>{item.children.map((child) => child.href && <a href={child.href}>{child.label}</a>)}</div></details> : item.href && <a href={item.href}>{item.label}</a>)}
+      </nav>
+    </header>
+    <main class="home-main wrap">
+      <section class="home-hero" aria-labelledby="home-title">
+        <h1 id="home-title">All Your Favourite Free Betting Tips In One Place</h1>
+        <a class="home-enter" href="#free-tips">Explore free betting tips</a>
+      </section>
+
+      <div id="offers"><HomeOfferLadder offers={offers} /></div>
+
+      <nav class="home-quick-links" aria-label="Explore EveryTip">
+        {quickLinks.map(([label, href]) => <a href={href}>{label}</a>)}
+      </nav>
+
+      <section id="newsletter" class="home-newsletter" aria-labelledby="newsletter-title">
+        <p class="kicker">EveryTip newsletter</p>
+        <h2 id="newsletter-title">The best tips and offers in your inbox</h2>
+        <p>Horse racing, football and other free tips, plus timely offer news, straight to your inbox.</p>
+        {available.has('/free-betting-tips-previews-analysis-by-email') && <a class="home-newsletter-preview" href="/free-betting-tips-previews-analysis-by-email">Sign up for free tips</a>}
+      </section>
+
+      {cards.length > 0 && <section class="home-section" aria-labelledby="features-title">
+        <div class="home-section-heading"><h2 id="features-title">Columnist Articles</h2><span>Latest from John Newsome and Seymour Biz</span></div>
+        <div class="home-feature-grid">
+          {cards.map((article) => <article class="home-feature-card">
+            <span>{article.type}</span>
+            <h3>{article.title}</h3>
+            <p>{article.date}</p>
+            <a class="home-text-link" href={article.uri}>Read the column</a>
+          </article>)}
+        </div>
+      </section>}
+
+      {editorial && <section class="home-section home-intro" aria-labelledby="intro-title">
+        <h2 id="intro-title">Free Betting Tips Published Every Day On EveryTip</h2>
+        <div set:html={editorial} />
+      </section>}
+
+      <section id="free-tips" class="home-section" aria-labelledby="tips-title">
+        <div class="home-section-heading"><h2 id="tips-title">Browse Free Betting Tips</h2><span>Browse by sport and tipster</span></div>
+        <div class="home-tip-grid">
+          {tipLinks.map(([label, href]) => <a href={href}>{label}<span aria-hidden="true">→</span></a>)}
+        </div>
+        {available.has('/free-betting-tips') && <a class="home-section-button" href="/free-betting-tips">See all free betting tips</a>}
+      </section>
+
+      <div id="latest-guides" class="home-two-column">
+        <section class="home-list-panel" aria-labelledby="reviews-title">
+          <h2 id="reviews-title">Bookmaker Reviews</h2>
+          <ul>{reviews.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
+        </section>
+        <section class="home-list-panel" aria-labelledby="guides-title">
+          <h2 id="guides-title">Betting Guides</h2>
+          <ul>{guides.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
+        </section>
+      </div>
+
+      <section class="home-section home-recommended" aria-labelledby="recommended-title">
+        <div class="home-section-heading"><h2 id="recommended-title">Recommended Bookmakers</h2><span>18+ · T&Cs apply</span></div>
+        <div class="home-recommended-grid">
+          {offers.slice(0, 3).map((offer) => <article style={`--recommend-brand:${offer.brandColor}`}>
+            <div class="home-recommended-logo"><img src={offer.logoUrl} alt={offer.bookmaker} loading="lazy" /></div>
+            <h3>{offer.headline}</h3>
+            <p>{offer.compactTerms}</p>
+            <a href={offer.ctaPath} rel="sponsored nofollow">{offer.ctaLabel}</a>
+          </article>)}
+        </div>
+      </section>
+    </main>
+    <SiteFooter preview={false} verifiedPublicPaths={paths} />
+  </body>
+</html>
+<style>
+  .home-header.cms-nav{display:grid;justify-items:center;gap:8px;min-height:0;padding:12px 0 10px}
+  .home-header.cms-nav nav{position:static;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 18px;max-width:100%;font-size:12px}
+  .home-nav-group{position:relative}
+  .home-nav-group summary{cursor:pointer;list-style:none;color:#1d5684;font-weight:750}
+  .home-nav-group summary::-webkit-details-marker{display:none}
+  .home-nav-group>div{position:absolute;z-index:15;left:0;top:100%;min-width:200px;display:grid;gap:7px;padding:10px;background:#fff;box-shadow:0 8px 24px #173b5a30}
+  .home-nav-group:not([open])>div{display:none}
+  .home-nav-group a{white-space:nowrap}
+  .home-list-panel ul a{color:inherit}
+  .home-recommended-grid a{display:inline-block;margin-top:8px;padding:9px 14px;border-radius:4px;background:var(--et-commercial);color:#fff;font-weight:800;text-decoration:none}
+  @media(max-width:600px){.home-nav-group>div{left:auto;right:0;max-width:min(80vw,300px)}.home-nav-group a{white-space:normal}}
+</style>
