@@ -46,6 +46,7 @@ export function articleCategory(record) {
   const columnist = columnistKeyForUri(record.uri);
   if (columnist === 'john') return { label: 'John Newsome · Football', href: columnistArchives.john };
   if (columnist === 'seymour') return { label: 'Seymour Biz · Horse racing', href: columnistArchives.seymour };
+  if (isGuide(record)) return { label: 'Betting guides', href: '/betting-guides' };
   if (record.kind === 'posts') return { label: 'Free betting tips', href: '/free-betting-tips' };
   return null;
 }
@@ -71,4 +72,29 @@ export function contentBeforeHeading(html, heading) {
   const matches = [...(html ?? '').matchAll(/<h2[^>]*>([\s\S]*?)<\/h2>/g)];
   const match = matches.find((m) => heading.test(plain(m[1])));
   return match ? html.slice(0, match.index) : html;
+}
+
+// Roundups and how-to guides use the approved roundup guide header.
+export function isGuide(record) {
+  return record.kind === 'posts' && /^\/(best-(?!backed-horses)|online-bookmakers-|low-or-no-|how-to-|bookmakers-|which-bookies-)/.test(record.uri);
+}
+
+// Give each <h2> an id and return a short table of contents.
+export function withHeadingIds(html, limit = 7) {
+  const toc = [];
+  const used = new Set();
+  const out = (html ?? '').replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/g, (whole, attrs, inner) => {
+    const label = plain(inner);
+    if (!label) return whole;
+    let id = (attrs.match(/\sid="([^"]+)"/) ?? [])[1];
+    if (!id) {
+      const base = label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60) || 'section';
+      id = base; for (let n = 2; used.has(id); n++) id = `${base}-${n}`;
+      attrs = `${attrs} id="${id}"`;
+    }
+    used.add(id);
+    if (toc.length < limit) toc.push({ href: `#${id}`, label });
+    return `<h2${attrs}>${inner}</h2>`;
+  });
+  return { html: out, toc };
 }

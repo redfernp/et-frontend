@@ -9,7 +9,7 @@ import { launchContent, robotsFor, endpoint } from '../../lib/launch-content.mjs
 import { launchOfferLineup } from '../../lib/launch-offers.mjs';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
 import { columnistKeyForUri, legacyColumnistPortraitPaths } from '../../lib/columnist-profiles.mjs';
-import { articleCategory, columnistArchives, launchColumnists } from '../../lib/launch-templates.mjs';
+import { articleCategory, columnistArchives, launchColumnists, isGuide, withHeadingIds } from '../../lib/launch-templates.mjs';
 
 export async function getStaticPaths() {
   const records = await launchContent();
@@ -36,6 +36,10 @@ let body = record.content ? launchHtml(record.content, endpoint) : '';
 if (columnist) for (const path of legacyColumnistPortraitPaths[columnist]) {
   body = body.replace(new RegExp(`<img[^>]*${path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^>]*>`, 'g'), '');
 }
+const guide = isGuide(record) ? withHeadingIds(body) : null;
+if (guide) body = guide.html;
+// Tip-table pages need the full width for their seven columns.
+const hasTipTable = /ninja_table|ninja-table|footable/i.test(record.content ?? '');
 const published = record.date?.slice(0, 10);
 const modified = record.modified?.slice(0, 10);
 const formatDate = (value) => value ? new Date(`${value}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
@@ -44,7 +48,23 @@ const formatDate = (value) => value ? new Date(`${value}T12:00:00Z`).toLocaleDat
  record.uri === '/bookie-free-bets-bonus-offers' ? <LaunchFreeBets record={record} paths={paths} offers={offers} seo={seo} /> :
  record.uri === '/bet365-review' ? <LaunchBet365Review record={record} paths={paths} offers={offers} seo={seo} /> :
  record.uri === '/free-betting-tips' ? <LaunchFreeTips record={record} records={records} paths={paths} offers={offers} seo={seo} /> :
-<BaseLayout title={record.title} publicPage={true} seo={seo} verifiedPublicPaths={paths} sidebar={true} offers={offers}>
+guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo} verifiedPublicPaths={paths} offers={offers}>
+  <article class="paypal-guide integrated-roundup">
+    <nav class="paypal-breadcrumb" aria-label="Breadcrumb"><a href="/">EveryTip</a><span aria-hidden="true">›</span>{paths.includes('/betting-guides') ? <a href="/betting-guides">Betting guides</a> : <span>Betting guides</span>}</nav>
+    <header class="paypal-hero">
+      <div class="paypal-hero-copy">
+        <p class="kicker">Betting guide</p>
+        <h1 set:html={record.title} />
+        {seo.description && <p class="paypal-deck">{seo.description}</p>}
+        <p class="paypal-byline">By the EveryTip team · Updated {formatDate(modified || published)}</p>
+      </div>
+    </header>
+    <div class="paypal-disclosure"><strong>#Ad · How this guide earns money</strong><p>EveryTip may receive a commission if you sign up through a bookmaker link in this guide. 18+ · T&amp;Cs apply · Please gamble responsibly.</p></div>
+    {guide.toc.length > 1 && <nav class="paypal-toc" aria-label="On this guide"><strong>On this page</strong>{guide.toc.map((item) => <a href={item.href}>{item.label}</a>)}</nav>}
+    <div class="exact-preview-body cms-content guide-body" set:html={body} />
+  </article>
+</BaseLayout> :
+<BaseLayout title={record.title} publicPage={true} seo={seo} verifiedPublicPaths={paths} sidebar={!hasTipTable} wide={hasTipTable} offers={offers}>
   <article class="exact-preview launch-article">
     {category ? <p class="kicker"><a href={category.href}>{category.label}</a></p> : null}
     <h1 set:html={record.title} />
@@ -77,6 +97,13 @@ const formatDate = (value) => value ? new Date(`${value}T12:00:00Z`).toLocaleDat
   :global(.page-shell.with-sidebar) .exact-preview{max-width:none;padding:0}
   @media(max-width:600px){.exact-preview{padding:20px}}
   .launch-article{min-width:0}
+  .cms-content :global(table th){background:#1d5f94;color:#fff;text-align:left}
+  .cms-content :global(table tr:nth-child(even) td){background:#f3f8fb}
+  .cms-content :global(table td:first-child),.cms-content :global(table th:first-child){white-space:nowrap}
+  @media(max-width:620px){
+    .cms-content :global(table:has(th:nth-child(7)) :is(th,td):is(:nth-child(4),:nth-child(5),:nth-child(6))){display:none}
+  }
+  .guide-body{max-width:none;margin-top:28px}
   .cms-content{max-width:100%;line-height:1.72;overflow-wrap:anywhere;color:#263849}
   .cms-content :global(h2){margin:30px 0 10px;font-size:25px;color:#183f60}
   .cms-content :global(h3){margin:24px 0 8px;color:#183f60}
