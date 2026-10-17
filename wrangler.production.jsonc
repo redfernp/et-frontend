@@ -1,0 +1,21 @@
+{
+  "name": "et-frontend",
+  "main": "src/worker/production.mjs",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "html_handling": "none",
+    "run_worker_first": true
+  },
+  "account_id": "5aa99b5280868c09bf3092fff6d06125",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [],
+  "vars": {
+    "WORDPRESS_ORIGIN": "https://origin.everytip.co.uk",
+    "WORDPRESS_CANONICAL_ORIGIN": "https://www.everytip.co.uk",
+    "ORIGIN_PRESERVE_HOST": "true",
+    "PREVIEW_NOINDEX": "false"
+  }
+}

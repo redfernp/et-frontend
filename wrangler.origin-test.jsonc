@@ -1,0 +1,22 @@
+{
+  "name": "et-frontend-origin-test",
+  "main": "src/worker/production.mjs",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./preview-dist",
+    "binding": "ASSETS",
+    "html_handling": "none",
+    "run_worker_first": true
+  },
+  "account_id": "5aa99b5280868c09bf3092fff6d06125",
+  "workers_dev": true,
+  "preview_urls": true,
+  "routes": [],
+  "vars": {
+    "WORDPRESS_ORIGIN": "https://wordpress-159231-2098144.cloudwaysapps.com",
+    "WORDPRESS_CANONICAL_ORIGIN": "https://wordpress-159231-2098144.cloudwaysapps.com",
+    "ORIGIN_PRESERVE_HOST": "false",
+    "PREVIEW_NOINDEX": "true"
+  },
+  "previews": {}
+}

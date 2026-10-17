@@ -4,7 +4,7 @@ on:
   repository_dispatch:
     types: [everytip-content-saved]
   schedule:
-    - cron: '17,47 * * * *'
+    - cron: '17 * * * *'
 permissions:
   contents: read
 concurrency:
