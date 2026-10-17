@@ -18,6 +18,8 @@ import { rebuildRankedCards } from '../src/lib/ranked-cards.mjs';
 import offerFile from '../src/data/offers.json' with { type: 'json' };
 
 const apply = process.argv.includes('--apply');
+// --from-live: use the live page's main content (pages whose real content lived only in Thrive).
+const fromLive = process.argv.includes('--from-live');
 const uris = process.argv.slice(2).filter((arg) => !arg.startsWith('--'));
 const base = process.env.EVERYTIP_WP_BASE_URL;
 if (!/cloudwaysapps\.com$/.test(new URL(base).hostname)) throw new Error('Refusing to write anywhere but staging');
@@ -56,6 +58,15 @@ const heading = (level, inner) => block('heading', `<h${level} class="wp-block-h
 const offerSlot = (offer, reason) => `<!-- wp:acf/everytip-offer-slot ${escapeJson({ name: 'acf/everytip-offer-slot', data: {
   et_slot_offer: offer.id, _et_slot_offer: 'field_et_slot_offer_v1', et_slot_layout: 'inline', _et_slot_layout: 'field_et_slot_layout_v1',
   ...(reason ? { et_slot_heading: reason.slice(0, 100), _et_slot_heading: 'field_et_slot_heading_v1' } : {}) }, mode: 'preview' })} /-->`;
+
+// A YouTube video (iframe, or Thrive/Beaver wrappers carrying data-url / data-src) as an embed block.
+const youtubeId = (value = '') => (value.match(/(?:youtube(?:-nocookie)?\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([\w-]{11})/) ?? [])[1];
+const videoOf = (node) => node.type === 'tag' && [node, ...tags(node, 'iframe'), ...tags(node, 'div')].map((item) => youtubeId(item.attribs?.src || item.attribs?.['data-src'] || item.attribs?.['data-url'] || '')).find(Boolean);
+const embedBlock = (id) => `<!-- wp:embed {"url":"https://www.youtube.com/watch?v=${id}","type":"video","providerNameSlug":"youtube","responsive":true,"className":"wp-embed-aspect-16-9 wp-has-aspect-ratio"} -->
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+https://www.youtube.com/watch?v=${id}
+</div></figure>
+<!-- /wp:embed -->`;
 
 // Keep only safe inline markup; drop ex-partner affiliate links (text stays), and
 // any linked image that points at an ex-partner.
@@ -197,6 +208,7 @@ export function toBlocks(renderedHtml, rawContent = '', uri = '') {
     if (node.type === 'text') { const value = clean(node.data); if (value && !exPartnerCta(value) && !/^(GambleAware\s*\|?\s*18\+)$/i.test(value)) out.push(paragraph(value)); continue; }
     if (node.type !== 'tag') continue;
     if (/\brank-card\b/.test(node.attribs.class ?? '')) { out.push(...cardBlocks(node, mentions)); continue; }
+    { const video = videoOf(node); if (video && clean(text(node)).length < 40) { out.push(embedBlock(video)); continue; } }
     flushMentions();
     const value = clean(text(node));
     if (/^h[1-6]$/.test(node.name)) { if (value) out.push(heading(Math.max(2, Number(node.name[1])), inline(node))); continue; }
@@ -244,10 +256,20 @@ if (import.meta.url === `file://${process.argv[1].replaceAll('\\', '/')}` || pro
     if (!record) { console.log(`SKIP ${uri}: not in the latest staging build`); continue; }
     const type = record.kind === 'posts' ? 'posts' : 'pages';
     const current = await rest(`${type}/${record.databaseId}?context=edit&_fields=id,slug,status,modified,content,title,link`);
-    const blocks = toBlocks(record.content, current.content.raw, uri);
+    let sourceHtml = record.content;
+    if (fromLive) {
+      const { DomUtils } = await import('htmlparser2');
+      const live = parseDocument(await (await fetch(`https://www.everytip.co.uk${uri}`, { headers: { 'user-agent': 'Mozilla/5.0' } })).text(), { decodeEntities: true });
+      const main = DomUtils.findOne((n) => n.attribs && (n.attribs.id === 'tve_editor' || /\bentry-content\b/.test(n.attribs.class ?? '')), live.children, true);
+      if (!main) { console.log(`SKIP ${uri}: no main content on live`); continue; }
+      // Drop scripts, styles and inline graphics before conversion.
+      DomUtils.findAll((n) => ['script', 'style', 'noscript', 'svg'].includes(n.name), [main]).forEach((n) => DomUtils.removeElement(n));
+      sourceHtml = render(main.children);
+    }
+    const blocks = toBlocks(sourceHtml, current.content.raw, uri);
     // Text retained: words in the new blocks versus the page as rendered today.
     const words = (html) => html.replace(/<!--[^]*?-->/g, ' ').replace(/<[^>]+>/g, ' ').split(/[^A-Za-z0-9£]+/).filter((word) => word.length > 2).length;
-    const retained = Math.round(100 * words(blocks) / Math.max(1, words(launchHtml(record.content, endpoint))));
+    const retained = Math.round(100 * words(blocks) / Math.max(1, words(launchHtml(sourceHtml, endpoint))));
     const stamp = new Date().toISOString().slice(0, 10);
     const file = `outputs/staging-writes/block-conversion/${record.databaseId}`;
     // Keep the first backup ever taken for a page; later runs must not replace the original.

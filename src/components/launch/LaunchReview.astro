@@ -1,80 +1,146 @@
 ---
-// Live bookmaker review in the approved Bet365 review design, built from the page's headings.
+// Bookmaker review in the style of the live Bet365 review: claim bar, brand header with the
+// offer, ratings at a glance, numbered scored sections with key points, offer bands and the
+// verdict. Built from the page's own headings, scores and lists in WordPress.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ReviewMobileSticky from '../ReviewMobileSticky.astro';
 import { splitReview, reviewOwnOffer } from '../../lib/review-sections.mjs';
+import { sectionDetails, overallRating, stars } from '../../lib/review-details.mjs';
 import { plainTitle } from '../../lib/launch-templates.mjs';
 import { exPartnerFor } from '../../lib/ranked-cards.mjs';
 
 const { record, body, paths, offers, seo, bookmaker } = Astro.props;
 const review = splitReview(body);
-// The bookmaker's offer from the offers file, otherwise the review's own #Ad copy.
 const fileOffer = offers.find((offer) => offer.id === bookmaker.partner);
 const own = reviewOwnOffer(body, bookmaker.name);
-// Former partners keep their review but get no offer card, claim section or sticky bar.
+// Former partners keep their review but get no offer, claim bar, bands or sticky bar.
 const exPartner = exPartnerFor(bookmaker.name);
-const offer = exPartner ? null : fileOffer ? { headline: fileOffer.headline, terms: fileOffer.compactTerms, link: fileOffer.ctaPath, label: fileOffer.ctaLabel, logo: fileOffer.logoUrl, color: fileOffer.brandColor }
+const offer = exPartner ? null : fileOffer
+  ? { headline: fileOffer.headline, terms: fileOffer.compactTerms, link: fileOffer.ctaPath, label: fileOffer.ctaLabel, logo: fileOffer.logoUrl, color: fileOffer.brandColor }
   : own.link ? { headline: own.headline ? own.headline.charAt(0).toUpperCase() + own.headline.slice(1) : `Join ${bookmaker.name}`, terms: own.terms, link: own.link, label: 'Claim offer', logo: null, color: '#1d5b32' } : null;
-const byline = /seymour biz/i.test(plainTitle(review.introHtml).slice(0, 600)) || /seymour/i.test(review.headline ?? '')
+const brand = offer?.color ?? fileOffer?.brandColor ?? '#17476c';
+const byline = /seymour/i.test(plainTitle(review.introHtml).slice(0, 800))
   ? { name: 'Seymour Biz', role: 'EveryTip horse racing columnist', image: 'https://www.everytip.co.uk/wp-content/uploads/2025/06/Seymour-Biz-Horse-Racing-Feature-Writer-100x100.png' }
   : { name: 'the EveryTip team', role: 'Independent bookmaker review', image: 'https://www.everytip.co.uk/wp-content/uploads/2025/06/cropped-ET.jpg' };
-const title = `${bookmaker.name} Review ${new Date(record.modified).getUTCFullYear()}`;
+
+// Our own ratings table replaces the old "jump to section" list; reviewer-name headings fold away.
+const skip = /^(.+ )?(review )?ratings|ratings at a glance|^seymour biz$/i;
+const sections = review.sections.filter((section) => !skip.test(section.title))
+  .map((section, index) => ({ ...section, ...sectionDetails(section.html), title: section.title.replace(/^\d+\.\s*/, '').replace(/[-–]\s*$/, '').trim(), anchor: `review-area-${index + 1}` }));
+const scored = sections.filter((section) => section.score !== null);
+const overall = overallRating(review.introHtml) ?? (scored.length ? Math.round(10 * scored.reduce((sum, s) => sum + s.score, 0) / scored.length) / 10 : null);
+const verdictLabel = overall >= 4.5 ? 'Highly Recommended' : overall >= 4 ? 'Recommended' : overall ? 'Worth a look' : '';
+const year = new Date(record.modified).getUTCFullYear();
+const title = `${bookmaker.name} Review ${year}`;
 const updated = new Date(record.modified).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
-const jump = [
-  ...(review.pros || review.cons ? [{ href: '#review-pros-cons', label: 'Pros & cons' }] : []),
-  ...(review.sections.length ? [{ href: '#review-assessment', label: 'Full assessment' }] : []),
-  ...(review.verdict ? [{ href: '#review-verdict', label: 'Final verdict' }] : []),
-];
+// An offer band after every third section, as on the live Bet365 review.
+const bandAfter = (index) => offer && (index + 1) % 3 === 0 && index < sections.length - 1;
 ---
 <BaseLayout title={title} publicPage={true} wide={true} seo={seo} verifiedPublicPaths={paths} offers={offers}>
-  <article class="review cms-content" style={`--review-green:${offer?.color ?? '#1d5b32'};--review-green-dark:#144324`}>
-    <header class="hero">
-      <div>
-        <p class="eyebrow">Independent bookmaker review</p>
+  <article class="bk-review cms-content" style={`--brand:${brand}`}>
+    {offer && <div class="claim-bar"><strong>🏆 New to {bookmaker.name}?</strong><a class="bk-btn bk-btn-light" href={offer.link} rel="sponsored nofollow">{offer.label} →</a></div>}
+
+    <header class="bk-hero">
+      <div class="bk-hero-copy">
+        <p class="bk-eyebrow">Independent bookmaker review</p>
         <h1>{title}</h1>
-        {seo.description && <p class="deck">{seo.description}</p>}
-        <div class="author"><img src={byline.image} alt="" width="80" height="80" /><div><strong>Reviewed by {byline.name}</strong><span>{byline.role}</span></div></div>
-        <p class="dated">Last updated {updated}.</p>
+        <p class="bk-deck">Independent review by {byline.name}{byline.name === 'Seymour Biz' ? ', horse racing columnist' : ''}. Last updated {updated}.</p>
+        {overall && <p class="bk-rating"><span class="bk-stars" aria-hidden="true">{stars(overall)}</span><strong>Rated {overall} / 5</strong>{verdictLabel && <span> · {verdictLabel}</span>}</p>}
+        {offer && <a class="bk-offer-btn" href={offer.link} rel="sponsored nofollow"><strong>{offer.headline} →</strong><span>For new UK customers at {bookmaker.name} only</span></a>}
+        {offer?.terms && <p class="bk-terms">{offer.terms}</p>}
       </div>
-      {offer && <aside class="offer" id="review-offer" aria-label={`${bookmaker.name} welcome offer`}>
-        {offer.logo ? <div class="offer-logo" style={`background:${offer.color}`}><img src={offer.logo} alt={bookmaker.name} width="150" height="40" /></div> : <p class="offer-name">{bookmaker.name}</p>}
-        <p class="offer-label">New customer offer · #Ad</p>
-        <h2>{offer.headline}</h2>
-        {offer.terms && <p class="offer-terms">{offer.terms}</p>}
-        <a class="disabled-cta live-cta" href={offer.link} rel="sponsored nofollow">{offer.label}</a>
-      </aside>}
+      {offer?.logo && <div class="bk-hero-logo"><img src={offer.logo} alt={bookmaker.name} width="220" height="60" /></div>}
     </header>
 
-    {jump.length > 0 && <nav class="jump" aria-label="In this review"><strong>In this review</strong>{jump.map((item) => <a href={item.href}>{item.label}</a>)}</nav>}
-    {review.introHtml && <section class="method" id="review-intro"><div class="editorial" set:html={review.introHtml} /></section>}
-    {(review.pros || review.cons) && <section class="pros-cons" id="review-pros-cons">
-      {review.pros && <div><p class="eyebrow">From our review</p><h2>{review.pros.title}</h2><div class="editorial" set:html={review.pros.html} /></div>}
-      {review.cons && <div><p class="eyebrow">What to weigh up</p><h2>{review.cons.title}</h2><div class="editorial" set:html={review.cons.html} /></div>}
+    <div class="bk-reviewer"><img src={byline.image} alt="" width="64" height="64" /><div><strong>Reviewed by {byline.name}</strong><span>{byline.role}</span></div></div>
+
+    {review.introHtml && <section class="bk-intro" set:html={review.introHtml} />}
+
+    {scored.length > 1 && <section class="bk-glance" aria-labelledby="glance-title">
+      <div class="bk-bar"><h2 id="glance-title">Our {bookmaker.name} Ratings at a Glance</h2>{overall && <span class="bk-score">Overall: {overall} / 5</span>}</div>
+      <ol>{scored.map((section) => <li><a href={`#${section.anchor}`}>{section.title}</a><span class="bk-row-score">{section.score} / 5 <span class="bk-stars" aria-hidden="true">{stars(section.score)}</span></span></li>)}</ol>
     </section>}
-    {review.sections.length > 0 && <section class="assessment" id="review-assessment"><div class="section-intro"><p class="eyebrow">The full editorial assessment</p><h2>Our {bookmaker.name} review in detail</h2></div>
-      {review.sections.map((section, index) => <section class="review-section"><div class="section-heading"><span>{String(index + 1).padStart(2, '0')}</span><h3>{section.title.replace(/^\d+\.\s*/, '')}</h3></div><div class="editorial" set:html={section.html} /></section>)}
-    </section>}
-    {review.verdict && <section class="verdict" id="review-verdict"><p class="eyebrow">Final verdict</p><h2>{review.verdict.title}</h2><div class="editorial" set:html={review.verdict.html} /></section>}
-    {!exPartner && review.claimHtml && <section class="other-offers" set:html={review.claimHtml} />}
-    {review.otherOffersHtml && <section class="other-offers" set:html={review.otherOffersHtml} />}
-    <footer class="disclosure"><p><strong>Affiliate disclosure.</strong> EveryTip may earn a commission from bookmaker links.</p><p><strong>Safer gambling.</strong> 18+ only. Please gamble responsibly. <a href="/safer-gambling">Find support and safer-gambling information</a>.</p></footer>
+
+    {offer && <aside class="bk-band"><div><strong>{offer.headline}</strong><span>New UK customers only · 18+ · T&amp;Cs apply</span></div><a class="bk-btn bk-btn-light" href={offer.link} rel="sponsored nofollow">{offer.label} →</a></aside>}
+
+    {review.pros || review.cons ? <section class="bk-pros-cons">
+      {review.pros && <div class="pros"><h2>{review.pros.title}</h2><div set:html={review.pros.html} /></div>}
+      {review.cons && <div class="cons"><h2>{review.cons.title}</h2><div set:html={review.cons.html} /></div>}
+    </section> : null}
+
+    {sections.map((section, index) => <>
+      <section class="bk-section" id={section.anchor}>
+        <div class="bk-bar"><h2>{index + 1}. {section.title}</h2>{section.score !== null && <span class="bk-score">{section.score} / 5</span>}</div>
+        <div class="bk-section-body">
+          {section.question && <p class="bk-question">{section.question}</p>}
+          {section.points?.length > 0 && <div class="bk-points"><p class="bk-points-title">Key points</p><ul>{section.points.map((point) => <li>{point}</li>)}</ul></div>}
+          <div class="bk-prose" set:html={section.html} />
+        </div>
+      </section>
+      {bandAfter(index) && <aside class="bk-band"><div><strong>{offer.headline}</strong><span>Offer available to new UK customers · Sign up takes 2 minutes</span></div><a class="bk-btn bk-btn-light" href={offer.link} rel="sponsored nofollow">{offer.label} →</a></aside>}
+    </>)}
+
+    {review.verdict && <section class="bk-verdict"><p class="bk-eyebrow">{byline.name === 'Seymour Biz' ? 'Seymour Biz’s' : 'Our'} final verdict</p><h2>{review.verdict.title}</h2>{overall && <p class="bk-rating"><span class="bk-stars" aria-hidden="true">{stars(overall)}</span><strong>{overall} / 5</strong></p>}<div set:html={review.verdict.html} /></section>}
+    {offer && <aside class="bk-band bk-band-final"><div><strong>Ready to claim your {offer.headline.replace(/^bet\s*£\d+,?\s*(get|&)\s*/i, '')}?</strong>{offer.terms && <span class="bk-band-terms">{offer.terms}</span>}</div><a class="bk-btn bk-btn-light" href={offer.link} rel="sponsored nofollow">{offer.label} →</a></aside>}
+    {review.otherOffersHtml && <section class="bk-other" set:html={review.otherOffersHtml} />}
   </article>
   {offer && <ReviewMobileSticky bookmaker={bookmaker.name} offerHref={offer.link} ctaLabel={offer.label} />}
 </BaseLayout>
 <style>
-  .review{color:#173b58}.review :global(p){line-height:1.7}.hero{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(270px,.68fr);gap:32px;align-items:start;margin:24px 0 30px}.eyebrow{text-transform:uppercase;letter-spacing:.12em;color:#b74700;font-weight:800;font-size:.78rem;margin:0 0 10px}.hero h1{font-size:clamp(2.4rem,5vw,4.3rem);line-height:1.04;margin:0 0 20px}.deck{font-size:1.18rem;max-width:62ch}.author{display:flex;align-items:center;gap:14px;background:#eef5f8;padding:12px 16px;border-left:4px solid #f36b00;border-radius:8px;max-width:540px}.author img{width:62px;height:62px;object-fit:cover;border-radius:8px}.author strong,.author span{display:block}.author span{font-size:.84rem;color:#42627a}.dated{font-size:.86rem;color:#52697b}.offer{background:#fff;border:1px solid #c8d8e1;border-top:6px solid var(--review-green);border-radius:10px;padding:24px;box-shadow:0 10px 30px #153e5e0e}.offer img{display:block;margin:auto}.offer-label{color:var(--review-green);font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin-top:20px}.offer h2{margin:0;font-size:1.6rem}.disabled-cta{display:block;text-align:center;background:#d9e0e5;color:#405868;padding:14px;border-radius:6px;font-weight:800;margin-top:20px}.jump{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;padding:17px 22px;background:#eaf2f7;border-radius:8px;margin:24px 0 34px}.jump a{color:#144e7b;font-weight:700}.method,.welcome,.verdict{border-radius:10px;padding:clamp(24px,4vw,42px);margin:26px 0}.method{background:#eff6f8;border-left:5px solid #f36b00}.welcome{background:#fff6eb;border-left:5px solid #f36b00}.verdict{background:#eef5f0;border-left:5px solid var(--review-green)}.method h2,.welcome h2,.verdict h2,.section-intro h2{margin:0 0 14px;font-size:clamp(1.6rem,3vw,2.3rem)}.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:18px}.pros-cons>div{padding:25px;background:#f3f7f9;border:1px solid #ccdde6;border-radius:8px}.pros-cons>div:first-child{border-top:4px solid var(--review-green)}.pros-cons>div:last-child{border-top:4px solid #f36b00}.pros-cons h2{margin:0 0 10px;font-size:1.35rem}.pros-cons :global(ul){margin:0;padding-left:20px}.pros-cons :global(li){margin:0 0 10px;line-height:1.5}.section-intro{margin:45px 0 22px}.review-section{padding:26px 0;border-top:1px solid #cfdee7}.section-heading{display:flex;align-items:flex-start;gap:18px}.section-heading span{background:#174c76;color:#fff;font-weight:800;border-radius:50%;min-width:42px;height:42px;display:grid;place-items:center}.section-heading h3{font-size:1.45rem;margin:5px 0 15px}.editorial{max-width:78ch}.editorial :global(p){margin:0 0 16px}.editorial :global(p:last-child){margin-bottom:0}.disclosure{border-top:1px solid #c6d7e1;padding:20px 0 34px;font-size:.9rem}.disclosure a{color:#144e7b}@media(max-width:760px){.hero,.pros-cons{grid-template-columns:1fr;gap:20px}.offer{padding:20px}.jump{display:grid;gap:8px}.review-section{padding:22px 0}.section-heading{gap:10px}.section-heading h3{font-size:1.2rem}}
-  .live-cta{cursor:pointer;text-decoration:none;background:var(--et-commercial);color:#fff}
-  .other-offers{margin:36px 0}
-  .cms-content :global(.offer-slot){margin:18px 0;padding:18px 20px;border:1px solid #d5e2ea;border-left:5px solid var(--et-orange);background:#fff}
-  .cms-content :global(.offer-slot h2){margin:.25rem 0 .6rem;font-size:21px}
-  .cms-content :global(.offer-slot p){font-size:13px}
-  .cms-content :global(.offer-bookmaker){font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#a74a04;margin:0}
-  .cms-content :global(.offer-slot a){display:inline-block;padding:10px 16px;border-radius:4px;background:var(--et-commercial);color:#fff;font-weight:900;text-decoration:none}
-  .offer-logo{display:grid;place-items:center;min-height:64px;border-radius:6px;padding:10px}
-  .offer-logo img{max-height:48px;width:auto;margin:0}
-  .offer-name{font-size:1.4rem;font-weight:900;text-align:center;margin:0}
-  .offer-terms{font-size:.8rem;line-height:1.5;color:#52697b}
-  .editorial :global(img){max-width:100%;height:auto}
-  .editorial :global(table){display:table;width:100%}
-  .review-section .editorial :global(h3){font-size:1.15rem;margin:18px 0 8px}
+  .bk-review{--blue:#1565c0;--orange:#e65100;color:#1f3445;max-width:1100px;margin:auto}
+  .bk-review :global(p){line-height:1.7}
+  .bk-review a.bk-btn,.bk-review a.bk-offer-btn{text-decoration:none !important;color:inherit}
+  .claim-bar{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;padding:18px 20px;background:var(--orange);color:#fff;font-size:20px;border-radius:6px}
+  .bk-btn{display:inline-block;padding:11px 20px;border-radius:5px;font-weight:900;font-size:16px;white-space:nowrap}
+  .bk-review a.bk-btn-light{background:#fff;color:var(--orange) !important}
+  .bk-hero{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:28px;align-items:center;margin:20px 0 0;padding:clamp(22px,4vw,40px);background:var(--brand);color:#fff;border-radius:8px}
+  .bk-eyebrow{margin:0 0 6px;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+  .bk-hero h1{margin:0 0 10px;font-size:clamp(32px,4.5vw,52px);line-height:1.05;color:#fff}
+  .bk-deck{margin:0 0 12px;font-size:17px;opacity:.95}
+  .bk-rating{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 16px}
+  .bk-stars{color:#ffc107;letter-spacing:2px;font-size:20px}
+  .bk-review a.bk-offer-btn{display:block;max-width:560px;padding:14px 20px;border-radius:8px;background:var(--orange);color:#fff !important;text-align:center;box-shadow:0 6px 18px #0003}
+  .bk-offer-btn strong{display:block;font-size:20px}
+  .bk-offer-btn span{display:block;font-size:13px;opacity:.9}
+  .bk-terms{margin:10px 0 0;max-width:640px;font-size:11px;line-height:1.5;opacity:.85}
+  .bk-hero-logo{display:grid;place-items:center;padding:18px;border:3px solid #ffc107;border-radius:10px;background:#ffffff14}
+  .bk-hero-logo img{max-width:100%;height:auto}
+  .bk-reviewer{display:flex;align-items:center;gap:14px;margin:18px 0;padding:14px 18px;background:#eef4ff;border-left:5px solid var(--orange);border-radius:6px}
+  .bk-reviewer img{width:56px;height:56px;border-radius:8px;object-fit:cover}
+  .bk-reviewer strong,.bk-reviewer span{display:block}
+  .bk-reviewer span{font-size:13px;color:#4a6274}
+  .bk-intro{margin:10px 0 22px}
+  .bk-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:var(--blue);color:#fff;border-radius:6px 6px 0 0}
+  .bk-bar h2{margin:0;font-size:clamp(18px,2.2vw,23px);color:#fff}
+  .bk-score{flex:none;padding:5px 12px;border-radius:20px;background:#fff;color:var(--blue);font-weight:900;font-size:14px}
+  .bk-glance{margin:22px 0;border:1px solid #d6e2f5;border-radius:6px;overflow:hidden}
+  .bk-glance ol{list-style:none;margin:0;padding:0}
+  .bk-glance li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 20px}
+  .bk-glance li:nth-child(odd){background:#f7f9ff}
+  .bk-glance li a{font-weight:700;color:#1f3445;text-decoration:none}
+  .bk-row-score{font-weight:800;white-space:nowrap}
+  .bk-row-score .bk-stars{font-size:16px}
+  .bk-band{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:24px 0;padding:18px 22px;background:var(--brand);color:#fff;border-radius:8px}
+  .bk-band strong{display:block;font-size:19px}
+  .bk-band span{display:block;font-size:13px;opacity:.9}
+  .bk-band .bk-band-terms{margin-top:6px;font-size:11px;line-height:1.5;opacity:.85;max-width:760px}
+  .bk-pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0}
+  .bk-pros-cons>div{padding:18px 20px;border-radius:6px;background:#f1f8e9}
+  .bk-pros-cons>div.cons{background:#fff3e0}
+  .bk-pros-cons h2{margin:0 0 8px;font-size:19px}
+  .bk-section{margin:26px 0;border:1px solid #d6e2f5;border-radius:6px;overflow:hidden}
+  .bk-section-body{padding:18px 22px}
+  .bk-question{margin:0 0 12px;font-weight:800;font-size:17px;color:#17476c}
+  .bk-points{margin:0 0 16px;padding:14px 18px;background:#f7f9ff;border-left:4px solid var(--blue);border-radius:4px}
+  .bk-points-title{margin:0 0 6px !important;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+  .bk-points ul{margin:0;padding-left:0;list-style:none}
+  .bk-points li{margin:0 0 5px;padding-left:24px;position:relative}
+  .bk-points li::before{content:'✓';position:absolute;left:0;color:#2e7d32;font-weight:900}
+  .bk-prose :global(img){max-width:100%;height:auto}
+  .bk-prose :global(h4){margin:18px 0 6px;color:#17476c}
+  .bk-verdict{margin:26px 0;padding:clamp(20px,3vw,32px);background:#1157b2;color:#fff;border-radius:8px}
+  .bk-verdict h2{margin:0 0 8px;color:#fff}
+  .bk-verdict :global(a){color:#fff !important}
+  .bk-other{margin:28px 0}
+  @media(max-width:760px){.bk-hero{grid-template-columns:1fr}.bk-hero-logo{order:-1;max-width:220px}.bk-pros-cons{grid-template-columns:1fr}.claim-bar{font-size:17px}.bk-glance li{padding:10px 14px}}
 </style>

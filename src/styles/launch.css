@@ -133,3 +133,7 @@ html .page-shell:not(.with-sidebar) .cms-content p, html .page-shell:not(.with-s
 .rank-card.offer-card .offer-bookmaker { margin: 0 0 2px !important; font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: #a74a04; }
 .rank-card.offer-card .rank-reason { margin: 4px 0 6px !important; font-size: 14px; font-weight: 600; color: #2f4a5e; }
 .rank-card.offer-card:not(:has(.rank-number)) { padding-left: 20px; }
+
+/* Embedded YouTube videos fill the column at 16:9. */
+.cms-content iframe[src*="youtube"], .cms-content .wp-block-embed iframe { display: block; width: 100%; max-width: 860px; height: auto; aspect-ratio: 16 / 9; border: 0; border-radius: 6px; margin: 18px 0; }
+.cms-content .wp-block-embed { margin: 18px 0; }
