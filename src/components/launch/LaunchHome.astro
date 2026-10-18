@@ -7,6 +7,7 @@ import HomeOfferLadder from '../HomeOfferLadder.astro';
 import SiteFooter from '../SiteFooter.astro';
 import CookieConsent from './CookieConsent.astro';
 import NavMenu from './NavMenu.astro';
+import NewsletterSignup from './NewsletterSignup.astro';
 import { publicMenuFallback, publicNavigation } from '../../lib/menu-tree';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
 import { removeExPartnerPromotion } from '../../lib/ranked-cards.mjs';
@@ -56,12 +57,6 @@ const fallbackGuides = linkIf([
 ]);
 const reviews = wpReviews.length ? wpReviews : fallbackReviews;
 const guides = wpGuides.length ? wpGuides : fallbackGuides;
-const quickLinks = [
-  ['Newsletter', '/daily-newsletter'],
-  ['Free tipsters', '#free-tips'],
-  ['Guides', '#latest-guides'],
-  ['Free bets', '#offers'],
-];
 ---
 <!doctype html>
 <html lang="en-GB" class="design-refresh">
@@ -75,91 +70,155 @@ const quickLinks = [
     <CookieConsent part="head" />
   </head>
   <body class="home-preview">
-    <header class="home-header wrap cms-nav">
-      <a href="/" aria-label="EveryTip homepage"><img src="https://www.everytip.co.uk/wp-content/uploads/2017/07/EveryTip-300x80.png" alt="EveryTip" width="308" height="80" /></a>
-      <nav aria-label="Primary navigation"><NavMenu items={navigation} variant="home" /></nav>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/" aria-label="EveryTip home"><img class="brand-logo" src="/everytip-logo.png" alt="EveryTip" width="341" height="90" /></a>
+        <nav aria-label="Primary navigation" class="public-nav"><NavMenu items={navigation} variant="bar" /></nav>
+      </div>
     </header>
-    <main class="home-main wrap">
-      <section class="home-hero" aria-labelledby="home-title">
-        <h1 id="home-title">All Your Favourite Free Betting Tips In One Place</h1>
-        <a class="home-enter" href="/free-betting-tips">Explore free betting tips</a>
-      </section>
-
-      <div id="offers"><HomeOfferLadder offers={offers} /></div>
-
-      <nav class="home-quick-links" aria-label="Explore EveryTip">
-        {quickLinks.map(([label, href]) => <a href={href}>{label}</a>)}
-      </nav>
-
-      <section id="newsletter" class="home-newsletter" aria-labelledby="newsletter-title">
-        <p class="kicker">EveryTip newsletter</p>
-        <h2 id="newsletter-title">The best tips and offers in your inbox</h2>
-        <p>Horse racing, football and other free tips, plus timely offer news, straight to your inbox.</p>
-        <a class="home-newsletter-preview" href="/daily-newsletter">Sign up for free tips</a>
-      </section>
-
-      {cards.length > 0 && <section class="home-section" aria-labelledby="features-title">
-        <div class="home-section-heading"><h2 id="features-title">Columnist Articles</h2><span>Latest from John Newsome and Seymour Biz</span></div>
-        <div class="home-feature-grid">
-          {cards.map((article) => <article class="home-feature-card">
-            <span>{article.type}</span>
-            <h3>{article.title}</h3>
-            <p>{article.date}</p>
-            <a class="home-text-link" href={article.uri}>Read the column</a>
-          </article>)}
+    <main class="home-main">
+      <!-- StoryBrand: the reader wants better bets without the legwork; EveryTip is the guide. -->
+      <section class="sb-hero" aria-labelledby="home-title">
+        <div class="wrap sb-hero-inner">
+          <div class="sb-hero-copy">
+            <p class="sb-kicker">Free betting tips since 2013</p>
+            <h1 id="home-title">Today’s best free betting tips, in one place</h1>
+            <p class="sb-lede">Horse racing, football and greyhound tips from our tipsters, researched and published every morning. Back today’s picks now, or get them in your inbox before the first race.</p>
+            <a class="sb-primary" href="/free-betting-tips">Today’s Free Tips <span aria-hidden="true">→</span></a>
+          </div>
+          <div id="newsletter" class="sb-signup-card">
+            <p class="sb-card-kicker">Daily Tips Newsletter</p>
+            <h2>Get the tips before the first race</h2>
+            <p>One email each morning with the day’s best tips and the offers worth having.</p>
+            <NewsletterSignup source="homepage-hero" button="Sign me up" />
+          </div>
         </div>
-      </section>}
-
-      {editorial && <section class="home-section home-intro" aria-labelledby="intro-title">
-        <h2 id="intro-title">Free Betting Tips Published Every Day On EveryTip</h2>
-        <div class="home-intro-card" set:html={editorial} />
-      </section>}
-
-      <section id="free-tips" class="home-section" aria-labelledby="tips-title">
-        <div class="home-section-heading"><h2 id="tips-title">Browse Free Betting Tips</h2><span>Browse by sport and tipster</span></div>
-        <div class="home-tip-grid">
-          {tipLinks.map(([label, href]) => <a href={href}>{label}<span aria-hidden="true">→</span></a>)}
-        </div>
-        {available.has('/free-betting-tips') && <a class="home-section-button" href="/free-betting-tips">See all free betting tips</a>}
       </section>
 
-      <div id="latest-guides" class="home-two-column">
-        <section class="home-list-panel" aria-labelledby="reviews-title">
-          <h2 id="reviews-title">Bookmaker Reviews</h2>
-          <ul>{reviews.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
-        </section>
-        <section class="home-list-panel" aria-labelledby="guides-title">
-          <h2 id="guides-title">Betting Guides</h2>
-          <ul>{guides.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
+      <section class="wrap sb-problem" aria-labelledby="problem-title">
+        <h2 id="problem-title">Betting without a plan gets expensive</h2>
+        <div class="sb-grid-3">
+          <article><span aria-hidden="true">🤯</span><h3>Too many tipsters</h3><p>Hundreds of tips every day, and no easy way to tell who has done the work.</p></article>
+          <article><span aria-hidden="true">⏳</span><h3>Hours on the form</h3><p>Reading cards, team news and stats before every bet takes time you do not have.</p></article>
+          <article><span aria-hidden="true">💸</span><h3>Bets on a hunch</h3><p>Without research behind them, small stakes add up to big losses.</p></article>
+        </div>
+      </section>
+
+      <section class="sb-guide" aria-labelledby="guide-title">
+        <div class="wrap sb-guide-inner">
+          <div>
+            <p class="sb-kicker">Your guide</p>
+            <h2 id="guide-title">We do the homework, you make the call</h2>
+            <p>Since 2013 EveryTip has published free tips every day. Our tipsters study the form, the going and the team news, then share their selections with the reasoning behind them, so you can bet with a plan instead of a hunch.</p>
+          </div>
+          <ul class="sb-proof">
+            <li><strong>Free since 2013</strong><span>No subscriptions, no paywall</span></li>
+            <li><strong>Updated every morning</strong><span>Racing, football, greyhounds and more</span></li>
+            <li><strong>Named columnists</strong><span>John Newsome and Seymour Biz</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="wrap sb-plan" aria-labelledby="plan-title">
+        <h2 id="plan-title">Three steps to a better betting day</h2>
+        <ol class="sb-grid-3">
+          <li><span>1</span><h3>Pick your sport</h3><p>Horse racing, football, greyhounds or cricket.</p></li>
+          <li><span>2</span><h3>Check today’s tips</h3><p>See each selection and why our tipster likes it.</p></li>
+          <li><span>3</span><h3>Bet with a plan</h3><p>Back the picks you agree with at a bookmaker you trust.</p></li>
+        </ol>
+        <a class="sb-primary" href="/free-betting-tips">Today’s Free Tips <span aria-hidden="true">→</span></a>
+      </section>
+
+      <div class="wrap">
+        <div id="offers"><HomeOfferLadder offers={offers} /></div>
+
+        {cards.length > 0 && <section class="home-section" aria-labelledby="features-title">
+          <div class="home-section-heading"><h2 id="features-title">Columnist Articles</h2><span>Latest from John Newsome and Seymour Biz</span></div>
+          <div class="home-feature-grid">
+            {cards.map((article) => <article class="home-feature-card">
+              <span>{article.type}</span>
+              <h3>{article.title}</h3>
+              <p>{article.date}</p>
+              <a class="home-text-link" href={article.uri}>Read the column</a>
+            </article>)}
+          </div>
+        </section>}
+
+        <section id="free-tips" class="home-section" aria-labelledby="tips-title">
+          <div class="home-section-heading"><h2 id="tips-title">Browse Free Betting Tips</h2><span>Browse by sport and tipster</span></div>
+          <div class="home-tip-grid">
+            {tipLinks.map(([label, href]) => <a href={href}>{label}<span aria-hidden="true">→</span></a>)}
+          </div>
+          {available.has('/free-betting-tips') && <a class="home-section-button" href="/free-betting-tips">See all free betting tips</a>}
         </section>
       </div>
 
-      <section class="home-section home-recommended" aria-labelledby="recommended-title">
-        <div class="home-section-heading"><h2 id="recommended-title">Recommended Bookmakers</h2><span>18+ · T&Cs apply</span></div>
-        <div class="home-recommended-grid">
-          {offers.slice(0, 3).map((offer) => <article style={`--recommend-brand:${offer.brandColor}`}>
-            <div class="home-recommended-logo"><img src={offer.logoUrl} alt={offer.bookmaker} loading="lazy" /></div>
-            <h3>{offer.headline}</h3>
-            <p>{offer.compactTerms}</p>
-            <a href={offer.ctaPath} rel="nofollow">{offer.ctaLabel}</a>
-          </article>)}
+      <section class="sb-final" aria-labelledby="final-title">
+        <div class="wrap sb-final-inner">
+          <div>
+            <h2 id="final-title">Start every betting day with a plan</h2>
+            <p>Join the EveryTip daily email and get the morning’s best free tips before the first race. Miss it, and you are back to guessing.</p>
+          </div>
+          <NewsletterSignup source="homepage-footer" tone="dark" />
         </div>
       </section>
+
+      <div class="wrap">
+        {editorial && <section class="home-section home-intro" aria-labelledby="intro-title">
+          <h2 id="intro-title">Free Betting Tips Published Every Day On EveryTip</h2>
+          <div class="home-intro-card" set:html={editorial} />
+        </section>}
+
+        <div id="latest-guides" class="home-two-column">
+          <section class="home-list-panel" aria-labelledby="reviews-title">
+            <h2 id="reviews-title">Bookmaker Reviews</h2>
+            <ul>{reviews.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
+          </section>
+          <section class="home-list-panel" aria-labelledby="guides-title">
+            <h2 id="guides-title">Betting Guides</h2>
+            <ul>{guides.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
+          </section>
+        </div>
+      </div>
     </main>
     <SiteFooter preview={false} verifiedPublicPaths={paths} />
     <CookieConsent part="banner" />
   </body>
 </html>
 <style>
-  .home-header.cms-nav{display:grid;justify-items:center;gap:8px;min-height:0;padding:12px 0 10px}
-  .home-header.cms-nav nav{position:static;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 18px;max-width:100%;font-size:12px}
-  .home-nav-group{position:relative}
-  .home-nav-group summary{cursor:pointer;list-style:none;color:#1d5684;font-weight:750}
-  .home-nav-group summary::-webkit-details-marker{display:none}
-  .home-nav-group>div{position:absolute;z-index:15;left:0;top:100%;min-width:200px;display:grid;gap:7px;padding:10px;background:#fff;box-shadow:0 8px 24px #173b5a30}
-  .home-nav-group:not([open])>div{display:none}
-  .home-nav-group a{white-space:nowrap}
   .home-list-panel ul a{color:inherit}
-  .home-recommended-grid a{display:inline-block;margin-top:8px;padding:9px 14px;border-radius:4px;background:var(--et-commercial);color:#fff;font-weight:800;text-decoration:none}
-  @media(max-width:600px){.home-nav-group>div{left:auto;right:0;max-width:min(80vw,300px)}.home-nav-group a{white-space:normal}}
+  .home-main{padding-bottom:20px}
+  .sb-kicker{margin:0 0 10px;color:#ffb37a;font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+  .sb-guide .sb-kicker{color:var(--et-orange-ink)}
+  .sb-primary{display:inline-flex;align-items:center;gap:10px;padding:16px 24px;border-radius:12px;background:var(--et-orange);color:#fff;font-size:17px;font-weight:900;text-decoration:none;box-shadow:0 6px 18px #f2680040;transition:transform .15s,box-shadow .2s}
+  .sb-primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px #f2680055;text-decoration:none}
+  .sb-primary span{transition:transform .2s}.sb-primary:hover span{transform:translateX(4px)}
+  .sb-hero{background:linear-gradient(135deg,#1c598f 0%,#256dae 55%,#2f7fc4 100%);color:#fff}
+  .sb-hero-inner{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding:52px 0}
+  .sb-hero h1{margin:0 0 14px;color:#fff;font-size:clamp(32px,4.6vw,52px);line-height:1.08}
+  .sb-lede{max-width:600px;margin:0 0 26px;font-size:18px;line-height:1.55;color:#e6f0f8}
+  .sb-signup-card{padding:26px;border-radius:18px;background:#fff;color:#183f60;box-shadow:0 18px 40px #0b1f3340}
+  .sb-signup-card h2{margin:0 0 6px;font-size:24px;line-height:1.2;color:#183f60}
+  .sb-signup-card>p{margin:0 0 16px;color:#4d6072}
+  .sb-signup-card>p.sb-card-kicker{margin:0 0 6px;color:var(--et-orange-ink);font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+  .sb-problem,.sb-plan{padding:48px 0 8px;text-align:center}
+  .sb-problem h2,.sb-plan h2,.sb-guide h2{margin:0 0 22px;font-size:clamp(25px,3vw,34px);color:#183f60}
+  .sb-grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0 0 24px;padding:0;list-style:none;text-align:left}
+  .sb-grid-3>*{padding:22px;border-radius:16px;background:#fff;border:1px solid #e1eaf2;box-shadow:0 4px 14px #102a400d}
+  .sb-grid-3 h3{margin:10px 0 6px;font-size:19px;color:#183f60}
+  .sb-grid-3 p{margin:0;color:#4d6072}
+  .sb-problem article>span{font-size:28px}
+  .sb-plan li>span{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#eaf2f9;color:#1c598f;font-weight:900}
+  .sb-guide{margin-top:40px;background:#eef5fa}
+  .sb-guide-inner{display:grid;grid-template-columns:1.2fr .8fr;gap:36px;align-items:center;padding:44px 0}
+  .sb-guide p{margin:0;font-size:17px;line-height:1.65;color:#33495c}
+  .sb-proof{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+  .sb-proof li{display:grid;padding:16px 18px;border-left:4px solid var(--et-orange);border-radius:10px;background:#fff}
+  .sb-proof strong{color:#183f60;font-size:17px}.sb-proof span{color:#5d6b78;font-size:14px}
+  .sb-final{margin:48px 0 10px;background:linear-gradient(135deg,#183f60,#1c598f);color:#fff}
+  .sb-final-inner{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;padding:40px 0}
+  .sb-final h2{margin:0 0 8px;color:#fff;font-size:clamp(24px,3vw,32px)}
+  .sb-final p{margin:0;color:#d7e5f1}
+  @media(max-width:860px){.sb-hero-inner,.sb-guide-inner,.sb-final-inner{grid-template-columns:1fr;gap:26px}.sb-hero-inner{padding:34px 0}.sb-grid-3{grid-template-columns:1fr}}
+  @media(max-width:600px){.sb-lede{font-size:16px}.sb-primary{width:100%;justify-content:center}.sb-signup-card{padding:20px}.sb-problem,.sb-plan{padding-top:34px}}
 </style>

@@ -1,0 +1,65 @@
+---
+// Daily tips email sign-up, posting straight to AWeber's form handler (no ConvertBox).
+// List "EveryTip - Free Daily Tips" (evertipsweep01); sign-ups count against AWeber web form
+// 995508900 so its confirmation settings apply. `source` is stored as AWeber ad tracking, so
+// each placement can be compared in AWeber. With JavaScript the form submits in the
+// background and thanks the reader in place; without it, AWeber redirects to the free tips page.
+interface Props { source: string; button?: string; tone?: 'light' | 'dark' }
+const { source, button = 'Send me the daily tips', tone = 'light' } = Astro.props;
+const id = `signup-${source}`;
+---
+<form class:list={['et-signup', `et-signup-${tone}`]} action="https://www.aweber.com/scripts/addlead.pl" method="post" data-et-signup={source}>
+  <input type="hidden" name="listname" value="evertipsweep01" />
+  <input type="hidden" name="meta_web_form_id" value="995508900" />
+  <input type="hidden" name="meta_adtracking" value={source} />
+  <input type="hidden" name="meta_message" value="1" />
+  <input type="hidden" name="meta_required" value="email" />
+  <input type="hidden" name="redirect" value="https://www.everytip.co.uk/free-betting-tips?subscribed=1" />
+  <input type="hidden" name="meta_redirect_onlist" value="https://www.everytip.co.uk/free-betting-tips?subscribed=1" />
+  <label class="et-signup-label" for={id}>Your email address</label>
+  <div class="et-signup-row">
+    <input id={id} type="email" name="email" required autocomplete="email" inputmode="email" placeholder="you@example.com" />
+    <button type="submit">{button}</button>
+  </div>
+  <p class="et-signup-note">Free every morning. 18+ only. Unsubscribe any time.</p>
+  <p class="et-signup-done" role="status" hidden>You're on the list. Check your inbox for today's tips (and confirm your address if we ask).</p>
+</form>
+
+<script>
+  for (const form of document.querySelectorAll<HTMLFormElement>('form[data-et-signup]')) {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const email = form.querySelector<HTMLInputElement>('input[name="email"]');
+      if (!email?.checkValidity()) { email?.reportValidity(); return; }
+      const button = form.querySelector('button');
+      if (button) { button.disabled = true; button.textContent = 'Signing you up…'; }
+      try {
+        // AWeber does not send CORS headers, so the response cannot be read; a sent request is a sign-up.
+        await fetch(form.action, { method: 'POST', mode: 'no-cors', body: new FormData(form) });
+        form.classList.add('is-done');
+        form.querySelector<HTMLElement>('.et-signup-done')?.removeAttribute('hidden');
+        (window as any).dataLayer?.push({ event: 'newsletter_signup', signup_source: form.dataset.etSignup });
+      } catch {
+        form.submit();
+      }
+    });
+  }
+</script>
+
+<style>
+  .et-signup { display: grid; gap: 8px; max-width: 520px; }
+  .et-signup-label { font-size: 13px; font-weight: 800; }
+  .et-signup-row { display: flex; gap: 8px; }
+  .et-signup input[type="email"] { flex: 1; min-width: 0; padding: 14px 15px; border: 2px solid #c9d8e4; border-radius: 10px; font: inherit; font-size: 16px; background: #fff; color: #183f60; }
+  .et-signup input[type="email"]:focus { outline: none; border-color: var(--et-orange); box-shadow: 0 0 0 3px #f2680033; }
+  .et-signup button { flex: none; padding: 14px 18px; border: 0; border-radius: 10px; background: var(--et-orange); color: #fff; font: inherit; font-size: 15px; font-weight: 900; cursor: pointer; transition: transform .15s, background .2s; }
+  .et-signup button:hover { background: #d95c00; }
+  .et-signup button:active { transform: scale(.97); }
+  .et-signup button:disabled { opacity: .7; cursor: default; }
+  .et-signup-note { margin: 0; font-size: 12px; opacity: .8; }
+  .et-signup-done { margin: 0; padding: 12px 14px; border-radius: 10px; background: #e8f6ee; color: #14532d; font-weight: 800; }
+  .et-signup.is-done .et-signup-row, .et-signup.is-done .et-signup-label, .et-signup.is-done .et-signup-note { display: none; }
+  .et-signup-dark { color: #fff; }
+  .et-signup-dark input[type="email"] { border-color: transparent; }
+  @media (max-width: 520px) { .et-signup-row { flex-direction: column; } .et-signup button { width: 100%; } }
+</style>
