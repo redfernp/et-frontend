@@ -49,7 +49,10 @@ async function inspect(record) {
   checked++;
   if (html.includes('data-everytip-offer-slot')) failures.push({ path: record.uri, field: 'unresolved-offer-slot' });
   const doc = parseDocument(html);
-  const sourceOffers = elements(parseDocument(record.content || ''), 'aside').filter(node => node.attribs['data-offer-id']);
+  const sourceDoc = parseDocument(record.content || '');
+  // Inline offer cards (aside) and in-article top-offers ladders ([everytip_top_offers], li rows).
+  const sourceAsides = elements(sourceDoc, 'aside').filter(node => node.attribs['data-offer-id']);
+  const sourceOffers = [...sourceAsides, ...elements(sourceDoc, 'li').filter(node => node.attribs['data-offer-id'])];
   const builtOffers = elements(doc, 'aside').filter(node => node.attribs['data-offer-id']);
   offerPlacements += builtOffers.length;
   const ladder = elements(doc, 'li').filter(node => node.attribs['data-offer-id']);
@@ -62,7 +65,7 @@ async function inspect(record) {
     const key = nodes => nodes.map(node => `${node.attribs['data-offer-id']} ${[...new Set(elements(node,'a').map(a => new URL(a.attribs.href,'https://www.everytip.co.uk').pathname))].join(',')}`).sort();
     const sourceKeys = new Set(key(sourceOffers));
     if (!ladder.length || key(ladder).some(entry => !sourceKeys.has(entry))) failures.push({path:record.uri,field:'central-offer-content'});
-  } else if (JSON.stringify(offerSignature(sourceOffers)) !== JSON.stringify(offerSignature(builtOffers))) failures.push({path:record.uri,field:'central-offer-content'});
+  } else if (JSON.stringify(offerSignature(sourceAsides)) !== JSON.stringify(offerSignature(builtOffers))) failures.push({path:record.uri,field:'central-offer-content'});
   const sourceTables = elements(parseDocument(record.content || ''), 'table').filter(node => /ninja/i.test(JSON.stringify(node.attribs)));
   for (const table of sourceTables) {
     const built = elements(doc, 'table').find(node => node.attribs.id === table.attribs.id);
