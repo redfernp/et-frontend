@@ -19,7 +19,8 @@ export default {
     const path = url.pathname;
     if (path.startsWith('/go/')) {
       const redirect = affiliateInventory.redirects[path + url.search] || affiliateInventory.redirects[path];
-      return redirect ? Response.redirect(redirect.location, redirect.status) : new Response('Not Found', {status:404});
+      // Unknown slugs go to the homepage, as WordPress's /go/index.php does with its default.
+      return redirect ? Response.redirect(redirect.location, redirect.status) : Response.redirect(new URL('/', url), 302);
     }
     if (verifiedLegacyRedirects.has(path)) {
       return Response.redirect(new URL(verifiedLegacyRedirects.get(path), url), 301);

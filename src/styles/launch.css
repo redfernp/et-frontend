@@ -137,3 +137,7 @@ html .page-shell:not(.with-sidebar) .cms-content p, html .page-shell:not(.with-s
 /* Embedded YouTube videos fill the column at 16:9. */
 .cms-content iframe[src*="youtube"], .cms-content .wp-block-embed iframe { display: block; width: 100%; max-width: 860px; height: auto; aspect-ratio: 16 / 9; border: 0; border-radius: 6px; margin: 18px 0; }
 .cms-content .wp-block-embed { margin: 18px 0; }
+
+/* Header logo: the live 341x90 PNG shown at half size, so it stays sharp on high-density screens. */
+.site-header .brand-logo { display: block; width: 170px; height: auto; }
+@media (max-width: 760px) { .site-header .brand-logo { width: 140px; } }

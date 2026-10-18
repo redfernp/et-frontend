@@ -9,7 +9,7 @@ export async function serve(request, env, fetchOrigin = fetch) {
   if (!['GET', 'HEAD'].includes(request.method)) return new Response('Method Not Allowed', { status: 405 });
   if (url.pathname === '/robots.txt') {
     const body = env.PREVIEW_NOINDEX === 'true' ? 'User-agent: *\nDisallow: /\n' :
-      'User-agent: *\nAllow: /\nDisallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\nSitemap: https://www.everytip.co.uk/sitemap.xml\n';
+      'User-agent: *\nAllow: /\nDisallow: /wp-admin/\nDisallow: /cgi-bin/\nDisallow: /tmp/\nDisallow: /go/\nDisallow: */feed\nAllow: /wp-admin/admin-ajax.php\nSitemap: https://www.everytip.co.uk/sitemap.xml\n';
     return new Response(request.method === 'HEAD' ? null : body, { headers: { 'content-type': 'text/plain; charset=utf-8' } });
   }
   if (url.pathname.startsWith('/go/') || verifiedLegacyRedirects.has(url.pathname)) return astroWorker.fetch(request, env);

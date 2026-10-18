@@ -17,7 +17,7 @@ const id = `mnav-${variant}`;
 <dialog class="mnav" id={id} aria-label="Menu">
   <div class="mnav-panel">
     <div class="mnav-top">
-      <a class="mnav-brand" href="/">Every<span>Tip</span></a>
+      <a class="mnav-brand" href="/"><img src="/everytip-logo.png" alt="EveryTip" width="341" height="90" /></a>
       <button type="button" class="mnav-close" aria-label="Close menu"><span aria-hidden="true"></span></button>
     </div>
     <div class="mnav-scroll">
@@ -114,8 +114,8 @@ const id = `mnav-${variant}`;
     .mnav-panel { display: flex; flex-direction: column; height: 100%; background: #f6f9fc; box-shadow: -18px 0 40px #0b1f3340; animation: mnav-in .42s cubic-bezier(.2, .85, .25, 1) both; }
     .mnav.is-closing .mnav-panel { animation: mnav-out .25s cubic-bezier(.5, 0, .75, 0) both; }
     .mnav-top { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; background: linear-gradient(135deg, var(--et-blue) 0%, #1c598f 100%); border-bottom: 4px solid var(--et-orange); }
-    .mnav.mnav .mnav-brand { color: #fff; font-size: 28px; font-weight: 900; letter-spacing: -.02em; text-decoration: none; }
-    .mnav-brand span { color: var(--et-orange); }
+    .mnav.mnav .mnav-brand { display: block; line-height: 0; }
+    .mnav-brand img { display: block; width: 136px; height: auto; }
     .mnav-close { position: relative; width: 40px; height: 40px; border-radius: 50%; border: 0; background: #ffffff26; cursor: pointer; transition: background .2s, transform .3s; }
     .mnav-close:hover { background: #ffffff40; transform: rotate(90deg); }
     .mnav-close span, .mnav-close span::after { position: absolute; left: 11px; top: 19px; width: 18px; height: 2px; border-radius: 2px; background: #fff; transform: rotate(45deg); content: ''; }

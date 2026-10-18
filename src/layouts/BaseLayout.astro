@@ -48,7 +48,7 @@ const publicPaths = new Set(verifiedPublicPaths);
     {(!publicPage || previewOnly) && <div class="preview-banner">{previewMessage}</div>}
     <header class="site-header">
       <div class="wrap header-inner">
-        {publicPage ? (publicPaths.has('/') ? <a class="brand" href="/" aria-label="EveryTip home"><span class="brand-wordmark">Every<span>Tip</span></span></a> : <span class="brand"><span class="brand-wordmark">Every<span>Tip</span></span></span>) : <a class="brand" href="/pilot/home/" aria-label="EveryTip pilot home"><span class="brand-wordmark">Every<span>Tip</span></span></a>}
+        {publicPage ? (publicPaths.has('/') ? <a class="brand" href="/" aria-label="EveryTip home"><img class="brand-logo" src="/everytip-logo.png" alt="EveryTip" width="341" height="90" /></a> : <span class="brand"><img class="brand-logo" src="/everytip-logo.png" alt="EveryTip" width="341" height="90" /></span>) : <a class="brand" href="/pilot/home/" aria-label="EveryTip pilot home"><img class="brand-logo" src="/everytip-logo.png" alt="EveryTip" width="341" height="90" /></a>}
         {publicPage ? <nav aria-label="Primary navigation" class="public-nav"><NavMenu items={publicItems} variant="bar" /></nav> : <nav aria-label="Pilot navigation">
           <a href="/pilot/home/">Home</a>
           <a href="/pilot/free-betting-tips/">Free tips</a>
