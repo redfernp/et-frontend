@@ -9,7 +9,8 @@ function visit(node){
 }
 for(const record of source.records)visit(parseDocument(record.content||''));
 await mkdir('outputs/affiliate-checks',{recursive:true});
-const redirects={};const failures=[];
+// Keep redirects no longer linked from content: old newsletters and emails still use them.
+const redirects={...JSON.parse(await readFile('data/affiliate-redirects.json','utf8')).redirects};const failures=[];
 for(const path of [...paths].sort()){
   const file=`outputs/affiliate-checks/${Buffer.from(path).toString('hex')}.json`;
   let result;
@@ -28,7 +29,7 @@ for(const path of [...paths].sort()){
   }else failures.push(result);
   console.log(`${path}: ${result.status}`);
 }
-await writeFile('data/affiliate-redirects.json',JSON.stringify({checkedAt:new Date().toISOString(),redirects},null,2)+'\n');
+await writeFile('data/affiliate-redirects.json',JSON.stringify({checkedAt:new Date().toISOString(),redirects:Object.fromEntries(Object.keys(redirects).sort().map(key=>[key,redirects[key]]))},null,2)+'\n');
 await writeFile('outputs/affiliate-check.json',JSON.stringify({total:paths.size,resolved:Object.keys(redirects).length,failures},null,2));
 console.log(JSON.stringify({total:paths.size,resolved:Object.keys(redirects).length,failures:failures.length}));
 if(failures.length)process.exitCode=1;

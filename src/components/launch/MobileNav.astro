@@ -1,0 +1,165 @@
+---
+// Phones: a Menu button opens a slide-in panel. Top-level links without submenus become quick
+// tiles; the rest are accordion sections whose links show as tappable chips. Desktop keeps
+// the hover dropdowns in NavMenu.
+import type { NavigationItem } from '../../lib/menu-tree';
+interface Props { items: NavigationItem[]; variant: 'bar' | 'home' }
+const { items, variant } = Astro.props;
+const icons: [RegExp, string][] = [[/free bets?/i, '🎁'], [/newsletter/i, '📬'], [/review/i, '⭐'], [/paid/i, '💷'], [/horse|racing/i, '🐎'], [/football|epl/i, '⚽'], [/greyhound/i, '🐕'], [/cricket/i, '🏏'], [/tipster|tips/i, '🎯'], [/award|best/i, '🏆'], [/offer/i, '🔥']];
+const iconFor = (label: string) => icons.find(([pattern]) => pattern.test(label))?.[1] ?? '›';
+const tiles = items.filter((item) => item.href && !item.children.length);
+const sections = items.filter((item) => item.children.length);
+const id = `mnav-${variant}`;
+---
+<button type="button" class="mnav-open" aria-haspopup="dialog" aria-controls={id} aria-expanded="false">
+  <span class="mnav-burger" aria-hidden="true"><i></i><i></i><i></i></span><span>Menu</span>
+</button>
+<dialog class="mnav" id={id} aria-label="Menu">
+  <div class="mnav-panel">
+    <div class="mnav-top">
+      <a class="mnav-brand" href="/">Every<span>Tip</span></a>
+      <button type="button" class="mnav-close" aria-label="Close menu"><span aria-hidden="true"></span></button>
+    </div>
+    <div class="mnav-scroll">
+      {tiles.length > 0 && <div class="mnav-tiles">
+        {tiles.map((item, index) => <a class="mnav-tile" href={item.href} style={`--i:${index}`}><span class="mnav-icon" aria-hidden="true">{iconFor(item.label)}</span>{item.label}</a>)}
+      </div>}
+      <ul class="mnav-sections">
+        {sections.map((item, index) => <li class="mnav-section" style={`--i:${index + tiles.length}`}>
+          <button type="button" class="mnav-row" aria-expanded="false">
+            <span class="mnav-icon" aria-hidden="true">{iconFor(item.label)}</span>
+            <span class="mnav-label">{item.label}</span>
+            <span class="mnav-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="mnav-drawer"><div class="mnav-drawer-inner">
+            {item.href && <a class="mnav-all" href={item.href}>All {item.label} →</a>}
+            {item.children.some((child) => !child.children.length) && <div class="mnav-chips">
+              {item.children.filter((child) => !child.children.length).map((child, j) => child.href && <a href={child.href} style={`--j:${j}`}>{child.label}</a>)}
+            </div>}
+            {item.children.filter((child) => child.children.length).map((group) => <div class="mnav-group">
+              {group.href ? <a class="mnav-group-title" href={group.href}><span aria-hidden="true">{iconFor(group.label)}</span>{group.label} →</a> : <p class="mnav-group-title"><span aria-hidden="true">{iconFor(group.label)}</span>{group.label}</p>}
+              <div class="mnav-chips">{group.children.map((child, j) => child.href && <a href={child.href} style={`--j:${j}`}>{child.label}</a>)}</div>
+            </div>)}
+          </div></div>
+        </li>)}
+      </ul>
+      <p class="mnav-foot">18+ only. Please gamble responsibly. <a href="https://www.begambleaware.org/" rel="nofollow noopener">BeGambleAware.org</a></p>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  for (const opener of document.querySelectorAll<HTMLButtonElement>('.mnav-open')) {
+    const dialog = document.getElementById(opener.getAttribute('aria-controls') ?? '') as HTMLDialogElement | null;
+    if (!dialog) continue;
+    const close = () => {
+      if (!dialog.open || dialog.classList.contains('is-closing')) return;
+      const finish = () => { dialog.classList.remove('is-closing'); dialog.close(); };
+      if (reduced()) return finish();
+      dialog.classList.add('is-closing');
+      dialog.querySelector('.mnav-panel')?.addEventListener('animationend', finish, { once: true });
+    };
+    dialog.addEventListener('close', () => { document.documentElement.classList.remove('mnav-lock'); opener.setAttribute('aria-expanded', 'false'); opener.focus(); });
+    opener.addEventListener('click', () => {
+      dialog.showModal();
+      document.documentElement.classList.add('mnav-lock');
+      opener.setAttribute('aria-expanded', 'true');
+    });
+    dialog.addEventListener('cancel', (event) => { event.preventDefault(); close(); });
+    dialog.querySelector('.mnav-close')?.addEventListener('click', close);
+    // A tap on the dimmed backdrop (outside the panel) closes the menu.
+    dialog.addEventListener('click', (event) => { if (event.target === dialog) close(); });
+    // One section open at a time.
+    const rows = [...dialog.querySelectorAll<HTMLButtonElement>('.mnav-row')];
+    const toggle = (row: HTMLButtonElement, open: boolean) => { row.setAttribute('aria-expanded', String(open)); row.parentElement?.classList.toggle('is-open', open); };
+    for (const row of rows) row.addEventListener('click', () => {
+      const open = row.getAttribute('aria-expanded') !== 'true';
+      for (const other of rows) toggle(other, false);
+      toggle(row, open);
+    });
+    // Mark the current page and open its section.
+    const here = location.pathname.replace(/\/$/, '') || '/';
+    for (const link of dialog.querySelectorAll<HTMLAnchorElement>('a[href]')) {
+      if ((new URL(link.href).pathname.replace(/\/$/, '') || '/') !== here) continue;
+      link.setAttribute('aria-current', 'page');
+      const row = link.closest('.mnav-section')?.querySelector<HTMLButtonElement>('.mnav-row');
+      if (row) toggle(row, true);
+    }
+  }
+</script>
+
+<style is:global>
+  .mnav-open, .mnav { display: none; }
+  @media (max-width: 760px) {
+    .nav-menu { display: none !important; }
+    .site-header .header-inner { display: flex; align-items: center; justify-content: space-between; min-height: 64px; padding: 10px 0; }
+    .site-header nav.public-nav { margin: 0; }
+    .home-header.cms-nav nav { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+    .mnav-open { display: inline-flex; align-items: center; gap: 9px; padding: 9px 14px 9px 12px; border-radius: 999px; font: inherit; font-size: 14px; font-weight: 800; cursor: pointer; border: 1.5px solid #ffffff59; background: #ffffff1f; color: #fff; transition: background .2s, transform .15s; }
+    .mnav-open:active { transform: scale(.96); }
+    .home-header .mnav-open { border-color: #1d568433; background: #eef5fa; color: #1d5684; }
+    .mnav-burger { display: grid; gap: 4px; width: 18px; }
+    .mnav-burger i { display: block; height: 2px; border-radius: 2px; background: currentColor; transition: transform .3s, opacity .3s, width .3s; }
+    .mnav-burger i:nth-child(2) { width: 70%; }
+    .mnav-open:hover .mnav-burger i:nth-child(2) { width: 100%; }
+    .mnav-open[aria-expanded="true"] .mnav-burger i:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .mnav-open[aria-expanded="true"] .mnav-burger i:nth-child(2) { opacity: 0; }
+    .mnav-open[aria-expanded="true"] .mnav-burger i:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    html.mnav-lock { overflow: hidden; }
+    .mnav[open] { display: block; position: fixed; inset: 0 0 0 auto; width: min(420px, 100vw); height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; overflow: visible; color: #183f60; font-size: 16px; white-space: normal; }
+    .mnav::backdrop { background: #0b1f3399; backdrop-filter: blur(3px); animation: mnav-fade .35s ease both; }
+    .mnav.is-closing::backdrop { animation: mnav-fade .25s ease reverse both; }
+    .mnav-panel { display: flex; flex-direction: column; height: 100%; background: #f6f9fc; box-shadow: -18px 0 40px #0b1f3340; animation: mnav-in .42s cubic-bezier(.2, .85, .25, 1) both; }
+    .mnav.is-closing .mnav-panel { animation: mnav-out .25s cubic-bezier(.5, 0, .75, 0) both; }
+    .mnav-top { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; background: linear-gradient(135deg, var(--et-blue) 0%, #1c598f 100%); border-bottom: 4px solid var(--et-orange); }
+    .mnav.mnav .mnav-brand { color: #fff; font-size: 28px; font-weight: 900; letter-spacing: -.02em; text-decoration: none; }
+    .mnav-brand span { color: var(--et-orange); }
+    .mnav-close { position: relative; width: 40px; height: 40px; border-radius: 50%; border: 0; background: #ffffff26; cursor: pointer; transition: background .2s, transform .3s; }
+    .mnav-close:hover { background: #ffffff40; transform: rotate(90deg); }
+    .mnav-close span, .mnav-close span::after { position: absolute; left: 11px; top: 19px; width: 18px; height: 2px; border-radius: 2px; background: #fff; transform: rotate(45deg); content: ''; }
+    .mnav-close span::after { left: 0; top: 0; transform: rotate(-90deg); }
+    .mnav-scroll { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 18px 16px 28px; }
+
+    .mnav-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
+    .mnav.mnav .mnav-tile { display: grid; justify-items: center; gap: 6px; padding: 14px 6px 12px; border-radius: 14px; background: #fff; box-shadow: 0 2px 10px #102a4014; color: #183f60; font-size: 13px; font-weight: 800; line-height: 1.2; text-align: center; text-decoration: none; animation: mnav-rise .45s cubic-bezier(.2, .85, .25, 1) both; animation-delay: calc(var(--i) * 45ms + 120ms); transition: transform .15s, box-shadow .2s; }
+    .mnav-tile:active { transform: scale(.96); }
+    .mnav-tile .mnav-icon { width: 40px; height: 40px; font-size: 20px; }
+    .mnav-icon { display: inline-grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 11px; background: #eaf2f9; font-size: 18px; line-height: 1; }
+
+    .mnav-sections { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+    .mnav-section { border-radius: 14px; background: #fff; box-shadow: 0 2px 10px #102a4014; overflow: hidden; animation: mnav-rise .45s cubic-bezier(.2, .85, .25, 1) both; animation-delay: calc(var(--i) * 45ms + 120ms); }
+    .mnav-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px; border: 0; background: none; color: #183f60; font: inherit; font-size: 16px; font-weight: 800; text-align: left; cursor: pointer; }
+    .mnav-label { flex: 1; }
+    .mnav-chevron { width: 28px; height: 28px; border-radius: 50%; background: #f1f5f9; position: relative; transition: transform .35s cubic-bezier(.2, .85, .25, 1), background .2s; }
+    .mnav-chevron::before { content: ''; position: absolute; left: 10px; top: 8px; width: 7px; height: 7px; border-right: 2px solid #1c598f; border-bottom: 2px solid #1c598f; transform: rotate(45deg); }
+    .mnav-section.is-open .mnav-chevron { transform: rotate(180deg); background: #fff1e6; }
+    .mnav-section.is-open .mnav-chevron::before { border-color: var(--et-orange); }
+    .mnav-section.is-open .mnav-row { color: var(--et-blue-ink); }
+    .mnav-drawer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .38s cubic-bezier(.2, .85, .25, 1); }
+    .mnav-section.is-open .mnav-drawer { grid-template-rows: 1fr; }
+    .mnav-drawer-inner { min-height: 0; overflow: hidden; padding: 0 14px; }
+    .mnav-section.is-open .mnav-drawer-inner { padding-bottom: 14px; }
+    .mnav.mnav .mnav-all { display: inline-block; margin: 2px 0 10px; color: var(--et-orange-ink); font-size: 13px; font-weight: 800; text-decoration: none; }
+    .mnav-chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .mnav.mnav .mnav-chips a { display: flex; align-items: center; min-height: 44px; padding: 8px 11px; border-radius: 10px; background: #f3f7fb; border: 1px solid #e1eaf2; color: #183f60; font-size: 13px; font-weight: 700; line-height: 1.25; text-decoration: none; opacity: 0; transform: translateY(6px); transition: opacity .3s, transform .3s, background .2s, border-color .2s; }
+    .mnav.mnav .mnav-section.is-open .mnav-chips a { opacity: 1; transform: none; transition-delay: calc(var(--j) * 22ms + 80ms), calc(var(--j) * 22ms + 80ms), 0s, 0s; }
+    .mnav.mnav .mnav-chips a:hover, .mnav.mnav .mnav-chips a:focus-visible { background: #fff4ec; border-color: #f7b98a; }
+    .mnav.mnav.mnav .mnav-scroll a[aria-current="page"] { background: #fff1e6; border-color: var(--et-orange); color: var(--et-orange-ink); }
+    .mnav-group { margin-top: 12px; }
+    .mnav-group:first-child { margin-top: 2px; }
+    .mnav.mnav .mnav-group-title { display: flex; align-items: center; gap: 7px; margin: 0 0 8px; color: var(--et-blue-ink); font-size: 14px; font-weight: 800; text-decoration: none; }
+    .mnav-foot { margin: 22px 4px 0; color: #5d6b78; font-size: 12px; text-align: center; animation: mnav-fade .5s .4s both; }
+    .mnav.mnav .mnav-foot a { color: inherit; font-weight: 700; }
+
+    @keyframes mnav-in { from { transform: translateX(100%); } to { transform: none; } }
+    @keyframes mnav-out { from { transform: none; } to { transform: translateX(100%); } }
+    @keyframes mnav-rise { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+    @keyframes mnav-fade { from { opacity: 0; } to { opacity: 1; } }
+  }
+  @media (max-width: 760px) and (prefers-reduced-motion: reduce) {
+    .mnav *, .mnav::backdrop, .mnav-panel { animation: none !important; transition: none !important; }
+    .mnav.mnav .mnav-chips a { opacity: 1; transform: none; }
+  }
+</style>

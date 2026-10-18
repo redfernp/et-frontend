@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-14T18:09:57.842Z",
+  "checkedAt": "2026-10-18T08:12:05.600Z",
   "redirects": {
     "/go/10bet": {
       "status": 302,
@@ -80,6 +80,10 @@
     "/go/betfred": {
       "status": 302,
       "location": "https://bfpartners.click/o/t9b-WJ?lpage=dRMZ-2&site_id=54649&r_id=332"
+    },
+    "/go/betfred-acca-flex": {
+      "status": 302,
+      "location": "https://bfpartners.click/o/kiUxMU?lpage=JTA2Z9&site_id=54649"
     },
     "/go/betfred-extra-places": {
       "status": 302,

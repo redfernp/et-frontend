@@ -13,8 +13,9 @@ for(const offer of offerFile.offers){
 const active=offerFile.offers.filter(offer=>offer.active!==false).sort((a,b)=>a.position-b.position);
 const byId=new Map(active.map(offer=>[offer.id,offer]));
 
-// The shape the offer components use.
-const lineup=active.map(offer=>({id:offer.partner,offerId:offer.id,bookmaker:offer.bookmaker,brandColor:offer.brandColor,
+// The shape the offer components use. "lineup": false keeps an offer (e.g. an existing-customer
+// promo) out of ladders and the sidebar; it still renders wherever an article places it.
+const lineup=active.filter(offer=>offer.lineup!==false).map(offer=>({id:offer.partner,offerId:offer.id,bookmaker:offer.bookmaker,brandColor:offer.brandColor,
   logoUrl:offer.logo,logoOnLight:offer.logoOnLight===true,headline:offer.headline,compactTerms:offer.terms,
   ctaPath:offer.link,ctaLabel:offer.buttonText}));
 if(!lineup.length)throw new Error('No active offers in src/data/offers.json');

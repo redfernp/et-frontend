@@ -92,6 +92,20 @@
       "link": "/go/betwright",
       "logo": "https://www.everytip.co.uk/wp-content/uploads/2025/04/betwright-logo-light-400px.png",
       "brandColor": "#253745"
+    },
+    {
+      "id": 91180,
+      "partner": "betfred-acca-flex",
+      "active": true,
+      "lineup": false,
+      "position": 99,
+      "bookmaker": "Betfred",
+      "headline": "Acca Flex: cash bonus or your stake back",
+      "terms": "#Ad - New and existing verified online customers. Football accumulators of 5+ legs at min. odds 1/2 (1.5) per leg, pre-match or in-play. All legs win: cash bonus of 5% to 100% on winnings (not stakes), max. bonus £35,000. One leg loses: stake back in cash, min. £0.50, max. £10. First qualifying bet each day only. Excludes bets placed with Free Bets, coupons, specials, boosted prices, cashed-out bets and permutation bets. Accas reduced to fewer than 5 legs by void, abandoned or postponed selections do not qualify. Paid within 24 hours of settlement. Full T&Cs apply.",
+      "buttonText": "Back our accas at Betfred",
+      "link": "/go/betfred-acca-flex",
+      "logo": "https://www.everytip.co.uk/wp-content/uploads/2018/06/betfred-154x40.png",
+      "brandColor": "#0f488f"
     }
   ],
   "_readmeNotPartners": "Former partners. They never get an offer card, button or affiliate link; they may be named in plain text only. match = lowercase letters/digits that identify them in /go/ links or logo names.",
