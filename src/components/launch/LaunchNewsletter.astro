@@ -1,0 +1,65 @@
+---
+// /daily-newsletter: the daily tips email sign-up (AWeber, ad tracking "newsletter-page").
+// Replaces the old ConvertBox embed; the WordPress page keeps only its SEO fields.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NewsletterSignup from './NewsletterSignup.astro';
+
+const { record, paths, offers, seo } = Astro.props;
+const benefits = [
+  ['🐎', 'Racing tips every morning', 'Our tipsters’ best horse racing selections, in your inbox before the first race.'],
+  ['⚽', 'Football picks', 'Match result, goals and both-teams-to-score tips for the day’s big games.'],
+  ['🎁', 'Offers worth having', 'Extra places, money back specials and new customer offers, only when they are good.'],
+];
+---
+<BaseLayout title={record.title} publicPage={true} seo={seo} verifiedPublicPaths={paths} offers={offers} wide={true}>
+  <article class="nl-page">
+    <section class="nl-hero">
+      <div class="nl-copy">
+        <p class="nl-kicker">Free daily tips newsletter</p>
+        <h1>Get today’s best free tips in your inbox</h1>
+        <p class="nl-lede">One email each morning with our tipsters’ best selections and the offers worth having. Free since 2013, and you can unsubscribe any time.</p>
+      </div>
+      <div class="nl-card">
+        <h2>Join the daily email</h2>
+        <NewsletterSignup source="newsletter-page" button="Send me the daily tips" />
+      </div>
+    </section>
+
+    <section class="nl-benefits" aria-labelledby="nl-benefits-title">
+      <h2 id="nl-benefits-title">What you get each morning</h2>
+      <div class="nl-grid">
+        {benefits.map(([icon, title, text]) => <div><span aria-hidden="true">{icon}</span><h3>{title}</h3><p>{text}</p></div>)}
+      </div>
+    </section>
+
+    <section class="nl-faq" aria-labelledby="nl-faq-title">
+      <h2 id="nl-faq-title">Questions</h2>
+      <details><summary>Is the newsletter free?</summary><p>Yes. Every tip on EveryTip is free, and so is the daily email.</p></details>
+      <details><summary>When does it arrive?</summary><p>Each morning, in time to look through the tips before racing starts.</p></details>
+      <details><summary>Can I unsubscribe?</summary><p>Yes, with one click from the bottom of any email.</p></details>
+    </section>
+    <p class="nl-foot">18+ only. Please gamble responsibly · <a href="https://www.begambleaware.org/" rel="nofollow noopener">BeGambleAware.org</a></p>
+  </article>
+</BaseLayout>
+
+<style>
+  .nl-page { color: #263748; }
+  .nl-hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center; padding: 34px; border-radius: 18px; background: linear-gradient(135deg, #1c598f 0%, #256dae 60%, #2f7fc4 100%); color: #fff; }
+  .nl-kicker { margin: 0 0 8px; color: #ffb37a; font-size: 13px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+  .nl-hero h1 { margin: 0 0 12px; color: #fff; font-size: clamp(28px, 4vw, 44px); line-height: 1.1; }
+  .nl-lede { margin: 0; font-size: 17px; line-height: 1.6; color: #e6f0f8; }
+  .nl-card { padding: 24px; border-radius: 16px; background: #fff; color: #183f60; box-shadow: 0 16px 36px #0b1f3340; }
+  .nl-card h2 { margin: 0 0 14px; font-size: 22px; color: #183f60; }
+  .nl-benefits, .nl-faq { margin-top: 36px; }
+  .nl-benefits h2, .nl-faq h2 { margin: 0 0 16px; font-size: 26px; color: #183f60; }
+  .nl-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .nl-grid > div { padding: 20px; border-radius: 14px; border: 1px solid #e1eaf2; background: #fff; box-shadow: 0 4px 14px #102a400d; }
+  .nl-grid span { font-size: 26px; }
+  .nl-grid h3 { margin: 8px 0 6px; font-size: 18px; color: #183f60; }
+  .nl-grid p { margin: 0; color: #4d6072; }
+  .nl-faq details { padding: 12px 0; border-bottom: 1px solid #dce5ec; }
+  .nl-faq summary { cursor: pointer; color: #1c598f; font-weight: 800; }
+  .nl-faq details p { margin: 8px 0 0; }
+  .nl-foot { margin-top: 28px; color: #607280; font-size: 12px; }
+  @media (max-width: 760px) { .nl-hero { grid-template-columns: 1fr; padding: 22px; gap: 20px; } .nl-grid { grid-template-columns: 1fr; } }
+</style>
