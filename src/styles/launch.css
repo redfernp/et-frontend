@@ -141,3 +141,14 @@ html .page-shell:not(.with-sidebar) .cms-content p, html .page-shell:not(.with-s
 /* Header logo: the live 341x90 PNG shown at half size, so it stays sharp on high-density screens. */
 .site-header .brand-logo { display: block; width: 170px; height: auto; }
 @media (max-width: 760px) { .site-header .brand-logo { width: 140px; } }
+
+/* Top-offers ladder inside an article ([everytip_top_offers]): keep the homepage ladder look,
+   not the article's heading, list and commercial-link styles. */
+.cms-content .post-ladder { margin: 28px 0; }
+.cms-content .post-ladder .home-ladder-heading h2 { margin: 0 0 1px; font-size: clamp(20px, 2.6vw, 24px); }
+.cms-content .post-ladder .home-ladder-heading p, .cms-content .post-ladder .home-ladder-foot { margin: 0; }
+.cms-content .post-ladder ol.home-ladder-list { margin: 0; padding: 0; list-style: none; }
+.cms-content .post-ladder li.home-ladder-row { margin: 0; }
+.cms-content .post-ladder .home-ladder-copy h3 { margin: 0 0 4px; }
+.cms-content .post-ladder .home-ladder-copy p { margin: 0; }
+.cms-content .post-ladder a.home-ladder-cta { color: #fff; text-decoration: none; }

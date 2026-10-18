@@ -48,6 +48,27 @@ export function renderOfferSlots(content){
   }).join('');
 }
 
+// [everytip_top_offers count="3"] in an article: the current top offers from offers.json as a
+// numbered ladder of offer cards, so tip posts never hold offer copy or a plugin table.
+const topOffersPattern=/(?:<p>\s*)?\[everytip_top_offers(?:\s+count=[^\d\]]{0,10}(\d+)[^\]]{0,10})?\s*\](?:\s*<\/p>)?/g;
+export function renderTopOffers(content){
+  // WordPress turns the quotes round count into entities (&#8221;); drop them before matching.
+  return content.replace(/\[everytip_top_offers[^\]]*\]/g,marker=>marker.replace(/&#\d+;|&quot;/g,'')).replace(topOffersPattern,(_,count)=>{
+    const top=active.filter(offer=>offer.lineup!==false).slice(0,Math.min(Number(count)||3,active.length));
+    // Same markup and styles as the homepage/free bets ladder (HomeOfferLadder), top N only.
+    const rows=top.map((offer,index)=>`<li class="home-ladder-row" data-offer-id="${offer.id}" style="--ladder-brand:${escape(offer.brandColor)}">`
+      +`<span class="home-ladder-rank">${index+1}</span>`
+      +`<span class="home-ladder-logo${offer.logoOnLight===true?' logo-on-light':''}"><img src="${escape(offer.logo)}" alt="${escape(offer.bookmaker)}" loading="lazy"></span>`
+      +`<div class="home-ladder-copy"><h3>${escape(offer.headline)}</h3><p>${escape(offer.terms)}</p></div>`
+      +`<a class="home-ladder-cta" href="${escape(offer.link)}" rel="nofollow">${escape(offer.buttonText)}</a></li>`).join('');
+    return `<section class="home-ladder post-ladder" aria-label="Today’s top ${top.length} betting offers"><div class="home-ladder-heading"><div><h2>Today’s Top ${top.length} Betting Offers</h2>`
+      +`<p>Our current top picks for new customers · 18+ · T&amp;Cs apply</p></div><span class="home-ladder-badge">Top ${top.length}</span></div>`
+      +`<ol class="home-ladder-list">${rows}</ol><p class="home-ladder-foot">Please gamble responsibly · 18+ · BeGambleAware.org</p></section>`;
+  });
+}
 export async function resolveLaunchOffers(records){
-  for(const record of records)if(record.content?.includes('data-everytip-offer-slot'))record.content=renderOfferSlots(record.content);
+  for(const record of records){
+    if(record.content?.includes('data-everytip-offer-slot'))record.content=renderOfferSlots(record.content);
+    if(record.content?.includes('[everytip_top_offers'))record.content=renderTopOffers(record.content);
+  }
 }

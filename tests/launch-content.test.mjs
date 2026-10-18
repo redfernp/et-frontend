@@ -33,13 +33,20 @@ test('incomplete or duplicate source fails instead of producing a partial site',
   await assert.rejects(readContent({ query: async () => { throw new Error('CMS unavailable'); } }), /CMS unavailable/);
 });
 
+test('requestGraphql passes per-request cache options through', async () => {
+  const source = (await import('node:fs')).readFileSync(new URL('../src/lib/launch-content.mjs', import.meta.url), 'utf8');
+  assert.match(source, /requestGraphql = \(query, variables = \{\}, options = \{\}\) => client\.request\(query, variables, options\)/);
+});
+
 test('incremental source re-fetches only changed, new and tip-table records', async () => {
   const { readContentIncremental, writeContentCache } = await import('../src/lib/launch-content.mjs');
   const record = (id, modified, content = '<p>Body</p>') => ({ databaseId: id, uri: `/r${id}`, title: `R${id}`, content, date: '2026-10-01T00:00:00', modified, status: 'publish', seo: {} });
   // Cached: 11 unchanged, 12 changed since, 13 has a tip table. 14 is new.
   await writeContentCache([{ ...record(11, 'a'), kind: 'posts' }, { ...record(12, 'a'), kind: 'posts' }, { ...record(13, 'a', '<table class="footable_5"></table>'), kind: 'posts' }]);
   const asked = [];
-  const records = await readContentIncremental({ query: async (document, variables) => {
+  const records = await readContentIncremental({ query: async (document, variables, options) => {
+    // Listings must never come from the disk cache, or edits and new posts would be missed.
+    assert.equal(options?.fresh, true);
     if (document.includes('LaunchListing')) return document.includes('posts(')
       ? { posts: { nodes: [11, 12, 13, 14].map((id) => ({ databaseId: id, uri: `/r${id}`, modified: id === 12 ? 'b' : 'a', status: 'publish' })), pageInfo: { hasNextPage: false } } }
       : { pages: { nodes: [{ databaseId: 1, uri: '/', modified: 'z', status: 'publish' }], pageInfo: { hasNextPage: false } } };

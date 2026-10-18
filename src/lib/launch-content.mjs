@@ -9,7 +9,7 @@ export const endpoint = import.meta.env?.WPGRAPHQL_ENDPOINT || process.env.WPGRA
 
 const fresh = (process.env.WPGRAPHQL_FRESH ?? import.meta.env?.WPGRAPHQL_FRESH) === '1';
 const client = createGraphqlClient({ endpoint, fresh });
-export const requestGraphql = (query, variables = {}) => client.request(query, variables);
+export const requestGraphql = (query, variables = {}, options = {}) => client.request(query, variables, options);
 
 let pending;
 export function launchContent() {
@@ -104,6 +104,20 @@ export async function readContentIncremental({ query = requestGraphql } = {}) {
       }`, { ids }, { fresh: true });
       if (!Array.isArray(result[kind]?.nodes)) throw new Error(`Incomplete ${kind} records`);
       for (const record of result[kind].nodes) fetched.set(record.databaseId, record);
+      // Staging's object cache can serve the pre-save copy for a short while. If a record is
+      // older than the listing says, wait and ask again (a later build would also catch it).
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        const behind = ids.filter((id) => fetched.get(id) && fetched.get(id).modified !== listing.find((node) => node.databaseId === id)?.modified);
+        if (!behind.length) break;
+        console.warn(`WPGraphQL ${kind}: ${behind.join(', ')} not yet updated; retry ${attempt}/3 in 20s`);
+        await new Promise((resolve) => setTimeout(resolve, 20000));
+        // The comment makes each retry a distinct request, so the in-memory cache cannot answer it.
+        const retry = await query(`# retry ${attempt}
+        query LaunchRecords($ids: [ID]) {
+          ${kind}(first: 5, where: { in: $ids }) { nodes { ${recordFields(kind)} } }
+        }`, { ids: behind }, { fresh: true });
+        for (const record of retry[kind]?.nodes ?? []) fetched.set(record.databaseId, record);
+      }
       console.log(`WPGraphQL ${kind}: refreshed ${Math.min(index + 5, stale.length)}/${stale.length}`);
     }
     for (const node of listing) {
