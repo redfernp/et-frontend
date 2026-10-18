@@ -66,8 +66,10 @@ const pilotMap = { '/english-premier-league-predictions-for-saturday': '/english
 const tipGroups = allGroups.map((group) => ({ ...group, links: group.links
   .map((link) => { const href = local(link.href); return { ...link, href: pilotMap[href] ?? href }; })
   .filter((link) => available.has(link.href)) })).filter((group) => group.links.length);
-const news = latestPosts(records, 40);
-const perPage = 10;
+// Offer News category only (tip articles are listed in the directory below), newest four.
+const offerNewsUris = new Set(records.filter((item) => item.kind === 'archive' && /\/offer-news$/.test(item.archiveBase ?? item.uri)).flatMap((item) => item.posts.map((post) => post.uri)));
+const news = latestPosts(records.filter((item) => offerNewsUris.has(item.uri)), 4);
+const perPage = 4;
 const editorial = removeExPartnerPromotion(launchHtml(contentFromHeading(record.content, /^Free Sports Betting Tips From Professional/i), endpoint));
 const formatDate = (value) => new Date(`${value}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 ---
@@ -102,7 +104,7 @@ const formatDate = (value) => new Date(`${value}T12:00:00Z`).toLocaleDateString(
     </section>}
 
     <section class="hub-news" aria-labelledby="hub-news-title" data-news-pager>
-      <div class="hub-section-heading"><p class="kicker">Latest from EveryTip</p><h2 id="hub-news-title">Today’s Betting Tips &amp; Offer News</h2></div>
+      <div class="hub-section-heading"><p class="kicker">Latest from EveryTip</p><h2 id="hub-news-title">Today’s Offer News</h2></div>
       <div class="hub-news-list news-two-col">
         {news.map((item, index) => <article data-news-page={Math.floor(index / perPage) + 1} hidden={index >= perPage}><time datetime={item.date}>{formatDate(item.date)}</time><h3><a href={item.uri}>{item.title}</a></h3></article>)}
       </div>

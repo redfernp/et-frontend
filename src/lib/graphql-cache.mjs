@@ -8,12 +8,12 @@ export function createGraphqlClient({ endpoint, directory = 'outputs/wpgraphql-c
   let queue = Promise.resolve();
   const memory = new Map();
   const receipts = [];
-  async function read(query, variables) {
+  async function read(query, variables, force = fresh) {
     const body = JSON.stringify({ query, variables });
     const key = createHash('sha256').update(`v1\n${endpoint}\n${body}`).digest('hex');
     if (memory.has(key)) return memory.get(key);
     const file = join(directory, `${key}.json`);
-    if (!fresh) {
+    if (!force) {
       try {
         const cached = JSON.parse(await readFile(file, 'utf8'));
         if (cached.key !== key || cached.endpoint !== endpoint || !cached.data || !cached.fetchedAt) throw new Error(`Invalid GraphQL cache: ${file}`);
@@ -55,9 +55,10 @@ export function createGraphqlClient({ endpoint, directory = 'outputs/wpgraphql-c
   }
   return {
     receipts,
-    request(query, variables = {}) {
+    // { fresh: true } skips the disk cache for this one request (incremental builds use it for listings).
+    request(query, variables = {}, options = {}) {
       // Even independent build routes share one sequential source queue.
-      const result = queue.then(() => read(query, variables));
+      const result = queue.then(() => read(query, variables, options.fresh ?? fresh));
       queue = result.catch(() => {});
       return result;
     },

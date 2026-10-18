@@ -8,7 +8,7 @@ export async function archiveMembership(query) {
   const seen = new Set();
   do {
     const { posts } = await query(`query LaunchMembership($after:String) {
-      posts(first:5,after:$after) { nodes { databaseId
+      posts(first:50,after:$after) { nodes { databaseId
         categories(first:100){nodes{databaseId} pageInfo{hasNextPage}}
         tags(first:100){nodes{databaseId} pageInfo{hasNextPage}}
         author{node{databaseId}}
@@ -86,7 +86,7 @@ export async function launchArchives(records, {query, endpoint, fresh=false, rec
   for (const kind of ['categories','tags','users']) {
     let after=null; const cursors=new Set();
     do {
-      const data=await query(`query LaunchArchives($after:String){${kind}(first:5,after:$after${kind==='users'?'':',where:{hideEmpty:false}'}){nodes{databaseId name uri}pageInfo{endCursor hasNextPage}}}`,{after});
+      const data=await query(`query LaunchArchives($after:String){${kind}(first:100,after:$after${kind==='users'?'':',where:{hideEmpty:false}'}){nodes{databaseId name uri}pageInfo{endCursor hasNextPage}}}`,{after});
       const connection=data[kind];
       for(const node of connection.nodes) {
         const selected=posts.filter(post=>{

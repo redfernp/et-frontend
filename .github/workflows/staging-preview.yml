@@ -1,24 +1,34 @@
-name: Staging Workers preview
+name: Build and deploy
+# Triggers: a WordPress save (the content-model plugin sends repository_dispatch about a minute
+# after the last save, and again when Ninja Tables rows change), a 30-minute safety net, a nightly
+# full refresh, and manual runs. Runs queue one at a time; GitHub keeps only the newest waiting
+# run, so a burst of saves becomes one build.
 on:
   workflow_dispatch:
+    inputs:
+      fresh:
+        description: Re-fetch every post and page instead of only changed ones
+        type: boolean
+        default: false
   repository_dispatch:
     types: [everytip-content-saved]
   schedule:
-    - cron: '17 * * * *'
+    - cron: '*/30 * * * *'
+    - cron: '23 3 * * *'
 permissions:
   contents: read
 concurrency:
-  group: everytip-staging-preview
+  group: everytip-build
   cancel-in-progress: false
 jobs:
-  build-preview:
+  build:
     if: vars.EVERYTIP_PREVIEW_BUILDS_ENABLED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
       WPGRAPHQL_ENDPOINT: ${{ vars.WPGRAPHQL_ENDPOINT || 'https://wordpress-159231-2098144.cloudwaysapps.com/graphql' }}
-      WPGRAPHQL_FRESH: '1'
-      CLOUDFLARE_API_TOKEN: ${{ secrets.EVERYTIP_PREVIEW_CLOUDFLARE_API_TOKEN }}
+      # Incremental by default: only new, changed and tip-table posts are re-fetched.
+      WPGRAPHQL_FRESH: ${{ (github.event.schedule == '23 3 * * *' || inputs.fresh) && '1' || '0' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -26,11 +36,33 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
+      # Per-post content and archive SEO from earlier runs, keyed by content source.
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            outputs/content-cache
+            outputs/archive-cache
+          key: content-${{ env.WPGRAPHQL_ENDPOINT }}-${{ github.run_id }}
+          restore-keys: content-${{ env.WPGRAPHQL_ENDPOINT }}-
       - run: npm run build
-      - run: node scripts/check-launch-parity.mjs --fresh
+      - run: node scripts/check-launch-parity.mjs ${{ env.WPGRAPHQL_FRESH == '1' && '--fresh' || '' }}
+      - uses: actions/cache/save@v4
+        with:
+          path: |
+            outputs/content-cache
+            outputs/archive-cache
+          key: content-${{ env.WPGRAPHQL_ENDPOINT }}-${{ github.run_id }}
+      # Test site (noindex preview).
       - run: node scripts/prepare-cloudflare-preview.mjs
-      # Preview deployment only. Never deploy the production Worker or DNS.
       - run: npx wrangler preview --config wrangler.preview.jsonc --name everytip-review --worker-name everytip-astro-preview --ignore-base-config
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.EVERYTIP_PREVIEW_CLOUDFLARE_API_TOKEN }}
+      # Production. Stays off until cutover: set EVERYTIP_PRODUCTION_DEPLOY_ENABLED=true and the
+      # EVERYTIP_PRODUCTION_CLOUDFLARE_API_TOKEN secret only after the CUTOVER-RUNBOOK checks pass.
+      - if: vars.EVERYTIP_PRODUCTION_DEPLOY_ENABLED == 'true'
+        run: npx wrangler deploy --config wrangler.production.jsonc
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.EVERYTIP_PRODUCTION_CLOUDFLARE_API_TOKEN }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

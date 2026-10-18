@@ -8,7 +8,6 @@
  */
 
 defined( 'ABSPATH' ) || exit;
-require_once __DIR__ . '/rebuild-hook.php';
 
 /**
  * Additional offer and bookmaker fields. These complement, rather than
