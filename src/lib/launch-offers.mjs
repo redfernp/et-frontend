@@ -29,9 +29,9 @@ const decode=value=>value.replace(/&quot;/g,'"').replace(/&#0?39;/g,"'").replace
 // terms and button. Offer blocks placed one after another become a numbered ranking.
 function offerCard(offer,reason,rank){
   return `<aside class="rank-card offer-card" data-offer-id="${offer.id}">${rank?`<span class="rank-number" aria-label="Rank ${rank}">${rank}</span>`:''}`
-    +`<div class="rank-logo" style="background:${escape(offer.brandColor)}"><a href="${escape(offer.link)}" rel="sponsored nofollow"><img src="${escape(offer.logo)}" alt="${escape(offer.bookmaker)}" loading="lazy"></a></div>`
+    +`<div class="rank-logo" style="background:${escape(offer.brandColor)}"><a href="${escape(offer.link)}" rel="nofollow"><img src="${escape(offer.logo)}" alt="${escape(offer.bookmaker)}" loading="lazy"></a></div>`
     +`<div class="rank-body"><p class="offer-bookmaker">${escape(offer.bookmaker)}</p><h3>${escape(offer.headline)}</h3>${reason?`<p class="rank-reason">${escape(reason)}</p>`:''}<p class="rank-terms">${escape(offer.terms)}</p></div>`
-    +`<div class="rank-cta"><a href="${escape(offer.link)}" rel="sponsored nofollow">${escape(offer.buttonText)}</a></div></aside>`;
+    +`<div class="rank-cta"><a href="${escape(offer.link)}" rel="nofollow">${escape(offer.buttonText)}</a></div></aside>`;
 }
 export function renderOfferSlots(content){
   const pieces=splitOfferSlots(content);

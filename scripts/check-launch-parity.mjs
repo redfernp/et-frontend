@@ -80,7 +80,7 @@ async function inspect(record) {
   const included = sitemap.includes(`<loc>${sitemapPath}</loc>`);
   const expectedInSitemap = !robotsFor(record).includes('noindex') && !verifiedLegacyRedirects.has(record.uri);
   if (included !== expectedInSitemap) failures.push({ path: record.uri, field: 'sitemap' });
-  for (const a of elements(doc, 'a')) if (/\/go\//.test(a.attribs.href ?? '') && !['sponsored','nofollow'].every(rel => (a.attribs.rel ?? '').split(/\s+/).includes(rel))) failures.push({ path: record.uri, field: 'affiliate-rel' });
+  for (const a of elements(doc, 'a')) if (/\/go\//.test(a.attribs.href ?? '') && (() => { const rel = (a.attribs.rel ?? '').split(/\s+/); return !rel.includes('nofollow') || rel.includes('sponsored'); })()) failures.push({ path: record.uri, field: 'affiliate-rel' });
 }
 const remaining=[...source.records];
 await Promise.all(Array.from({length:origin?5:1},async()=>{while(remaining.length)await inspect(remaining.shift());}));

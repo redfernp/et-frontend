@@ -29,7 +29,7 @@ const additionalOffers = expanded ? [] : displayOffers.slice(5);
         <h3>{offer.headline}</h3>
         <p>{offer.compactTerms ?? '#Ad · 18+ · This is a visual preview. Approved short terms will be supplied by the central ACF offer record.'}</p>
       </div>
-      {live ? <a class="home-ladder-cta" href={offer.ctaPath} rel="sponsored nofollow">{offer.ctaLabel}</a> : <span class="home-ladder-cta" aria-label="Offer link disabled in template preview">Offer preview</span>}
+      {live ? <a class="home-ladder-cta" href={offer.ctaPath} rel="nofollow">{offer.ctaLabel}</a> : <span class="home-ladder-cta" aria-label="Offer link disabled in template preview">Offer preview</span>}
     </li>)}
   </ol>
   {!expanded && <details class="home-ladder-more">
@@ -42,7 +42,7 @@ const additionalOffers = expanded ? [] : displayOffers.slice(5);
           <h3>{offer.headline}</h3>
           <p>{offer.compactTerms ?? '#Ad · 18+ · This is a visual preview. Approved short terms will be supplied by the central ACF offer record.'}</p>
         </div>
-        {live ? <a class="home-ladder-cta" href={offer.ctaPath} rel="sponsored nofollow">{offer.ctaLabel}</a> : <span class="home-ladder-cta" aria-label="Offer link disabled in template preview">Offer preview</span>}
+        {live ? <a class="home-ladder-cta" href={offer.ctaPath} rel="nofollow">{offer.ctaLabel}</a> : <span class="home-ladder-cta" aria-label="Offer link disabled in template preview">Offer preview</span>}
       </li>)}
     </ol>
   </details>}

@@ -23,7 +23,7 @@ const displayOffers = live ? offers : featuredOfferPreview.map((offer) => ({ ...
         </div>
         <h3>{offer.headline}</h3>
         <p class="featured-offer-terms">{offer.compactTerms ?? '#Ad · 18+ · Approved short terms will come from the central ACF offer record.'}</p>
-        {live ? <a class="featured-offer-cta" href={offer.ctaPath} rel="sponsored nofollow">{offer.ctaLabel}</a> : <span class="featured-offer-cta" aria-label="Offer link disabled in template preview">Offer preview</span>}
+        {live ? <a class="featured-offer-cta" href={offer.ctaPath} rel="nofollow">{offer.ctaLabel}</a> : <span class="featured-offer-cta" aria-label="Offer link disabled in template preview">Offer preview</span>}
       </article>
     </li>)}
   </ol>

@@ -38,7 +38,7 @@ const bandAfter = (index) => offer && (index + 1) % 3 === 0 && index < sections.
 ---
 <BaseLayout title={title} publicPage={true} wide={true} seo={seo} verifiedPublicPaths={paths} offers={offers}>
   <article class="bk-review cms-content" style={`--brand:${brand}`}>
-    {offer && <div class="claim-bar"><strong>🏆 New to {bookmaker.name}?</strong><a class="bk-btn bk-btn-light" href={offer.link} rel="sponsored nofollow">{offer.label} →</a></div>}
+    {offer && <div class="claim-bar"><strong>🏆 New to {bookmaker.name}?</strong><a class="bk-btn bk-btn-light" href={offer.link} rel="nofollow">{offer.label} →</a></div>}
 
     <header class="bk-hero">
       <div class="bk-hero-copy">
@@ -46,7 +46,7 @@ const bandAfter = (index) => offer && (index + 1) % 3 === 0 && index < sections.
         <h1>{title}</h1>
         <p class="bk-deck">Independent review by {byline.name}{byline.name === 'Seymour Biz' ? ', horse racing columnist' : ''}. Last updated {updated}.</p>
         {overall && <p class="bk-rating"><span class="bk-stars" aria-hidden="true">{stars(overall)}</span><strong>Rated {overall} / 5</strong>{verdictLabel && <span> · {verdictLabel}</span>}</p>}
-        {offer && <a class="bk-offer-btn" href={offer.link} rel="sponsored nofollow"><strong>{offer.headline} →</strong><span>For new UK customers at {bookmaker.name} only</span></a>}
+        {offer && <a class="bk-offer-btn" href={offer.link} rel="nofollow"><strong>{offer.headline} →</strong><span>For new UK customers at {bookmaker.name} only</span></a>}
         {offer?.terms && <p class="bk-terms">{offer.terms}</p>}
       </div>
       {offer?.logo && <div class="bk-hero-logo"><img src={offer.logo} alt={bookmaker.name} width="220" height="60" /></div>}
@@ -61,7 +61,7 @@ const bandAfter = (index) => offer && (index + 1) % 3 === 0 && index < sections.
       <ol>{scored.map((section) => <li><a href={`#${section.anchor}`}>{section.title}</a><span class="bk-row-score">{section.score} / 5 <span class="bk-stars" aria-hidden="true">{stars(section.score)}</span></span></li>)}</ol>
     </section>}
 
-    {offer && <aside class="bk-band"><div><strong>{offer.headline}</strong><span>New UK customers only · 18+ · T&amp;Cs apply</span></div><a class="bk-btn bk-btn-light" href={offer.link} rel="sponsored nofollow">{offer.label} →</a></aside>}
+    {offer && <aside class="bk-band"><div><strong>{offer.headline}</strong><span>New UK customers only · 18+ · T&amp;Cs apply</span></div><a class="bk-btn bk-btn-light" href={offer.link} rel="nofollow">{offer.label} →</a></aside>}
 
     {review.pros || review.cons ? <section class="bk-pros-cons">
       {review.pros && <div class="pros"><h2>{review.pros.title}</h2><div set:html={review.pros.html} /></div>}
@@ -77,11 +77,11 @@ const bandAfter = (index) => offer && (index + 1) % 3 === 0 && index < sections.
           <div class="bk-prose" set:html={section.html} />
         </div>
       </section>
-      {bandAfter(index) && <aside class="bk-band"><div><strong>{offer.headline}</strong><span>Offer available to new UK customers · Sign up takes 2 minutes</span></div><a class="bk-btn bk-btn-light" href={offer.link} rel="sponsored nofollow">{offer.label} →</a></aside>}
+      {bandAfter(index) && <aside class="bk-band"><div><strong>{offer.headline}</strong><span>Offer available to new UK customers · Sign up takes 2 minutes</span></div><a class="bk-btn bk-btn-light" href={offer.link} rel="nofollow">{offer.label} →</a></aside>}
     </>)}
 
     {review.verdict && <section class="bk-verdict"><p class="bk-eyebrow">{byline.name === 'Seymour Biz' ? 'Seymour Biz’s' : 'Our'} final verdict</p><h2>{review.verdict.title}</h2>{overall && <p class="bk-rating"><span class="bk-stars" aria-hidden="true">{stars(overall)}</span><strong>{overall} / 5</strong></p>}<div set:html={review.verdict.html} /></section>}
-    {offer && <aside class="bk-band bk-band-final"><div><strong>Ready to claim your {offer.headline.replace(/^bet\s*£\d+,?\s*(get|&)\s*/i, '')}?</strong>{offer.terms && <span class="bk-band-terms">{offer.terms}</span>}</div><a class="bk-btn bk-btn-light" href={offer.link} rel="sponsored nofollow">{offer.label} →</a></aside>}
+    {offer && <aside class="bk-band bk-band-final"><div><strong>Ready to claim your {offer.headline.replace(/^bet\s*£\d+,?\s*(get|&)\s*/i, '')}?</strong>{offer.terms && <span class="bk-band-terms">{offer.terms}</span>}</div><a class="bk-btn bk-btn-light" href={offer.link} rel="nofollow">{offer.label} →</a></aside>}
     {review.otherOffersHtml && <section class="bk-other" set:html={review.otherOffersHtml} />}
   </article>
   {offer && <ReviewMobileSticky bookmaker={bookmaker.name} offerHref={offer.link} ctaLabel={offer.label} />}

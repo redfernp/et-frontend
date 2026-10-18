@@ -47,6 +47,8 @@ export function launchHtml(html, sourceEndpoint) {
   const doc = parseDocument(hasBuilderMarkup(html) ? cleanupBuilderHtml(html) : html);
   const sourceHost = new URL(sourceEndpoint).hostname;
   function visit(node) {
+    // Sitewide rule: affiliate links are rel="nofollow" only, never "sponsored".
+    if (node.name === 'a' && node.attribs?.rel) node.attribs.rel = node.attribs.rel.split(/\s+/).filter((value) => value && value !== 'sponsored').join(' ') || 'nofollow';
     if (node.name === 'a' && node.attribs?.href) {
       try {
         const url = new URL(node.attribs.href, 'https://www.everytip.co.uk');
@@ -54,7 +56,7 @@ export function launchHtml(html, sourceEndpoint) {
           // Keep /go/ on the existing site until its redirect inventory is migrated.
           if (url.pathname.startsWith('/go/')) {
             node.attribs.href = `https://www.everytip.co.uk${url.pathname}${url.search}${url.hash}`;
-            node.attribs.rel = [...new Set([...(node.attribs.rel ?? '').split(/\s+/).filter(Boolean), 'sponsored', 'nofollow'])].join(' ');
+            node.attribs.rel = [...new Set([...(node.attribs.rel ?? '').split(/\s+/).filter(Boolean), 'nofollow'])].join(' ');
           } else node.attribs.href = `${url.pathname}${url.search}${url.hash}`;
         }
       } catch { /* Preserve unparseable editorial links for the link audit. */ }

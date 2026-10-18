@@ -98,7 +98,7 @@ const formatDate = (value) => new Date(`${value}T12:00:00Z`).toLocaleDateString(
     {offers[0] && <section class="hub-spotlight" aria-label="Featured bookmaker offer" style={`--spotlight-brand:${offers[0].brandColor}`}>
       <div class="hub-spotlight-logo"><img src={offers[0].logoUrl} alt={offers[0].bookmaker} width="150" height="40" /></div>
       <div class="hub-spotlight-copy"><span>Featured bookmaker · #Ad</span><h2>{offers[0].headline}</h2><p>{offers[0].compactTerms}</p></div>
-      <a class="hub-commercial-cta" href={offers[0].ctaPath} rel="sponsored nofollow">{offers[0].ctaLabel}</a>
+      <a class="hub-commercial-cta" href={offers[0].ctaPath} rel="nofollow">{offers[0].ctaLabel}</a>
     </section>}
 
     <section class="hub-news" aria-labelledby="hub-news-title" data-news-pager>

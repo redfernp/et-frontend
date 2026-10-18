@@ -5,7 +5,7 @@ const { bookmaker, offerHref, ctaLabel = 'View offer' } = Astro.props;
 <aside class="review-mobile-sticky" data-review-mobile-sticky aria-label={`${bookmaker} offer`} hidden>
   <div class="sticky-copy"><strong>{bookmaker}</strong><span>New-customer offer</span></div>
   {offerHref
-    ? <a class="sticky-cta" href={offerHref} rel="sponsored nofollow">{ctaLabel}</a>
+    ? <a class="sticky-cta" href={offerHref} rel="nofollow">{ctaLabel}</a>
     : <span class="sticky-cta sticky-disabled" aria-label="Offer link disabled in template preview">Offer preview</span>}
   <button class="sticky-dismiss" type="button" aria-label="Dismiss offer bar" data-review-sticky-dismiss>×</button>
   <p class="sticky-disclosure">#Ad · 18+ · Eligibility and terms apply. <a href="#review-offer">Read offer details</a></p>

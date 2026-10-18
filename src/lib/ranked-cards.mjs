@@ -86,7 +86,7 @@ function buildCard(logo, members, rank) {
     ${pairs.length ? `<dl class="rank-specs">${pairs.map(([label, value]) => `<div><dt>${escape(label)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>` : ''}
     ${terms ? `<p class="rank-terms">${escape(terms)}</p>` : ''}
   </div>
-  ${cta ? `<div class="rank-cta"><a href="${escape(cta.href)}" rel="sponsored nofollow">${escape(cta.label)}</a></div>` : ''}
+  ${cta ? `<div class="rank-cta"><a href="${escape(cta.href)}" rel="nofollow">${escape(cta.label)}</a></div>` : ''}
 </div>${statsOnly ? facts.map((fact) => `
 <p>${escape(fact)}</p>`).join('') : ''}`;
 }
@@ -141,7 +141,7 @@ export function fillEmptyLinkCells(html) {
       if (!cell || clean(text(cell))) continue;
       const go = tags(row, 'a').find((a) => isGo(a.attribs.href) && clean(text(a)));
       if (!go) continue;
-      cell.children = parseDocument(`<a class="table-cta" href="${escape(go.attribs.href)}" rel="sponsored nofollow">Visit site</a>`).children;
+      cell.children = parseDocument(`<a class="table-cta" href="${escape(go.attribs.href)}" rel="nofollow">Visit site</a>`).children;
       changed = true;
     }
   }

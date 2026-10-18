@@ -15,6 +15,6 @@ test('localises editorial links and retains working affiliate paths with require
   const html = launchHtml('<a href="https://stage.example/page">Page</a><a href="/go/bookie?x=1" rel="noopener">Offer</a><table><tr><td>Live row</td></tr></table>', 'https://stage.example/graphql');
   assert.match(html, /href="\/page"/);
   assert.match(html, /href="https:\/\/www.everytip.co.uk\/go\/bookie\?x=1"/);
-  assert.match(html, /rel="noopener sponsored nofollow"/);
+  assert.match(html, /rel="noopener nofollow"/);
   assert.match(html, /Live row/);
 });
