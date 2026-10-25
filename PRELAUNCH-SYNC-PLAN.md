@@ -98,3 +98,25 @@ directly.
   from live (for example the old offer posts Paul is deleting) is set to draft on staging, so
   the push does not bring it back. Paul adds any 301s he wants for the deleted URLs.
 - **New categories, tags or authors on live**: created on staging by slug before the posts.
+
+## How the script decides (built and rehearsed 25 October 2026)
+
+`node --env-file=.env.local scripts/prelaunch-sync.mjs [--apply] [--only=IDs] [--force=IDs]`.
+Without `--apply` it is a dry run that writes `outputs/prelaunch/<time>/report.md`.
+
+For each changed post it finds staging's starting point (the newest live revision that matches
+any version in staging's own history; the clone rewrote links to the staging host, so they are
+normalised first) and compares the visible text:
+
+| Situation | What happens |
+|---|---|
+| Live changed, staging only has the standard edits (ladder swap, 18+ line, block conversion) | Live copied over, standard edits re-applied |
+| Live only re-saved (same words, different encoding) | Staging kept |
+| Staging holds an older day's tips (seen: ITV, Singapore) | Copied with `--force=ID` |
+| Real edits on both sides | Skipped, all three versions saved for a manual merge |
+| Beaver layout with content (only Jason Weaver now) | Skipped, copied by hand (about 2 minutes) |
+| Created earlier by this script | Matched by slug, refreshed from live |
+
+Dry run on 25 October: 49 changed posts, 45 automatic (2 of them forced), 3 kept as re-saves,
+Champions League needs nothing (staging already has live's change), Jason Weaver by hand.
+Rehearsed writes on Templegate's tips and one new offer post; a second run made no duplicates.
