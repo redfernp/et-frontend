@@ -1,0 +1,50 @@
+{
+  "refreshedAt": "2026-10-18",
+  "source": "Tipstrr public tipster profiles: verified results at £10 level stakes; prices are Tipstrr's monthly membership",
+  "sections": [
+    {
+      "key": "horse-racing",
+      "label": "Horse racing tipsters",
+      "icon": "🐎",
+      "tipsters": [
+        { "slug": "underdog-racing-tips", "name": "UNDERDOG Racing Tips", "since": "October 2019", "profit": 79204, "period": "all time", "tips": 11367, "tipsPerWeek": 32, "avgOdds": 16.93, "winRate": "22%", "roi": "35.0%", "monthlyProfit": 945, "price": 39, "introPrice": 11.7, "image": "https://cdn.tipstrr.com/central/portfolio/image/underdog-racing-tips-FPMc1UQ3.jpg" },
+        { "slug": "the-profit-rocket", "name": "The Profit Rocket", "since": "August 2023", "profit": 57035, "period": "all time", "tips": 9767, "tipsPerWeek": 60, "avgOdds": 14.77, "winRate": "25%", "roi": "29.4%", "monthlyProfit": 1496, "price": 29, "introPrice": 8.7, "image": "https://cdn.tipstrr.com/central/portfolio/image/the-profit-rocket-hnJxz9RC.jpg" },
+        { "slug": "the-king-of-horses", "name": "The King of Horses", "since": "April 2023", "profit": 51078, "period": "all time", "tips": 12760, "tipsPerWeek": 71, "avgOdds": 13.88, "winRate": "25%", "roi": "20.1%", "monthlyProfit": 1223, "price": 29, "introPrice": 8.7, "image": "https://cdn.tipstrr.com/central/portfolio/image/the-king-of-horses-0sTrSDd8.jpg" },
+        { "slug": "early-value-racing", "name": "Early Value Racing", "since": "June 2026", "profit": 4516, "period": "in the last 6 months", "tips": 1127, "tipsPerWeek": 44, "avgOdds": 7.5, "winRate": "36%", "roi": "20.4%", "monthlyProfit": 751, "price": 39, "introPrice": 11.7, "image": "https://cdn.tipstrr.com/central/portfolio/image/early-value-racing-cwP104kX.jpg" },
+        { "slug": "moth-tips", "name": "Moth Tips", "since": "May 2025", "profit": 2711, "period": "in the last 3 months", "tips": 424, "tipsPerWeek": 33, "avgOdds": 11.05, "winRate": "31%", "roi": "32.2%", "monthlyProfit": 897, "price": 29, "introPrice": 14.5, "image": "https://cdn.tipstrr.com/central/portfolio/image/moth-tips-B178rL3a.jpg" }
+      ]
+    },
+    {
+      "key": "football",
+      "label": "Football tipsters",
+      "icon": "⚽",
+      "tipsters": [
+        { "slug": "svb-tips", "name": "SVB Tips", "since": "January 2019", "profit": 24768, "period": "all time", "tips": 16253, "tipsPerWeek": 41, "avgOdds": 3.91, "winRate": "35%", "roi": "15.2%", "monthlyProfit": 266, "price": 29, "introPrice": 8.7, "image": "https://cdn.tipstrr.com/central/portfolio/image/svb-tips-6ffd47g5.jpg" },
+        { "slug": "matchmind-gold", "name": "Matchmind Gold", "since": "June 2026", "profit": 1186, "period": "in the last 3 months", "tips": 133, "tipsPerWeek": 11, "avgOdds": 20.33, "winRate": "27%", "roi": "22.7%", "monthlyProfit": 392, "price": 29, "introPrice": 17.4, "image": "https://cdn.tipstrr.com/central/portfolio/image/matchmind-gold-VwxejXYZ.jpg" },
+        { "slug": "the-btts-extreme", "name": "The BTTS Extreme", "since": "February 2026", "profit": 809, "period": "in the last 12 months", "tips": 448, "tipsPerWeek": 9, "avgOdds": 3.88, "winRate": "31%", "roi": "18.1%", "monthlyProfit": 67, "price": 29, "introPrice": 14.5, "image": "https://cdn.tipstrr.com/central/portfolio/image/the-btts-extreme-abDGm0NN.jpg" },
+        { "slug": "korika12", "name": "Korika12", "since": "December 2025", "profit": 550, "period": "in the last 3 months", "tips": 501, "tipsPerWeek": 34, "avgOdds": 2.8, "winRate": "48%", "roi": "11.0%", "monthlyProfit": 161, "price": 49, "introPrice": 14.7, "image": "https://cdn.tipstrr.com/central/portfolio/image/korika12-7nLbt42G.jpg" }
+      ]
+    },
+    {
+      "key": "tennis",
+      "label": "Tennis tipsters",
+      "icon": "🎾",
+      "tipsters": [
+        { "slug": "steviebetscom", "name": "Steviebets.com", "since": "June 2025", "profit": 349, "period": "all time", "tips": 376, "tipsPerWeek": 6, "avgOdds": 2.54, "winRate": "46%", "roi": "9.3%", "monthlyProfit": 22, "price": 119, "introPrice": 83.3, "image": "https://cdn.tipstrr.com/central/portfolio/image/steviebetscom-KObfV240.jpg" },
+        { "slug": "readyplay", "name": "ReadyPlay", "since": "March 2026", "profit": 252, "period": "in the last 12 months", "tips": 284, "tipsPerWeek": 6, "avgOdds": 1.89, "winRate": "55%", "roi": "8.9%", "monthlyProfit": 21, "price": 39, "introPrice": 27.3, "image": "https://cdn.tipstrr.com/central/portfolio/image/readyplay-EfD9P1Uy.jpg" },
+        { "slug": "high-betting-odds", "name": "High Betting Odds", "since": "May 2026", "profit": 53.6, "period": "in the last 3 months", "tips": 60, "tipsPerWeek": 5, "avgOdds": 1.88, "winRate": "57%", "roi": "8.9%", "monthlyProfit": 17, "price": 49, "introPrice": 19.6, "image": "https://cdn.tipstrr.com/central/portfolio/image/high-betting-odds-sYJ26Icg.jpg" },
+        { "slug": "firststrike", "name": "FirstStrike", "since": "March 2026", "profit": 210, "period": "in the last 12 months", "tips": 469, "tipsPerWeek": 10, "avgOdds": 2.43, "winRate": "44%", "roi": "4.5%", "monthlyProfit": 17, "price": 39, "introPrice": 27.3, "image": "https://cdn.tipstrr.com/central/portfolio/image/firststrike-AYB5OYux.jpg" }
+      ]
+    },
+    {
+      "key": "us-sports",
+      "label": "US sports tipsters",
+      "icon": "⚾",
+      "tipsters": [
+        { "slug": "mlbets", "name": "MLBets", "since": "May 2025", "profit": 679, "period": "all time", "tips": 1008, "tipsPerWeek": 14, "avgOdds": 2.22, "winRate": "48%", "roi": "6.7%", "monthlyProfit": 39, "price": 49, "introPrice": 34.3, "image": "https://cdn.tipstrr.com/central/portfolio/image/mlbets-1Z5H24dw.jpg" },
+        { "slug": "mlb-prophet", "name": "MLB Prophet", "since": "April 2026", "profit": 487, "period": "in the last 6 months", "tips": 745, "tipsPerWeek": 29, "avgOdds": 2.03, "winRate": "51%", "roi": "6.5%", "monthlyProfit": 80, "price": 49, "introPrice": 29.4, "image": "https://cdn.tipstrr.com/central/portfolio/image/mlb-prophet-p3qRFSDJ.jpg" },
+        { "slug": "2-way-choice", "name": "2 Way Choice", "since": "January 2026", "profit": 205, "period": "in the last 12 months", "tips": 478, "tipsPerWeek": 10, "avgOdds": 2.73, "winRate": "44%", "roi": "4.3%", "monthlyProfit": 17, "price": 29, "introPrice": 8.7, "image": "https://cdn.tipstrr.com/central/portfolio/image/2-way-choice-rfGknFjB.jpg" }
+      ]
+    }
+  ]
+}

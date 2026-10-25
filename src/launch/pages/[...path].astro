@@ -7,6 +7,7 @@ import LaunchBet365Review from '../../components/launch/LaunchBet365Review.astro
 import LaunchColumnArchive from '../../components/launch/LaunchColumnArchive.astro';
 import LaunchReview from '../../components/launch/LaunchReview.astro';
 import LaunchNewsletter from '../../components/launch/LaunchNewsletter.astro';
+import LaunchTipsters from '../../components/launch/LaunchTipsters.astro';
 import ColumnistProfile from '../../components/ColumnistProfile.astro';
 import { launchContent, robotsFor, endpoint } from '../../lib/launch-content.mjs';
 import { launchOfferLineup } from '../../lib/launch-offers.mjs';
@@ -57,6 +58,7 @@ const formatDate = (value) => value ? new Date(`${value}T12:00:00Z`).toLocaleDat
  archiveColumnist ? <LaunchColumnArchive record={record} records={records} paths={paths} offers={offers} seo={seo} columnist={archiveColumnist} /> :
  bookmakerReviews[record.uri] ? <LaunchReview record={record} body={body} paths={paths} offers={offers} seo={seo} bookmaker={bookmakerReviews[record.uri]} /> :
  record.uri === '/bet365-review' ? <LaunchBet365Review record={record} paths={paths} offers={offers} seo={seo} /> :
+ record.uri === '/professional-winning-tipsters-comparison-table' ? <LaunchTipsters record={record} paths={paths} offers={offers} seo={seo} /> :
  record.uri === '/daily-newsletter' ? <LaunchNewsletter record={record} paths={paths} offers={offers} seo={seo} /> :
  record.uri === '/free-betting-tips' ? <LaunchFreeTips record={record} records={records} paths={paths} offers={offers} seo={seo} /> :
 guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo} verifiedPublicPaths={paths} offers={offers}>

@@ -698,6 +698,70 @@
       "status": 302,
       "location": "https://hop.clickbank.net/?affiliate=predfern&vendor=betgods&cbpage=TS"
     },
+    "/go/tipstrr-2-way-choice": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/2-way-choice/join?ref-a=everytip"
+    },
+    "/go/tipstrr-early-value-racing": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/early-value-racing/join?ref-a=everytip"
+    },
+    "/go/tipstrr-firststrike": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/firststrike/join?ref-a=everytip"
+    },
+    "/go/tipstrr-high-betting-odds": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/high-betting-odds/join?ref-a=everytip"
+    },
+    "/go/tipstrr-korika12": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/korika12/join?ref-a=everytip"
+    },
+    "/go/tipstrr-matchmind-gold": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/matchmind-gold/join?ref-a=everytip"
+    },
+    "/go/tipstrr-mlb-prophet": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/mlb-prophet/join?ref-a=everytip"
+    },
+    "/go/tipstrr-mlbets": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/mlbets/join?ref-a=everytip"
+    },
+    "/go/tipstrr-moth-tips": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/moth-tips/join?ref-a=everytip"
+    },
+    "/go/tipstrr-readyplay": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/readyplay/join?ref-a=everytip"
+    },
+    "/go/tipstrr-steviebetscom": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/steviebetscom/join?ref-a=everytip"
+    },
+    "/go/tipstrr-svb-tips": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/svb-tips/join?ref-a=everytip"
+    },
+    "/go/tipstrr-the-btts-extreme": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/the-btts-extreme/join?ref-a=everytip"
+    },
+    "/go/tipstrr-the-king-of-horses": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/the-king-of-horses/join?ref-a=everytip"
+    },
+    "/go/tipstrr-the-profit-rocket": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/the-profit-rocket/join?ref-a=everytip"
+    },
+    "/go/tipstrr-underdog-racing-tips": {
+      "status": 302,
+      "location": "https://tipstrr.com/tipster/underdog-racing-tips/join?ref-a=everytip"
+    },
     "/go/top-20-golf-tips": {
       "status": 302,
       "location": "http://bettinggods.com/go.php?offer=predfern&pid=39"

@@ -1,0 +1,100 @@
+---
+// Paid tipsters page: Tipstrr tipsters by sport, from data/tipstrr-tipsters.json (a dated snapshot
+// of their verified public profiles). Links go through /go/tipstrr-<slug> (scripts/tipstrr-links.mjs).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import data from '../../../data/tipstrr-tipsters.json';
+
+const { record, paths, offers, seo } = Astro.props;
+const pounds = (value) => `£${Math.round(value).toLocaleString('en-GB')}`;
+const pence = (value) => `£${value.toFixed(2)}`;
+const period = (value) => value.replace(/^in the /, '');
+const asOf = new Date(`${data.refreshedAt}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<BaseLayout title={record.title} publicPage={true} seo={seo} verifiedPublicPaths={paths} offers={offers} wide={true}>
+  <article class="tp-page">
+    <header class="tp-hero">
+      <p class="tp-kicker">Paid tipsters · verified results</p>
+      <h1>The best paid betting tipsters by sport</h1>
+      <p class="tp-lede">Every tipster here has their results recorded and verified by Tipstrr against real bookmaker odds, so the profit figures are not self-reported. Pick your sport, compare the numbers and try a month.</p>
+      <nav class="tp-jump" aria-label="Sports">
+        {data.sections.map((section) => <a href={`#${section.key}`}><span aria-hidden="true">{section.icon}</span>{section.label.replace(' tipsters', '')}</a>)}
+      </nav>
+    </header>
+
+    <p class="tp-disclosure"><strong>#Ad</strong> EveryTip earns a commission if you join a tipster through these links, at no extra cost to you. Stats are from Tipstrr at £10 level stakes, checked {asOf}. Past results do not guarantee future profit. 18+, please gamble responsibly.</p>
+
+    {data.sections.map((section) => <section id={section.key} class="tp-section" aria-labelledby={`${section.key}-title`}>
+      <h2 id={`${section.key}-title`}><span aria-hidden="true">{section.icon}</span> {section.label}</h2>
+      <ol class="tp-list">
+        {section.tipsters.map((tipster, index) => <li class="tp-card">
+          <span class="tp-rank">{index + 1}</span>
+          <img class="tp-avatar" src={`${tipster.image}?width=128`} alt="" width="64" height="64" loading="lazy" />
+          <div class="tp-head">
+            <h3>{tipster.name}</h3>
+            <p>On Tipstrr since {tipster.since} · about {tipster.tipsPerWeek} tips a week</p>
+          </div>
+          <dl class="tp-stats">
+            <div class="tp-profit"><dt>Profit ({period(tipster.period)})</dt><dd>{pounds(tipster.profit)}</dd></div>
+            <div><dt>ROI</dt><dd>{tipster.roi}</dd></div>
+            <div><dt>Win rate</dt><dd>{tipster.winRate}</dd></div>
+            <div><dt>Avg odds</dt><dd>{tipster.avgOdds.toFixed(2)}</dd></div>
+          </dl>
+          <div class="tp-cta">
+            <p>{pounds(tipster.price)}/month{tipster.introPrice && <span>First month {pence(tipster.introPrice)}</span>}</p>
+            <a href={`/go/tipstrr-${tipster.slug}`} rel="nofollow">View tipster</a>
+          </div>
+        </li>)}
+      </ol>
+    </section>)}
+
+    <section class="tp-how" aria-labelledby="tp-how-title">
+      <h2 id="tp-how-title">How we choose these tipsters</h2>
+      <ul>
+        <li><strong>Verified results only.</strong> Tipstrr records every tip at the time it is posted and settles it against bookmaker odds.</li>
+        <li><strong>In profit.</strong> Each tipster shows a profit and a positive return on investment over the period Tipstrr reports.</li>
+        <li><strong>Open to new members.</strong> We only list services you can join today, with the monthly price shown.</li>
+      </ul>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .tp-page { color: #263748; }
+  .tp-hero { padding: 30px; border-radius: 18px; background: linear-gradient(135deg, #1c598f 0%, #256dae 60%, #2f7fc4 100%); color: #fff; }
+  .tp-kicker { margin: 0 0 8px; color: #ffb37a; font-size: 13px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+  .tp-hero h1 { margin: 0 0 10px; color: #fff; font-size: clamp(28px, 4vw, 42px); line-height: 1.1; }
+  .tp-lede { max-width: 760px; margin: 0 0 18px; font-size: 17px; line-height: 1.6; color: #e6f0f8; }
+  .tp-jump { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tp-jump a { display: inline-flex; gap: 6px; align-items: center; padding: 8px 14px; border-radius: 999px; background: #ffffff26; color: #fff; font-weight: 800; font-size: 14px; text-decoration: none; }
+  .tp-jump a:hover { background: #ffffff40; }
+  .tp-disclosure { margin: 16px 0 0; padding: 12px 16px; border-left: 4px solid var(--et-orange); background: #fff4e9; font-size: 13px; }
+  .tp-section { margin-top: 34px; scroll-margin-top: 20px; }
+  .tp-section h2 { margin: 0 0 14px; font-size: 26px; color: #183f60; }
+  .tp-list { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .tp-card { display: grid; grid-template-columns: 34px 64px minmax(0, 1.2fr) minmax(0, 1.6fr) 170px; gap: 16px; align-items: center; padding: 16px 18px; border: 1px solid #dce6ed; border-left: 5px solid #1c598f; border-radius: 14px; background: #fff; box-shadow: 0 3px 12px #102a400d; }
+  .tp-rank { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: #183f60; color: #fff; font-weight: 900; }
+  .tp-avatar { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; background: #eef3f7; }
+  .tp-head h3 { margin: 0 0 4px; font-size: 18px; color: #183f60; }
+  .tp-head p { margin: 0; font-size: 13px; color: #5d6b78; }
+  .tp-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0; }
+  .tp-stats div { padding: 8px 10px; border-radius: 10px; background: #f3f7fb; }
+  .tp-stats dt { font-size: 11px; font-weight: 800; color: #5d6b78; text-transform: uppercase; letter-spacing: .03em; }
+  .tp-stats dd { margin: 2px 0 0; font-size: 17px; font-weight: 900; color: #183f60; }
+  .tp-stats .tp-profit dd { color: #15803d; }
+  .tp-cta { text-align: center; }
+  .tp-cta p { margin: 0 0 8px; font-weight: 900; color: #183f60; }
+  .tp-cta p span { display: block; font-size: 12px; font-weight: 700; color: #b45608; }
+  .tp-cta a { display: block; padding: 11px 14px; border-radius: 10px; background: var(--et-commercial, #c94f00); color: #fff; font-weight: 900; text-decoration: none; }
+  .tp-how { margin-top: 36px; padding: 22px 24px; border-radius: 14px; background: #eef5fa; }
+  .tp-how h2 { margin: 0 0 10px; font-size: 22px; color: #183f60; }
+  .tp-how ul { margin: 0; padding-left: 20px; }
+  .tp-how li { margin: 6px 0; }
+  @media (max-width: 980px) {
+    .tp-card { grid-template-columns: 34px 56px minmax(0, 1fr); }
+    .tp-avatar { width: 56px; height: 56px; }
+    .tp-stats, .tp-cta { grid-column: 1 / -1; }
+    .tp-cta { display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left; }
+    .tp-cta p { margin: 0; }
+  }
+  @media (max-width: 520px) { .tp-hero { padding: 22px; } .tp-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>
