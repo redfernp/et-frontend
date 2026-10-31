@@ -29,9 +29,11 @@ export function launchContent() {
   });
 }
 
+// Author (byline, author box) and Yoast's JSON-LD graph travel with each record.
 const recordFields = kind => `databaseId uri title content date modified status
   ${kind === 'pages' ? 'isPostsPage' : ''}
-  seo { title metaDesc canonical metaRobotsNoindex metaRobotsNofollow }`;
+  author { node { name description uri slug avatar(size: 96) { url } } }
+  seo { title metaDesc canonical metaRobotsNoindex metaRobotsNofollow schema { raw } }`;
 const hasTipTable = record => /ninja_table_instance|footable_\d+/.test(record.content ?? '');
 const contentCacheDir = process.env.EVERYTIP_CONTENT_CACHE || 'outputs/content-cache';
 
@@ -93,7 +95,8 @@ export async function readContentIncremental({ query = requestGraphql } = {}) {
     const stale = [];
     for (const node of listing) {
       const hit = await readCached(kind, node.databaseId);
-      if (hit && hit.modified === node.modified && hit.uri === node.uri && !hasTipTable(hit)) cached.set(node.databaseId, hit);
+      // Entries saved before author and schema were fetched are refreshed once.
+      if (hit && hit.modified === node.modified && hit.uri === node.uri && !hasTipTable(hit) && 'author' in hit && hit.seo && 'schema' in hit.seo) cached.set(node.databaseId, hit);
       else stale.push(node.databaseId);
     }
     const fetched = new Map();
@@ -142,10 +145,7 @@ export async function readContent({ query = requestGraphql } = {}) {
     do {
       const result = await query(`query LaunchContent($after: String) {
         ${kind}(first: 5, after: $after) {
-          nodes { databaseId uri title content date modified status
-            ${kind === 'pages' ? 'isPostsPage' : ''}
-            seo { title metaDesc canonical metaRobotsNoindex metaRobotsNofollow }
-          }
+          nodes { ${recordFields(kind)} }
           pageInfo { endCursor hasNextPage }
         }
       }`, { after });

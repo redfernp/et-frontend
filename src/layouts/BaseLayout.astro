@@ -41,6 +41,7 @@ const publicPaths = new Set(verifiedPublicPaths);
     {(!publicPage || previewOnly) && <meta name="everytip-preview" content="not-for-publication" />}
     {seo?.description && <meta name="description" content={seo.description} />}
     {publicPage && !previewOnly && seo?.canonical && <link rel="canonical" href={seo.canonical} />}
+    {publicPage && seo?.schema && <script type="application/ld+json" set:html={seo.schema} />}
     <title>{resolvedTitle}</title>
     {publicPage && !previewOnly && <CookieConsent part="head" />}
   </head>

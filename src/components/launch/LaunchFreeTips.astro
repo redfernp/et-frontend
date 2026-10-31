@@ -5,7 +5,7 @@ import FreeTipsDirectory from '../FreeTipsDirectory.astro';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
 import { removeExPartnerPromotion } from '../../lib/ranked-cards.mjs';
 import { endpoint } from '../../lib/launch-content.mjs';
-import { contentFromHeading, latestPosts } from '../../lib/launch-templates.mjs';
+import { contentFromHeading, latestOfferNews } from '../../lib/launch-templates.mjs';
 
 const { record, records, paths, offers, seo } = Astro.props;
 const available = new Set(paths);
@@ -67,8 +67,7 @@ const tipGroups = allGroups.map((group) => ({ ...group, links: group.links
   .map((link) => { const href = local(link.href); return { ...link, href: pilotMap[href] ?? href }; })
   .filter((link) => available.has(link.href)) })).filter((group) => group.links.length);
 // Offer News category only (tip articles are listed in the directory below), newest four.
-const offerNewsUris = new Set(records.filter((item) => item.kind === 'archive' && /\/offer-news$/.test(item.archiveBase ?? item.uri)).flatMap((item) => item.posts.map((post) => post.uri)));
-const news = latestPosts(records.filter((item) => offerNewsUris.has(item.uri)), 4);
+const news = latestOfferNews(records, 4);
 const perPage = 4;
 const editorial = removeExPartnerPromotion(launchHtml(contentFromHeading(record.content, /^Free Sports Betting Tips From Professional/i), endpoint));
 const formatDate = (value) => new Date(`${value}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });

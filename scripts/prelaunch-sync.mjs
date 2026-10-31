@@ -63,6 +63,8 @@ export function stagingRecipes(raw) {
     notes.push(`unlinked former partner: ${href.replace(/^https?:\/\/[^/]+/, '')}`);
     return text;
   });
+  // Beaver saved-layout shortcodes print as text now that Beaver is off.
+  if (/\[fl_builder_insert_layout[^\]]*\]/.test(html)) { html = html.replace(/(?:<p>\s*)?\[fl_builder_insert_layout[^\]]*\](?:\s*<\/p>)?\s*/g, ''); notes.push('removed Beaver layout shortcode'); }
   // An empty Beaver layout wrapper around ordinary content (Beaver is off on staging).
   if (/<!-- \/?wp:fl-builder\/layout -->/.test(html)) { html = html.replace(/<!-- \/?wp:fl-builder\/layout -->\s*/g, ''); notes.push('removed Beaver wrapper'); }
   if (/fl-builder|tve_|tcb-/.test(html)) notes.push('CHECK: page builder markup');

@@ -40,7 +40,7 @@ test('requestGraphql passes per-request cache options through', async () => {
 
 test('incremental source re-fetches only changed, new and tip-table records', async () => {
   const { readContentIncremental, writeContentCache } = await import('../src/lib/launch-content.mjs');
-  const record = (id, modified, content = '<p>Body</p>') => ({ databaseId: id, uri: `/r${id}`, title: `R${id}`, content, date: '2026-10-01T00:00:00', modified, status: 'publish', seo: {} });
+  const record = (id, modified, content = '<p>Body</p>') => ({ databaseId: id, uri: `/r${id}`, title: `R${id}`, content, date: '2026-10-01T00:00:00', modified, status: 'publish', author: null, seo: { schema: { raw: '' } } });
   // Cached: 11 unchanged, 12 changed since, 13 has a tip table. 14 is new.
   await writeContentCache([{ ...record(11, 'a'), kind: 'posts' }, { ...record(12, 'a'), kind: 'posts' }, { ...record(13, 'a', '<table class="footable_5"></table>'), kind: 'posts' }]);
   const asked = [];

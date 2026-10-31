@@ -43,7 +43,11 @@ export function cleanupBuilderHtml(html) {
 }
 
 export function launchHtml(html, sourceEndpoint) {
-  html = html ?? '';
+  // Page-builder shortcodes WordPress leaves unrendered (Beaver saved layouts, Thrive pagination)
+  // stay in the post for the editors but never print as text on the site.
+  html = (html ?? '').replace(/(?:<p>\s*)?\[fl_builder_insert_layout[^\]]*\](?:\s*<\/p>)?/g, '')
+    .replace(/(?:Page\s*)?<span[^>]*data-shortcode="tcb_pagination_current_page"[\s\S]*?<\/span>\s*of\s*<span[^>]*data-shortcode="tcb_pagination_total_pages"[\s\S]*?<\/span>/g, '')
+    .replace(/<span[^>]*data-shortcode="tcb_pagination_[a-z_]+"[^>]*>[\s\S]*?<\/span>/g, '');
   const doc = parseDocument(hasBuilderMarkup(html) ? cleanupBuilderHtml(html) : html);
   const sourceHost = new URL(sourceEndpoint).hostname;
   function visit(node) {

@@ -14,7 +14,7 @@ import { launchOfferLineup } from '../../lib/launch-offers.mjs';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
 import { rebuildRankedCards, fillEmptyLinkCells, responsiveNinjaTables, polishContent, removeExPartnerPromotion, mergeSplitLinks } from '../../lib/ranked-cards.mjs';
 import { columnistKeyForUri, legacyColumnistPortraitPaths } from '../../lib/columnist-profiles.mjs';
-import { bookmakerReviews, canonicalFor, articleCategory, columnistArchives, launchColumnists, isGuide, withHeadingIds } from '../../lib/launch-templates.mjs';
+import { schemaFor, authorFor, bookmakerReviews, canonicalFor, articleCategory, columnistArchives, launchColumnists, isGuide, withHeadingIds } from '../../lib/launch-templates.mjs';
 
 export async function getStaticPaths() {
   const records = await launchContent();
@@ -32,7 +32,9 @@ const seo = {
   // Canonicals always name the public site, whichever WordPress host the build reads.
   canonical: canonicalFor(record),
   robots: robotsFor(record),
+  schema: schemaFor(record),
 };
+const author = record.kind === 'posts' ? authorFor(record) : null;
 const isHome = record.uri === '/';
 const archiveColumnist = record.posts?.length ? Object.keys(columnistArchives).find((key) => columnistArchives[key] === record.archiveBase) : null;
 const columnist = columnistKeyForUri(record.uri);
@@ -82,7 +84,7 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
     <h1 set:html={record.title} />
     {profile && <ColumnistProfile profile={profile} variant="byline" archiveHref={columnistArchives[columnist]} />}
     {record.kind === 'posts' && published && <p class="exact-preview-meta">
-      {profile ? `By ${profile.name} · ` : ''}Published {formatDate(published)}{modified && modified !== published ? ` · Updated ${formatDate(modified)}` : ''}
+      {profile ? `By ${profile.name} · ` : author ? <>By {author.href ? <a href={author.href}>{author.name}</a> : author.name} · </> : ''}Published {formatDate(published)}{modified && modified !== published ? ` · Updated ${formatDate(modified)}` : ''}
     </p>}
     {body && <div class="exact-preview-body cms-content" set:html={body} />}
     {record.posts?.length > 0 && <>
@@ -96,6 +98,10 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
       </nav>
     </>}
     {profile && <ColumnistProfile profile={profile} variant="full" archiveHref={columnistArchives[columnist]} />}
+    {!profile && author && <aside class="author-box" aria-label="About the author">
+      {author.avatar && <img src={author.avatar} alt="" width="72" height="72" loading="lazy" />}
+      <div><p class="author-box-name">{author.href ? <a href={author.href}>{author.name}</a> : author.name}</p>{author.description && <p>{author.description}</p>}</div>
+    </aside>}
     <p class="exact-preview-source">18+ · Please gamble responsibly · <a href="https://www.begambleaware.org/" rel="noopener">BeGambleAware.org</a></p>
   </article>
 </BaseLayout>}

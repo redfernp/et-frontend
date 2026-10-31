@@ -67,6 +67,12 @@ export function latestPosts(records, count = 5) {
     .map((record) => ({ uri: record.uri, title: plain(record.title), date: record.date.slice(0, 10) }));
 }
 
+// Newest posts in the Offer News category (from its archive record), for the daily offers grid.
+export function latestOfferNews(records, count = 4) {
+  const uris = new Set(records.filter((item) => item.kind === 'archive' && /\/offer-news$/.test(item.archiveBase ?? item.uri)).flatMap((item) => item.posts.map((post) => post.uri)));
+  return latestPosts(records.filter((item) => uris.has(item.uri)), count);
+}
+
 // WordPress HTML before the first <h2> matching `heading` (for example the trailing offer list).
 export function contentBeforeHeading(html, heading) {
   const matches = [...(html ?? '').matchAll(/<h2[^>]*>([\s\S]*?)<\/h2>/g)];
@@ -119,6 +125,25 @@ export function canonicalFor(record) {
     const url = new URL(source, publicOrigin);
     return `${publicOrigin}${url.pathname}${url.search}`;
   } catch { return `${publicOrigin}${record.uri}`; }
+}
+
+// WordPress (staging or the origin) writes its own host into schema and author links; the public
+// site is www.everytip.co.uk. Any http(s) host ending in cloudwaysapps.com or naming the origin is swapped.
+const toPublic = (value) => value.replace(/https?:\\?\/\\?\/(?:wordpress-[\w-]+\.cloudwaysapps\.com|origin\.everytip\.co\.uk)/g, (match) => match.includes('\\/') ? 'https:\\/\\/www.everytip.co.uk' : publicOrigin);
+
+// Yoast's JSON-LD graph (Article, Person, Organization, breadcrumbs), ready for a script tag.
+export function schemaFor(record) {
+  const raw = record.seo?.schema?.raw;
+  if (!raw) return null;
+  try { JSON.parse(raw); } catch { return null; }
+  return toPublic(raw).replace(/<\/script/gi, '<\\/script');
+}
+
+// The post author for the byline and author box (live site shows the same box).
+export function authorFor(record) {
+  const author = record.author?.node;
+  if (!author?.name) return null;
+  return { name: author.name, description: author.description ?? '', href: author.uri ?? null, avatar: author.avatar?.url ? toPublic(author.avatar.url) : null };
 }
 
 // Links listed under a homepage heading (for example "Latest Bookmaker Reviews"), up to the next heading.
