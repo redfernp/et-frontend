@@ -1,5 +1,6 @@
 // Section 4 launch gate: compare the build's fresh-source receipt with its assets.
 import { canonicalFor } from '../src/lib/launch-templates.mjs';
+import { exPartnerFor } from '../src/lib/ranked-cards.mjs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { parseDocument } from 'htmlparser2';
 import { robotsFor } from '../src/lib/launch-content.mjs';
@@ -69,7 +70,9 @@ async function inspect(record) {
   const sourceTables = elements(parseDocument(record.content || ''), 'table').filter(node => /ninja/i.test(JSON.stringify(node.attribs)));
   for (const table of sourceTables) {
     const built = elements(doc, 'table').find(node => node.attribs.id === table.attribs.id);
-    const expectedRows = elements(table, 'tr').map(row => text(row).replace(/\s+/g, ' ').trim());
+    // Rows listing a former partner (first cell) are removed by the build on purpose.
+    const listsExPartner = row => { const first = (row.children ?? []).find(child => child.type === 'tag' && ['td', 'th'].includes(child.name)); return first?.name === 'td' && exPartnerFor(text(first).replace(/\s+/g, ' ').trim()); };
+    const expectedRows = elements(table, 'tr').filter(row => !listsExPartner(row)).map(row => text(row).replace(/\s+/g, ' ').trim());
     const actualRows = built ? elements(built, 'tr').map(row => text(row).replace(/\s+/g, ' ').trim()) : [];
     ninjaTables++; ninjaRows += expectedRows.length;
     if (JSON.stringify(expectedRows) !== JSON.stringify(actualRows)) failures.push({path:record.uri,field:'ninja-table-rows',table:table.attribs.id,expected:expectedRows.length,actual:actualRows.length});

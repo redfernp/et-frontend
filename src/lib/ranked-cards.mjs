@@ -221,6 +221,12 @@ export function removeExPartnerPromotion(html) {
     const value = clean(text(p));
     if ((/^#Ad/i.test(value) || /^(sign up|visit|claim|open|join|bet now|register)\b/i.test(value)) && exPartnerFor(value)) drop(p);
   }
+  // Comparison table rows (often Ninja Tables, stored outside the post) whose bookmaker cell, the
+  // first cell, names a former partner: the row is a listing, so it goes.
+  for (const tr of doc.children.flatMap((node) => tags(node, 'tr'))) {
+    const first = tr.children.find((child) => child.type === 'tag' && ['td', 'th'].includes(child.name));
+    if (first?.name === 'td' && exPartnerFor(clean(text(first)))) drop(tr);
+  }
   return changed ? render(doc) : html;
 }
 
