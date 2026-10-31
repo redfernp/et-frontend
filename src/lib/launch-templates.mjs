@@ -85,7 +85,7 @@ export function contentBeforeHeading(html, heading) {
 
 // Roundups and how-to guides use the approved roundup guide header.
 export function isGuide(record) {
-  if (record.kind === 'pages') return /^\/(best-|high-stakes-)/.test(record.uri);
+  if (record.kind === 'pages') return /^\/(best-|high-stakes-|top-)/.test(record.uri);
   return record.kind === 'posts' && /^\/(best-(?!backed-horses)|online-bookmakers-|low-or-no-|how-to-|bookmakers-|which-bookies-)/.test(record.uri);
 }
 
