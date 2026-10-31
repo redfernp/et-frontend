@@ -142,6 +142,20 @@ export function schemaFor(record) {
   return toPublic(raw).replace(/<\/script/gi, '<\\/script');
 }
 
+// Open Graph image: the page's main image from Yoast's graph (primaryImageOfPage, else the first
+// ImageObject), already on the public host.
+export function ogImageFor(record) {
+  const raw = schemaFor(record);
+  if (!raw) return null;
+  try {
+    const graph = JSON.parse(raw.replace(/<\\\/script/gi, '</script'))['@graph'] ?? [];
+    const page = graph.find((node) => node['@type'] === 'WebPage' || (Array.isArray(node['@type']) && node['@type'].includes('WebPage')));
+    const primaryId = page?.primaryImageOfPage?.['@id'];
+    const image = graph.find((node) => node['@id'] === primaryId) ?? graph.find((node) => node['@type'] === 'ImageObject' && !/logo/i.test(node['@id'] ?? ''));
+    return image?.contentUrl ?? image?.url ?? null;
+  } catch { return null; }
+}
+
 // The post author for the byline and author box (live site shows the same box).
 export function authorFor(record) {
   const author = record.author?.node;

@@ -5,8 +5,9 @@
 import type { NavigationItem } from '../../lib/menu-tree';
 interface Props { items: NavigationItem[]; variant: 'bar' | 'home' }
 const { items, variant } = Astro.props;
-const icons: [RegExp, string][] = [[/free bets?/i, '🎁'], [/newsletter/i, '📬'], [/review/i, '⭐'], [/paid/i, '💷'], [/horse|racing/i, '🐎'], [/football|epl/i, '⚽'], [/greyhound/i, '🐕'], [/cricket/i, '🏏'], [/tipster|tips/i, '🎯'], [/award|best/i, '🏆'], [/offer/i, '🔥']];
-const iconFor = (label: string) => icons.find(([pattern]) => pattern.test(label))?.[1] ?? '›';
+import SportIcon, { type IconName } from './SportIcon.astro';
+const icons: [RegExp, IconName][] = [[/free bets?/i, 'gift'], [/newsletter/i, 'mail'], [/review/i, 'star'], [/paid/i, 'pound'], [/horse|racing/i, 'racing'], [/football|epl/i, 'football'], [/greyhound/i, 'stopwatch'], [/cricket/i, 'cricket'], [/tennis/i, 'tennis'], [/tipster|tips/i, 'target'], [/award|best/i, 'trophy'], [/offer/i, 'tag']];
+const iconFor = (label: string): IconName => icons.find(([pattern]) => pattern.test(label))?.[1] ?? 'chevron';
 const tiles = items.filter((item) => item.href && !item.children.length);
 const sections = items.filter((item) => item.children.length);
 const id = `mnav-${variant}`;
@@ -22,12 +23,12 @@ const id = `mnav-${variant}`;
     </div>
     <div class="mnav-scroll">
       {tiles.length > 0 && <div class="mnav-tiles">
-        {tiles.map((item, index) => <a class="mnav-tile" href={item.href} style={`--i:${index}`}><span class="mnav-icon" aria-hidden="true">{iconFor(item.label)}</span>{item.label}</a>)}
+        {tiles.map((item, index) => <a class="mnav-tile" href={item.href} style={`--i:${index}`}><SportIcon name={iconFor(item.label)} size="sm" />{item.label}</a>)}
       </div>}
       <ul class="mnav-sections">
         {sections.map((item, index) => <li class="mnav-section" style={`--i:${index + tiles.length}`}>
           <button type="button" class="mnav-row" aria-expanded="false">
-            <span class="mnav-icon" aria-hidden="true">{iconFor(item.label)}</span>
+            <SportIcon name={iconFor(item.label)} size="sm" />
             <span class="mnav-label">{item.label}</span>
             <span class="mnav-chevron" aria-hidden="true"></span>
           </button>
@@ -37,7 +38,7 @@ const id = `mnav-${variant}`;
               {item.children.filter((child) => !child.children.length).map((child, j) => child.href && <a href={child.href} style={`--j:${j}`}>{child.label}</a>)}
             </div>}
             {item.children.filter((child) => child.children.length).map((group) => <div class="mnav-group">
-              {group.href ? <a class="mnav-group-title" href={group.href}><span aria-hidden="true">{iconFor(group.label)}</span>{group.label} →</a> : <p class="mnav-group-title"><span aria-hidden="true">{iconFor(group.label)}</span>{group.label}</p>}
+              {group.href ? <a class="mnav-group-title" href={group.href}><SportIcon name={iconFor(group.label)} size="sm" />{group.label} →</a> : <p class="mnav-group-title"><SportIcon name={iconFor(group.label)} size="sm" />{group.label}</p>}
               <div class="mnav-chips">{group.children.map((child, j) => child.href && <a href={child.href} style={`--j:${j}`}>{child.label}</a>)}</div>
             </div>)}
           </div></div>
@@ -125,8 +126,6 @@ const id = `mnav-${variant}`;
     .mnav-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
     .mnav.mnav .mnav-tile { display: grid; justify-items: center; gap: 6px; padding: 14px 6px 12px; border-radius: 14px; background: #fff; box-shadow: 0 2px 10px #102a4014; color: #183f60; font-size: 13px; font-weight: 800; line-height: 1.2; text-align: center; text-decoration: none; animation: mnav-rise .45s cubic-bezier(.2, .85, .25, 1) both; animation-delay: calc(var(--i) * 45ms + 120ms); transition: transform .15s, box-shadow .2s; }
     .mnav-tile:active { transform: scale(.96); }
-    .mnav-tile .mnav-icon { width: 40px; height: 40px; font-size: 20px; }
-    .mnav-icon { display: inline-grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 11px; background: #eaf2f9; font-size: 18px; line-height: 1; }
 
     .mnav-sections { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
     .mnav-section { border-radius: 14px; background: #fff; box-shadow: 0 2px 10px #102a4014; overflow: hidden; animation: mnav-rise .45s cubic-bezier(.2, .85, .25, 1) both; animation-delay: calc(var(--i) * 45ms + 120ms); }

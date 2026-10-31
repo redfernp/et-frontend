@@ -42,6 +42,13 @@ export function cleanupBuilderHtml(html) {
   });
 }
 
+const commercialHref = /^(?:https?:\/\/[^/]+)?\/(?!go\/)[^"#?]*(?:-review|best-|bookmakers|betting-sites|bookies|bonus|casino)/i;
+const currentYear = '2026';
+function renewYears(node) {
+  if (node.type === 'text') node.data = node.data.replace(/\b20(?:2[0-5])\b(?!\s*\/)/g, currentYear);
+  for (const child of node.children ?? []) renewYears(child);
+}
+
 export function launchHtml(html, sourceEndpoint) {
   // Page-builder shortcodes WordPress leaves unrendered (Beaver saved layouts, Thrive pagination)
   // stay in the post for the editors but never print as text on the site.
@@ -66,6 +73,9 @@ export function launchHtml(html, sourceEndpoint) {
         }
       } catch { /* Preserve unparseable editorial links for the link audit. */ }
     }
+    // Links to commercial pages (reviews, "best" guides, bonus and casino pages) keep a current
+    // year in their anchor text: "Betfred Review 2025" reads as "Betfred Review 2026".
+    if (node.name === 'a' && commercialHref.test(node.attribs?.href ?? '')) renewYears(node);
     for (const child of node.children ?? []) visit(child);
   }
   visit(doc);

@@ -1,29 +1,73 @@
 ---
-// EveryTip line icons (blue stroke, orange accent) used in place of emoji.
-interface Props { name: 'racing' | 'football' | 'trophy' }
-const { name } = Astro.props;
+// EveryTip line icons (blue stroke, orange accent) used in place of emoji across the site.
+export type IconName = 'racing' | 'football' | 'trophy' | 'gift' | 'mail' | 'star' | 'pound' | 'target' | 'tag' | 'stopwatch' | 'cricket' | 'tennis' | 'chevron';
+interface Props { name: IconName; size?: 'sm' | 'md' }
+const { name, size = 'md' } = Astro.props;
+const accent = 'var(--et-orange)';
 ---
-<span class="sport-icon" aria-hidden="true">
-  <svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+<span class:list={['sport-icon', `sport-icon-${size}`]} aria-hidden="true">
+  <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
     {name === 'racing' && <>
       <path d="M19 13v13a13 13 0 0 0 26 0V13" />
       <path d="M15 13h8M41 13h8" />
-      <g fill="var(--et-orange)" stroke="none"><circle cx="21.5" cy="22" r="2" /><circle cx="22.5" cy="31" r="2" /><circle cx="42.5" cy="22" r="2" /><circle cx="41.5" cy="31" r="2" /></g>
+      <g fill={accent} stroke="none"><circle cx="21.5" cy="22" r="2" /><circle cx="22.5" cy="31" r="2" /><circle cx="42.5" cy="22" r="2" /><circle cx="41.5" cy="31" r="2" /></g>
     </>}
     {name === 'football' && <>
       <circle cx="32" cy="32" r="17" />
-      <path d="M32 26l5.7 4.1-2.2 6.8h-7l-2.2-6.8z" fill="var(--et-orange)" stroke="var(--et-orange)" />
+      <path d="M32 26l5.7 4.1-2.2 6.8h-7l-2.2-6.8z" fill={accent} stroke={accent} />
       <path d="M32 26v-11M37.7 30.1l10.5-3.4M35.5 36.9l6.5 8.9M28.5 36.9l-6.5 8.9M26.3 30.1l-10.5-3.4" />
     </>}
     {name === 'trophy' && <>
       <path d="M22 14h20v10a10 10 0 0 1-20 0z" />
       <path d="M22 18h-5a5 5 0 0 0 5 8M42 18h5a5 5 0 0 1-5 8" />
       <path d="M32 34v7M25 49h14M27 41h10v8H27z" />
-      <path d="M32 18.5l1.5 3 3.3.5-2.4 2.3.6 3.3-3-1.6-3 1.6.6-3.3-2.4-2.3 3.3-.5z" fill="var(--et-orange)" stroke="none" />
+      <path d="M32 18.5l1.5 3 3.3.5-2.4 2.3.6 3.3-3-1.6-3 1.6.6-3.3-2.4-2.3 3.3-.5z" fill={accent} stroke="none" />
     </>}
+    {name === 'gift' && <>
+      <path d="M15 30h34v19H15zM12 22h40v8H12z" />
+      <path d="M32 22v27" stroke={accent} />
+      <path d="M32 22c-3-7-12-8-12-3 0 3 6 3 12 3zM32 22c3-7 12-8 12-3 0 3-6 3-12 3z" stroke={accent} />
+    </>}
+    {name === 'mail' && <>
+      <rect x="12" y="18" width="40" height="28" rx="3" />
+      <path d="M13 20l19 14 19-14" stroke={accent} />
+    </>}
+    {name === 'star' && <path d="M32 13l5.6 11.4 12.6 1.8-9.1 8.9 2.1 12.5L32 41.7l-11.2 5.9 2.1-12.5-9.1-8.9 12.6-1.8z" fill={accent} fill-opacity="0.18" />}
+    {name === 'pound' && <>
+      <circle cx="32" cy="32" r="18" />
+      <path d="M37.5 24.5c-1.2-2.6-7.5-3.2-8 1.5V40c0 2-1.5 3.5-3.5 4h12M25 33h10" stroke={accent} />
+    </>}
+    {name === 'target' && <>
+      <circle cx="32" cy="32" r="17" />
+      <circle cx="32" cy="32" r="10" />
+      <circle cx="32" cy="32" r="3.5" fill={accent} stroke={accent} />
+    </>}
+    {name === 'tag' && <>
+      <path d="M33 13h17v17L30 50 13 33z" />
+      <circle cx="42" cy="21" r="3" fill={accent} stroke={accent} />
+    </>}
+    {name === 'stopwatch' && <>
+      <circle cx="32" cy="36" r="15" />
+      <path d="M27 14h10M32 14v7M44 22l3-3" />
+      <path d="M32 36l6-7" stroke={accent} />
+    </>}
+    {name === 'cricket' && <>
+      <path d="M17 44l17-17 5 5-17 17a3.5 3.5 0 0 1-5-5z" />
+      <path d="M37 29l8-8M43 19l4 4" />
+      <circle cx="46" cy="45" r="4.5" fill={accent} stroke={accent} />
+    </>}
+    {name === 'tennis' && <>
+      <circle cx="32" cy="32" r="17" />
+      <path d="M19 21c7 5 7 17 0 22M45 21c-7 5-7 17 0 22" stroke={accent} />
+    </>}
+    {name === 'chevron' && <path d="M27 20l12 12-12 12" />}
   </svg>
 </span>
 
 <style>
-  .sport-icon { display: inline-grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, #eaf2f9, #dbe9f5); color: #1c598f; }
+  .sport-icon { display: inline-grid; place-items: center; flex: none; border-radius: 16px; background: linear-gradient(135deg, #eaf2f9, #dbe9f5); color: #1c598f; }
+  .sport-icon-md { width: 56px; height: 56px; }
+  .sport-icon-md svg { width: 32px; height: 32px; }
+  .sport-icon-sm { width: 38px; height: 38px; border-radius: 11px; }
+  .sport-icon-sm svg { width: 24px; height: 24px; }
 </style>

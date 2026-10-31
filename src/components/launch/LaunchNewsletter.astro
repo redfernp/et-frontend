@@ -3,12 +3,13 @@
 // Replaces the old ConvertBox embed; the WordPress page keeps only its SEO fields.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import NewsletterSignup from './NewsletterSignup.astro';
+import SportIcon from './SportIcon.astro';
 
 const { record, paths, offers, seo } = Astro.props;
 const benefits = [
-  ['🐎', 'Racing tips every morning', 'The day’s horse racing tips from the top tipsters, in your inbox each morning.'],
-  ['⚽', 'Football picks', 'Correct score, goals and both teams to score tips for the day’s main games.'],
-  ['🎁', 'Offers worth having', 'Extra places, money back specials and new customer offers, only when they are good.'],
+  ['racing', 'Racing tips every morning', 'The day’s horse racing tips from the top tipsters, in your inbox each morning.'],
+  ['football', 'Football picks', 'Correct score, goals and both teams to score tips for the day’s main games.'],
+  ['gift', 'Offers worth having', 'Extra places, money back specials and new customer offers, only when they are good.'],
 ];
 ---
 <BaseLayout title={record.title} publicPage={true} seo={seo} verifiedPublicPaths={paths} offers={offers} wide={true}>
@@ -28,7 +29,7 @@ const benefits = [
     <section class="nl-benefits" aria-labelledby="nl-benefits-title">
       <h2 id="nl-benefits-title">What you get each morning</h2>
       <div class="nl-grid">
-        {benefits.map(([icon, title, text]) => <div><span aria-hidden="true">{icon}</span><h3>{title}</h3><p>{text}</p></div>)}
+        {benefits.map(([icon, title, text]) => <div><SportIcon name={icon as any} size="sm" /><h3>{title}</h3><p>{text}</p></div>)}
       </div>
     </section>
 
@@ -54,7 +55,6 @@ const benefits = [
   .nl-benefits h2, .nl-faq h2 { margin: 0 0 16px; font-size: 26px; color: #183f60; }
   .nl-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
   .nl-grid > div { padding: 20px; border-radius: 14px; border: 1px solid #e1eaf2; background: #fff; box-shadow: 0 4px 14px #102a400d; }
-  .nl-grid span { font-size: 26px; }
   .nl-grid h3 { margin: 8px 0 6px; font-size: 18px; color: #183f60; }
   .nl-grid p { margin: 0; color: #4d6072; }
   .nl-faq details { padding: 12px 0; border-bottom: 1px solid #dce5ec; }

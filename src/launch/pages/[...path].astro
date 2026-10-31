@@ -14,7 +14,7 @@ import { launchOfferLineup } from '../../lib/launch-offers.mjs';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
 import { rebuildRankedCards, fillEmptyLinkCells, responsiveNinjaTables, polishContent, removeExPartnerPromotion, mergeSplitLinks } from '../../lib/ranked-cards.mjs';
 import { columnistKeyForUri, legacyColumnistPortraitPaths } from '../../lib/columnist-profiles.mjs';
-import { schemaFor, authorFor, bookmakerReviews, canonicalFor, articleCategory, columnistArchives, launchColumnists, isGuide, withHeadingIds } from '../../lib/launch-templates.mjs';
+import { schemaFor, authorFor, ogImageFor, bookmakerReviews, canonicalFor, articleCategory, columnistArchives, launchColumnists, isGuide, withHeadingIds } from '../../lib/launch-templates.mjs';
 
 export async function getStaticPaths() {
   const records = await launchContent();
@@ -33,8 +33,11 @@ const seo = {
   canonical: canonicalFor(record),
   robots: robotsFor(record),
   schema: schemaFor(record),
+  ogImage: ogImageFor(record),
+  ogType: record.kind === 'posts' ? 'article' : 'website',
 };
-const author = record.kind === 'posts' ? authorFor(record) : null;
+// Posts and guides (which can be pages) show the WordPress author, as on the live site.
+const author = record.kind === 'posts' || isGuide(record) ? authorFor(record) : null;
 const isHome = record.uri === '/';
 const archiveColumnist = record.posts?.length ? Object.keys(columnistArchives).find((key) => columnistArchives[key] === record.archiveBase) : null;
 const columnist = columnistKeyForUri(record.uri);
@@ -88,6 +91,10 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
     </header>
     {guide.toc.length > 1 && <nav class="paypal-toc" aria-label="On this guide"><strong>On this page</strong>{guide.toc.map((item) => <a href={item.href}>{item.label}</a>)}</nav>}
     <div class="exact-preview-body cms-content guide-body" set:html={body} />
+    {author && <aside class="author-box" aria-label="About the author">
+      {author.avatar && <img src={author.avatar} alt={author.name} width="72" height="72" loading="lazy" />}
+      <div><p class="author-box-name">{author.href ? <a href={author.href}>{author.name}</a> : author.name}</p>{author.description && <p>{author.description}</p>}</div>
+    </aside>}
   </article>
 </BaseLayout> :
 <BaseLayout title={record.title} publicPage={true} seo={seo} verifiedPublicPaths={paths} sidebar={!hasTipTable} wide={hasTipTable} offers={offers}>
@@ -111,7 +118,7 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
     </>}
     {profile && <ColumnistProfile profile={profile} variant="full" archiveHref={columnistArchives[columnist]} />}
     {!profile && author && <aside class="author-box" aria-label="About the author">
-      {author.avatar && <img src={author.avatar} alt="" width="72" height="72" loading="lazy" />}
+      {author.avatar && <img src={author.avatar} alt={author.name} width="72" height="72" loading="lazy" />}
       <div><p class="author-box-name">{author.href ? <a href={author.href}>{author.name}</a> : author.name}</p>{author.description && <p>{author.description}</p>}</div>
     </aside>}
     <p class="exact-preview-source">18+ · Please gamble responsibly · <a href="https://www.begambleaware.org/" rel="noopener">BeGambleAware.org</a></p>

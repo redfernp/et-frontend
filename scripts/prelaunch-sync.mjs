@@ -8,6 +8,7 @@
 // unless the staging host is the Cloudways app. Every staging write keeps a backup.
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { decodeHTML } from 'entities';
+import { renewLinkYears } from './link-years.mjs';
 
 const args = Object.fromEntries(process.argv.slice(2).map((arg) => { const [key, value] = arg.replace(/^--/, '').split('='); return [key, value ?? true]; }));
 const apply = args.apply === true;
@@ -67,6 +68,10 @@ export function stagingRecipes(raw) {
   if (/\[fl_builder_insert_layout[^\]]*\]/.test(html)) { html = html.replace(/(?:<p>\s*)?\[fl_builder_insert_layout[^\]]*\](?:\s*<\/p>)?\s*/g, ''); notes.push('removed Beaver layout shortcode'); }
   // An empty Beaver layout wrapper around ordinary content (Beaver is off on staging).
   if (/<!-- \/?wp:fl-builder\/layout -->/.test(html)) { html = html.replace(/<!-- \/?wp:fl-builder\/layout -->\s*/g, ''); notes.push('removed Beaver wrapper'); }
+  // Anchor text years on links to commercial pages: "Betfred Review 2025" becomes 2026.
+  const before = html;
+  html = renewLinkYears(html);
+  if (html !== before) notes.push('renewed link years');
   if (/fl-builder|tve_|tcb-/.test(html)) notes.push('CHECK: page builder markup');
   if (/bet365|william hill|boylesports/i.test(html.replace(/<[^>]+>/g, ' '))) notes.push('CHECK: mentions a former partner');
   return { html, notes };
@@ -148,6 +153,8 @@ for (const post of report.changed) {
 }
 
 // 3. New posts: terms by slug, featured image uploaded to staging media.
+// Staging is a clone, so user IDs match live: copy the live author when that user exists.
+const stagingUsers = new Set((await all(staging, 'users', '_fields=id')).map((user) => user.id));
 const termCache = new Map();
 async function stagingTerm(taxonomy, liveId) {
   const key = `${taxonomy}:${liveId}`;
@@ -176,7 +183,7 @@ for (const post of report.created) {
       featured = (await call(staging, '/wp/v2/media', { method: 'POST', body: file, headers: { 'Content-Disposition': `attachment; filename="${name}"`, 'Content-Type': name.endsWith('.png') ? 'image/png' : name.endsWith('.webp') ? 'image/webp' : 'image/jpeg' } })).data.id;
       if (media.alt_text) await call(staging, `/wp/v2/media/${featured}`, { method: 'POST', body: JSON.stringify({ alt_text: media.alt_text }) });
     }
-    const { data: made } = await call(staging, '/wp/v2/posts', { method: 'POST', body: JSON.stringify({ slug: src.slug, title: src.title.raw, content: html, excerpt: src.excerpt.raw, date: src.date, status: 'publish', categories, tags, ...(featured ? { featured_media: featured } : {}) }) });
+    const { data: made } = await call(staging, '/wp/v2/posts', { method: 'POST', body: JSON.stringify({ slug: src.slug, title: src.title.raw, content: html, excerpt: src.excerpt.raw, date: src.date, status: 'publish', categories, tags, ...(stagingUsers.has(src.author) ? { author: src.author } : {}), ...(featured ? { featured_media: featured } : {}) }) });
     if (made.slug !== src.slug) notes.push(`CHECK: slug became ${made.slug}`);
     // Yoast title and description through the staging editorial SEO route.
     const seo = src.yoast_head_json ?? {};

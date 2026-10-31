@@ -70,6 +70,16 @@ const guides = wpGuides.length ? wpGuides : fallbackGuides;
     {seo.description && <meta name="description" content={seo.description} />}
     {seo.canonical && <link rel="canonical" href={seo.canonical} />}
     {seo.schema && <script type="application/ld+json" set:html={seo.schema} />}
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:type" content={seo.ogType || 'website'} />
+    <meta property="og:title" content={seo.title} />
+    {seo.description && <meta property="og:description" content={seo.description} />}
+    {seo.canonical && <meta property="og:url" content={seo.canonical} />}
+    <meta property="og:site_name" content="Every Tip" />
+    {seo.ogImage && <meta property="og:image" content={seo.ogImage} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@everytipsite" />
+    <meta name="twitter:creator" content="@everytipsite" />
     <title>{seo.title}</title>
     <CookieConsent part="head" />
   </head>

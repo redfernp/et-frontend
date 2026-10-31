@@ -3,6 +3,8 @@
 // of their verified public profiles). Links go through /go/tipstrr-<slug> (scripts/tipstrr-links.mjs).
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import data from '../../../data/tipstrr-tipsters.json';
+import SportIcon from './SportIcon.astro';
+const sectionIcon = { 'horse-racing': 'racing', football: 'football', tennis: 'tennis', 'us-sports': 'trophy' } as const;
 
 const { record, paths, offers, seo } = Astro.props;
 const pounds = (value) => `£${Math.round(value).toLocaleString('en-GB')}`;
@@ -17,14 +19,14 @@ const asOf = new Date(`${data.refreshedAt}T12:00:00Z`).toLocaleDateString('en-GB
       <h1>The best paid betting tipsters by sport</h1>
       <p class="tp-lede">Every tipster here has their results recorded and verified by Tipstrr against real bookmaker odds, so the profit figures are not self-reported. Pick your sport, compare the numbers and try a month.</p>
       <nav class="tp-jump" aria-label="Sports">
-        {data.sections.map((section) => <a href={`#${section.key}`}><span aria-hidden="true">{section.icon}</span>{section.label.replace(' tipsters', '')}</a>)}
+        {data.sections.map((section) => <a href={`#${section.key}`}>{section.label.replace(' tipsters', '')}</a>)}
       </nav>
     </header>
 
     <p class="tp-disclosure"><strong>#Ad</strong> EveryTip earns a commission if you join a tipster through these links, at no extra cost to you. Stats are from Tipstrr at £10 level stakes, checked {asOf}. Past results do not guarantee future profit. 18+, please gamble responsibly.</p>
 
     {data.sections.map((section) => <section id={section.key} class="tp-section" aria-labelledby={`${section.key}-title`}>
-      <h2 id={`${section.key}-title`}><span aria-hidden="true">{section.icon}</span> {section.label}</h2>
+      <h2 id={`${section.key}-title`}><SportIcon name={sectionIcon[section.key] ?? 'trophy'} size="sm" /> {section.label}</h2>
       <ol class="tp-list">
         {section.tipsters.map((tipster, index) => <li class="tp-card">
           <span class="tp-rank">{index + 1}</span>
@@ -69,7 +71,7 @@ const asOf = new Date(`${data.refreshedAt}T12:00:00Z`).toLocaleDateString('en-GB
   .tp-jump a:hover { background: #ffffff40; }
   .tp-disclosure { margin: 16px 0 0; padding: 12px 16px; border-left: 4px solid var(--et-orange); background: #fff4e9; font-size: 13px; }
   .tp-section { margin-top: 34px; scroll-margin-top: 20px; }
-  .tp-section h2 { margin: 0 0 14px; font-size: 26px; color: #183f60; }
+  .tp-section h2 { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; font-size: 26px; color: #183f60; }
   .tp-list { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
   .tp-card { display: grid; grid-template-columns: 34px 64px minmax(0, 1.2fr) minmax(0, 1.6fr) 170px; gap: 16px; align-items: center; padding: 16px 18px; border: 1px solid #dce6ed; border-left: 5px solid #1c598f; border-radius: 14px; background: #fff; box-shadow: 0 3px 12px #102a400d; }
   .tp-rank { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: #183f60; color: #fff; font-weight: 900; }

@@ -93,8 +93,8 @@ const formatDate = (value) => new Date(`${value}T12:00:00Z`).toLocaleDateString(
     </section>
 
     <nav class="hub-editorial-links" aria-label="Featured betting guides">
-      {available.has('/which-bookies-paying-5-places-each-way.html') && <a href="/which-bookies-paying-5-places-each-way.html"><span aria-hidden="true">👉</span> Who’s paying five places or more today?</a>}
-      {available.has('/best-odds-guaranteed-bookies.html') && <a href="/best-odds-guaranteed-bookies.html"><span aria-hidden="true">👉</span> Best odds guaranteed bookmakers</a>}
+      {available.has('/which-bookies-paying-5-places-each-way.html') && <a href="/which-bookies-paying-5-places-each-way.html">Who’s paying five places or more today? <span aria-hidden="true">→</span></a>}
+      {available.has('/best-odds-guaranteed-bookies.html') && <a href="/best-odds-guaranteed-bookies.html">Best odds guaranteed bookmakers <span aria-hidden="true">→</span></a>}
     </nav>
 
     {offers[0] && <section class="hub-spotlight" aria-label="Featured bookmaker offer" style={`--spotlight-brand:${offers[0].brandColor}`}>
