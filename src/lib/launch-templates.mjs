@@ -156,6 +156,23 @@ export function ogImageFor(record) {
   } catch { return null; }
 }
 
+// Social sharing fields as Yoast sets them, falling back to the page's main image and then to
+// the site's default sharing image (what the live site shows for pages without their own).
+export function socialFor(record) {
+  const seo = record.seo ?? {};
+  const image = seo.opengraphImage?.sourceUrl ? toPublic(seo.opengraphImage.sourceUrl) : ogImageFor(record);
+  return {
+    ogTitle: seo.opengraphTitle || null,
+    ogDescription: seo.opengraphDescription || null,
+    ogImage: image || `${publicOrigin}/wp-content/uploads/2018/06/Everytip-Facebook-cover.png`,
+  };
+}
+
+// Yoast's title as set; without one, the post title plus the site name, as Yoast would print it.
+export function titleFor(record) {
+  return record.seo?.title || `${plain(record.title)} - Every Tip`;
+}
+
 // The post author for the byline and author box (live site shows the same box).
 export function authorFor(record) {
   const author = record.author?.node;

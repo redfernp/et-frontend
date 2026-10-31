@@ -14,7 +14,7 @@ import { launchOfferLineup } from '../../lib/launch-offers.mjs';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
 import { rebuildRankedCards, fillEmptyLinkCells, responsiveNinjaTables, polishContent, removeExPartnerPromotion, mergeSplitLinks } from '../../lib/ranked-cards.mjs';
 import { columnistKeyForUri, legacyColumnistPortraitPaths } from '../../lib/columnist-profiles.mjs';
-import { schemaFor, authorFor, ogImageFor, bookmakerReviews, canonicalFor, articleCategory, columnistArchives, launchColumnists, isGuide, withHeadingIds } from '../../lib/launch-templates.mjs';
+import { schemaFor, authorFor, socialFor, titleFor, bookmakerReviews, canonicalFor, articleCategory, columnistArchives, launchColumnists, isGuide, withHeadingIds } from '../../lib/launch-templates.mjs';
 
 export async function getStaticPaths() {
   const records = await launchContent();
@@ -27,17 +27,17 @@ export async function getStaticPaths() {
 const { record, paths, records } = Astro.props;
 const offers = launchOfferLineup();
 const seo = {
-  title: record.seo?.title || record.title,
+  title: titleFor(record),
   description: record.seo?.metaDesc || '',
   // Canonicals always name the public site, whichever WordPress host the build reads.
   canonical: canonicalFor(record),
   robots: robotsFor(record),
   schema: schemaFor(record),
-  ogImage: ogImageFor(record),
+  ...socialFor(record),
   ogType: record.kind === 'posts' ? 'article' : 'website',
 };
 // Posts and guides (which can be pages) show the WordPress author, as on the live site.
-const author = record.kind === 'posts' || isGuide(record) ? authorFor(record) : null;
+const author = authorFor(record);
 const isHome = record.uri === '/';
 const archiveColumnist = record.posts?.length ? Object.keys(columnistArchives).find((key) => columnistArchives[key] === record.archiveBase) : null;
 const columnist = columnistKeyForUri(record.uri);
@@ -50,6 +50,8 @@ if (columnist) for (const path of legacyColumnistPortraitPaths[columnist]) {
 }
 const guide = isGuide(record) ? withHeadingIds(body) : null;
 if (guide) body = guide.html;
+// The template prints the page's H1; an H1 inside the content becomes an H2.
+body = body.replace(/<h1(\s[^>]*)?>/gi, '<h2$1>').replace(/<\/h1>/gi, '</h2>');
 // "The Quick Tip": an editorial summary written in the guide itself (a paragraph block with the
 // CSS class quick-tip), shown beside the title instead of in the body. Editorial only: no offer
 // headlines here, because offers must show their full terms.

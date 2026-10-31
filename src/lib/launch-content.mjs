@@ -33,7 +33,8 @@ export function launchContent() {
 const recordFields = kind => `databaseId uri title content date modified status
   ${kind === 'pages' ? 'isPostsPage' : ''}
   author { node { name description uri slug avatar(size: 96) { url } } }
-  seo { title metaDesc canonical metaRobotsNoindex metaRobotsNofollow schema { raw } }`;
+  seo { title metaDesc canonical metaRobotsNoindex metaRobotsNofollow schema { raw }
+    opengraphTitle opengraphDescription opengraphImage { sourceUrl } }`;
 const hasTipTable = record => /ninja_table_instance|footable_\d+/.test(record.content ?? '');
 const contentCacheDir = process.env.EVERYTIP_CONTENT_CACHE || 'outputs/content-cache';
 
@@ -96,7 +97,7 @@ export async function readContentIncremental({ query = requestGraphql } = {}) {
     for (const node of listing) {
       const hit = await readCached(kind, node.databaseId);
       // Entries saved before author and schema were fetched are refreshed once.
-      if (hit && hit.modified === node.modified && hit.uri === node.uri && !hasTipTable(hit) && 'author' in hit && hit.seo && 'schema' in hit.seo) cached.set(node.databaseId, hit);
+      if (hit && hit.modified === node.modified && hit.uri === node.uri && !hasTipTable(hit) && 'author' in hit && hit.seo && 'schema' in hit.seo && 'opengraphImage' in hit.seo) cached.set(node.databaseId, hit);
       else stale.push(node.databaseId);
     }
     const fetched = new Map();

@@ -72,8 +72,8 @@ const guides = wpGuides.length ? wpGuides : fallbackGuides;
     {seo.schema && <script type="application/ld+json" set:html={seo.schema} />}
     <meta property="og:locale" content="en_GB" />
     <meta property="og:type" content={seo.ogType || 'website'} />
-    <meta property="og:title" content={seo.title} />
-    {seo.description && <meta property="og:description" content={seo.description} />}
+    <meta property="og:title" content={seo.ogTitle || seo.title} />
+    {(seo.ogDescription || seo.description) && <meta property="og:description" content={seo.ogDescription || seo.description} />}
     {seo.canonical && <meta property="og:url" content={seo.canonical} />}
     <meta property="og:site_name" content="Every Tip" />
     {seo.ogImage && <meta property="og:image" content={seo.ogImage} />}

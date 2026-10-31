@@ -98,12 +98,17 @@ for (const post of await all(live, 'posts', `modified_after=${since}&orderby=mod
   const twin = stagingPosts.get(post.id)?.slug === post.slug ? stagingPosts.get(post.id) : stagingBySlug.get(post.slug) ?? stagingPosts.get(post.id);
   (twin ? report.changed : report.created).push({ ...post, stagingId: twin?.id ?? null });
 }
-for (const page of await all(live, 'pages', `modified_after=${since}&orderby=modified&_fields=${fields}`)) if (!only || only.has(page.id)) report.pages.push({ ...page, onStaging: stagingPages.has(page.id) });
+// Pages that exist on staging go through the same checks as posts; any others are reported.
+for (const page of await all(live, 'pages', `modified_after=${since}&orderby=modified&_fields=${fields}`)) {
+  if (only && !only.has(page.id)) continue;
+  if (stagingPages.has(page.id)) report.changed.push({ ...page, type: 'pages', stagingId: page.id });
+  else report.pages.push({ ...page, onStaging: false });
+}
 for (const post of stagingPosts.values()) if (post.status === 'publish' && !livePublished.has(post.id) && !livePublishedSlugs.has(post.slug) && (!only || only.has(post.id))) report.gone.push(post);
 
 const row = (p, extra = '') => `| ${p.id} | ${p.slug} | ${p.modified?.replace('T', ' ')} | ${extra} |`;
 const lines = [`# Pre-launch sync report ${stamp}`, `Live changes since ${since}. Mode: ${apply ? 'APPLY' : 'dry run'}.`, '',
-  `## Changed posts (${report.changed.length})`, '| ID | Slug | Live modified | Notes |', '|---|---|---|---|'];
+  `## Changed posts and pages (${report.changed.length})`, '| ID | Slug | Live modified | Notes |', '|---|---|---|---|'];
 
 // The clone rewrote every link to the staging host; compare as if it were live.
 const stagingHost = new URL(staging.base).host;
@@ -112,10 +117,10 @@ const same = (a, b) => norm(a) === norm(b);
 // Staging's starting point for a post: the newest live revision that matches any version in
 // staging's own history (the clone date differs per post). Comparing staging with it shows what
 // staging changed since.
-async function liveBase(liveId, stagingId, current) {
+async function liveBase(liveId, stagingId, current, type = 'posts') {
   const [{ data: liveRevisions }, { data: stagingRevisions }] = await Promise.all([
-    call(live, `/wp/v2/posts/${liveId}/revisions?context=edit&per_page=100&_fields=id,date_gmt,content`),
-    call(staging, `/wp/v2/posts/${stagingId}/revisions?context=edit&per_page=100&_fields=id,content`),
+    call(live, `/wp/v2/${type}/${liveId}/revisions?context=edit&per_page=100&_fields=id,date_gmt,content`),
+    call(staging, `/wp/v2/${type}/${stagingId}/revisions?context=edit&per_page=100&_fields=id,content`),
   ]);
   const seen = new Set([current, ...stagingRevisions.map((revision) => revision.content.raw)].map(norm));
   return liveRevisions.find((revision) => seen.has(norm(revision.content.raw)))?.content.raw ?? null;
@@ -130,18 +135,19 @@ const words = (html) => norm(decode(html.replace(/<!--[\s\S]*?-->/g, ' ').replac
 for (const post of report.changed) {
   const sid = post.stagingId ?? post.id;
   const ours = sid !== post.id;
-  const { data: src } = await call(live, `/wp/v2/posts/${post.id}?context=edit&_fields=id,slug,date,title,content,excerpt`);
-  const { data: cur } = await call(staging, `/wp/v2/posts/${sid}?context=edit&_fields=id,content,status`);
+  const type = post.type === 'pages' ? 'pages' : 'posts';
+  const { data: src } = await call(live, `/wp/v2/${type}/${post.id}?context=edit&_fields=id,slug,date,title,content,excerpt`);
+  const { data: cur } = await call(staging, `/wp/v2/${type}/${sid}?context=edit&_fields=id,content,status`);
   const { html, notes } = stagingRecipes(src.content.raw);
   const diff = lineDiff(cur.content.raw, html);
-  const base = ours ? null : await liveBase(post.id, sid, cur.content.raw);
+  const base = ours ? null : await liveBase(post.id, sid, cur.content.raw, type);
   // Live re-saved without changing a word (e.g. a bulk save that re-encoded quotes): keep staging.
   const liveUnchanged = base !== null && words(stagingRecipes(base).html) === words(html);
   const stagingEdited = ours ? false : base === null ? 'unknown' : words(stagingRecipes(base).html) !== words(stagingRecipes(cur.content.raw).html);
   await writeFile(`${out}/${post.id}-staging-before.json`, JSON.stringify(cur));
   await writeFile(`${out}/${post.id}-live.html`, src.content.raw);
   if (base !== null) await writeFile(`${out}/${post.id}-live-at-copy.html`, base);
-  const write = async () => call(staging, `/wp/v2/posts/${sid}`, { method: 'POST', body: JSON.stringify({ content: html, title: src.title.raw, excerpt: src.excerpt.raw, date: src.date, slug: src.slug, status: 'publish' }) });
+  const write = async () => call(staging, `/wp/v2/${type}/${sid}`, { method: 'POST', body: JSON.stringify({ content: html, title: src.title.raw, ...(src.excerpt ? { excerpt: src.excerpt.raw } : {}), date: src.date, slug: src.slug, status: 'publish' }) });
   let result = `${diff.added} lines in, ${diff.removed} out${ours ? `; staging copy ${sid}` : ''}`;
   if (liveUnchanged) result += '; no real change on live (re-save), staging kept';
   else if (notes.some((n) => n.startsWith('CHECK: page builder'))) result += '; SKIPPED (page builder, do by hand)';
@@ -189,7 +195,7 @@ for (const post of report.created) {
     const seo = src.yoast_head_json ?? {};
     if (seo.title || seo.description) {
       const { data: current } = await call(staging, `/everytip/v1/editorial-seo/${made.id}`);
-      await call(staging, `/everytip/v1/editorial-seo/${made.id}`, { method: 'POST', body: JSON.stringify({ expected_revision: current.revision_token, fields: { ...(seo.title ? { seo_title: seo.title.replace(/ - Every Tip$/, '') } : {}), ...(seo.description ? { meta_description: seo.description } : {}) } }) });
+      await call(staging, `/everytip/v1/editorial-seo/${made.id}`, { method: 'POST', body: JSON.stringify({ expected_revision: current.revision_token, fields: { ...(seo.title ? { seo_title: seo.title } : {}), ...(seo.description ? { meta_description: seo.description } : {}) } }) });
     }
     result += `; created as staging ${made.id}`;
   }
@@ -197,7 +203,7 @@ for (const post of report.created) {
 }
 
 // 4. Pages: report only.
-lines.push('', `## Changed pages (${report.pages.length}), report only`, '| ID | Slug | Live modified | Notes |', '|---|---|---|---|');
+lines.push('', `## Live pages not on staging (${report.pages.length}), report only`, '| ID | Slug | Live modified | Notes |', '|---|---|---|---|');
 for (const page of report.pages) lines.push(row(page, page.onStaging ? 'review by hand' : 'NOT ON STAGING'));
 
 // 5. Published on staging, gone from live: draft on staging so the push does not bring it back.

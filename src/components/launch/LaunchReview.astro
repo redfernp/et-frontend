@@ -35,8 +35,14 @@ const title = `${bookmaker.name} Review ${year}`;
 const updated = new Date(record.modified).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 // An offer band after every third section, as on the live Bet365 review.
 const bandAfter = (index) => offer && (index + 1) % 3 === 0 && index < sections.length - 1;
+// Our star rating as Review schema (replaces the old review plugin's Product markup on live).
+const reviewSchema = overall ? JSON.stringify({ '@context': 'https://schema.org', '@type': 'Review', name: title, url: seo?.canonical,
+  itemReviewed: { '@type': 'Organization', name: bookmaker.name },
+  reviewRating: { '@type': 'Rating', ratingValue: overall, bestRating: 5, worstRating: 1 },
+  author: byline.name === 'Seymour Biz' ? { '@type': 'Person', name: 'Seymour Biz' } : { '@type': 'Organization', name: 'Every Tip', url: 'https://www.everytip.co.uk/' },
+  datePublished: record.date?.slice(0, 10), dateModified: record.modified?.slice(0, 10) }).replace(/</g, '\\u003c') : null;
 ---
-<BaseLayout title={title} publicPage={true} wide={true} seo={seo} verifiedPublicPaths={paths} offers={offers}>
+<BaseLayout title={title} publicPage={true} wide={true} seo={{ ...seo, reviewSchema }} verifiedPublicPaths={paths} offers={offers}>
   <article class="bk-review cms-content" style={`--brand:${brand}`}>
     {offer && <div class="claim-bar"><strong>New to {bookmaker.name}?</strong><a class="bk-btn bk-btn-light" href={offer.link} rel="nofollow">{offer.label} →</a></div>}
 
@@ -52,7 +58,7 @@ const bandAfter = (index) => offer && (index + 1) % 3 === 0 && index < sections.
       {offer?.logo && <div class="bk-hero-logo"><img src={offer.logo} alt={bookmaker.name} width="220" height="60" /></div>}
     </header>
 
-    <div class="bk-reviewer"><img src={byline.image} alt="" width="64" height="64" /><div><strong>Reviewed by {byline.name}</strong><span>{byline.role}</span></div></div>
+    <div class="bk-reviewer"><img src={byline.image} alt={byline.name} width="64" height="64" /><div><strong>Reviewed by {byline.name}</strong><span>{byline.role}</span></div></div>
 
     {review.introHtml && <section class="bk-intro" set:html={review.introHtml} />}
 
