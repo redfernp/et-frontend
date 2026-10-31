@@ -8,6 +8,7 @@ import SiteFooter from '../SiteFooter.astro';
 import CookieConsent from './CookieConsent.astro';
 import NavMenu from './NavMenu.astro';
 import NewsletterSignup from './NewsletterSignup.astro';
+import OfferNews from './OfferNews.astro';
 import { publicMenuFallback, publicNavigation } from '../../lib/menu-tree';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
 import { removeExPartnerPromotion } from '../../lib/ranked-cards.mjs';
@@ -22,7 +23,6 @@ const homeHtml = removeExPartnerPromotion(launchHtml(record.content, endpoint));
 const editorial = homeEditorialHtml({ ...record, content: homeHtml });
 const cards = columnistCards(records);
 const offerNews = latestOfferNews(records, 4);
-const newsDate = (value) => new Date(`${value}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 const linkIf = (entries) => entries.filter(([, href]) => available.has(href));
 
 const tipLinks = linkIf([
@@ -98,12 +98,7 @@ const guides = wpGuides.length ? wpGuides : fallbackGuides;
         </div>
       </section>
 
-      {offerNews.length > 0 && <section class="wrap hub-news home-offer-news" aria-labelledby="offer-news-title">
-        <div class="hub-section-heading"><p class="kicker">Latest from EveryTip</p><h2 id="offer-news-title">Today’s Offer News</h2></div>
-        <div class="hub-news-list home-news-grid">
-          {offerNews.map((item) => <article><time datetime={item.date}>{newsDate(item.date)}</time><h3><a href={item.uri}>{item.title}</a></h3></article>)}
-        </div>
-      </section>}
+      <div class="wrap"><OfferNews items={offerNews} /></div>
 
       <section class="wrap sb-problem" aria-labelledby="find-title">
         <h2 id="find-title">What you’ll find on EveryTip</h2>
@@ -122,9 +117,8 @@ const guides = wpGuides.length ? wpGuides : fallbackGuides;
             <a href="/english-premier-league-predictions-for-saturday"><strong>John Newsome</strong><span>Premier League predictions every weekend</span></a>
             <a href="/saturday-horse-racing-tips"><strong>Seymour Biz</strong><span>Saturday horse racing preview and tips</span></a>
             <a href="/author/everyt"><strong>JP, Chief Editor</strong><span>Editor and tipster at EveryTip</span></a>
-            <a href="/value-bet-tips-dark-horses.html"><strong>EveryTip Outsider Tips</strong><span>Our daily horse racing outsiders, also behind our <span class="sb-inline">treble</span> and <span class="sb-inline">Lucky 15</span> tips</span></a>
+            <a href="/value-bet-tips-dark-horses.html"><strong>EveryTip Outsider Tips</strong><span>Our daily horse racing outsiders</span></a>
           </div>
-          <p class="sb-own-links"><a href="/horse-racing-treble-tips.html">Daily treble tips</a> · <a href="/lucky-15-tips.html">Lucky 15 tips</a></p>
         </div>
       </section>
 
@@ -228,10 +222,6 @@ const guides = wpGuides.length ? wpGuides : fallbackGuides;
   .sb-own-grid a{display:grid;gap:4px;padding:16px 18px;border-left:4px solid var(--et-orange);border-radius:10px;background:#fff;color:inherit;text-decoration:none;transition:transform .15s}
   .sb-own-grid a:hover{transform:translateY(-2px);text-decoration:none}
   .sb-own-grid strong{color:#183f60;font-size:17px}.sb-own-grid span{color:#5d6b78;font-size:14px}
-  .home-offer-news{max-width:none}
-  .home-news-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px}
-  @media(max-width:700px){.home-news-grid{grid-template-columns:1fr}}
-  .sb-own-links{margin:14px 0 0;font-size:14px;font-weight:700}
   @media(max-width:860px){.sb-own-grid{grid-template-columns:1fr 1fr}}
   @media(max-width:520px){.sb-own-grid{grid-template-columns:1fr}}
 </style>
