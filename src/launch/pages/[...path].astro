@@ -47,12 +47,12 @@ if (columnist) for (const path of legacyColumnistPortraitPaths[columnist]) {
 }
 const guide = isGuide(record) ? withHeadingIds(body) : null;
 if (guide) body = guide.html;
-// "The Quick Tip": the guide's own top 3 offers, in its ranking order, beside the title.
-const rankedIds = guide ? [...new Set([...body.matchAll(/data-offer-id="(\d+)"/g)].map((m) => Number(m[1])))] : [];
-const rankedOffers = rankedIds.map((id) => offers.find((offer) => offer.offerId === id)).filter(Boolean);
-// Topped up from the main offer order when a guide ranks fewer than three.
-const quickTip = guide ? [...rankedOffers, ...offers.filter((offer) => !rankedOffers.includes(offer))].slice(0, 3) : [];
-if (rankedOffers.length) body = body.replace('<aside class="rank-card offer-card"', '<aside id="top-offers" class="rank-card offer-card"');
+// "The Quick Tip": an editorial summary written in the guide itself (a paragraph block with the
+// CSS class quick-tip), shown beside the title instead of in the body. Editorial only: no offer
+// headlines here, because offers must show their full terms.
+const quickTipMatch = guide ? body.match(/<p[^>]*class="[^"]*\bquick-tip\b[^"]*"[^>]*>([\s\S]*?)<\/p>/) : null;
+const quickTip = quickTipMatch ? quickTipMatch[1] : null;
+if (quickTipMatch) body = body.replace(quickTipMatch[0], '');
 // Tip-table pages need the full width for their seven columns.
 // Comparison and award pages built around tables use the full width; tips posts keep the
 // sidebar like the live site, with responsive Ninja tables.
@@ -79,18 +79,11 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
         {seo.description && <p class="paypal-deck">{seo.description}</p>}
         <p class="paypal-byline">By the EveryTip team · Updated {formatDate(modified || published)}</p>
       </div>
-      {quickTip.length > 0 && <aside class="quick-tip" aria-labelledby="quick-tip-title">
+      {quickTip && <aside class="quick-tip" aria-labelledby="quick-tip-title">
         <p class="quick-tip-kicker">Short on time?</p>
         <h2 id="quick-tip-title">The Quick Tip</h2>
-        <ol>
-          {quickTip.map((offer, index) => <li style={`--brand:${offer.brandColor}`}>
-            <span class="qt-rank">{index + 1}</span>
-            <span class="qt-logo"><img src={offer.logoUrl} alt={offer.bookmaker} loading="eager" /></span>
-            <span class="qt-copy"><strong>{offer.headline}</strong><details class="qt-terms"><summary>#Ad · 18+ · T&amp;Cs apply</summary><p>{offer.compactTerms}</p></details></span>
-            <a class="qt-cta" href={offer.ctaPath} rel="nofollow">{offer.ctaLabel}</a>
-          </li>)}
-        </ol>
-        <a class="qt-all" href={rankedOffers.length ? '#top-offers' : '/bookie-free-bets-bonus-offers'}>Full list and terms ↓</a>
+        <p class="quick-tip-text" set:html={quickTip} />
+        <p class="quick-tip-note">#Ad · Contains affiliate links · 18+ · Please gamble responsibly</p>
       </aside>}
     </header>
     {guide.toc.length > 1 && <nav class="paypal-toc" aria-label="On this guide"><strong>On this page</strong>{guide.toc.map((item) => <a href={item.href}>{item.label}</a>)}</nav>}

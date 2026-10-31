@@ -53,7 +53,8 @@ export function launchHtml(html, sourceEndpoint) {
   function visit(node) {
     // Sitewide rule: affiliate links are rel="nofollow" only, never "sponsored".
     if (node.name === 'a' && node.attribs?.rel) node.attribs.rel = node.attribs.rel.split(/\s+/).filter((value) => value && value !== 'sponsored').join(' ') || 'nofollow';
-    if (node.name === 'a' && node.attribs?.href) {
+    // In-page links (#section) stay as they are; resolving them would point them at the homepage.
+    if (node.name === 'a' && node.attribs?.href && !node.attribs.href.startsWith('#')) {
       try {
         const url = new URL(node.attribs.href, 'https://www.everytip.co.uk');
         if ([sourceHost, 'www.everytip.co.uk', 'everytip.co.uk'].includes(url.hostname)) {

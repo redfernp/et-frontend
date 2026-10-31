@@ -160,22 +160,11 @@ html .page-shell:not(.with-sidebar) .cms-content p, html .page-shell:not(.with-s
 .author-box .author-box-name { margin-bottom: 4px; font-size: 16px; font-weight: 800; }
 .author-box .author-box-name a { color: var(--et-blue-ink); text-decoration: none; }
 
-/* "The Quick Tip": the guide's top 3 offers beside the title on award and roundup guides. */
-.quick-tip { align-self: stretch; padding: 18px 18px 14px; border-radius: 14px; background: #fff; border: 1px solid #dce6ed; box-shadow: 0 10px 26px #102a4014; }
+/* "The Quick Tip": the guide's editorial summary beside the title on award and roundup guides. */
+.quick-tip { align-self: stretch; padding: 20px 22px; border-radius: 14px; background: #fff; border: 1px solid #dce6ed; border-top: 4px solid var(--et-orange); box-shadow: 0 10px 26px #102a4014; }
 .quick-tip-kicker { margin: 0; color: var(--et-orange-ink); font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
-.quick-tip h2 { margin: 2px 0 12px; font-size: 24px; color: #183f60; }
-.quick-tip ol { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
-.quick-tip li { display: grid; grid-template-columns: 26px 72px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 8px; border-radius: 10px; border-left: 4px solid var(--brand, #1c598f); background: #f7fafc; }
-.qt-rank { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #183f60; color: #fff; font-size: 13px; font-weight: 900; }
-.qt-logo { display: grid; place-items: center; height: 40px; padding: 4px 6px; border-radius: 8px; background: var(--brand, #1c598f); }
-.qt-logo img { max-width: 100%; max-height: 30px; object-fit: contain; }
-.qt-copy strong { display: block; color: #183f60; font-size: 14px; line-height: 1.25; }
-.qt-copy small { color: #66737f; font-size: 11px; }
-.quick-tip .qt-cta { padding: 9px 12px; border-radius: 8px; background: var(--et-commercial, #c94f00); color: #fff; font-size: 13px; font-weight: 900; text-decoration: none; white-space: nowrap; }
-.quick-tip .qt-all { display: inline-block; margin-top: 10px; color: var(--et-blue-ink); font-size: 13px; font-weight: 800; }
-@media (max-width: 520px) { .quick-tip li { grid-template-columns: 24px 60px minmax(0, 1fr); } .quick-tip .qt-cta { grid-column: 1 / -1; text-align: center; } }
-.qt-terms summary { cursor: pointer; color: #66737f; font-size: 11px; list-style: none; }
-.qt-terms summary::-webkit-details-marker { display: none; }
-.qt-terms summary::after { content: ' ▾'; }
-.qt-terms[open] summary::after { content: ' ▴'; }
-.qt-terms p { margin: 4px 0 0; color: #4d5c69; font-size: 11px; line-height: 1.45; }
+.quick-tip h2 { margin: 2px 0 10px; font-size: 24px; color: #183f60; }
+.quick-tip .quick-tip-text { margin: 0; font-size: 16px; line-height: 1.65; color: #33495c; }
+.quick-tip .quick-tip-text a { color: var(--et-blue-ink); font-weight: 700; text-decoration: underline; text-decoration-color: #8fb2ce; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.quick-tip .quick-tip-text a[href*="/go/"] { color: #1e73be; text-decoration-color: #f7941d; }
+.quick-tip .quick-tip-note { margin: 12px 0 0; color: #66737f; font-size: 11px; }
