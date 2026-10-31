@@ -9,6 +9,7 @@ import CookieConsent from './CookieConsent.astro';
 import NavMenu from './NavMenu.astro';
 import NewsletterSignup from './NewsletterSignup.astro';
 import OfferNews from './OfferNews.astro';
+import SportIcon from './SportIcon.astro';
 import { publicMenuFallback, publicNavigation } from '../../lib/menu-tree';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
 import { removeExPartnerPromotion } from '../../lib/ranked-cards.mjs';
@@ -103,9 +104,9 @@ const guides = wpGuides.length ? wpGuides : fallbackGuides;
       <section class="wrap sb-problem" aria-labelledby="find-title">
         <h2 id="find-title">What you’ll find on EveryTip</h2>
         <div class="sb-grid-3">
-          <a class="sb-card-link" href="/free-horse-racing-tips"><span aria-hidden="true">🐎</span><h3>Horse racing tips</h3><p>The day’s selections from popular newspaper and TV tipsters on one page, plus every ITV race on Saturdays and a nap of the day.</p></a>
-          <a class="sb-card-link" href="/football-correct-score-tips.html"><span aria-hidden="true">⚽</span><h3>Football tips</h3><p>Correct score, accumulator, both teams to score and goals tips for the main leagues, updated every day.</p></a>
-          <a class="sb-card-link" href="/irish-horse-racing-tips.html"><span aria-hidden="true">🌍</span><h3>Racing around the world</h3><p>Tips for Ireland, South Africa, Hong Kong, India, Dubai and more, alongside greyhound and cricket tips.</p></a>
+          <a class="sb-card-link" href="/free-horse-racing-tips"><SportIcon name="racing" /><h3>Horse racing tips</h3><p>The day’s selections from popular newspaper and TV tipsters on one page, every ITV race on Saturdays and a nap of the day, plus racing from Ireland, South Africa, Hong Kong, India, Dubai and beyond.</p></a>
+          <a class="sb-card-link" href="/football-correct-score-tips.html"><SportIcon name="football" /><h3>Football tips</h3><p>Correct score, accumulator, both teams to score and goals tips for the main leagues, updated every day.</p></a>
+          <a class="sb-card-link" href="/free-betting-tips"><SportIcon name="trophy" /><h3>More sports</h3><p>Cricket, rugby, darts, snooker, golf, tennis and greyhound tips, all in one place.</p></a>
         </div>
       </section>
 
@@ -216,7 +217,6 @@ const guides = wpGuides.length ? wpGuides : fallbackGuides;
   @media(max-width:600px){.sb-lede{font-size:16px}.sb-primary{width:100%;justify-content:center}.sb-signup-card{padding:20px}.sb-problem,.sb-plan{padding-top:34px}}
   .sb-card-link{display:block;color:inherit;text-decoration:none;transition:transform .15s,box-shadow .2s}
   .sb-card-link:hover{transform:translateY(-2px);box-shadow:0 10px 22px #102a401f;text-decoration:none}
-  .sb-card-link>span{font-size:28px}
   .sb-guide>.wrap{padding:40px 0}
   .sb-own-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
   .sb-own-grid a{display:grid;gap:4px;padding:16px 18px;border-left:4px solid var(--et-orange);border-radius:10px;background:#fff;color:inherit;text-decoration:none;transition:transform .15s}

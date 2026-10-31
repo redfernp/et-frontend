@@ -1,0 +1,29 @@
+---
+// EveryTip line icons (blue stroke, orange accent) used in place of emoji.
+interface Props { name: 'racing' | 'football' | 'trophy' }
+const { name } = Astro.props;
+---
+<span class="sport-icon" aria-hidden="true">
+  <svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    {name === 'racing' && <>
+      <path d="M19 13v13a13 13 0 0 0 26 0V13" />
+      <path d="M15 13h8M41 13h8" />
+      <g fill="var(--et-orange)" stroke="none"><circle cx="21.5" cy="22" r="2" /><circle cx="22.5" cy="31" r="2" /><circle cx="42.5" cy="22" r="2" /><circle cx="41.5" cy="31" r="2" /></g>
+    </>}
+    {name === 'football' && <>
+      <circle cx="32" cy="32" r="17" />
+      <path d="M32 26l5.7 4.1-2.2 6.8h-7l-2.2-6.8z" fill="var(--et-orange)" stroke="var(--et-orange)" />
+      <path d="M32 26v-11M37.7 30.1l10.5-3.4M35.5 36.9l6.5 8.9M28.5 36.9l-6.5 8.9M26.3 30.1l-10.5-3.4" />
+    </>}
+    {name === 'trophy' && <>
+      <path d="M22 14h20v10a10 10 0 0 1-20 0z" />
+      <path d="M22 18h-5a5 5 0 0 0 5 8M42 18h5a5 5 0 0 1-5 8" />
+      <path d="M32 34v7M25 49h14M27 41h10v8H27z" />
+      <path d="M32 18.5l1.5 3 3.3.5-2.4 2.3.6 3.3-3-1.6-3 1.6.6-3.3-2.4-2.3 3.3-.5z" fill="var(--et-orange)" stroke="none" />
+    </>}
+  </svg>
+</span>
+
+<style>
+  .sport-icon { display: inline-grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, #eaf2f9, #dbe9f5); color: #1c598f; }
+</style>
