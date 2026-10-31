@@ -70,7 +70,10 @@ export function latestPosts(records, count = 5) {
 // Newest posts in the Offer News category (from its archive record), for the daily offers grid.
 export function latestOfferNews(records, count = 4) {
   const uris = new Set(records.filter((item) => item.kind === 'archive' && /\/offer-news$/.test(item.archiveBase ?? item.uri)).flatMap((item) => item.posts.map((post) => post.uri)));
-  return latestPosts(records.filter((item) => uris.has(item.uri)), count);
+  const byUri = new Map(records.map((record) => [record.uri, record]));
+  // A one-line summary from the article's opening text, as on the live Offer News list.
+  const summary = (html) => { const text = plain((html ?? '').replace(/<(table|figure|aside)[\s\S]*?<\/\1>/g, ' ')); return text.length > 150 ? `${text.slice(0, 150).replace(/\s+\S*$/, '')}…` : text; };
+  return latestPosts(records.filter((item) => uris.has(item.uri)), count).map((post) => ({ ...post, summary: summary(byUri.get(post.uri)?.content) }));
 }
 
 // WordPress HTML before the first <h2> matching `heading` (for example the trailing offer list).

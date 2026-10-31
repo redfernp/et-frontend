@@ -6,6 +6,7 @@ import { launchHtml } from '../../lib/builder-cleanup.mjs';
 import { removeExPartnerPromotion } from '../../lib/ranked-cards.mjs';
 import { endpoint } from '../../lib/launch-content.mjs';
 import { contentFromHeading, latestOfferNews } from '../../lib/launch-templates.mjs';
+import OfferNews from './OfferNews.astro';
 
 const { record, records, paths, offers, seo } = Astro.props;
 const available = new Set(paths);
@@ -102,17 +103,7 @@ const formatDate = (value) => new Date(`${value}T12:00:00Z`).toLocaleDateString(
       <a class="hub-commercial-cta" href={offers[0].ctaPath} rel="nofollow">{offers[0].ctaLabel}</a>
     </section>}
 
-    <section class="hub-news" aria-labelledby="hub-news-title" data-news-pager>
-      <div class="hub-section-heading"><p class="kicker">Latest from EveryTip</p><h2 id="hub-news-title">Today’s Offer News</h2></div>
-      <div class="hub-news-list news-two-col">
-        {news.map((item, index) => <article data-news-page={Math.floor(index / perPage) + 1} hidden={index >= perPage}><time datetime={item.date}>{formatDate(item.date)}</time><h3><a href={item.uri}>{item.title}</a></h3></article>)}
-      </div>
-      {news.length > perPage && <nav class="news-pager" aria-label="Older tips and news">
-        <button type="button" data-news-prev disabled>← Newer</button>
-        <span data-news-status>Page 1 of {Math.ceil(news.length / perPage)}</span>
-        <button type="button" data-news-next>Older →</button>
-      </nav>}
-    </section>
+    <OfferNews items={news} />
 
     <section class="hub-directory-section" aria-labelledby="hub-directory-title">
       <div class="hub-section-heading"><p class="kicker">Find your tips</p><h2 id="hub-directory-title">Browse Free Tips by Sport &amp; Tipster</h2></div>
