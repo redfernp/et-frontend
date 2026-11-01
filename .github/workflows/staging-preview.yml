@@ -1,7 +1,7 @@
 name: Build and deploy
 # Triggers: a WordPress save (the content-model plugin sends repository_dispatch about a minute
-# after the last save or straight away from the admin-bar button, and again when Ninja Tables rows change), a nightly
-# full refresh, and manual runs. Runs queue one at a time; GitHub keeps only the newest waiting
+# after the last save or straight away from the admin-bar button, and again when Ninja Tables rows change), a late-morning safety-net build, a
+# nightly full refresh, and manual runs. Runs queue one at a time; GitHub keeps only the newest waiting
 # run, so a burst of saves becomes one build.
 on:
   workflow_dispatch:
@@ -13,6 +13,7 @@ on:
   repository_dispatch:
     types: [everytip-content-saved]
   schedule:
+    - cron: '5 11 * * *'
     - cron: '23 3 * * *'
 permissions:
   contents: read

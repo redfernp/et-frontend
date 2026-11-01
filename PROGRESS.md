@@ -154,6 +154,6 @@ No DNS, everytip.co.uk Cloudflare routes, production Worker uploads or live Word
 
 ## Rebuild automation (18 October 2026)
 - Builds are incremental by default: listings are always fresh; only new or changed posts and the ~45 posts with tip tables are re-fetched (`outputs/content-cache`, tagged by endpoint). About 4 minutes locally instead of 25 to 50. `WPGRAPHQL_FRESH=1` still re-fetches everything (nightly in CI).
-- `.github/workflows/staging-preview.yml`: WordPress dispatch (save or admin-bar button), nightly full refresh, manual (with a "fresh" option). Deploys the test site; production deploy is gated on `EVERYTIP_PRODUCTION_DEPLOY_ENABLED` and `EVERYTIP_PRODUCTION_CLOUDFLARE_API_TOKEN`.
+- `.github/workflows/staging-preview.yml`: WordPress dispatch (save or admin-bar button), 11:05 UTC safety net, nightly full refresh, manual (with a "fresh" option). Deploys the test site; production deploy is gated on `EVERYTIP_PRODUCTION_DEPLOY_ENABLED` and `EVERYTIP_PRODUCTION_CLOUDFLARE_API_TOKEN`.
 - WordPress trigger moved to its own plugin `wordpress-plugins/everytip-rebuild-hook` (zip in `outputs/everytip-rebuild-hook.zip`): publish/unpublish saves of posts, pages and offers, Ninja Tables row actions, and a two-minute check of the Ninja Tables row fingerprint.
 - To switch on: install that plugin on staging, add `EVERYTIP_PREVIEW_DISPATCH_TOKEN` (GitHub fine-grained token, et-frontend, Contents read/write) to staging wp-config.php, add the `EVERYTIP_PREVIEW_CLOUDFLARE_API_TOKEN` secret, then set `EVERYTIP_PREVIEW_BUILDS_ENABLED=true`.
