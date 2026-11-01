@@ -48,9 +48,9 @@ test('test response guard adds noindex to pages, redirects and errors', async ()
   assert.match(await (await worker.fetch(new Request('https://test.workers.dev/robots.txt'), env)).text(), /Disallow: \/\n/);
   assert.match(await (await worker.fetch(new Request('https://www.everytip.co.uk/robots.txt'), { ...env, PREVIEW_NOINDEX: 'false' })).text(), /Sitemap: https:\/\/www.everytip.co.uk\/sitemap.xml/);
 });
-test('both configs have no site routes; production is not exposed on workers.dev', () => {
+test('production serves only www (no origin or wildcard route); test config has none; production is not exposed on workers.dev', () => {
   for (const file of ['wrangler.production.jsonc', 'wrangler.origin-test.jsonc']) {
-    const c = JSON.parse(readFileSync(file, 'utf8')); assert.deepEqual(c.routes, []); assert.equal(c.assets.run_worker_first, true); assert.equal(c.assets.html_handling, 'none'); assert.equal(c.workers_dev, file === 'wrangler.origin-test.jsonc');
+    const c = JSON.parse(readFileSync(file, 'utf8')); assert.deepEqual(c.routes, file === 'wrangler.production.jsonc' ? [{ pattern: 'www.everytip.co.uk/*', zone_name: 'everytip.co.uk' }] : []); assert.equal(c.assets.run_worker_first, true); assert.equal(c.assets.html_handling, 'none'); assert.equal(c.workers_dev, file === 'wrangler.origin-test.jsonc');
   }
   const production = JSON.parse(readFileSync('wrangler.production.jsonc', 'utf8'));
   assert.equal(production.name, 'et-frontend'); assert.equal(production.assets.directory, './dist'); assert.equal(production.vars.PREVIEW_NOINDEX, 'false');
