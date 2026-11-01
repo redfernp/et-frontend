@@ -31,7 +31,10 @@ export function createGraphqlClient({ endpoint, directory = 'outputs/wpgraphql-c
           error.permanent = response.status < 500 && ![408, 429].includes(response.status);
           throw error;
         }
-        const result = await response.json();
+        const text = await response.text();
+        let result;
+        // A firewall or challenge page comes back as HTML; show its start so the log says who answered.
+        try { result = JSON.parse(text); } catch { throw new Error(`WPGraphQL answered with non-JSON (${response.headers.get('server') ?? 'unknown server'}, cf-ray ${response.headers.get('cf-ray') ?? 'none'}): ${text.replace(/\s+/g, ' ').slice(0, 300)}`); }
         if (result.errors?.length || !result.data) {
           const error = new Error(result.errors?.map(e => e.message).join('; ') || 'WPGraphQL returned no data');
           error.permanent = true;
