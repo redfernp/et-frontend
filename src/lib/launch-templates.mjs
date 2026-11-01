@@ -199,7 +199,8 @@ export function linksUnderHeading(html, heading) {
 }
 
 // Bookmaker reviews that use the approved review design (Bet365 has its own template).
-// partner matches an entry in src/data/offers.json where EveryTip has a live offer.
+// partner matches an entry in src/data/offers.json where EveryTip has a live offer; rating is
+// our score for reviews whose text carries none.
 export const bookmakerReviews = {
   '/betfred-review': { name: 'Betfred', partner: 'betfred' },
   '/quinnbet-review': { name: 'QuinnBet', partner: 'quinnbet' },
@@ -207,7 +208,7 @@ export const bookmakerReviews = {
   '/10bet-review': { name: '10Bet', partner: '10bet' },
   '/betwright-review': { name: 'BetWright', partner: 'betwright' },
   '/netbet-review': { name: 'NetBet', partner: 'netbet' },
-  '/netbet-sportsbook-review.html': { name: 'NetBet', partner: 'netbet' },
+  '/netbet-sportsbook-review.html': { name: 'NetBet', partner: 'netbet', rating: 4 },
   '/spreadex-review': { name: 'Spreadex', partner: 'spreadex' },
   '/boylesports-review': { name: 'Boylesports', partner: null },
   '/betfair-sportsbook-review': { name: 'Betfair Sportsbook', partner: null },

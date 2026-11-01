@@ -2,7 +2,7 @@
 import { canonicalFor } from '../src/lib/launch-templates.mjs';
 import { exPartnerFor } from '../src/lib/ranked-cards.mjs';
 import { readFile, writeFile } from 'node:fs/promises';
-import { parseDocument } from 'htmlparser2';
+import { parseDocument, DomUtils } from 'htmlparser2';
 import { robotsFor } from '../src/lib/launch-content.mjs';
 import { verifiedLegacyRedirects } from '../src/lib/legacy-redirects.mjs';
 import { workerArchiveRedirects } from '../src/lib/archive-redirects.mjs';
@@ -50,6 +50,8 @@ async function inspect(record) {
   checked++;
   if (html.includes('data-everytip-offer-slot')) failures.push({ path: record.uri, field: 'unresolved-offer-slot' });
   const doc = parseDocument(html);
+  // The Top 3 block the template adds to posts is not article content; leave it out of the comparison.
+  for (const node of elements(doc, 'div').filter(node => 'data-template-offers' in node.attribs)) DomUtils.removeElement(node);
   const sourceDoc = parseDocument(record.content || '');
   // Inline offer cards (aside) and in-article top-offers ladders ([everytip_top_offers], li rows).
   const sourceAsides = elements(sourceDoc, 'aside').filter(node => node.attribs['data-offer-id']);

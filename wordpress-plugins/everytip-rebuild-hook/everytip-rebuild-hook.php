@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EveryTip Rebuild Hook
  * Description: Rebuilds the Astro front end on GitHub when published content or Ninja Tables rows change.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Requires PHP: 7.4
  *
  * Content change -> GitHub rebuild of the Astro front end.
@@ -87,3 +87,39 @@ function everytip_dispatch_preview_build() {
 		'status' => is_wp_error( $response ) ? 'transport_error' : wp_remote_retrieve_response_code( $response ) ), false );
 }
 add_action( 'everytip_dispatch_preview_build', 'everytip_dispatch_preview_build' );
+
+// "Rebuild site now" in the admin bar for editors: dispatches straight away (no one-minute wait),
+// for when the newsletter needs today's tips live. The hover title shows the last dispatch.
+add_action( 'admin_bar_menu', function ( $bar ) {
+	if ( ! everytip_rebuild_enabled() || ! current_user_can( 'edit_posts' ) ) {
+		return;
+	}
+	$last = get_option( 'everytip_preview_last_dispatch' );
+	$bar->add_node( array(
+		'id'    => 'everytip-rebuild',
+		'title' => 'Rebuild site now',
+		'href'  => wp_nonce_url( admin_url( 'admin-post.php?action=everytip_rebuild_now' ), 'everytip_rebuild_now' ),
+		'meta'  => array( 'title' => $last ? sprintf( 'Last rebuild request: %s (HTTP %s). The site updates about 5 to 10 minutes after a request.', $last['at'], $last['status'] ) : 'The site updates about 5 to 10 minutes after a request.' ),
+	) );
+}, 100 );
+
+add_action( 'admin_post_everytip_rebuild_now', function () {
+	if ( ! current_user_can( 'edit_posts' ) || ! check_admin_referer( 'everytip_rebuild_now' ) ) {
+		wp_die( 'Not allowed.' );
+	}
+	wp_clear_scheduled_hook( 'everytip_dispatch_preview_build' );
+	everytip_dispatch_preview_build();
+	$last = get_option( 'everytip_preview_last_dispatch' );
+	$ok   = is_array( $last ) && in_array( (int) $last['status'], array( 200, 204 ), true );
+	wp_safe_redirect( add_query_arg( 'everytip_rebuild', $ok ? 'sent' : 'failed', wp_get_referer() ?: admin_url() ) );
+	exit;
+} );
+
+add_action( 'admin_notices', function () {
+	if ( empty( $_GET['everytip_rebuild'] ) ) {
+		return;
+	}
+	$sent = 'sent' === $_GET['everytip_rebuild'];
+	printf( '<div class="notice notice-%s is-dismissible"><p>%s</p></div>', $sent ? 'success' : 'error',
+		$sent ? 'Rebuild requested. The site will show the changes in about 5 to 10 minutes.' : 'The rebuild request failed. Try again, or tell Paul.' );
+} );

@@ -28,7 +28,7 @@ const skip = /^(.+ )?(review )?ratings|ratings at a glance|^seymour biz$/i;
 const sections = review.sections.filter((section) => !skip.test(section.title))
   .map((section, index) => ({ ...section, ...sectionDetails(section.html), title: section.title.replace(/^\d+\.\s*/, '').replace(/[-–]\s*$/, '').trim(), anchor: `review-area-${index + 1}` }));
 const scored = sections.filter((section) => section.score !== null);
-const overall = overallRating(review.introHtml) ?? (scored.length ? Math.round(10 * scored.reduce((sum, s) => sum + s.score, 0) / scored.length) / 10 : null);
+const overall = overallRating(review.introHtml) ?? bookmaker.rating ?? (scored.length ? Math.round(10 * scored.reduce((sum, s) => sum + s.score, 0) / scored.length) / 10 : null);
 const verdictLabel = overall >= 4.5 ? 'Highly Recommended' : overall >= 4 ? 'Recommended' : overall ? 'Worth a look' : '';
 const year = new Date(record.modified).getUTCFullYear();
 const title = `${bookmaker.name} Review ${year}`;

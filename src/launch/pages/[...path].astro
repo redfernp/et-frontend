@@ -10,7 +10,8 @@ import LaunchNewsletter from '../../components/launch/LaunchNewsletter.astro';
 import LaunchTipsters from '../../components/launch/LaunchTipsters.astro';
 import ColumnistProfile from '../../components/ColumnistProfile.astro';
 import { launchContent, robotsFor, endpoint } from '../../lib/launch-content.mjs';
-import { launchOfferLineup } from '../../lib/launch-offers.mjs';
+import { launchOfferLineup, renderTopOffers } from '../../lib/launch-offers.mjs';
+import top3AfterIntro from '../../data/top3-after-intro.json';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
 import { rebuildRankedCards, fillEmptyLinkCells, responsiveNinjaTables, polishContent, removeExPartnerPromotion, mergeSplitLinks } from '../../lib/ranked-cards.mjs';
 import { columnistKeyForUri, legacyColumnistPortraitPaths } from '../../lib/columnist-profiles.mjs';
@@ -61,6 +62,13 @@ if (quickTipMatch) body = body.replace(quickTipMatch[0], '');
 // Tip-table pages need the full width for their seven columns.
 // Comparison and award pages built around tables use the full width; tips posts keep the
 // sidebar like the live site, with responsive Ninja tables.
+// Posts end with today's top 3 offers (replaces live's Betfred banner) unless the post already shows them.
+// Old posts that had the Beaver "Top Bookies" table show them after the intro paragraph instead, where the table sat.
+let postLadder = record.kind === 'posts' && body && !body.includes('post-ladder') ? `<div class="template-offers" data-template-offers>${renderTopOffers('[everytip_top_offers count="3"]')}</div>` : null;
+if (postLadder && top3AfterIntro.uris.includes(record.uri) && body.includes('</p>')) {
+  body = body.replace('</p>', `</p>${postLadder}`);
+  postLadder = null;
+}
 const hasTipTable = record.kind === 'pages' && /<table/i.test(record.content ?? '');
 const published = record.date?.slice(0, 10);
 const modified = record.modified?.slice(0, 10);
@@ -108,6 +116,7 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
       {profile ? `By ${profile.name} · ` : author ? <>By {author.href ? <a href={author.href}>{author.name}</a> : author.name} · </> : ''}Published {formatDate(published)}{modified && modified !== published ? ` · Updated ${formatDate(modified)}` : ''}
     </p>}
     {body && <div class="exact-preview-body cms-content" set:html={body} />}
+    {postLadder && <div class="cms-content" set:html={postLadder} />}
     {record.posts?.length > 0 && <>
       <ol class="archive-posts">
         {record.posts.map(post => <li><a href={post.uri} set:html={post.title} /><time datetime={post.date}>{formatDate(post.date.slice(0, 10))}</time></li>)}

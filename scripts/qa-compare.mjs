@@ -175,17 +175,17 @@ const csv = (value) => `"${String(value ?? '').replace(/"/g, '""')}"`;
 await writeFile('outputs/qa/differences.csv', ['severity,area,check,url,detail,decision (keep/ditch)', ...results.flatMap((row) => row.differences.map((d) => [d.severity, d.area, d.check, LIVE + row.uri, d.detail, ''].map(csv).join(',')))].join('\n'));
 // Assessment of each check after review on 31 October 2026, shown in the report.
 const notes = {
-  'Robots': 'KEEP (recommended): your rolling rule noindexes John Newsome and Seymour Biz columns older than 12 months. Staging applies it to all 434; live is behind on these.',
+  'Robots': 'KEEP (decided 1 Nov): your rolling rule noindexes John Newsome and Seymour Biz columns older than 12 months. Staging applies it to all 434; live is behind on these.',
   'H1': 'Mostly expected: live printed duplicate H1s ("X | X") or none; the new site prints one H1 per page. Check the few where the wording changed.',
   'Meta description': 'Pages edited on live since staging was copied; copied across when pages are synced at launch.',
   'Title tag': 'Fixed: titles now match live.',
-  'Betfred banner after the post (live only)': 'DECIDE: live shows a Betfred offer banner and link after every post. Keep (with its full terms visible) or drop.',
+  'Betfred banner after the post (live only)': 'DITCHED (decided 1 Nov): every post now ends with the Today’s Top 3 Betting Offers block instead.',
   'Word count drop over 20%': 'Mostly expected: former partners, non-partners and promo copy removed from guides and reviews. A few are pages edited on live since the copy (synced at launch).',
   'H2 headings missing': 'Mostly expected: review and guide redesigns restructure headings; removed partner sections. Pages edited on live since the copy are synced at launch.',
-  'Tables fewer': 'DECIDE: mostly old posts whose table came from a Beaver Builder layout (Beaver is off). Recover by copying the rendered table from live, or let them go.',
+  'Tables fewer': 'DITCHED (decided 1 Nov): the old Beaver Top Bookies tables are gone; the 36 posts that had one show the Top 3 offers after the intro instead (src/data/top3-after-intro.json).',
   'Author box missing': 'Expected: utility pages (newsletter, free bets hub, subscription confirm) and the Bet365 review template.',
-  'Schema types missing': 'DECIDE: five old .html reviews carried a review plugin Product and star-rating markup on live. They have no rating on the new template, so no Review schema. Add ratings to these reviews, or accept losing it.',
-  'Hand-added entity schema missing': 'DECIDE: hand-written WebPage "about" entity markup (PayPal, betting, sports betting) on two guides. Low value; can be re-added per page if wanted.',
+  'Schema types missing': 'NetBet now scores 4/5 with Review schema. The other four old .html reviews are left for Paul to refresh later.',
+  'Hand-added entity schema missing': 'OMITTED for now (decided 1 Nov): Paul will refresh these guides later.',
   'Review plugin schema replaced by Review schema': 'Expected: the new reviews output clean Review schema from our star rating.',
   'Internal links removed': 'Mostly expected: links to former-partner and non-partner reviews removed with their sections.',
   'Affiliate links removed': 'Mostly expected: non-partner and duplicate CTA links removed. Review the list for any partner link that should stay.',
