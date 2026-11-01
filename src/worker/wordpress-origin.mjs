@@ -3,6 +3,8 @@ export function isWordPressRequest(url) {
   const path = url.pathname;
   return /^\/(?:wp-admin|wp-json|graphql)/.test(path) ||
     /^\/(?:wp-content|wp-includes)(?:\/|$)/.test(path) ||
+    // Cloudways renews the origin's Let's Encrypt certificate over HTTP through the public host.
+    path.startsWith('/.well-known/acme-challenge/') ||
     /^\/(?:wp-login|wp-cron|xmlrpc|wp-comments-post|wp-signup|wp-activate|wp-trackback|wp-mail|wp-links-opml)\.php(?:\/|$)/.test(path) ||
     ((path === '/' || path === '/index.php') && url.searchParams.has('rest_route')) ||
     ['preview', 'preview_id', 'customize_changeset_uuid', 'customize_theme', 'fl_builder', 'tve', 'elementor-preview'].some(key => url.searchParams.has(key));
