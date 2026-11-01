@@ -78,8 +78,9 @@ Reads live, writes staging only. Every staging write keeps a backup in
 | +60 min | Paul | Editing reopens on the new site. |
 
 Pushing the database only (not files) keeps live's uploads and `/go/redirects.txt` untouched.
-The only file change made on staging is the rebuild-hook plugin, which can be installed on live
-directly.
+Plugin files are not pushed. Before the push, upload to live (inactive): Add WPGraphQL SEO,
+EveryTip Content Model and EveryTip Rebuild Hook. WPGraphQL and WPGraphQL for ACF files are already
+on live but inactive; the push activates all of them from staging.
 
 ## Needed from Paul before the rehearsal
 
