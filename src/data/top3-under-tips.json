@@ -1,0 +1,17 @@
+{
+  "note": "Tip pages whose Top 3 offers sit straight under the first tip table, headed 'Recommended bookies to place your <bet>'. Racecourse tips pages (/...-racing-tips with a tip table) use the course name and need no entry.",
+  "betTypes": {
+    "/1x2-betting-tips.html": "1X2 bet",
+    "/both-teams-to-score-btts-tips.html": "BTTS bet",
+    "/english-premier-league-betting-tips.html": "Premier League bet",
+    "/football-accumulator-tips.html": "football accumulator",
+    "/football-correct-score-tips.html": "correct score bet",
+    "/horse-racing-treble-tips.html": "treble bet",
+    "/over-2-5-goals-tips.html": "over 2.5 goals bet",
+    "/templegates-tips.html": "horse racing bet",
+    "/uefa-champions-league-betting-tips-predictions.html": "Champions League bet",
+    "/under-over-1-5-goals-tips.html": "over/under 1.5 goals bet",
+    "/value-bet-tips-dark-horses.html": "value bet",
+    "/world-cup-2026-betting-tips.html": "World Cup bet"
+  }
+}

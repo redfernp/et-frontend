@@ -513,3 +513,7 @@
   .column-pagination { gap:8px; }
   .column-page-direction, .column-page-spacer { min-width:70px; }
 }
+
+/* Offer buttons were styled as disabled placeholders before offers went live (cursor: not-allowed).
+   Anything with a link is clickable, so it always gets the hand cursor. */
+a[href] { cursor: pointer !important; }

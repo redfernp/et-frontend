@@ -145,6 +145,8 @@ const id = `mnav-${variant}`;
     .mnav.mnav .mnav-chips a { display: flex; align-items: center; min-height: 44px; padding: 8px 11px; border-radius: 10px; background: #f3f7fb; border: 1px solid #e1eaf2; color: #183f60; font-size: 13px; font-weight: 700; line-height: 1.25; text-decoration: none; opacity: 0; transform: translateY(6px); transition: opacity .3s, transform .3s, background .2s, border-color .2s; }
     .mnav.mnav .mnav-section.is-open .mnav-chips a { opacity: 1; transform: none; transition-delay: calc(var(--j) * 22ms + 80ms), calc(var(--j) * 22ms + 80ms), 0s, 0s; }
     .mnav.mnav .mnav-chips a:hover, .mnav.mnav .mnav-chips a:focus-visible { background: #fff4ec; border-color: #f7b98a; }
+    /* The desktop header's orange hover underline sits 8px below the text and cut through wrapped labels. */
+    html .mnav.mnav.mnav a:hover { text-decoration: none; }
     .mnav.mnav.mnav .mnav-scroll a[aria-current="page"] { background: #fff1e6; border-color: var(--et-orange); color: var(--et-orange-ink); }
     .mnav-group { margin-top: 12px; }
     .mnav-group:first-child { margin-top: 2px; }
