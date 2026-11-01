@@ -69,7 +69,9 @@ const guides = wpGuides.length ? wpGuides : fallbackGuides;
     <meta name="robots" content={seo.robots} />
     {seo.description && <meta name="description" content={seo.description} />}
     {seo.canonical && <link rel="canonical" href={seo.canonical} />}
-    {seo.schema && <script type="application/ld+json" set:html={seo.schema} />}
+    {/* Search Console ownership, as Yoast printed it on the WordPress homepage. */}
+    <meta name="google-site-verification" content="8oNxXalg2KUI14VI9UyFKBk4AGw_wrCTWejvDpP7Pjg" />
+    {seo.schema &&<script type="application/ld+json" set:html={seo.schema} />}
     <meta property="og:locale" content="en_GB" />
     <meta property="og:type" content={seo.ogType || 'website'} />
     <meta property="og:title" content={seo.ogTitle || seo.title} />
