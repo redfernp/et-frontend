@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EveryTip Rebuild Hook
  * Description: Rebuilds the Astro front end on GitHub when published content or Ninja Tables rows change.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Requires PHP: 7.4
  *
  * Content change -> GitHub rebuild of the Astro front end.
@@ -14,22 +14,24 @@
  *    the tables' latest updated_at and row count with the last value it saw.
  */
 defined( 'ABSPATH' ) || exit;
-// An older content-model plugin may ship the first version of this hook; never declare it twice.
-if ( function_exists( 'everytip_queue_frontend_rebuild' ) ) {
-	return;
-}
-
+// An older content-model plugin may ship the first version of this hook. Its functions are kept
+// (never declared twice) and the rest of this file, including the admin-bar button, still loads.
+if ( ! function_exists( 'everytip_rebuild_enabled' ) ) :
 function everytip_rebuild_enabled() {
 	return defined( 'EVERYTIP_PREVIEW_DISPATCH_TOKEN' ) && EVERYTIP_PREVIEW_DISPATCH_TOKEN;
 }
+endif;
 
+if ( ! function_exists( 'everytip_queue_frontend_rebuild' ) ) :
 function everytip_queue_frontend_rebuild() {
 	if ( everytip_rebuild_enabled() && ! wp_next_scheduled( 'everytip_dispatch_preview_build' ) ) {
 		wp_schedule_single_event( time() + 60, 'everytip_dispatch_preview_build' );
 	}
 }
+endif;
 
 // Only changes the public site can show: published now, or published before this save.
+if ( ! function_exists( 'everytip_rebuild_on_status' ) ) :
 function everytip_rebuild_on_status( $new_status, $old_status, $post ) {
 	if ( wp_is_post_revision( $post ) || wp_is_post_autosave( $post ) ||
 		! in_array( $post->post_type, array( 'post', 'page', 'et_offer', 'ninja-table' ), true ) ) {
@@ -39,6 +41,7 @@ function everytip_rebuild_on_status( $new_status, $old_status, $post ) {
 		everytip_queue_frontend_rebuild();
 	}
 }
+endif;
 add_action( 'transition_post_status', 'everytip_rebuild_on_status', 100, 3 );
 
 // Ninja Tables row actions, where the installed version fires them.
@@ -57,6 +60,7 @@ add_action( 'init', function () {
 		wp_schedule_event( time() + 120, 'everytip_two_minutes', 'everytip_check_tip_tables' );
 	}
 } );
+if ( ! function_exists( 'everytip_check_tip_tables' ) ) :
 function everytip_check_tip_tables() {
 	global $wpdb;
 	$table = $wpdb->prefix . 'ninja_table_items';
@@ -70,8 +74,10 @@ function everytip_check_tip_tables() {
 		everytip_queue_frontend_rebuild();
 	}
 }
+endif;
 add_action( 'everytip_check_tip_tables', 'everytip_check_tip_tables' );
 
+if ( ! function_exists( 'everytip_dispatch_preview_build' ) ) :
 function everytip_dispatch_preview_build() {
 	if ( ! everytip_rebuild_enabled() ) {
 		return;
@@ -86,20 +92,21 @@ function everytip_dispatch_preview_build() {
 	update_option( 'everytip_preview_last_dispatch', array( 'at' => gmdate( 'c' ),
 		'status' => is_wp_error( $response ) ? 'transport_error' : wp_remote_retrieve_response_code( $response ) ), false );
 }
+endif;
 add_action( 'everytip_dispatch_preview_build', 'everytip_dispatch_preview_build' );
 
 // "Rebuild site now" in the admin bar for editors: dispatches straight away (no one-minute wait),
 // for when the newsletter needs today's tips live. The hover title shows the last dispatch.
 add_action( 'admin_bar_menu', function ( $bar ) {
-	if ( ! everytip_rebuild_enabled() || ! current_user_can( 'edit_posts' ) ) {
+	if ( ! current_user_can( 'edit_posts' ) ) {
 		return;
 	}
 	$last = get_option( 'everytip_preview_last_dispatch' );
 	$bar->add_node( array(
 		'id'    => 'everytip-rebuild',
-		'title' => 'Rebuild site now',
+		'title' => everytip_rebuild_enabled() ? 'Rebuild site now' : 'Rebuild site now (token missing)',
 		'href'  => wp_nonce_url( admin_url( 'admin-post.php?action=everytip_rebuild_now' ), 'everytip_rebuild_now' ),
-		'meta'  => array( 'title' => $last ? sprintf( 'Last rebuild request: %s (HTTP %s). The site updates about 5 to 10 minutes after a request.', $last['at'], $last['status'] ) : 'The site updates about 5 to 10 minutes after a request.' ),
+		'meta'  => array( 'title' => $last ? sprintf( 'Last rebuild request: %s (HTTP %s). The site updates about 3 to 5 minutes after a request.', $last['at'], $last['status'] ) : 'The site updates about 3 to 5 minutes after a request.' ),
 	) );
 }, 100 );
 
@@ -121,5 +128,5 @@ add_action( 'admin_notices', function () {
 	}
 	$sent = 'sent' === $_GET['everytip_rebuild'];
 	printf( '<div class="notice notice-%s is-dismissible"><p>%s</p></div>', $sent ? 'success' : 'error',
-		$sent ? 'Rebuild requested. The site will show the changes in about 5 to 10 minutes.' : 'The rebuild request failed. Try again, or tell Paul.' );
+		$sent ? 'Rebuild requested. The site will show the changes in about 3 to 5 minutes.' : ( everytip_rebuild_enabled() ? 'The rebuild request failed. Try again, or tell Paul.' : 'The rebuild token is missing from wp-config.php (EVERYTIP_PREVIEW_DISPATCH_TOKEN), so nothing was sent.' ) );
 } );
