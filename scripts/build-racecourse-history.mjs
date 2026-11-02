@@ -1,7 +1,7 @@
 // Past racecourse tips for the "Previous tips" accordion on each racecourse page, from the
-// tissue tracker (one top-rated horse per race, with the result once settled).
-// Only public fields are kept: no tissue price, value rating or race check, so nothing here
-// shows how the picks are chosen.
+// tissue tracker (one top-rated horse per race). Only the selection is kept: no tissue price,
+// value rating or race check (nothing shows how the picks are chosen) and no results, which
+// have no reliable feed.
 // Usage: node scripts/build-racecourse-history.mjs [path/to/top-rated-tracker.csv]
 import { readFile, writeFile } from 'node:fs/promises';
 
@@ -40,7 +40,6 @@ for (const line of lines) {
   const meetings = courses[course] ??= {};
   (meetings[get('Date')] ??= []).push({
     time: get('Time'), race: get('Race'), horse: get('Horse'), jockey: get('Jockey'), trainer: get('Trainer'),
-    sp: get('Forecast SP'), bsp: get('BSP'), finish: get('Finish'), won: get('Won') === 'Y',
   });
 }
 

@@ -184,14 +184,10 @@ html .page-shell:not(.with-sidebar) .cms-content p, html .page-shell:not(.with-s
 .cms-content .racecourse-meeting th { background: #17476c; color: #fff; padding: 8px 10px; text-align: left; }
 .cms-content .racecourse-meeting td { padding: 8px 10px; border-bottom: 1px solid #e3e9ee; vertical-align: top; }
 .cms-content .racecourse-meeting td span { display: block; color: #5d6b78; font-size: 12px; }
-.cms-content .racecourse-meeting th, .cms-content .racecourse-meeting td:nth-child(1), .cms-content .racecourse-meeting td:nth-child(4), .cms-content .racecourse-meeting td:nth-child(5) { white-space: nowrap; }
-.cms-content .racecourse-meeting tr.is-winner td { background: #e8f6ee; }
-.cms-content .racecourse-meeting tr.is-winner td:nth-child(4) { color: #15803d; font-weight: 800; }
+.cms-content .racecourse-meeting th, .cms-content .racecourse-meeting td:nth-child(1) { white-space: nowrap; }
 @media (max-width: 700px) {
   .cms-content .racecourse-meeting thead { display: none; }
   .cms-content .racecourse-meeting tr { display: grid; grid-template-columns: 60px 1fr; gap: 2px 10px; padding: 10px 0; border-bottom: 1px solid #e3e9ee; }
   .cms-content .racecourse-meeting td { border: 0; padding: 0; }
   .cms-content .racecourse-meeting td:nth-child(n+3) { grid-column: 2; }
-  .cms-content .racecourse-meeting td:nth-child(4)::before { content: 'Result: '; color: #5d6b78; font-weight: 400; }
-  .cms-content .racecourse-meeting td:nth-child(5)::before { content: 'BSP: '; color: #5d6b78; }
 }

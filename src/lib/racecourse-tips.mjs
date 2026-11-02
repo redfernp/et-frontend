@@ -42,18 +42,14 @@ export function filterCourseTable(html, course) {
 }
 
 const longDate = (date) => new Date(`${date}T12:00:00Z`).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
-const ordinal = (n) => { const s = ['th', 'st', 'nd', 'rd']; const v = n % 100; return `${n}${s[(v - 20) % 10] || s[v] || s[0]}`; };
-
-// Previous meetings at this course, newest first, each one a closed accordion.
+// Previous meetings at this course, newest first, each one a closed accordion. Selections only:
+// there is no results feed.
 export function racecourseHistoryHtml(course, today, limit = 12) {
   const meetings = (history.courses[course.id] ?? []).filter((meeting) => meeting.date < today).slice(0, limit);
   if (!meetings.length) return '';
   const items = meetings.map(({ date, races }) => {
-    const settled = races.filter((race) => race.finish);
-    const winners = races.filter((race) => race.won).length;
-    const summary = settled.length ? `${races.length} tips · ${winners} ${winners === 1 ? 'winner' : 'winners'}` : `${races.length} tips`;
-    const rows = races.map((race) => `<tr${race.won ? ' class="is-winner"' : ''}><td data-label="Time">${escape(race.time)}</td><td data-label="Horse"><strong>${escape(race.horse)}</strong><span>${escape(race.race)}</span></td><td data-label="Jockey / trainer">${escape(race.jockey)}<span>${escape(race.trainer)}</span></td><td data-label="Result">${race.finish ? (race.won ? 'Won' : /^\d+$/.test(race.finish) ? ordinal(Number(race.finish)) : escape(race.finish)) : 'Not settled'}</td><td data-label="BSP">${race.bsp ? escape(race.bsp) : "n/a"}</td></tr>`).join('');
-    return `<details class="racecourse-meeting"><summary><span>${longDate(date)}</span><span class="racecourse-meeting-count">${summary}</span></summary><div class="racecourse-meeting-body"><table><thead><tr><th>Time</th><th>Horse</th><th>Jockey / trainer</th><th>Result</th><th>BSP</th></tr></thead><tbody>${rows}</tbody></table></div></details>`;
+    const rows = races.map((race) => `<tr><td data-label="Time">${escape(race.time)}</td><td data-label="Selection"><strong>${escape(race.horse)}</strong><span>${escape(race.race)}</span></td><td data-label="Jockey / trainer">${escape(race.jockey)}<span>${escape(race.trainer)}</span></td></tr>`).join('');
+    return `<details class="racecourse-meeting"><summary><span>${longDate(date)}</span><span class="racecourse-meeting-count">${races.length} ${races.length === 1 ? 'selection' : 'selections'}</span></summary><div class="racecourse-meeting-body"><table><thead><tr><th>Time</th><th>Selection</th><th>Jockey / trainer</th></tr></thead><tbody>${rows}</tbody></table></div></details>`;
   }).join('');
-  return `<section class="racecourse-history" aria-labelledby="racecourse-history-title"><h2 id="racecourse-history-title">Our previous ${escape(course.name)} tips and results</h2><p>Our selection for every race at recent ${escape(course.name)} meetings. Open a meeting to see each tip and how it finished. BSP is the Betfair starting price.</p>${items}</section>`;
+  return `<section class="racecourse-history" aria-labelledby="racecourse-history-title"><h2 id="racecourse-history-title">Our previous ${escape(course.name)} tips</h2><p>Our selection for every race at recent ${escape(course.name)} meetings. Open a meeting to see each tip.</p>${items}</section>`;
 }
