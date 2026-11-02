@@ -6,6 +6,7 @@ import { parseDocument, DomUtils } from 'htmlparser2';
 import { robotsFor } from '../src/lib/launch-content.mjs';
 import { verifiedLegacyRedirects } from '../src/lib/legacy-redirects.mjs';
 import { workerArchiveRedirects } from '../src/lib/archive-redirects.mjs';
+import { racecourseFor, filterCourseTable } from '../src/lib/racecourse-tips.mjs';
 const source = JSON.parse(await readFile('outputs/launch-source.json', 'utf8'));
 const origin = process.argv.find(arg=>arg.startsWith('--origin='))?.slice('--origin='.length);
 const sitemap = origin ? await (await fetch(new URL('/sitemap.xml',origin))).text() : await readFile('dist/sitemap.xml', 'utf8');
@@ -69,7 +70,9 @@ async function inspect(record) {
     const sourceKeys = new Set(key(sourceOffers));
     if (!ladder.length || key(ladder).some(entry => !sourceKeys.has(entry))) failures.push({path:record.uri,field:'central-offer-content'});
   } else if (JSON.stringify(offerSignature(sourceAsides)) !== JSON.stringify(offerSignature(builtOffers))) failures.push({path:record.uri,field:'central-offer-content'});
-  const sourceTables = elements(parseDocument(record.content || ''), 'table').filter(node => /ninja/i.test(JSON.stringify(node.attribs)));
+  // Racecourse pages show only their own course's rows from the daily tips table, by design.
+  const course = racecourseFor(record);
+  const sourceTables = elements(parseDocument(course ? filterCourseTable(record.content || '', course) : record.content || ''), 'table').filter(node => /ninja/i.test(JSON.stringify(node.attribs)));
   for (const table of sourceTables) {
     const built = elements(doc, 'table').find(node => node.attribs.id === table.attribs.id);
     // Rows listing a former partner (first cell) are removed by the build on purpose.

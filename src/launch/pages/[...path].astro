@@ -13,6 +13,7 @@ import { launchContent, robotsFor, endpoint } from '../../lib/launch-content.mjs
 import { launchOfferLineup, renderTopOffers } from '../../lib/launch-offers.mjs';
 import top3AfterIntro from '../../data/top3-after-intro.json';
 import top3UnderTips from '../../data/top3-under-tips.json';
+import { racecourseFor, filterCourseTable, racecourseHistoryHtml } from '../../lib/racecourse-tips.mjs';
 import { launchHtml } from '../../lib/builder-cleanup.mjs';
 import { rebuildRankedCards, fillEmptyLinkCells, responsiveNinjaTables, polishContent, removeExPartnerPromotion, mergeSplitLinks } from '../../lib/ranked-cards.mjs';
 import { columnistKeyForUri, legacyColumnistPortraitPaths } from '../../lib/columnist-profiles.mjs';
@@ -71,14 +72,22 @@ if (postLadder && top3AfterIntro.uris.includes(record.uri) && body.includes('</p
   postLadder = null;
 }
 // Tip pages show the Top 3 straight under the first tip table, headed for the bet being tipped.
-const racecourse = record.kind === 'pages' && record.uri.match(/^\/(?:racecourses\/)?([a-z-]+)-racing-tips$/);
-const betType = top3UnderTips.betTypes[record.uri] ?? (racecourse ? `${racecourse[1].replace(/(^|-)([a-z])/g, (_, dash, letter) => `${dash ? ' ' : ''}${letter.toUpperCase()}`)} bet` : null);
-const tipTableEnd = betType && !body.includes('post-ladder') ? body.indexOf('</table>', body.indexOf('data-ninja_table_instance')) : -1;
-if (tipTableEnd > -1 && body.indexOf('data-ninja_table_instance') > -1) {
-  const close = body.slice(tipTableEnd).match(/^<\/table>\s*(?:<\/div>)?/)[0];
+// Racecourse pages keep only that course's rows from the daily table, then list previous meetings.
+const racecourse = racecourseFor(record);
+if (racecourse) body = filterCourseTable(body, racecourse);
+const londonToday = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London' }).format(new Date());
+const racecourseHistory = racecourse ? racecourseHistoryHtml(racecourse, londonToday) : '';
+const betType = top3UnderTips.betTypes[record.uri] ?? (racecourse ? `${racecourse.name} bet` : null);
+// On a day with no racing the tips table is replaced by a note; anchor to that, not to a later table.
+const noRacingEnd = racecourse && body.includes('racecourse-no-racing') ? body.indexOf('</p>', body.indexOf('racecourse-no-racing')) : -1;
+const tipTableEnd = betType && noRacingEnd < 0 && !body.includes('post-ladder') ? body.indexOf('</table>', body.indexOf('data-ninja_table_instance')) : -1;
+if ((tipTableEnd > -1 && body.indexOf('data-ninja_table_instance') > -1) || noRacingEnd > -1) {
+  const end = tipTableEnd > -1 ? tipTableEnd + body.slice(tipTableEnd).match(/^<\/table>\s*(?:<\/div>)?/)[0].length : noRacingEnd + 4;
   const ladder = renderTopOffers('[everytip_top_offers count="3"]').replace(/<h2>Today’s Top \d+ Betting Offers<\/h2>/, `<h2>Recommended bookies to place your ${betType}</h2>`);
-  body = `${body.slice(0, tipTableEnd + close.length)}<div class="template-offers" data-template-offers>${ladder}</div>${body.slice(tipTableEnd + close.length)}`;
+  body = `${body.slice(0, end)}<div class="template-offers" data-template-offers>${ladder}</div>${racecourseHistory}${body.slice(end)}`;
   postLadder = null;
+} else if (racecourseHistory) {
+  body += racecourseHistory;
 }
 const hasTipTable = record.kind === 'pages' && /<table/i.test(record.content ?? '');
 const published = record.date?.slice(0, 10);
