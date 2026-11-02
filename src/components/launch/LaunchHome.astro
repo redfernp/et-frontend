@@ -6,6 +6,7 @@ import '../../styles/launch.css';
 import HomeOfferLadder from '../HomeOfferLadder.astro';
 import SiteFooter from '../SiteFooter.astro';
 import CookieConsent from './CookieConsent.astro';
+import ConvertBox from './ConvertBox.astro';
 import NavMenu from './NavMenu.astro';
 import NewsletterSignup from './NewsletterSignup.astro';
 import OfferNews from './OfferNews.astro';
@@ -84,6 +85,7 @@ const guides = wpGuides.length ? wpGuides : fallbackGuides;
     <meta name="twitter:creator" content="@everytipsite" />
     <title>{seo.title}</title>
     <CookieConsent part="head" />
+    <ConvertBox />
   </head>
   <body class="home-preview">
     <header class="site-header">

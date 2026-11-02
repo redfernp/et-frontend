@@ -26,22 +26,14 @@ const id = `signup-${source}`;
 </form>
 
 <script>
+  // A normal form post, as AWeber's own forms send it: a background fetch could not see AWeber's
+  // answer, so its spam check or "already subscribed" page failed silently. AWeber then redirects
+  // to the free tips page with ?subscribed=1, which shows the thank-you message.
   for (const form of document.querySelectorAll<HTMLFormElement>('form[data-et-signup]')) {
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const email = form.querySelector<HTMLInputElement>('input[name="email"]');
-      if (!email?.checkValidity()) { email?.reportValidity(); return; }
+    form.addEventListener('submit', () => {
       const button = form.querySelector('button');
-      if (button) { button.disabled = true; button.textContent = 'Signing you up…'; }
-      try {
-        // AWeber does not send CORS headers, so the response cannot be read; a sent request is a sign-up.
-        await fetch(form.action, { method: 'POST', mode: 'no-cors', body: new FormData(form) });
-        form.classList.add('is-done');
-        form.querySelector<HTMLElement>('.et-signup-done')?.removeAttribute('hidden');
-        (window as any).dataLayer?.push({ event: 'newsletter_signup', signup_source: form.dataset.etSignup });
-      } catch {
-        form.submit();
-      }
+      if (button) button.textContent = 'Signing you up…';
+      (window as any).dataLayer?.push({ event: 'newsletter_signup', signup_source: form.dataset.etSignup });
     });
   }
 </script>

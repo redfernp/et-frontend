@@ -5,6 +5,7 @@ import '../styles/launch.css';
 import FeaturedOffersSidebar from '../components/FeaturedOffersSidebar.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import CookieConsent from '../components/launch/CookieConsent.astro';
+import ConvertBox from '../components/launch/ConvertBox.astro';
 import NavMenu from '../components/launch/NavMenu.astro';
 import { publicMenuFallback, publicNavigation, type NavigationItem } from '../lib/menu-tree';
 import { resolvePreviewRobots } from '../lib/preview-robots.mjs';
@@ -60,6 +61,7 @@ const publicPaths = new Set(verifiedPublicPaths);
     </>}
     <title>{resolvedTitle}</title>
     {publicPage && !previewOnly && <CookieConsent part="head" />}
+    {publicPage && !previewOnly && <ConvertBox />}
   </head>
   <body>
     {(!publicPage || previewOnly) && <div class="preview-banner">{previewMessage}</div>}
