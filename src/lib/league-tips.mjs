@@ -16,7 +16,7 @@ export function competitionFor(record) {
   return competitions[record.uri] ?? null;
 }
 
-// Every tip table on the page keeps the competition's rows; a table left empty becomes a note.
+// Every tip table on the page keeps the competition's rows; a table left empty is hidden.
 export function filterCompetitionTables(html, competition) {
   if (!/data-ninja_table_instance/.test(html)) return html;
   const doc = parseDocument(html, { decodeEntities: true });
@@ -35,9 +35,15 @@ export function filterCompetitionTables(html, competition) {
       else DomUtils.removeElement(row);
     }
     if (!kept) {
+      // Hide a market with no matches, along with its heading.
       const wrapper = table.parent?.attribs?.class?.includes('footable_parent') ? table.parent : table;
-      const note = parseDocument(`<p class="league-no-matches">No ${competition.name} matches in today’s tips for this market. Our picks appear here on matchdays.</p>`).children[0];
-      DomUtils.replaceElement(wrapper, note);
+      // Some posts head the table with a bold paragraph, and the table's own <p> leaves an empty one between.
+      const blank = (node) => (node.type === 'text' || (node.type === 'tag' && node.name === 'p')) && !text(node);
+      let heading = wrapper.prev;
+      while (heading && blank(heading)) { const prev = heading.prev; if (heading.type === 'tag') DomUtils.removeElement(heading); heading = prev; }
+      const boldLine = heading?.name === 'p' && heading.children.filter((child) => child.type === 'tag').length === 1 && heading.children.find((child) => child.type === 'tag')?.name === 'strong' && text(heading) === text(heading.children.find((child) => child.type === 'tag'));
+      if (heading?.type === 'tag' && (/^h[2-6]$/.test(heading.name) || boldLine)) DomUtils.removeElement(heading);
+      DomUtils.removeElement(wrapper);
     }
   }
   return render(doc);

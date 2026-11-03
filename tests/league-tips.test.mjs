@@ -24,11 +24,17 @@ test('Premier League page needs England as the country', () => {
   assert.doesNotMatch(html, /Zenit/);
 });
 
-test('a table with no matches becomes a note', () => {
+test('a table with no matches is hidden with its heading', () => {
   const competition = competitionFor({ uri: '/uefa-champions-league-betting-tips-predictions.html' });
   const html = filterCompetitionTables(table([row('England', 'Championship', 'Watford')]), competition);
-  assert.doesNotMatch(html, /<table/);
-  assert.match(html, /class="league-no-matches"/);
+  assert.doesNotMatch(html, /<table|<h3>|footable_parent/);
+});
+
+test('a bold-paragraph heading goes with its empty table', () => {
+  const competition = competitionFor({ uri: '/english-premier-league-betting-tips.html' });
+  const html = filterCompetitionTables(`<p>Intro</p><p><strong>Over 1.5 Goals Acca Bet Bankers</strong></p><p>${table([row('England', 'Championship', 'Watford')]).replace('<h3>Tips</h3>', '')}</p>`, competition);
+  assert.doesNotMatch(html, /Bankers|<table/);
+  assert.match(html, /<p>Intro<\/p>/);
 });
 
 test('other pages are left alone', () => {

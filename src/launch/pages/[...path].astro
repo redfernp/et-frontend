@@ -83,7 +83,7 @@ const londonToday = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London'
 const racecourseHistory = racecourse ? racecourseHistoryHtml(racecourse, londonToday) : '';
 const betType = top3UnderTips.betTypes[record.uri] ?? (racecourse ? `${racecourse.name} bet` : null);
 // A table left empty by the filter is replaced by a note; when that note comes first, anchor to it, not to a later table.
-const firstNote = body.search(/class="(?:racecourse-no-racing|league-no-matches)"/);
+const firstNote = body.search(/class="racecourse-no-racing"/);
 const firstTable = body.indexOf('data-ninja_table_instance');
 const noRacingEnd = firstNote > -1 && (firstTable < 0 || firstNote < firstTable) ? body.indexOf('</p>', firstNote) : -1;
 const tipTableEnd = betType && noRacingEnd < 0 && !body.includes('post-ladder') ? body.indexOf('</table>', body.indexOf('data-ninja_table_instance')) : -1;
