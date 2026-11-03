@@ -170,7 +170,7 @@ html .page-shell:not(.with-sidebar) .cms-content p, html .page-shell:not(.with-s
 .quick-tip .quick-tip-note { margin: 12px 0 0; color: #66737f; font-size: 11px; }
 
 /* Racecourse pages: no-racing note and previous meetings accordion. */
-.cms-content .racecourse-no-racing { margin: 12px 0 20px; padding: 14px 16px; border-left: 4px solid var(--et-orange); border-radius: 8px; background: #fff4e9; color: #6b3a10; font-weight: 700; }
+.cms-content .racecourse-no-racing, .cms-content .league-no-matches { margin: 12px 0 20px; padding: 14px 16px; border-left: 4px solid var(--et-orange); border-radius: 8px; background: #fff4e9; color: #6b3a10; font-weight: 700; }
 .cms-content .racecourse-history { margin: 30px 0; }
 .cms-content .racecourse-history > p { color: #4c5a67; }
 .cms-content .racecourse-meeting { margin: 8px 0; border: 1px solid #dce6ed; border-radius: 10px; background: #fff; overflow: hidden; }
