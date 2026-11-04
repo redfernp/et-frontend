@@ -110,6 +110,7 @@ export async function launchArchives(records, {query, endpoint, fresh=false, rec
   for(const archive of archives) {
     const pages=paginateArchive(archive.posts,settings.readingSettingsPostsPerPage);
     const base=archive.uri.replace(/\/$/,'');
+    let previousSeo=null;
     for(let index=0;index<pages.length;index++) {
       const uri=index?`${base}/page/${index+1}`:base;
       if(existing.has(uri)) throw new Error(`Archive collides with content: ${uri}`);
@@ -136,10 +137,20 @@ export async function launchArchives(records, {query, endpoint, fresh=false, rec
         }
         continue;
       }
+      if(result.missing && index && previousSeo) {
+        // The SEO source is now the live Astro site, so a page that new posts have just created
+        // (e.g. /blog/page/11) 404s until this build deploys it. Number it from the page before.
+        const pageLabel=`Page ${index+1} of ${pages.length}`;
+        result.seo={...previousSeo,title:/Page \d+ of \d+/.test(previousSeo.title)?previousSeo.title.replace(/Page \d+ of \d+/,pageLabel):`${previousSeo.title} - ${pageLabel}`,
+          canonical:previousSeo.canonical?previousSeo.canonical.replace(/\/page\/\d+\/?$|\/?$/,`/page/${index+1}`):''};
+        delete result.missing;
+        console.log(`Archive page numbered from the page before: ${uri}`);
+      }
       if(result.missing) {
         if (!archive.posts.length) continue; // Empty terms/authors may legitimately return 404.
         throw new Error(`Published archive not found: ${uri}`);
       }
+      previousSeo=result.seo;
       routes.push({uri,title:archive.name,kind:'archive',seo:result.seo,posts:pages[index],page:index+1,pageCount:pages.length,archiveBase:base});
       console.log(`Archive route: ${uri}`);
     }
