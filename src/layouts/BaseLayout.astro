@@ -38,6 +38,11 @@ const publicPaths = new Set(verifiedPublicPaths);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* Site icon, the same WordPress site icon (cropped-ET.png) the backend uses. */}
+    <link rel="icon" href="https://www.everytip.co.uk/wp-content/uploads/2017/04/cropped-ET.png" sizes="32x32" />
+    <link rel="icon" href="https://www.everytip.co.uk/wp-content/uploads/2017/04/cropped-ET.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="https://www.everytip.co.uk/wp-content/uploads/2017/04/cropped-ET.png" />
+    <meta name="msapplication-TileImage" content="https://www.everytip.co.uk/wp-content/uploads/2017/04/cropped-ET.png" />
     <meta name="robots" content={resolvedRobots} />
     {(!publicPage || previewOnly) && <meta name="everytip-preview" content="not-for-publication" />}
     {seo?.description && <meta name="description" content={seo.description} />}
