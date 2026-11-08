@@ -191,3 +191,26 @@ html .page-shell:not(.with-sidebar) .cms-content p, html .page-shell:not(.with-s
   .cms-content .racecourse-meeting td { border: 0; padding: 0; }
   .cms-content .racecourse-meeting td:nth-child(n+3) { grid-column: 2; }
 }
+
+/* Offer explainer card (e.g. the Betfred sign-up offer page): hero + numbered
+   how-it-works steps + CTA, built from classes because inline styles are sanitised out. */
+.cms-content .et-offer-card { border: 1px solid var(--et-stroke); border-radius: 10px; overflow: hidden; margin: 24px 0; box-shadow: 0 3px 14px #183f5f14; }
+.cms-content .et-offer-hero { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; background: var(--et-navy); color: #fff; padding: 22px 24px; }
+.cms-content .et-offer-brand { display: flex; align-items: center; gap: 16px; }
+.cms-content .et-offer-hero img { background: #fff; padding: 6px 10px; border-radius: 6px; width: 120px; height: auto; }
+.cms-content .et-offer-eyebrow { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: #9fc0dd; font-weight: 800; }
+.cms-content .et-offer-headline { font-size: 24px; font-weight: 900; line-height: 1.2; }
+.cms-content .et-offer-body { padding: 24px; }
+.cms-content .et-offer-body > h3 { margin: 0 0 16px; color: var(--et-blue-ink); font-size: 19px; }
+.cms-content .et-steps { display: flex; flex-wrap: wrap; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.cms-content .et-step { flex: 1 1 200px; border: 1px solid var(--et-stroke); border-radius: 8px; padding: 16px; margin: 0; }
+.cms-content .et-step-num { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: var(--et-blue); color: #fff; font-weight: 800; margin-bottom: 10px; }
+.cms-content .et-step strong { display: block; margin-bottom: 4px; }
+.cms-content .et-step-desc { display: block; color: #57636d; font-size: 14px; }
+.cms-content .et-offer-cta-wrap { text-align: center; margin-top: 22px; }
+.cms-content a.et-offer-cta { display: inline-block; background: var(--et-commercial); color: #fff; font-weight: 900; padding: 14px 28px; border-radius: 6px; text-decoration: none; }
+.cms-content a.et-offer-cta:hover { filter: brightness(1.08); text-decoration: none; }
+.cms-content .et-offer-terms { font-size: 12px; color: #57636d; margin: 18px 0 0; line-height: 1.5; }
+@media (max-width: 600px) {
+  .cms-content .et-offer-hero { flex-direction: column; align-items: flex-start; }
+}
