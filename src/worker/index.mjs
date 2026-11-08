@@ -23,7 +23,10 @@ export default {
       return redirect ? Response.redirect(redirect.location, redirect.status) : Response.redirect(new URL('/', url), 302);
     }
     if (verifiedLegacyRedirects.has(path)) {
-      return Response.redirect(new URL(verifiedLegacyRedirects.get(path), url), 301);
+      // Keep the query string so newsletter UTM tags survive the redirect.
+      const target = new URL(verifiedLegacyRedirects.get(path), url);
+      if (!target.search) target.search = url.search;
+      return Response.redirect(target, 301);
     }
     if (archiveRedirects[path]) {
       const redirect = archiveRedirects[path];

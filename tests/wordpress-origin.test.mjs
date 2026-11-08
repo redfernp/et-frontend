@@ -55,3 +55,24 @@ test('production serves only www (no origin or wildcard route); test config has 
   const production = JSON.parse(readFileSync('wrangler.production.jsonc', 'utf8'));
   assert.equal(production.name, 'et-frontend'); assert.equal(production.assets.directory, './dist'); assert.equal(production.vars.PREVIEW_NOINDEX, 'false');
 });
+test('redirects keep the newsletter query string', async () => {
+  const response = await serve(new Request('https://test.workers.dev/betfred-review.html?utm_source=newsletter&utm_medium=email'), env);
+  assert.equal(response.status, 301);
+  assert.equal(response.headers.get('location'), 'https://test.workers.dev/betfred-review?utm_source=newsletter&utm_medium=email');
+});
+test('before a 404, a WordPress redirect (old slug) is passed on with the query kept', async () => {
+  const config = JSON.parse(readFileSync('wrangler.production.jsonc', 'utf8'));
+  const prodEnv = { ...config.vars, ASSETS: { fetch: async () => new Response('missing', { status: 404 }) } };
+  const origin = async (upstream) => {
+    assert.equal(upstream.method, 'HEAD'); assert.equal(new URL(upstream.url).search, '');
+    return new URL(upstream.url).pathname === '/channel-4-racing-tips.html'
+      ? new Response(null, { status: 301, headers: { location: 'https://www.everytip.co.uk/channel-4-racing-tips-morning-line.html' } })
+      : new Response('old theme page', { status: 200 });
+  };
+  const moved = await serve(new Request('https://www.everytip.co.uk/channel-4-racing-tips.html?utm_source=newsletter'), prodEnv, origin);
+  assert.equal(moved.status, 301);
+  assert.equal(moved.headers.get('location'), 'https://www.everytip.co.uk/channel-4-racing-tips-morning-line.html?utm_source=newsletter');
+  assert.equal((await serve(new Request('https://www.everytip.co.uk/no-such-page'), prodEnv, origin)).status, 404);
+  const offsite = async () => new Response(null, { status: 301, headers: { location: 'https://elsewhere.example/x' } });
+  assert.equal((await serve(new Request('https://www.everytip.co.uk/gone.html'), prodEnv, offsite)).status, 404);
+});

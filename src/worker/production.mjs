@@ -16,8 +16,26 @@ export async function serve(request, env, fetchOrigin = fetch) {
   if (url.pathname.includes('//') || url.pathname.includes('\\') || /(?:^|\/)index\.html$/.test(url.pathname)) return new Response('Not Found', { status: 404 });
   // The existing preview relies on assets-first for exact .html and build assets.
   // In production's worker-first mode we must explicitly serve these exact files.
-  if (/\.[^/]+$/.test(url.pathname)) return env.ASSETS.fetch(request);
-  return astroWorker.fetch(request, env);
+  const response = /\.[^/]+$/.test(url.pathname) ? await env.ASSETS.fetch(request) : await astroWorker.fetch(request, env);
+  if (response.status !== 404) return response;
+  return await wordpressRedirect(request, env, fetchOrigin) ?? response;
+}
+
+// Before a 404, ask WordPress: it still knows old slugs (a post whose address changed) and its
+// own redirect rules, which stopped firing when Astro took over public pages. Only a redirect
+// to another page on this site is passed on, with the visitor's query (newsletter UTM tags) kept.
+async function wordpressRedirect(request, env, fetchOrigin) {
+  const url = new URL(request.url);
+  if (!env.WORDPRESS_ORIGIN || url.pathname.startsWith('/go/')) return null;
+  const probe = new URL(url.pathname, url);
+  let origin;
+  try { origin = await proxyWordPress(new Request(probe, { method: 'HEAD' }), env, fetchOrigin); } catch { return null; }
+  if (![301, 302, 307, 308].includes(origin.status) || !origin.headers.get('location')) return null;
+  const target = new URL(origin.headers.get('location'), probe);
+  if (target.host !== url.host || target.pathname === url.pathname || isWordPressRequest(target)) return null;
+  target.protocol = url.protocol;
+  if (!target.search) target.search = url.search;
+  return new Response(null, { status: 301, headers: { location: target.href, 'cache-control': 'public, max-age=3600' } });
 }
 
 export default {

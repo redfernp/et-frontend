@@ -1,6 +1,11 @@
+import wordpressRedirects from '../../data/wordpress-redirects.json' with { type: 'json' };
+
 // Read-only live HEAD verification on 2026-10-03 (first two) and 2026-10-04
 // (the rest). Keep exact old paths; these are not Astro content routes.
 export const verifiedLegacyRedirects = new Map([
+  // The Redirection plugin's list (scripts/import-wordpress-redirects.mjs): WordPress no longer
+  // serves public pages, so its own redirects never fire.
+  ...Object.entries(wordpressRedirects.redirects),
   ['/free-betting-tips-old', '/free-betting-tips'],
   ['/live-streaming-top-bookmakers', '/best-betting-sites-for-live-sports-streaming'],
   ['/william-hill-scratch-of-the-day', '/william-hill-review'],
