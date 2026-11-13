@@ -12,6 +12,7 @@
   "workers_dev": false,
   "preview_urls": false,
   "routes": [{ "pattern": "www.everytip.co.uk/*", "zone_name": "everytip.co.uk" }],
+  "analytics_engine_datasets": [{ "binding": "CLICKS", "dataset": "everytip_offer_clicks" }],
   "vars": {
     "WORDPRESS_ORIGIN": "https://origin.everytip.co.uk",
     "WORDPRESS_CANONICAL_ORIGIN": "https://www.everytip.co.uk",

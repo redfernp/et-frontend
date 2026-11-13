@@ -54,16 +54,23 @@ const topOffersPattern=/(?:<p>\s*)?\[everytip_top_offers(?:\s+count=[^\d\]]{0,10
 export function renderTopOffers(content){
   // WordPress turns the quotes round count into entities (&#8221;); drop them before matching.
   return content.replace(/\[everytip_top_offers[^\]]*\]/g,marker=>marker.replace(/&#\d+;|&quot;/g,'')).replace(topOffersPattern,(_,count)=>{
-    const top=active.filter(offer=>offer.lineup!==false).slice(0,Math.min(Number(count)||3,active.length));
-    // Same markup and styles as the homepage/free bets ladder (HomeOfferLadder), top N only.
-    const rows=top.map((offer,index)=>`<li class="home-ladder-row" data-offer-id="${offer.id}" style="--ladder-brand:${escape(offer.brandColor)}">`
-      +`<span class="home-ladder-rank">${index+1}</span>`
+    // Every ladder offer is in the page: the top N show, the rest open under "View all".
+    const all=active.filter(offer=>offer.lineup!==false);
+    const shown=Math.min(Number(count)||3,all.length);
+    const top=all.slice(0,shown), more=all.slice(shown);
+    // Same markup and styles as the homepage/free bets ladder (HomeOfferLadder). The ?pl= tag tells
+    // the /go/ click counter whether the reader clicked in the top N or in the expanded list.
+    const row=(offer,rank,placement)=>`<li class="home-ladder-row" data-offer-id="${offer.id}" style="--ladder-brand:${escape(offer.brandColor)}">`
+      +`<span class="home-ladder-rank">${rank}</span>`
       +`<span class="home-ladder-logo${offer.logoOnLight===true?' logo-on-light':''}"><img src="${escape(offer.logo)}" alt="${escape(offer.bookmaker)}" loading="lazy"></span>`
       +`<div class="home-ladder-copy"><h3>${escape(offer.headline)}</h3><p>${escape(offer.terms)}</p></div>`
-      +`<a class="home-ladder-cta" href="${escape(offer.link)}" rel="nofollow">${escape(offer.buttonText)}</a></li>`).join('');
+      +`<a class="home-ladder-cta" href="${escape(offer.link)}?pl=${placement}" rel="nofollow">${escape(offer.buttonText)}</a></li>`;
+    const rows=top.map((offer,index)=>row(offer,index+1,'top')).join('');
+    const expand=more.length?`<details class="home-ladder-more"><summary><span class="show-more">View all ${all.length} offers</span><span class="show-less">Show top ${shown} only</span></summary>`
+      +`<ol class="home-ladder-list" start="${shown+1}">${more.map((offer,index)=>row(offer,shown+index+1,'more')).join('')}</ol></details>`:'';
     return `<section class="home-ladder post-ladder" aria-label="Today’s top ${top.length} betting offers"><div class="home-ladder-heading"><div><h2>Today’s Top ${top.length} Betting Offers</h2>`
       +`<p>Our current top picks for new customers · 18+ · T&amp;Cs apply</p></div><span class="home-ladder-badge">Top ${top.length}</span></div>`
-      +`<ol class="home-ladder-list">${rows}</ol><p class="home-ladder-foot">Please gamble responsibly · 18+ · BeGambleAware.org</p></section>`;
+      +`<ol class="home-ladder-list">${rows}</ol>${expand}<p class="home-ladder-foot">Please gamble responsibly · 18+ · BeGambleAware.org</p></section>`;
   });
 }
 export async function resolveLaunchOffers(records){

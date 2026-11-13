@@ -1,5 +1,5 @@
 {
-  "_readme": "EveryTip offers. Edit headline, terms, buttonText or link, set active to false to hide an offer, and change position to reorder the ladder. id is the WordPress offer ID that in-article offer blocks point to; keep it unchanged.",
+  "_readme": "EveryTip offers. Edit headline, terms, buttonText or link, set active to false to hide an offer, and positions are re-ranked every Monday on the previous week's /go/ clicks (scripts/rerank-offers.mjs), so a manual position only lasts until then. A new partner gets newUntil (YYYY-MM-DD, a week after it goes live) and is held at #3 until that date. id is the WordPress offer ID that in-article offer blocks point to; keep it unchanged.",
   "offers": [
     {
       "id": 90846,
