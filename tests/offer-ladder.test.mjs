@@ -18,6 +18,13 @@ test('a new partner is held at #3 until newUntil, then ranked on clicks', () => 
   assert.deepEqual(order(rankOffers(offers, { c: 50, a: 40, b: 30 }, '2026-11-23')), ['c', 'a', 'b', 'new']);
 });
 
+test('a pinned #1 cannot be outranked, and a new partner still lands at #3', () => {
+  const offers = [offer(1, 'betfred', 1, { pinned: 1 }), offer(2, 'b', 2), offer(3, 'c', 3), offer(4, 'd', 4), offer(9, 'new', 5, { newUntil: '2026-11-22' })];
+  const clicks = { d: 5000, c: 900, b: 10, betfred: 1 };
+  assert.deepEqual(order(rankOffers(offers, clicks, '2026-11-16')), ['betfred', 'd', 'new', 'c', 'b']);
+  assert.deepEqual(order(rankOffers(offers, clicks, '2026-11-30')), ['betfred', 'd', 'c', 'b', 'new']);
+});
+
 test('offers outside the ladder keep their position', () => {
   const offers = [offer(1, 'a', 1), offer(2, 'b', 2), offer(5, 'promo', 99, { lineup: false }), offer(6, 'off', 4, { active: false })];
   const result = rankOffers(offers, { b: 5 }, '2026-11-16');

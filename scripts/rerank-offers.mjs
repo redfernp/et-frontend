@@ -21,19 +21,23 @@ const slugOf = offer => offer.link.replace(/^\/go\//, '').toLowerCase();
 // Pure ranking step: offers as in offers.json, clicks as { slug: count }, today as YYYY-MM-DD.
 export function rankOffers(offers, clicks, today) {
   const ladder = offers.filter(o => o.active !== false && o.lineup !== false).sort((a, b) => a.position - b.position);
-  const isNew = o => typeof o.newUntil === 'string' && today <= o.newUntil;
+  // "pinned": N fixes an offer at position N whatever its clicks (Betfred is pinned at #1, so no
+  // partner can click its way above it). Pinned offers are placed first, then new partners at #3.
+  const isPinned = o => Number.isInteger(o.pinned) && o.pinned > 0;
+  const isNew = o => !isPinned(o) && typeof o.newUntil === 'string' && today <= o.newUntil;
   const held = ladder.filter(isNew);
-  const ranked = ladder.filter(o => !isNew(o))
+  const ranked = ladder.filter(o => !isNew(o) && !isPinned(o))
     .map((offer, index) => ({ offer, index, clicks: clicks[slugOf(offer)] ?? 0 }))
     .sort((a, b) => b.clicks - a.clicks || a.index - b.index)
     .map(entry => entry.offer);
+  for (const offer of ladder.filter(isPinned).sort((a, b) => a.pinned - b.pinned)) ranked.splice(Math.min(offer.pinned - 1, ranked.length), 0, offer);
   ranked.splice(Math.min(NEW_PARTNER_SLOT - 1, ranked.length), 0, ...held);
   const before = new Map(ladder.map(o => [o.id, o.position]));
   const positions = new Map(ranked.map((offer, index) => [offer.id, index + 1]));
   return {
     offers: offers.map(o => positions.has(o.id) ? { ...o, position: positions.get(o.id) } : o),
     rows: ranked.map(o => ({ bookmaker: o.bookmaker, slug: slugOf(o), clicks: clicks[slugOf(o)] ?? 0,
-      from: before.get(o.id), to: positions.get(o.id), held: isNew(o) })),
+      from: before.get(o.id), to: positions.get(o.id), held: isNew(o), pinned: isPinned(o) })),
   };
 }
 
@@ -64,7 +68,7 @@ export async function fetchWeek(days = 7) {
 const pageName = page => !page ? '(no referrer: newsletter, apps, direct)' : page.startsWith('ext:') ? `other site: ${page.slice(4)}` : page;
 const split = bySlug => Object.entries(bySlug).sort((a, b) => b[1] - a[1]).map(([slug, n]) => `${slug} ${n}`).join(', ');
 export function report(rows, byPlacement, byPage, today, title = `EveryTip offer ladder, week to ${today}`) {
-  const move = r => r.held ? 'held at #3 (new partner)' : r.from === r.to ? 'no change' : r.to < r.from ? `up ${r.from - r.to}` : `down ${r.to - r.from}`;
+  const move = r => r.pinned ? `pinned at #${r.to}` : r.held ? 'held at #3 (new partner)' : r.from === r.to ? 'no change' : r.to < r.from ? `up ${r.from - r.to}` : `down ${r.to - r.from}`;
   const placementName = { top: 'Top offers, first rows', more: 'Top offers, "View all" list', '': 'Other placements (homepage, sidebar, free bets, offer blocks)' };
   return [`# ${title}`, '',
     '| New | Bookmaker | Clicks (7 days) | Was | Move |', '|---|---|---|---|---|',
