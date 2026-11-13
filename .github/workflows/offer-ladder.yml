@@ -6,6 +6,11 @@ on:
   schedule:
     - cron: '30 5 * * 1'
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Only read the clicks and show the report; change nothing
+        type: boolean
+        default: false
 permissions:
   contents: write
   actions: write
@@ -25,8 +30,9 @@ jobs:
         env:
           CLOUDFLARE_ACCOUNT_ID: 5aa99b5280868c09bf3092fff6d06125
           CLOUDFLARE_ANALYTICS_TOKEN: ${{ secrets.CLOUDFLARE_ANALYTICS_TOKEN }}
-        run: node scripts/rerank-offers.mjs >> "$GITHUB_STEP_SUMMARY"
+        run: node scripts/rerank-offers.mjs ${{ inputs.dry_run && '--dry-run' || '' }} >> "$GITHUB_STEP_SUMMARY"
       - name: Commit the new order and report
+        if: ${{ !inputs.dry_run }}
         id: commit
         run: |
           git config user.name "everytip-ladder"
