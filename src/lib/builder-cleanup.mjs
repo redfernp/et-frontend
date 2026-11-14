@@ -3,12 +3,20 @@ import render from 'dom-serializer';
 import sanitizeHtml from 'sanitize-html';
 
 const builderClass = /^(?:fl-|tve[_-]|thrv_|tcb-)/;
+const ladderSlot = 'ETOFFERLADDERSLOT';
 export function hasBuilderMarkup(html = '') {
   return /class=["'][^"']*\b(?:fl-|tve[_-]|thrv_|tcb-)/i.test(html);
 }
 
 // One family-level cleanup, with no URL- or article-specific exceptions.
 export function cleanupBuilderHtml(html) {
+  // The offer ladder is markup we generate, not builder markup, but a post that carries both the
+  // top-offers shortcode and a legacy Thrive/Beaver class sends the ladder through this cleanup,
+  // which strips its <details> toggle, its --ladder-brand style and its data-offer-id click hooks.
+  // Hold any ladder aside and put it back untouched once the cleanup has run.
+  const ladders = [];
+  html = (html ?? '').replace(/<section class="home-ladder[\s\S]*?<\/section>/g, (ladder) =>
+    `<p>${ladderSlot}${ladders.push(ladder) - 1}</p>`);
   const document = parseDocument(html);
   function clean(parent) {
     parent.children = (parent.children ?? []).flatMap(node => {
@@ -30,7 +38,7 @@ export function cleanupBuilderHtml(html) {
     });
   }
   clean(document);
-  return sanitizeHtml(render(document), {
+  const cleaned = sanitizeHtml(render(document), {
     allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img', 'picture', 'source'],
     allowedAttributes: {
       '*': ['id', 'class', 'aria-label', 'data-everytip-*', 'data-layout', 'data-heading'],
@@ -40,6 +48,7 @@ export function cleanupBuilderHtml(html) {
       th: ['scope', 'colspan', 'rowspan'], td: ['colspan', 'rowspan'],
     },
   });
+  return cleaned.replace(new RegExp(`<p>${ladderSlot}(\\d+)</p>`, 'g'), (_, index) => ladders[Number(index)]);
 }
 
 const commercialHref = /^(?:https?:\/\/[^/]+)?\/(?!go\/)[^"#?]*(?:-review|best-|bookmakers|betting-sites|bookies|bonus|casino)/i;
