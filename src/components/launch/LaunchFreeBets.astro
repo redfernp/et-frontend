@@ -1,4 +1,5 @@
 ---
+import SiteIcons from '../SiteIcons.astro';
 // Live free bets hub: the approved design with the live offer ladder and the staging guide copy.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import HomeOfferLadder from '../HomeOfferLadder.astro';
@@ -20,7 +21,8 @@ const explainer = [
 <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo} verifiedPublicPaths={paths} offers={offers}>
   <article class="freebets-guide">
     <nav class="freebets-breadcrumb" aria-label="Breadcrumb"><a href="/">EveryTip</a><span aria-hidden="true">›</span><span>Free bets</span></nav>
-    <header class="freebets-hero"><p class="kicker">Free bets</p><h1>Bookmaker free bets &amp; bonus offers</h1><p>Today’s best new customer offers, with the key terms on every one.</p></header>
+    <header class="freebets-hero">
+    <SiteIcons /><p class="kicker">Free bets</p><h1>Bookmaker free bets &amp; bonus offers</h1><p>Today’s best new customer offers, with the key terms on every one.</p></header>
     <nav class="freebets-jump" aria-label="On this page"><a href="#compare">Compare offers</a><a href="#understand">How to compare</a><a href="#guide">Free bets guide</a><a href="#questions">Questions</a></nav>
     <details class="freebets-jump-mobile"><summary>On this page</summary><nav aria-label="On this page"><a href="#compare">Compare offers</a><a href="#understand">How to compare</a><a href="#guide">Free bets guide</a><a href="#questions">Questions</a></nav></details>
 

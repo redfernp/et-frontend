@@ -1,4 +1,5 @@
 ---
+import SiteIcons from '../SiteIcons.astro';
 // Live homepage: the approved pilot design fed by staging WordPress and the active ACF offers.
 import '../../styles/global.css';
 import '../../styles/design-refresh.css';
@@ -65,6 +66,7 @@ const guides = wpGuides.length ? wpGuides : fallbackGuides;
 <!doctype html>
 <html lang="en-GB" class="design-refresh">
   <head>
+    <SiteIcons />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content={seo.robots} />

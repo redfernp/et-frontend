@@ -1,4 +1,5 @@
 ---
+import SiteIcons from '../../components/SiteIcons.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 const groups = [
   { id: 'start', title: 'Start here', links: [ { label: 'Home', href: '/pilot/home/' }, { label: 'Free betting tips', href: '/pilot/free-betting-tips/' }, { label: 'Free bets and offers', href: '/pilot/bookie-free-bets-bonus-offers/' }, { label: 'Newsletter', href: '/pilot/daily-newsletter/' } ] },
@@ -11,7 +12,8 @@ const groups = [
 <BaseLayout title="HTML sitemap — pilot" wide={true}>
   <article class="sitemap-pilot">
     <nav class="sm-crumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><span>Sitemap</span></nav>
-    <header class="sm-hero"><p class="kicker">Site navigation · design pilot</p><h1>Explore EveryTip</h1><p>A human-readable route into the main page families, without burying readers in hundreds of dated predictions.</p><div><span>1 October 2026 preview</span><span>Representative pilot routes</span><span>Not an XML sitemap</span></div></header>
+    <header class="sm-hero">
+    <SiteIcons /><p class="kicker">Site navigation · design pilot</p><h1>Explore EveryTip</h1><p>A human-readable route into the main page families, without burying readers in hundreds of dated predictions.</p><div><span>1 October 2026 preview</span><span>Representative pilot routes</span><span>Not an XML sitemap</span></div></header>
     <p class="sm-note"><strong>Publishing rule.</strong> The production HTML sitemap should draw from the same published URL registry as the Astro build. It should exclude redirects, noindex archives, expired offers and private previews as appropriate. This page currently lists representative pilot links, not the full live inventory.</p>
     <nav class="sm-jump" aria-label="Sitemap categories">{groups.map((group) => <a href={`#${group.id}`}>{group.title}</a>)}</nav>
     <div class="sm-grid">{groups.map((group) => <section id={group.id}><h2>{group.title}</h2><ul>{group.links.map((link) => <li><a href={link.href}>{link.label}<span aria-hidden="true">→</span></a></li>)}</ul></section>)}</div>

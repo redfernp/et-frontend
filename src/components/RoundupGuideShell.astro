@@ -1,4 +1,5 @@
 ---
+import SiteIcons from './SiteIcons.astro';
 type TocItem = { href: string; label: string };
 const {
   title,
@@ -25,6 +26,7 @@ const {
 <article class="paypal-guide integrated-roundup">
   <nav class="paypal-breadcrumb" aria-label="Breadcrumb"><a href={exactPath ? '/' : '/pilot/home/'}>EveryTip</a><span aria-hidden="true">›</span><span>Betting guides</span></nav>
   <header class="paypal-hero">
+    <SiteIcons />
     <div class="paypal-hero-copy">
       <p class="kicker">{kicker}</p>
       <h1>{title}</h1>

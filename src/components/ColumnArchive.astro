@@ -1,4 +1,5 @@
 ---
+import SiteIcons from './SiteIcons.astro';
 import { archivePagePath, type ColumnEntry } from '../lib/column-archives';
 type Props = {
   slug: string;
@@ -23,6 +24,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
 <article class="column-archive" style={`--column-accent:${accent}`}>
   <nav class="column-breadcrumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><a href="/pilot/free-betting-tips/">Free tips</a><span aria-hidden="true">›</span><span>{columnist}</span></nav>
   <header class="column-hero">
+    <SiteIcons />
     <p class="kicker">{discipline} · weekly column</p>
     <h1>{title}</h1>
     <div class="column-identity"><img src={portrait} alt="" width="100" height="100" /><div><h2>{subtitle}</h2><p>By {columnist} · EveryTip feature columnist</p></div></div>

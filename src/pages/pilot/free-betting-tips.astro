@@ -1,4 +1,5 @@
 ---
+import SiteIcons from '../../components/SiteIcons.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FreeTipsDirectory from '../../components/FreeTipsDirectory.astro';
 import { featuredOfferPreview } from '../../lib/pilot-data';
@@ -96,6 +97,7 @@ const menuItems = exactRecord ? (await getWordPressMenu('PRIMARY')).items : null
 <BaseLayout title="Free betting tips — hub pilot" wide={true} publicPage={!!exactRecord} previewOnly={!!exactRecord} menuItems={menuItems} verifiedPublicPaths={exactRecord ? previewPublicPaths : []} seo={exactRecord ? { title: exactRecord.seo?.title, description: exactRecord.seo?.metaDesc } : undefined} previewMessage={exactRecord ? (freshNewsFeed ? `Exact free tips URL preview · newest staging post ${latestFeedDate}${staleNewsFeed ? ` (${freshNewsFeed.freshness.ageDays} days old; feed stale as of ${freshNewsFeed.freshness.asOfDate} Europe/Rome)` : ''} · offers disabled` : 'Exact free tips URL preview · dated WordPress copy · offers and daily feed withheld') : undefined}>
   <div class="free-tips-hub">
     <header class="hub-heading">
+    <SiteIcons />
       <p class="kicker">{exactRecord ? 'Free tips directory · WordPress content preview' : 'Free tips, updated daily'}</p>
       <h1>Free Betting Tips</h1>
       <p>{exactRecord ? (freshNewsFeed ? `Browse the established sports and tipster destinations alongside dated published staging articles. Current selections and offers are still withheld from this preview.` : 'Browse the established sports and tipster destinations. The current daily selections and offer feed are not connected in this local preview.') : 'Explore horse racing and football selections by sport, and catch up on betting offer news examples.'}</p>

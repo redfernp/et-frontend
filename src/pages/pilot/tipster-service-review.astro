@@ -1,4 +1,5 @@
 ---
+import SiteIcons from '../../components/SiteIcons.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 const checks = [
   { title: 'Service availability', copy: 'Confirm that the provider and membership are active before showing a current review or outbound link.' },
@@ -10,7 +11,8 @@ const checks = [
 <BaseLayout title="Paid tipster service review — pilot" wide={true}>
   <article class="service-review">
     <nav class="sr-crumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><a href="/pilot/winning-football-tipsters/">Paid tipsters</a><span aria-hidden="true">›</span><span>Service review</span></nav>
-    <header class="sr-hero"><div><p class="kicker">Subscription-service review · design pilot</p><h1>A paid tipster service, reviewed</h1><p>A separate review framework for subscription tips. It puts service status, independent evidence, achievable prices and the real cost ahead of any sign-up prompt.</p><div class="sr-meta"><span>1 October 2026 design snapshot</span><span>No provider endorsed</span><span>No active affiliate link</span></div></div><aside><strong>Verdict pending</strong><p>A review cannot be current until the provider, product and record have been checked again.</p></aside></header>
+    <header class="sr-hero">
+    <SiteIcons /><div><p class="kicker">Subscription-service review · design pilot</p><h1>A paid tipster service, reviewed</h1><p>A separate review framework for subscription tips. It puts service status, independent evidence, achievable prices and the real cost ahead of any sign-up prompt.</p><div class="sr-meta"><span>1 October 2026 design snapshot</span><span>No provider endorsed</span><span>No active affiliate link</span></div></div><aside><strong>Verdict pending</strong><p>A review cannot be current until the provider, product and record have been checked again.</p></aside></header>
     <p class="sr-alert"><strong>Legacy-content guardrail.</strong> Older EveryTip tipster reviews mention providers, prices and returns that may no longer apply. Do not carry over a profit claim or trial offer from a Beaver/Thrive block simply because its HTML survives migration.</p>
     <nav class="sr-jump" aria-label="On this review"><a href="#service-status">Status</a><a href="#service-checks">Review checks</a><a href="#service-method">Evidence</a><a href="#service-decision">Verdict</a></nav>
     <section id="service-status"><p class="kicker">Before anything else</p><h2>Is this service still available?</h2><div class="sr-status"><div><span>Provider</span><strong>Verified name required</strong></div><div><span>Membership</span><strong>Availability check required</strong></div><div><span>Last tested</span><strong>Dated editorial field</strong></div><div><span>Affiliate relation</span><strong>Optional, never assumed</strong></div></div></section>

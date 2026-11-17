@@ -1,4 +1,5 @@
 ---
+import SiteIcons from './SiteIcons.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { editorialArchiveEntries, editorialArchivePageCount, editorialArchivePagePath, type EditorialArchiveData } from '../lib/editorial-archives';
 
@@ -10,7 +11,8 @@ const isAuthor = data.slug.startsWith('author/');
 <BaseLayout title={`${data.title} — archive pilot`} sidebar={true} robots="noindex,nofollow" relatedTopic={isAuthor ? 'football' : 'racing'}>
   <article class="editorial-archive">
     <nav class="ea-breadcrumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><span>{data.category}</span></nav>
-    <header class="ea-hero"><p class="kicker">{data.eyebrow} · design pilot</p>{isAuthor && <img class="ea-author-photo" src="https://www.everytip.co.uk/wp-content/uploads/2025/06/John-Newsome-Everytip-Football-Feature-Writer-100x100.png" alt="" width="100" height="100" />}<h1>{data.title}</h1><p>{data.intro}</p><div class="ea-hero-tags"><span>{data.seoPolicy === 'index' ? 'Legacy indexable archive' : 'Legacy noindex archive'}</span><span>Page {page} of {total}</span></div></header>
+    <header class="ea-hero">
+    <SiteIcons /><p class="kicker">{data.eyebrow} · design pilot</p>{isAuthor && <img class="ea-author-photo" src="https://www.everytip.co.uk/wp-content/uploads/2025/06/John-Newsome-Everytip-Football-Feature-Writer-100x100.png" alt="" width="100" height="100" />}<h1>{data.title}</h1><p>{data.intro}</p><div class="ea-hero-tags"><span>{data.seoPolicy === 'index' ? 'Legacy indexable archive' : 'Legacy noindex archive'}</span><span>Page {page} of {total}</span></div></header>
     <p class="ea-status">Entries below link to other local template previews; they are layout fixtures, not a WordPress query. The production archive will use published post dates, excerpts and featured images from WPGraphQL.</p>
     <div class="ea-tools"><strong>{page === 1 ? 'Browse the archive' : `Older entries · page ${page}`}</strong><span>{data.category} · newest first</span></div>
     <div class="ea-grid">{entries.map((entry, index) => <article class:list={['ea-entry', {'ea-lead': page === 1 && index === 0}]}><div class="ea-entry-image"><span>{entry.category}</span></div><div class="ea-entry-copy"><span class="ea-entry-meta">{entry.date} · {entry.category}</span><h2><a href={entry.href}>{entry.title}</a></h2><p>{entry.excerpt}</p><a class="ea-read" href={entry.href}>Read preview <span aria-hidden="true">→</span></a></div></article>)}</div>

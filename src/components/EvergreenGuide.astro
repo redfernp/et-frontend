@@ -1,4 +1,5 @@
 ---
+import SiteIcons from './SiteIcons.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 interface GuideSection { id: string; eyebrow: string; title: string; summary: string; points?: string[] }
@@ -9,6 +10,7 @@ const { title, deck, category, sections, updated, author, relatedHref, relatedLa
   <article class="evergreen-guide">
     <nav class="guide-crumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><a href="/pilot/betting-guides/">Betting guides</a><span aria-hidden="true">›</span><span>{category}</span></nav>
     <header class="guide-hero">
+    <SiteIcons />
       <p class="kicker">{category} · evergreen guide pilot</p>
       <h1>{title}</h1>
       <p class="guide-deck">{deck}</p>

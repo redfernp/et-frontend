@@ -1,4 +1,5 @@
 ---
+import SiteIcons from '../../components/SiteIcons.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const criteria = [
@@ -11,7 +12,8 @@ const criteria = [
 <BaseLayout title="Betfair Exchange review — exchange variant pilot" sidebar={true} relatedTopic="football">
   <article class="exchange-review">
     <nav class="exchange-crumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><span>Exchange reviews</span></nav>
-    <header class="exchange-hero"><div><p class="kicker">Independent exchange review · design pilot</p><h1>Betfair Exchange review</h1><p class="exchange-deck">A review structure for an exchange, where matched bets, lay liability, market depth and commission matter more than a bookmaker welcome-bonus scorecard.</p><div class="exchange-meta"><span>By JP, Chief Editor</span><span>1 October 2026 template snapshot</span><span>Claims need a current test</span></div></div><aside class="exchange-verdict"><span>Our view</span><strong>Verdict pending re-test</strong><p>The live page contains an older numeric rating and promotional terms. Neither is carried into this preview as a current recommendation.</p></aside></header>
+    <header class="exchange-hero">
+    <SiteIcons /><div><p class="kicker">Independent exchange review · design pilot</p><h1>Betfair Exchange review</h1><p class="exchange-deck">A review structure for an exchange, where matched bets, lay liability, market depth and commission matter more than a bookmaker welcome-bonus scorecard.</p><div class="exchange-meta"><span>By JP, Chief Editor</span><span>1 October 2026 template snapshot</span><span>Claims need a current test</span></div></div><aside class="exchange-verdict"><span>Our view</span><strong>Verdict pending re-test</strong><p>The live page contains an older numeric rating and promotional terms. Neither is carried into this preview as a current recommendation.</p></aside></header>
     <div class="exchange-alert"><strong>Source review needs a new editorial check</strong><p>The existing exchange article includes changing details about commission, offer eligibility, product features and performance. Confirm those with first-hand testing and official operator sources before launch. No commercial CTA is active here.</p></div>
     <nav class="exchange-jump" aria-label="On this review"><a href="#exchange-fit">Who it suits</a><a href="#exchange-how">How it works</a><a href="#exchange-criteria">Review criteria</a><a href="#exchange-testing">Testing notes</a><a href="#exchange-offer">Optional offer</a></nav>
     <section id="exchange-fit" class="exchange-section"><p class="kicker">The quick read</p><h2>Who might an exchange suit?</h2><div class="exchange-fit-grid"><div><h3>Potential fit</h3><p>Readers who want to understand matching, pricing and the option to lay a selection. The final review should say what was actually tested and where an exchange was useful.</p></div><div><h3>What to weigh up</h3><p>Unmatched bets, lay liability and commission can make the experience less straightforward. Explain each risk before any sign-up prompt.</p></div></div></section>

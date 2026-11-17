@@ -1,4 +1,5 @@
 ---
+import SiteIcons from '../components/SiteIcons.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { latestContentSnapshot } from '../lib/migration-preview.mjs';
 import { extractRacingHubEditorial } from '../lib/free-horse-racing-hub.mjs';
@@ -17,7 +18,8 @@ const verifiedPublicPaths = ['/', '/free-betting-tips', '/free-horse-racing-tips
   verifiedPublicPaths={verifiedPublicPaths}>
   <article class="racing-hub">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">EveryTip</a><span aria-hidden="true">/</span><span>Horse racing tips</span></nav>
-    <header class="hero"><div><p class="eyebrow">EveryTip racing</p><h1>Free horse racing tips</h1><p class="deck">Explore the approach behind our selections, the racing details we examine and ways to use tips with perspective. The current daily picks are not available in this preview.</p></div><div class="hero-mark" aria-hidden="true">ET<span>Racing</span></div></header>
+    <header class="hero">
+    <SiteIcons /><div><p class="eyebrow">EveryTip racing</p><h1>Free horse racing tips</h1><p class="deck">Explore the approach behind our selections, the racing details we examine and ways to use tips with perspective. The current daily picks are not available in this preview.</p></div><div class="hero-mark" aria-hidden="true">ET<span>Racing</span></div></header>
     <div class="status" role="note"><strong>Today’s tips are withheld.</strong> The saved WordPress page was last changed {sourceDate} and contains a 2025 daily-tip directory. A trusted, dated tips feed must be connected before this page can show current selections. Commercial offer links are disabled.</div>
     <div class="columns">
       <div class="body">
