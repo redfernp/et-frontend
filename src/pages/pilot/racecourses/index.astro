@@ -1,5 +1,4 @@
 ---
-import SiteIcons from '../../../components/SiteIcons.astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { racecourseGroups, racecourseHref } from '../../../lib/racecourses';
 
@@ -8,8 +7,7 @@ const totalCourses = racecourseGroups.reduce((sum, group) => sum + group.courses
 <BaseLayout title="Racecourses — index pilot" sidebar={true}>
   <article class="course-index">
     <nav class="ci-breadcrumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><a href="/pilot/free-betting-tips/">Racing tips</a><span aria-hidden="true">›</span><span>Racecourses</span></nav>
-    <header class="ci-hero">
-    <SiteIcons /><p class="kicker">Racecourse directory · design pilot</p><h1>Racecourse tips &amp; guides</h1><p>Find a track quickly, then see its current tips, earlier selections and course guide. Every course page will filter the same canonical tips dataset by a stable course ID.</p><div class="ci-hero-meta"><span>{totalCourses} mapped guides</span><span>UK and Ireland</span><span>Grouped by surface</span></div></header>
+    <header class="ci-hero"><p class="kicker">Racecourse directory · design pilot</p><h1>Racecourse tips &amp; guides</h1><p>Find a track quickly, then see its current tips, earlier selections and course guide. Every course page will filter the same canonical tips dataset by a stable course ID.</p><div class="ci-hero-meta"><span>{totalCourses} mapped guides</span><span>UK and Ireland</span><span>Grouped by surface</span></div></header>
     <div class="ci-note"><strong>Crawl inventory preview</strong><p>The index below uses the 45 racecourse-guide URLs found in the September crawl. The live page also names some additional tracks, so Eric should reconcile the final list and exact paths before publishing. Links other than Kempton lead to the current live site.</p></div>
     <div class="ci-search"><label for="course-filter">Find a racecourse</label><input id="course-filter" type="search" placeholder="Search by track name" autocomplete="off" /><p id="course-filter-status" aria-live="polite">Showing all {totalCourses} mapped courses</p></div>
     <nav class="ci-jump" aria-label="Racecourse groups">{racecourseGroups.map((group) => <a href={`#${group.id}`}>{group.title}</a>)}</nav>

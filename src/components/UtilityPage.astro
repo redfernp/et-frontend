@@ -1,5 +1,4 @@
 ---
-import SiteIcons from './SiteIcons.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 interface Props { title: string; eyebrow: string; deck: string; note: string; sections: { id: string; title: string; text: string }[] }
 const { title, eyebrow, deck, note, sections } = Astro.props;
@@ -7,8 +6,7 @@ const { title, eyebrow, deck, note, sections } = Astro.props;
 <BaseLayout title={`${title} — utility page pilot`} wide={true}>
   <article class="utility-page">
     <nav class="utility-crumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><span>{title}</span></nav>
-    <header class="utility-hero">
-    <SiteIcons /><p class="kicker">{eyebrow} · design pilot</p><h1>{title}</h1><p>{deck}</p></header>
+    <header class="utility-hero"><p class="kicker">{eyebrow} · design pilot</p><h1>{title}</h1><p>{deck}</p></header>
     <div class="utility-note"><strong>Content review before migration</strong><span>{note}</span></div>
     <div class="utility-grid"><nav class="utility-nav" aria-label="On this page"><strong>On this page</strong>{sections.map((section) => <a href={`#${section.id}`}>{section.title}</a>)}</nav><div class="utility-content">{sections.map((section) => <section id={section.id}><h2>{section.title}</h2><p>{section.text}</p></section>)}<slot /></div></div>
     <footer class="utility-footer">All page wording, links and SEO fields remain editable in WordPress. The pilot is not a published policy or a live contact form.</footer>

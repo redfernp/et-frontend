@@ -1,5 +1,4 @@
 ---
-import SiteIcons from '../../components/SiteIcons.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import LaunchHome from '../../components/launch/LaunchHome.astro';
 import LaunchFreeTips from '../../components/launch/LaunchFreeTips.astro';
@@ -113,7 +112,6 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
   <article class="paypal-guide integrated-roundup">
     <nav class="paypal-breadcrumb" aria-label="Breadcrumb"><a href="/">EveryTip</a><span aria-hidden="true">›</span>{paths.includes('/betting-guides') ? <a href="/betting-guides">Betting guides</a> : <span>Betting guides</span>}</nav>
     <header class="paypal-hero">
-    <SiteIcons />
       <div class="paypal-hero-copy">
         <p class="kicker">Betting guide</p>
         <h1 set:html={record.title} />

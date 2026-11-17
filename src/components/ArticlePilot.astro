@@ -1,5 +1,4 @@
 ---
-import SiteIcons from './SiteIcons.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EditorialProfile from './EditorialProfile.astro';
 import { getColumnistProfiles } from '../lib/columnist-profiles.mjs';
@@ -21,8 +20,7 @@ const { editor } = await getColumnistProfiles();
 <BaseLayout title={`${title} — article pilot`} sidebar={true} relatedTopic="racing">
   <article class="article-pilot">
     <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><a href="/pilot/free-betting-tips/">Free tips</a><span aria-hidden="true">›</span><span>{category}</span></nav>
-    <header class="article-head">
-    <SiteIcons /><span class="article-category">{category} · template preview</span><h1>{title}</h1><p class="article-deck">{isNews ? 'An editorial hook around a genuine promotion, with the offer facts and terms supplied from one approved WordPress record.' : 'A clean daily post format for automated selections, with a human-editable opening and transparent source notes.'}</p><div class="article-meta"><span>EveryTip editorial team</span><span>Example date · updated date from WordPress</span><span>{isNews ? 'Offer verification pending' : 'Selections are illustrative'}</span></div></header>
+    <header class="article-head"><span class="article-category">{category} · template preview</span><h1>{title}</h1><p class="article-deck">{isNews ? 'An editorial hook around a genuine promotion, with the offer facts and terms supplied from one approved WordPress record.' : 'A clean daily post format for automated selections, with a human-editable opening and transparent source notes.'}</p><div class="article-meta"><span>EveryTip editorial team</span><span>Example date · updated date from WordPress</span><span>{isNews ? 'Offer verification pending' : 'Selections are illustrative'}</span></div></header>
     <div class="article-status"><strong>Design preview</strong><p>{isNews ? 'No promotion is active in this sample article. A real news story must link to a checked ACF offer record and show the approved compact terms wherever the offer appears.' : 'The runner and fixture examples below are invented. The published version should show the model run time and the daily import ID so corrections can be traced.'}</p></div>
     {isNews ? <>
       <p class="article-lede">A strong offer story starts with something happening today—a fixture, festival or change in the bookmaker’s rules—then answers the reader’s practical questions. Eric can change the headline and analysis in WordPress without modifying the offer terms.</p>

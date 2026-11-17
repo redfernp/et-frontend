@@ -1,5 +1,4 @@
 ---
-import SiteIcons from '../SiteIcons.astro';
 // Bookmaker review in the style of the live Bet365 review: claim bar, brand header with the
 // offer, ratings at a glance, numbered scored sections with key points, offer bands and the
 // verdict. Built from the page's own headings, scores and lists in WordPress.
@@ -48,7 +47,6 @@ const reviewSchema = overall ? JSON.stringify({ '@context': 'https://schema.org'
     {offer && <div class="claim-bar"><strong>New to {bookmaker.name}?</strong><a class="bk-btn bk-btn-light" href={offer.link} rel="nofollow">{offer.label} →</a></div>}
 
     <header class="bk-hero">
-    <SiteIcons />
       <div class="bk-hero-copy">
         <p class="bk-eyebrow">Independent bookmaker review</p>
         <h1>{title}</h1>

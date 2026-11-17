@@ -1,5 +1,4 @@
 ---
-import SiteIcons from '../SiteIcons.astro';
 // Live columnist hub (John Newsome / Seymour Biz): the approved column archive design.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { launchColumnists, plainTitle } from '../../lib/launch-templates.mjs';
@@ -39,7 +38,6 @@ const pagePath = (number) => number === 1 ? record.archiveBase : `${record.archi
   <article class="column-archive" style={`--column-accent:${meta.accent}`}>
     <nav class="column-breadcrumb" aria-label="Breadcrumb"><a href="/">EveryTip</a><span aria-hidden="true">›</span><a href="/free-betting-tips">Free tips</a><span aria-hidden="true">›</span><span>{profile.name}</span></nav>
     <header class="column-hero">
-    <SiteIcons />
       <p class="kicker">{meta.discipline} · weekly column</p>
       <h1>{meta.title}{page > 1 ? ` — page ${page}` : ''}</h1>
       <div class="column-identity"><img src={profile.image} alt="" width="100" height="100" /><div><h2>{meta.subtitle}</h2><p>By {profile.name} · EveryTip feature columnist</p></div></div>

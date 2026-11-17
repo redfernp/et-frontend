@@ -1,5 +1,4 @@
 ---
-import SiteIcons from '../components/SiteIcons.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ReviewMobileSticky from '../components/ReviewMobileSticky.astro';
 import { latestContentSnapshot } from '../lib/migration-preview.mjs';
@@ -23,7 +22,6 @@ const sourceDate = new Date(review.modified).toLocaleDateString('en-GB', { day: 
 >
   <article class="review" style="--review-green:#1d5b32;--review-green-dark:#144324">
     <header class="hero">
-    <SiteIcons />
       <div>
         <p class="eyebrow">Independent bookmaker review</p>
         <h1>Bet365 Review 2026</h1>

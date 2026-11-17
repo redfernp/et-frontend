@@ -1,5 +1,4 @@
 ---
-import SiteIcons from '../SiteIcons.astro';
 // Live free tips hub: the approved directory design over the staging page content.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FreeTipsDirectory from '../FreeTipsDirectory.astro';
@@ -83,7 +82,6 @@ const formatDate = (value) => new Date(`${value}T12:00:00Z`).toLocaleDateString(
 <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo} verifiedPublicPaths={paths} offers={offers}>
   <div class="free-tips-hub">
     <header class="hub-heading">
-    <SiteIcons />
       <p class="kicker">Free tips, updated daily</p>
       <h1>Free Betting Tips</h1>
       <p>Explore horse racing and football selections by sport and tipster, plus the latest betting offer news.</p>

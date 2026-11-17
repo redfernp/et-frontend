@@ -1,5 +1,4 @@
 ---
-import SiteIcons from './SiteIcons.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { weeklyArchivePath } from '../lib/weekly-column-archive.mjs';
 
@@ -18,7 +17,6 @@ const hasOctoberOverlay = sourceMode.includes('+four-source-locked-october-artic
   <article class="weekly-archive" style={`--archive-accent:${family.accent}`}>
     <nav class="archive-breadcrumb" aria-label="Breadcrumb"><a href="/">EveryTip</a><span aria-hidden="true">/</span><span>{family.discipline}</span></nav>
     <header class="archive-hero">
-    <SiteIcons />
       <div class="archive-copy">
         <span class="archive-eyebrow">EveryTip weekly column</span>
         <h1>{page.title}</h1>

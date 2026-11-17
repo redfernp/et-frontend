@@ -1,5 +1,4 @@
 ---
-import SiteIcons from '../../components/SiteIcons.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import HomeOfferLadder from '../../components/HomeOfferLadder.astro';
 import { extractFreeBetsEditorial } from '../../lib/free-bets-editorial.mjs';
@@ -19,8 +18,7 @@ const explainer = [
 <BaseLayout title="Bookmaker free bets and bonuses — pilot" wide={true} publicPage={!!exactRecord} previewOnly={!!exactRecord} menuItems={menuItems} verifiedPublicPaths={exactRecord ? previewPublicPaths : []} seo={exactRecord ? { title: exactRecord.seo?.title, description: exactRecord.seo?.metaDesc } : undefined} previewMessage={exactRecord ? 'Exact free-bets URL preview · dated WordPress copy · offers and terms unverified' : undefined}>
   <article class="freebets-guide">
     <nav class="freebets-breadcrumb" aria-label="Breadcrumb"><a href={exactRecord ? '/' : '/pilot/home/'}>EveryTip</a><span aria-hidden="true">›</span><span>Free bets</span></nav>
-    <header class="freebets-hero">
-    <SiteIcons /><p class="kicker">Free bets · design pilot</p><h1>Bookmaker free bets &amp; bonus offers</h1><p>Compare offers at a glance, then check the conditions that matter before deciding whether one is right for you.</p><span>18+ · Terms and eligibility vary · Current offers require verification</span></header>
+    <header class="freebets-hero"><p class="kicker">Free bets · design pilot</p><h1>Bookmaker free bets &amp; bonus offers</h1><p>Compare offers at a glance, then check the conditions that matter before deciding whether one is right for you.</p><span>18+ · Terms and eligibility vary · Current offers require verification</span></header>
     <div class="freebets-disclosure"><strong>#Ad · How this page earns money</strong><p>EveryTip may receive a commission if you use an affiliate link. The design preview below has no active offer buttons. Its bookmaker lineup and headlines mirror our homepage pilot for visual review; they are not current eligibility or terms claims.</p></div>
     <nav class="freebets-jump" aria-label="On this page"><a href="#compare">Compare offers</a><a href="#understand">How to compare</a><a href="#terms">Where terms live</a><a href="#questions">Questions</a></nav>
 

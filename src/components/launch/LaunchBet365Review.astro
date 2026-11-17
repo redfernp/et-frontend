@@ -1,5 +1,4 @@
 ---
-import SiteIcons from '../SiteIcons.astro';
 // Live Bet365 review: the approved review design over Seymour's staging review copy.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ReviewMobileSticky from '../ReviewMobileSticky.astro';
@@ -25,7 +24,6 @@ const updated = new Date(record.modified).toLocaleDateString('en-GB', { day: 'nu
 <BaseLayout title="Bet365 Review 2026" publicPage={true} wide={true} seo={seo} verifiedPublicPaths={paths} offers={offers}>
   <article class="review" style="--review-green:#1d5b32;--review-green-dark:#144324">
     <header class:list={["hero", { "hero-solo": exPartner }]}>
-    <SiteIcons />
       <div>
         <p class="eyebrow">Independent bookmaker review</p>
         <h1>Bet365 Review 2026</h1>

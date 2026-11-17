@@ -1,5 +1,4 @@
 ---
-import SiteIcons from '../SiteIcons.astro';
 // Paid tipsters page: Tipstrr tipsters by sport, from data/tipstrr-tipsters.json (a dated snapshot
 // of their verified public profiles). Links go through /go/tipstrr-<slug> (scripts/tipstrr-links.mjs).
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -16,7 +15,6 @@ const asOf = new Date(`${data.refreshedAt}T12:00:00Z`).toLocaleDateString('en-GB
 <BaseLayout title={record.title} publicPage={true} seo={seo} verifiedPublicPaths={paths} offers={offers} wide={true}>
   <article class="tp-page">
     <header class="tp-hero">
-    <SiteIcons />
       <p class="tp-kicker">Paid tipsters · verified results</p>
       <h1>The best paid betting tipsters by sport</h1>
       <p class="tp-lede">Every tipster here has their results recorded and verified by Tipstrr against real bookmaker odds, so the profit figures are not self-reported. Pick your sport, compare the numbers and try a month.</p>

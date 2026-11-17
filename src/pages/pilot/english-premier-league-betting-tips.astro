@@ -1,5 +1,4 @@
 ---
-import SiteIcons from '../../components/SiteIcons.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 // Fictional fixtures illustrate the imported-data component only.
@@ -17,8 +16,7 @@ const markets = [
 <BaseLayout title="Football betting tips — sport hub pilot" sidebar={true} relatedTopic="football">
   <article class="sport-hub">
     <nav class="sport-breadcrumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><a href="/pilot/free-betting-tips/">Free tips</a><span aria-hidden="true">›</span><span>Football</span></nav>
-    <header class="sport-hero">
-    <SiteIcons /><p class="kicker">Sport tips hub · design pilot</p><h1>Football betting tips</h1><p>Scan today’s selections by market, read our football columns, and understand how the predictions are produced. The published version will be populated from the canonical daily import, not copied tables in WordPress.</p><div class="sport-snapshot"><span>Illustrative fixtures only</span><span>Last feed update: import timestamp slot</span></div></header>
+    <header class="sport-hero"><p class="kicker">Sport tips hub · design pilot</p><h1>Football betting tips</h1><p>Scan today’s selections by market, read our football columns, and understand how the predictions are produced. The published version will be populated from the canonical daily import, not copied tables in WordPress.</p><div class="sport-snapshot"><span>Illustrative fixtures only</span><span>Last feed update: import timestamp slot</span></div></header>
     <aside class="sport-alert"><strong>No live predictions in this preview.</strong><p>All teams, competitions and picks below are fictional. This page tests the market grouping and mobile reading experience; it does not provide betting advice.</p></aside>
     <nav class="sport-jump" aria-label="Football tip markets"><strong>Jump to</strong>{markets.map((market) => <a href={`#${market.id}`}>{market.title}</a>)}<a href="#columns">Expert previews</a><a href="#history">Previous tips</a></nav>
     <section class="sport-overview"><h2>Today’s football selections</h2><p>Each market comes from a structured selection record with fixture ID, kickoff time and timezone, league, market, prediction, price snapshot and import run. A change after publication should be logged as a correction rather than silently replacing the original.</p></section>

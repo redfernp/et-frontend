@@ -1,5 +1,4 @@
 ---
-import SiteIcons from '../../components/SiteIcons.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 // Layout fixtures only. The live page contains expired promotions; do not reuse them.
@@ -19,8 +18,7 @@ const groups = [
 <BaseLayout title="Latest betting offers — index pilot" wide={true}>
   <article class="latest-offers">
     <nav class="latest-breadcrumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><span>Latest offers</span></nav>
-    <header class="latest-hero">
-    <SiteIcons /><p class="kicker">Offer index · design pilot</p><h1>New betting offers for existing customers</h1><p>A home for genuine new and ongoing promotions that Eric can turn into useful event-led stories—not a static list of old welcome bonuses.</p><div class="latest-hero-tags"><span>Today</span><span>Horse racing</span><span>Football</span></div></header>
+    <header class="latest-hero"><p class="kicker">Offer index · design pilot</p><h1>New betting offers for existing customers</h1><p>A home for genuine new and ongoing promotions that Eric can turn into useful event-led stories—not a static list of old welcome bonuses.</p><div class="latest-hero-tags"><span>Today</span><span>Horse racing</span><span>Football</span></div></header>
     <aside class="latest-caution"><strong>Preview data only</strong><p>The live page currently contains some dated promotions. None have been copied into this pilot as active offers. Cards below show the intended fields and states; each published card must have approved terms, eligibility, source and expiry or re-check date from its ACF record.</p></aside>
     <nav class="latest-jump" aria-label="Offer categories">{groups.map((group) => <a href={`#${group.id}`}>{group.title}</a>)}</nav>
     {groups.map((group) => <section class="latest-group" id={group.id}><div class="latest-group-head"><div><p class="kicker">Current promotions</p><h2>{group.title}</h2><p>{group.intro}</p></div><span>{group.items.length} design {group.items.length === 1 ? 'card' : 'cards'}</span></div><div class="latest-grid">{group.items.map((item) => <article class="latest-card" style={`--latest-accent:${item.accent}`}><div class="latest-card-top"><strong>{item.brand}</strong><span>{item.type}</span></div><h3>{item.label}</h3><dl><div><dt>Who can use it</dt><dd>{item.eligibility}</dd></div><div><dt>Last checked</dt><dd>{item.date}</dd></div></dl><p class="latest-terms">Approved compact terms appear here, including the key qualifying action, restrictions and end date. A full-terms disclosure is linked to the central offer record.</p><span class="latest-disabled" aria-label="Offer link disabled in template preview">Offer preview</span></article>)}</div></section>)}

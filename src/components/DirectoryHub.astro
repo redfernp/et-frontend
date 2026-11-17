@@ -1,5 +1,4 @@
 ---
-import SiteIcons from './SiteIcons.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 interface DirectoryEntry { title: string; group: string; summary: string; meta: string; href?: string; label?: string }
@@ -9,8 +8,7 @@ const { title, eyebrow, deck, note, groups, entries, footer } = Astro.props;
 <BaseLayout title={`${title} — directory pilot`} wide={true}>
   <article class="directory-hub">
     <nav class="dh-crumb" aria-label="Breadcrumb"><a href="/pilot/home/">EveryTip</a><span aria-hidden="true">›</span><span>{title}</span></nav>
-    <header class="dh-hero">
-    <SiteIcons /><p class="kicker">{eyebrow} · design pilot</p><h1>{title}</h1><p>{deck}</p><div class="dh-meta"><span>1 October 2026 preview</span><span>{groups.length} sections</span><span>No live ranking implied</span></div></header>
+    <header class="dh-hero"><p class="kicker">{eyebrow} · design pilot</p><h1>{title}</h1><p>{deck}</p><div class="dh-meta"><span>1 October 2026 preview</span><span>{groups.length} sections</span><span>No live ranking implied</span></div></header>
     <div class="dh-note"><strong>Editorial check</strong><span>{note}</span></div>
     <nav class="dh-jump" aria-label="Directory sections">{groups.map((group) => <a href={`#${group.key}`}>{group.label}</a>)}</nav>
     {groups.map((group) => {
