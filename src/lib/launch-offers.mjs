@@ -1,5 +1,6 @@
 import {splitOfferSlots} from './offer-slots.mjs';
 import offerFile from '../data/offers.json' with {type:'json'};
+import {isOfferVisible} from './partner-preview.mjs';
 
 // All offer copy lives in src/data/offers.json (edited by Paul). WordPress only decides
 // where an offer appears: in-article offer blocks reference an offer by its id.
@@ -10,7 +11,11 @@ for(const offer of offerFile.offers){
   if(missing.length)throw new Error(`Offer ${offer.id??offer.partner??'?'} in src/data/offers.json is missing: ${missing.join(', ')}`);
   if(!/^\/go\/[a-z0-9-]+$/.test(offer.link))throw new Error(`Offer ${offer.id} link must be a /go/ path, got ${offer.link}`);
 }
-const active=offerFile.offers.filter(offer=>offer.active!==false).sort((a,b)=>a.position-b.position);
+// Offers marked "preview" (unpaid new partners) only appear in that partner's preview build.
+const isNewPartner=offer=>Boolean(offer.preview)||(typeof offer.newUntil==='string'&&offer.newUntil>=new Date().toISOString().slice(0,10));
+const active=offerFile.offers.filter(offer=>offer.active!==false&&isOfferVisible(offer))
+  // A new partner (preview, or its first week live with newUntil) wins a tie for its position.
+  .sort((a,b)=>a.position-b.position||isNewPartner(b)-isNewPartner(a));
 const byId=new Map(active.map(offer=>[offer.id,offer]));
 
 // The shape the offer components use. "lineup": false keeps an offer (e.g. an existing-customer

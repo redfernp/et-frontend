@@ -2,6 +2,7 @@ import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { createGraphqlClient } from './graphql-cache.mjs';
 import { launchArchives } from './launch-archives.mjs';
 import { resolveLaunchOffers } from './launch-offers.mjs';
+import { readPartnerDrafts } from './partner-drafts.mjs';
 // Default builds are incremental: listings are always fresh, and only new or changed records
 // (plus every record with a tip table) are re-fetched. WPGRAPHQL_FRESH=1 re-fetches everything.
 export const endpoint = import.meta.env?.WPGRAPHQL_ENDPOINT || process.env.WPGRAPHQL_ENDPOINT ||
@@ -14,6 +15,8 @@ export const requestGraphql = (query, variables = {}, options = {}) => client.re
 let pending;
 export function launchContent() {
   return pending ??= (fresh ? readContent().then(async records => { await writeContentCache(records); return records; }) : readContentIncremental()).then(async records => {
+    // Partner preview builds only: the partner's WordPress drafts (see partner-drafts.mjs).
+    records.push(...await readPartnerDrafts(new Set(records.map(record => record.uri))));
     await resolveLaunchOffers(records, requestGraphql);
     const archiveReceipts = [];
     // Archive listings must reflect today's posts, so their GraphQL reads skip the disk cache;

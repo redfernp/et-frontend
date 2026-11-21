@@ -208,6 +208,7 @@ export const bookmakerReviews = {
   '/10bet-review': { name: '10Bet', partner: '10bet' },
   '/betwright-review': { name: 'BetWright', partner: 'betwright' },
   '/netbet-review': { name: 'NetBet', partner: 'netbet' },
+  '/pricedup-review': { name: 'Pricedup', partner: 'pricedup' },
   '/netbet-sportsbook-review.html': { name: 'NetBet', partner: 'netbet', rating: 4 },
   '/spreadex-review': { name: 'Spreadex', partner: 'spreadex' },
   '/boylesports-review': { name: 'Boylesports', partner: null },

@@ -1,5 +1,5 @@
 {
-  "_readme": "EveryTip offers. Edit headline, terms, buttonText or link, set active to false to hide an offer, and positions are re-ranked every Monday on the previous week's /go/ clicks (scripts/rerank-offers.mjs), so a manual position only lasts until then. pinned N holds an offer at position N whatever its clicks (Betfred is pinned at 1). A new partner gets newUntil (YYYY-MM-DD, a week after it goes live) and is held at #3 until that date. id is the WordPress offer ID that in-article offer blocks point to; keep it unchanged.",
+  "_readme": "EveryTip offers. Edit headline, terms, buttonText or link, set active to false to hide an offer, and positions are re-ranked every Monday on the previous week's /go/ clicks (scripts/rerank-offers.mjs), so a manual position only lasts until then. pinned N holds an offer at position N whatever its clicks (Betfred is pinned at 1). A new partner gets newUntil (YYYY-MM-DD, a week after it goes live) and is held at #3 until that date. id is the WordPress offer ID that in-article offer blocks point to; keep it unchanged. A new partner who has not paid yet carries \"preview\": \"<slug>\": it is left out of every normal build and only shows in that partner's preview (npm run partner:preview <slug>); npm run partner:live <slug> removes it once the partner has paid.",
   "offers": [
     {
       "id": 90846,
@@ -110,6 +110,21 @@
       "link": "/go/betfred-acca-flex",
       "logo": "https://www.everytip.co.uk/wp-content/uploads/2018/06/betfred-154x40.png",
       "brandColor": "#0f488f"
+    },
+    {
+      "id": 91918,
+      "partner": "pricedup",
+      "preview": "pricedup",
+      "active": true,
+      "position": 3,
+      "bookmaker": "Pricedup",
+      "headline": "Bet £20 Get £20 in Free Bets with code bet20",
+      "terms": "#Ad - 18+. New customers only. Must use promo code bet20. Opt in required. Minimum bet of £20 on any selections. Min odds of evens (2.00). Pre-game only. Free bet awarded upon settlement. Free bet split into 4 x £5 Free Bets. Free bet expiry 24 hours. Other free bet terms apply. Maximum pay-outs apply. GamCare.org.uk | UK only. Full T&Cs apply.",
+      "buttonText": "Get Free Bets",
+      "link": "/go/pricedup",
+      "logo": "/partner-logos/pricedup.svg",
+      "brandColor": "#16171a",
+      "highlight": "UKGC-licensed newcomer: bet £20, get £20 in free bets with code bet20"
     }
   ],
   "_readmeNotPartners": "Former partners. They never get an offer card, button or affiliate link; they may be named in plain text only. match = lowercase letters/digits that identify them in /go/ links or logo names.",

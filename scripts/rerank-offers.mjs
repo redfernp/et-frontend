@@ -20,7 +20,8 @@ const slugOf = offer => offer.link.replace(/^\/go\//, '').toLowerCase();
 
 // Pure ranking step: offers as in offers.json, clicks as { slug: count }, today as YYYY-MM-DD.
 export function rankOffers(offers, clicks, today) {
-  const ladder = offers.filter(o => o.active !== false && o.lineup !== false).sort((a, b) => a.position - b.position);
+  // Preview offers (new partners who have not paid yet) are not on the live ladder: leave them alone.
+  const ladder = offers.filter(o => o.active !== false && o.lineup !== false && !o.preview).sort((a, b) => a.position - b.position);
   // "pinned": N fixes an offer at position N whatever its clicks (Betfred is pinned at #1, so no
   // partner can click its way above it). Pinned offers are placed first, then new partners at #3.
   const isPinned = o => Number.isInteger(o.pinned) && o.pinned > 0;

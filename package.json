@@ -33,7 +33,9 @@
     "probe:offer-catalog": "node --env-file=.env.local scripts/probe-staging-offer-catalog.mjs",
     "probe:builder-drafts": "node --env-file=.env.local scripts/probe-builder-editorial-drafts.mjs",
     "audit:offer-copy": "node --env-file=.env.local scripts/audit-staging-offer-copy.mjs",
-    "seo:staging": "node --env-file=.env.local scripts/staging-editorial-seo.mjs"
+    "seo:staging": "node --env-file=.env.local scripts/staging-editorial-seo.mjs",
+    "partner:preview": "node scripts/partner-preview.mjs",
+    "partner:live": "node scripts/partner-live.mjs"
   },
   "dependencies": {
     "astro": "^7.3.5",

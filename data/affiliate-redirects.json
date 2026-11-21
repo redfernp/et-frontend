@@ -829,6 +829,18 @@
     "/go/zenith": {
       "status": 302,
       "location": "https://tipstrr.com/tipster/zenith/join?ref-a=everytip"
+    },
+    "/go/pricedup": {
+      "status": 302,
+      "location": "https://priceduplinks.com/whuawiddk"
+    },
+    "/go/priceduptandcs": {
+      "status": 302,
+      "location": "https://priceduplinks.com/wyaxazjgp"
+    },
+    "/go/pricedup-acca": {
+      "status": 302,
+      "location": "https://priceduplinks.com/wb2r0jesy"
     }
   }
 }

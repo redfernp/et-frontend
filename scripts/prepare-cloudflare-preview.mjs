@@ -47,6 +47,8 @@ try {
 await mkdir(target);
 await cp(source, target, { recursive: true, filter: (path) => !excluded(path) });
 await writeFile(join(target, '_headers'), '/*\n  X-Robots-Tag: noindex, nofollow\n');
+// Every preview host (test site, partner previews) blocks all crawling, not just indexing.
+await writeFile(join(target, 'robots.txt'), 'User-agent: *\nDisallow: /\n');
 const pilotLinks = new Map([
   ['/pilot/about-us/', '/about-us'],
   ['/pilot/best-paypal-betting-sites/', '/best-paypal-betting-sites.html'],
