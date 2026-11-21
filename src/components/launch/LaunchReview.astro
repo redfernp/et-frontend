@@ -19,8 +19,11 @@ const offer = exPartner ? null : fileOffer
   ? { headline: fileOffer.headline, terms: fileOffer.compactTerms, link: fileOffer.ctaPath, label: fileOffer.ctaLabel, logo: fileOffer.logoUrl, color: fileOffer.brandColor }
   : own.link ? { headline: own.headline ? own.headline.charAt(0).toUpperCase() + own.headline.slice(1) : `Join ${bookmaker.name}`, terms: own.terms, link: own.link, label: 'Claim offer', logo: null, color: '#1d5b32' } : null;
 const brand = offer?.color ?? fileOffer?.brandColor ?? '#17476c';
+// Reviews written by JP (WordPress user "JP, Chief Editor, EveryTip") carry his byline.
+const byJp = /^JP\b/.test(record.author?.node?.name ?? '');
 const byline = /seymour/i.test(plainTitle(review.introHtml).slice(0, 800))
   ? { name: 'Seymour Biz', role: 'EveryTip horse racing columnist', image: 'https://www.everytip.co.uk/wp-content/uploads/2025/06/Seymour-Biz-Horse-Racing-Feature-Writer-100x100.png' }
+  : byJp ? { name: 'JP', role: 'Chief Editor, EveryTip.co.uk', image: 'https://www.everytip.co.uk/wp-content/uploads/2025/06/cropped-ET.jpg' }
   : { name: 'the EveryTip team', role: 'Independent bookmaker review', image: 'https://www.everytip.co.uk/wp-content/uploads/2025/06/cropped-ET.jpg' };
 
 // Our own ratings table replaces the old "jump to section" list; reviewer-name headings fold away.
@@ -39,7 +42,7 @@ const bandAfter = (index) => offer && (index + 1) % 3 === 0 && index < sections.
 const reviewSchema = overall ? JSON.stringify({ '@context': 'https://schema.org', '@type': 'Review', name: title, url: seo?.canonical,
   itemReviewed: { '@type': 'Organization', name: bookmaker.name },
   reviewRating: { '@type': 'Rating', ratingValue: overall, bestRating: 5, worstRating: 1 },
-  author: byline.name === 'Seymour Biz' ? { '@type': 'Person', name: 'Seymour Biz' } : { '@type': 'Organization', name: 'Every Tip', url: 'https://www.everytip.co.uk/' },
+  author: byline.name === 'Seymour Biz' ? { '@type': 'Person', name: 'Seymour Biz' } : byline.name === 'JP' ? { '@type': 'Person', name: 'JP', jobTitle: 'Chief Editor', worksFor: { '@type': 'Organization', name: 'EveryTip', url: 'https://www.everytip.co.uk/' } } : { '@type': 'Organization', name: 'Every Tip', url: 'https://www.everytip.co.uk/' },
   datePublished: record.date?.slice(0, 10), dateModified: record.modified?.slice(0, 10) }).replace(/</g, '\\u003c') : null;
 ---
 <BaseLayout title={title} publicPage={true} wide={true} seo={{ ...seo, reviewSchema }} verifiedPublicPaths={paths} offers={offers}>
@@ -50,7 +53,7 @@ const reviewSchema = overall ? JSON.stringify({ '@context': 'https://schema.org'
       <div class="bk-hero-copy">
         <p class="bk-eyebrow">Independent bookmaker review</p>
         <h1>{title}</h1>
-        <p class="bk-deck">Independent review by {byline.name}{byline.name === 'Seymour Biz' ? ', horse racing columnist' : ''}. Last updated {updated}.</p>
+        <p class="bk-deck">Independent review by {byline.name}{byline.name === 'Seymour Biz' ? ', horse racing columnist' : byline.name === 'JP' ? ', Chief Editor of EveryTip.co.uk' : ''}. Last updated {updated}.</p>
         {overall && <p class="bk-rating"><span class="bk-stars" aria-hidden="true">{stars(overall)}</span><strong>Rated {overall} / 5</strong>{verdictLabel && <span> · {verdictLabel}</span>}</p>}
         {offer && <a class="bk-offer-btn" href={offer.link} rel="nofollow"><strong>{offer.headline} →</strong><span>For new UK customers at {bookmaker.name} only</span></a>}
         {offer?.terms && <p class="bk-terms">{offer.terms}</p>}

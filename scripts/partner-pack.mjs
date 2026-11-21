@@ -32,6 +32,8 @@ export function renderPack(partner, offers) {
   const placements = (partner.placements ?? []).map(p => `<li><div><strong>${esc(p.label)}</strong><span>${esc(p.note)}</span></div><a href="${esc(p.path)}">Open</a></li>`).join('');
   const drafts = (partner.drafts ?? []).map(p => `<li><div><strong>${esc(p.label ?? 'Article')}</strong><span>Draft, publishes when you go live</span></div><a href="${esc(p.path)}">Open</a></li>`).join('');
   const later = (partner.comingAfterPayment ?? []).map(item => `<li>${esc(item)}</li>`).join('');
+  // How we will promote the partner (newsletter, branded pages): [{ title, text, points: [] }].
+  const promo = (partner.promotion ?? []).map(item => `<div class="promo"><h3>${esc(item.title)}</h3><p>${esc(item.text)}</p>${item.points?.length ? `<ul class="ticks">${item.points.map(pt => `<li>${esc(pt)}</li>`).join('')}</ul>` : ''}</div>`).join('');
   return `<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><title>${name} on EveryTip</title><link rel="icon" href="/favicon.ico">
 <style>
@@ -51,6 +53,7 @@ h2{font-size:20px;margin:0 0 14px;color:var(--navy)}.steps{display:grid;grid-tem
 .list{list-style:none;margin:0;padding:0}.list li{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 0;border-top:1px solid var(--line)}.list li:first-child{border-top:0}
 .list span{display:block;color:var(--muted);font-size:14px}.list a{font-weight:700;white-space:nowrap}
 .ticks{margin:0;padding-left:20px}.ticks li{margin:4px 0}
+.promo{padding:16px 0;border-top:1px solid var(--line)}.promo:first-of-type{border-top:0;padding-top:0}.promo h3{margin:0 0 6px;font-size:17px}.promo p{margin:0 0 8px}
 .terms{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.terms div{background:var(--soft);border-radius:10px;padding:14px}.terms dt{font-size:13px;color:var(--muted)}.terms dd{margin:2px 0 0;font-weight:700}
 .pay{border:2px solid var(--navy)}.pay .amount{font-size:32px;font-weight:800;color:var(--navy);margin:0}.pay p{margin:6px 0}
 footer{text-align:center;color:var(--muted);font-size:14px;padding:8px 16px 32px}
@@ -65,6 +68,7 @@ footer{text-align:center;color:var(--muted);font-size:14px;padding:8px 16px 32px
 <li><strong>Live on both sites</strong><span>EveryTip and OddsTips within 5 working days of payment.</span></li></ol></section>
 <section><h2>Your offer</h2>${offers.map(offerCard).join('')}</section>
 <section><h2>See it in place</h2><ul class="list">${placements}${drafts}</ul></section>
+${promo ? `<section><h2>How we'll promote you</h2>${promo}</section>` : ''}
 ${later ? `<section><h2>Added once you're live</h2><ul class="ticks">${later}</ul></section>` : ''}
 <section><h2>The deal</h2><dl class="terms">
 <div><dt>Entry fee</dt><dd>${esc(money(d.fee, d.currency))}${d.feeLabel ? ` <span style="font-weight:400;color:var(--muted)">(${esc(d.feeLabel)})</span>` : ''}</dd></div>
