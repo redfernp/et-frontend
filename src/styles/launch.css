@@ -25,6 +25,9 @@
 .cms-content a:is([rel~="sponsored"], [href*="/go/"], [href*="amazon."], [href*="amzn."]),
 .home-intro-card a:is([rel~="sponsored"], [href*="/go/"]) { color: #1e73be; font-weight: 700; text-decoration-line: underline; text-decoration-color: #f7941d; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .cms-content a:is([rel~="sponsored"], [href*="/go/"], [href*="amazon."], [href*="amzn."]) :is(strong, b) { color: inherit; }
+/* Old WordPress links wrap their text in an inline underline span (or <u>), which draws a second
+   underline in the text colour on top of the link's own one. Drop it so only the link's underline shows. */
+.cms-content a :is(span[style*="underline"], u) { text-decoration: none !important; }
 .cms-content a:has(img) { text-decoration: none; }
 
 /* Lists in articles (for example "Related reading"): tighter rows. */
