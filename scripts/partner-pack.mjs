@@ -65,7 +65,7 @@ footer{text-align:center;color:var(--muted);font-size:14px;padding:8px 16px 32px
 <section><h2>How it works</h2><ol class="steps">
 <li><strong>Review this preview</strong><span>Check the offer, terms and placements. Tell us if anything needs changing.</span></li>
 <li><strong>Payment</strong><span>${esc(money(d.fee, d.currency))} by bank transfer, reference ${esc(partner.paymentReference)}.</span></li>
-<li><strong>Live on both sites</strong><span>EveryTip and OddsTips within 5 working days of payment.</span></li></ol></section>
+<li><strong>Live on both sites</strong><span>EveryTip and OddsTips within 24 hours of receiving your transfer confirmation or the payment itself.</span></li></ol></section>
 <section><h2>Your offer</h2>${offers.map(offerCard).join('')}</section>
 <section><h2>See it in place</h2><ul class="list">${placements}${drafts}</ul></section>
 ${promo ? `<section><h2>How we'll promote you</h2>${promo}</section>` : ''}
@@ -77,7 +77,7 @@ ${later ? `<section><h2>Added once you're live</h2><ul class="ticks">${later}</u
 <div><dt>Monthly fees and minimum term</dt><dd>None</dd></div></dl></section>
 <section class="pay"><h2>Payment</h2><p class="amount">${esc(money(d.fee, d.currency))}</p>
 <p>Reference: <strong>${esc(partner.paymentReference)}</strong></p>
-<p>Bank details are in the payment request JP emailed you. Once you've paid, reply with the transfer confirmation and we'll switch ${name} on. We'll send the invoice as soon as the payment arrives.</p></section>
+<p>Bank details are in the payment request JP emailed you. Once you've paid, reply with the transfer confirmation or receipt and we'll have ${name} live on both sites within 24 hours. We'll send the invoice as soon as the payment arrives.</p></section>
 </main>
 <footer>JP, Chief Editor, EveryTip.co.uk &middot; <a href="mailto:info@everytip.co.uk">info@everytip.co.uk</a><br>18+ &middot; Please gamble responsibly &middot; BeGambleAware.org</footer>
 </body></html>`;
