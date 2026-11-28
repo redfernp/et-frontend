@@ -56,6 +56,22 @@ const guide = isGuide(record) ? withHeadingIds(body) : null;
 if (guide) body = guide.html;
 // The template prints the page's H1; an H1 inside the content becomes an H2.
 body = body.replace(/<h1(\s[^>]*)?>/gi, '<h2$1>').replace(/<\/h1>/gi, '</h2>');
+// Plain editorial tables (offer posts, guides) sit in a scroll box, so on a phone a wide table
+// scrolls inside the box instead of being cut off; the table itself keeps its full width.
+// Tables with a header row of 4+ columns also become stacked cards on a phone: each cell gets
+// its column heading as data-label, shown in front of the value.
+body = body.replace(/<table(?![^>]*\bnt-responsive\b)[^>]*>[\s\S]*?<\/table>/gi, (table) => {
+  const headRow = table.match(/<thead[^>]*>[\s\S]*?<tr[^>]*>([\s\S]*?)<\/tr>/i);
+  const labels = headRow ? [...headRow[1].matchAll(/<th[^>]*>([\s\S]*?)<\/th>/gi)].map((m) => m[1].replace(/<[^>]+>/g, '').replace(/"/g, '&quot;').trim()) : [];
+  if (labels.length < 4 || /\s(?:col|row)span=/i.test(table)) return `<div class="table-scroll">${table}</div>`;
+  const stacked = table
+    .replace(/^<table/i, '<table data-stack')
+    .replace(/<tbody[^>]*>[\s\S]*?<\/tbody>/i, (tbody) => tbody.replace(/<tr([^>]*)>([\s\S]*?)<\/tr>/gi, (row, attrs, cells) => {
+      let i = 0;
+      return `<tr${attrs}>${cells.replace(/<td(?=[\s>])/gi, () => `<td data-label="${labels[i++] ?? ''}"`)}</tr>`;
+    }));
+  return `<div class="table-scroll">${stacked}</div>`;
+});
 // "The Quick Tip": an editorial summary written in the guide itself (a paragraph block with the
 // CSS class quick-tip), shown beside the title instead of in the body. Editorial only: no offer
 // headlines here, because offers must show their full terms.
@@ -254,7 +270,22 @@ guide ? <BaseLayout title={record.title} wide={true} publicPage={true} seo={seo}
   .cms-content :global(p){max-width:770px}
   .cms-content :global(img){max-width:100%;height:auto}
   .cms-content :global(table){display:table;width:100%;max-width:100%;border-collapse:collapse}
-  @media(max-width:720px){.cms-content :global(table:not(.nt-responsive)){display:block;overflow-x:auto}}
+  .cms-content :global(.table-scroll){max-width:100%;overflow-x:auto;margin:12px 0 20px}
+  /* min-width:0 undoes global.css's 610px table minimum (meant for the home tip tables), so a table only scrolls when its words truly don't fit. */
+  .cms-content :global(.table-scroll table){margin:0;min-width:0;overflow-wrap:normal;word-break:normal}
+  @media(max-width:720px){
+    .cms-content :global(.table-scroll table){font-size:14px;line-height:1.4}
+    .cms-content :global(.table-scroll :is(th,td)){padding:6px 7px}
+  }
+  @media(max-width:600px){
+    .cms-content :global(table[data-stack]),.cms-content :global(table[data-stack] :is(tbody,tr,td)){display:block;width:100%}
+    .cms-content :global(table[data-stack] thead){display:none}
+    .cms-content :global(table[data-stack] tr){margin:0 0 10px;border:1px solid #dce7ed;border-left:4px solid #1d5f94;background:#fff}
+    .cms-content :global(table[data-stack] tr:nth-child(even) td){background:none}
+    .cms-content :global(table[data-stack] td){display:flex;gap:10px;border:0;border-bottom:1px solid #edf2f5;padding:6px 10px;white-space:normal}
+    .cms-content :global(table[data-stack] td:last-child){border-bottom:0}
+    .cms-content :global(table[data-stack] td::before){content:attr(data-label);flex:0 0 38%;font-weight:700;color:#183f60}
+  }
   .cms-content :global(th),.cms-content :global(td){padding:7px 9px;border:1px solid #dce7ed}
   .cms-content :global(iframe){max-width:100%}
   .cms-content :global(figure){max-width:100%;margin:1rem 0}
